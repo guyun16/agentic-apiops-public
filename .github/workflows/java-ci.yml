@@ -38,6 +38,12 @@ jobs:
             java-apiops-platform/**/pom.xml
             java-apiops-platform/.mvn/wrapper/maven-wrapper.properties
 
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: python-apiops-agentlab/uv.lock
+
       - name: Make Maven wrapper executable
         run: chmod +x mvnw
 
