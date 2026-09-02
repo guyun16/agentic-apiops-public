@@ -135,7 +135,7 @@ tool access governance
 platform-level reliability
 ```
 
-Future Java modules include:
+Current Java modules include:
 
 ```text
 apiops-common
@@ -148,10 +148,9 @@ apiops-agent
 apiops-rag
 apiops-tool-gateway
 apiops-demo-order-service
-apiops-eval
 ```
 
-Current Java implementation work starts from `apiops-common`, because later modules need stable result wrappers, error codes, exceptions, enums, utility rules, and common models.
+The public snapshot includes the executable platform source and ordinary tests for these modules.
 
 ## 5. Python AgentLab Responsibility
 
@@ -165,25 +164,26 @@ It owns:
 - tool-use planning
 - Agent Trace
 - Runtime Evaluation
-- Ablation Study
-- workflow optimization
 
 Python does not replace Java Platform. It calls Java Platform APIs and Java Tool Gateway to complete APIOps workflows.
 
-Future Python modules include:
+Current Python packages include:
 
 ```text
 app/api
-app/schemas
 app/agents
-app/workflows
-app/tools
-app/rag
-app/memory
-app/guardrails
-app/tracing
+app/clients
+app/core
 app/evaluator
+app/guardrails
+app/memory
+app/rag
 app/reports
+app/schemas
+app/services
+app/tools
+app/tracing
+app/workflows
 ```
 
 ## 6. Java AI and Python AI Boundary
@@ -211,7 +211,6 @@ Python AI is used for:
 - tool-use strategy exploration
 - RAG strategy experiments
 - runtime evaluation
-- ablation studies
 - trace analysis
 
 When a good strategy is discovered in Python AgentLab, the transferable assets are not the Python code itself. They are:
@@ -241,11 +240,12 @@ Core integration APIs:
 
 | Scenario | Method | Path | Purpose |
 |---|---|---|---|
-| Get API metadata | GET | `/api/v1/openapi/apis/{apiId}` | Read normalized API metadata |
-| Validate TestCase DSL | POST | `/api/v1/testcases/validate` | Validate Agent-generated DSL |
-| Submit test run | POST | `/api/v1/runs` | Submit executable test cases to Java Runner |
-| Query report | GET | `/api/v1/reports/{reportId}` | Read Java authoritative test report |
-| Call tool | POST | `/api/v1/tools/call` | Access controlled tools through Java Tool Gateway |
+| Get API metadata | GET | `/api/v1/projects/{projectId}/openapi/apis/{apiId}` | Read normalized API metadata |
+| Submit test batch | POST | `/api/v1/projects/{projectId}/test-batches` | Submit executable test cases to Java Runner |
+| Query report | GET | `/api/v1/projects/{projectId}/test-runs/{runId}/report` | Read Java authoritative test report |
+| Call tool | POST | `/api/v1/projects/{projectId}/tool-calls` | Access controlled tools through Java Tool Gateway |
+
+TestCase DSL validation is enforced inside the Java Agent and Runner service boundaries; the current public REST surface does not expose a standalone validation endpoint.
 
 Unified response format:
 
@@ -270,7 +270,7 @@ shared-schemas/
 
 They define the contract between Java Platform and Python AgentLab.
 
-Current Stage 0 schemas:
+Public shared schemas:
 
 ```text
 testcase-dsl-schema.json
@@ -356,74 +356,34 @@ Current repository structure:
 ```text
 agentic-apiops-public
 ├── README.md
-├── shared-schemas
+├── .github
 ├── examples
 ├── scripts
+├── shared-schemas
 ├── java-apiops-platform
-│   └── apiops-common
+│   ├── apiops-common
+│   ├── apiops-auth
+│   ├── apiops-openapi
+│   ├── apiops-runner
+│   ├── apiops-report
+│   ├── apiops-rag
+│   ├── apiops-tool-gateway
+│   ├── apiops-agent
+│   ├── apiops-web
+│   └── apiops-demo-order-service
+├── apiops-console
+│   ├── src
+│   └── scripts
 └── python-apiops-agentlab
-    └── app
+    ├── app
+    └── tests
 ```
 
-## 12. Current Stage
+## 12. Current Public Implementation
 
-Current stage:
+The Java platform includes the web/API surface, OpenAPI metadata, TestCase DSL validation, Runner, reports, RAG, Tool Gateway, agent integration, and the demo order service. The Python AgentLab includes FastAPI workflows, generation, diagnosis, memory, RAG, tracing, runtime evaluation, reports, and ordinary tests. The Console exposes the current non-Benchmark workflows through these contracts.
 
-```text
-Stage 0: Business Domain, Architecture, Contract, and Roadmap Finalization
-Stage 1: Java apiops-common foundation is being prepared
-Stage 2: JVM and concurrency learning notes are being organized
-```
-
-Stage 4 order-service work is present in the current workspace. The service has real user, product, coupon, inventory, order, payment-callback, and fault-injection code plus automated tests. The public snapshot does not include historical acceptance documents or runtime evidence artifacts.
-
-Stage 0 defines architecture, protocols, schemas, examples, and validation boundaries.
-
-Stage 0 does not implement:
-
-```text
-real Java Runner
-real AssertionEngine
-real Tool Gateway executor
-real SQL Guard
-real Redis Guard
-real RAG pipeline
-real LangGraph workflow
-real Spring AI Agent
-real model API integration
-real database schema
-real Redis / MQ / SSE integration
-```
-
-## 13. Roadmap
-
-Planned roadmap:
-
-```text
-Stage 1: Java common module, Result<T>, ErrorCode, BusinessException, enums
-Stage 2: JVM, concurrency, thread pool design
-Stage 3: Maven, Git, Spring Boot engineering foundation
-Stage 4: Spring MVC, MySQL, MyBatis, demo order service
-Stage 5: Security, JWT, RBAC, OpenAPI documentation generation
-Stage 6: OpenAPI parsing and API metadata modeling
-Stage 7: TestCase DSL and AssertionEngine
-Stage 8: HTTP Runner, state machine, and test report
-Stage 9: Redis, RabbitMQ, SSE, and async batch execution
-Stage 10: Java RAG and Context Pack
-Stage 11: Java Spring AI Agent and structured output
-Stage 12: MCP-style Tool Gateway and security guard
-Stage 13: Java testing, observability, and performance engineering
-Stage 14: Python foundation, Pydantic, FastAPI, and engineering setup
-Stage 15: LangChain, LangGraph, and Agent ecosystem
-Stage 16: Python TestCase Generator Agent Workflow
-Stage 17: Python RAG, Memory, and Context Engineering
-Stage 18: Python Tool-use, Guardrails, and Human-in-the-loop
-Stage 19: Python Agent Tracing, Evaluator, and experiment reports
-Stage 20: Java × Python integration
-Stage 22: Ablation study and optimization
-```
-
-## 14. Final Positioning
+## 13. Final Positioning
 
 ```text
 Java is responsible for platformization, execution, security, audit, and formal business closure.
