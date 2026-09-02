@@ -1,0 +1,48 @@
+name: Java CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  java-platform:
+    name: Java Platform default verification
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: java-apiops-platform
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check pull request whitespace
+        if: ${{ github.event_name == 'pull_request' }}
+        working-directory: .
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: git diff --check "$BASE_SHA...$HEAD_SHA"
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+          cache-dependency-path: |
+            java-apiops-platform/**/pom.xml
+            java-apiops-platform/.mvn/wrapper/maven-wrapper.properties
+
+      - name: Make Maven wrapper executable
+        run: chmod +x mvnw
+
+      - name: Verify Docker daemon
+        run: docker info
+
+      - name: Run default Maven verification
+        run: ./mvnw clean verify

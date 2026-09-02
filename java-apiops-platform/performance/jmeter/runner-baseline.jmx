@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="APIOps Runner baseline" enabled="true">
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="baseUrl" elementType="Argument">
+            <stringProp name="Argument.name">baseUrl</stringProp>
+            <stringProp name="Argument.value">${__P(baseUrl,http://127.0.0.1:8080)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="projectId" elementType="Argument">
+            <stringProp name="Argument.name">projectId</stringProp>
+            <stringProp name="Argument.value">${__P(projectId,19)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="username" elementType="Argument">
+            <stringProp name="Argument.name">username</stringProp>
+            <stringProp name="Argument.value">${__P(username,demo-user)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="password" elementType="Argument">
+            <stringProp name="Argument.name">password</stringProp>
+            <stringProp name="Argument.value">${__P(password,)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="accessToken" elementType="Argument">
+            <stringProp name="Argument.name">accessToken</stringProp>
+            <stringProp name="Argument.value">${__P(accessToken,)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="concurrency" elementType="Argument">
+            <stringProp name="Argument.name">concurrency</stringProp>
+            <stringProp name="Argument.value">${__P(concurrency,1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="rampUpSeconds" elementType="Argument">
+            <stringProp name="Argument.name">rampUpSeconds</stringProp>
+            <stringProp name="Argument.value">${__P(rampUpSeconds,1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="durationSeconds" elementType="Argument">
+            <stringProp name="Argument.name">durationSeconds</stringProp>
+            <stringProp name="Argument.value">${__P(durationSeconds,10)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="warmupSeconds" elementType="Argument">
+            <stringProp name="Argument.name">warmupSeconds</stringProp>
+            <stringProp name="Argument.value">${__P(warmupSeconds,2)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="targetBaseUrl" elementType="Argument">
+            <stringProp name="Argument.name">targetBaseUrl</stringProp>
+            <stringProp name="Argument.value">${__P(targetBaseUrl,http://127.0.0.1:8081)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="runnerFixturePath" elementType="Argument">
+            <stringProp name="Argument.name">runnerFixturePath</stringProp>
+            <stringProp name="Argument.value">${__P(runnerFixturePath,performance/jmeter/fixtures/runner-test-case.template.json)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="runTag" elementType="Argument">
+            <stringProp name="Argument.name">runTag</stringProp>
+            <stringProp name="Argument.value">${__P(runTag,jmeter-runner)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="connectTimeoutMillis" elementType="Argument">
+            <stringProp name="Argument.name">connectTimeoutMillis</stringProp>
+            <stringProp name="Argument.value">${__P(connectTimeoutMillis,2000)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="responseTimeoutMillis" elementType="Argument">
+            <stringProp name="Argument.name">responseTimeoutMillis</stringProp>
+            <stringProp name="Argument.value">${__P(responseTimeoutMillis,10000)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Runner steady state" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController">
+          <boolProp name="LoopController.continue_forever">true</boolProp>
+          <stringProp name="LoopController.loops">-1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${concurrency}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampUpSeconds}</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">${durationSeconds}</stringProp>
+        <stringProp name="ThreadGroup.delay">${warmupSeconds}</stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Formal API headers" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="Content-Type" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+            <elementProp name="Authorization" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+            </elementProp>
+            <elementProp name="X-Trace-Id" elementType="Header">
+              <stringProp name="Header.name">X-Trace-Id</stringProp>
+              <stringProp name="Header.value">${runTag}-${__threadNum}</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Initialize endpoint variables once" enabled="true"/>
+        <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Initialize endpoint variables" enabled="true">
+          <stringProp name="cacheKey">initialize-runner-endpoint</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="script"><![CDATA[
+def envAccessToken = System.getenv('APIOPS_PERF_ACCESS_TOKEN')
+if (envAccessToken != null && !envAccessToken.isBlank()) {
+    vars.put('accessToken', envAccessToken)
+}
+def uri = new java.net.URI(vars.get('baseUrl'))
+vars.put('serverProtocol', uri.scheme)
+def port = uri.port > 0 ? uri.port : (uri.scheme.equalsIgnoreCase('https') ? 443 : 80)
+vars.put('serverPort', String.valueOf(port))
+vars.put('serverHost', uri.host)
+def path = uri.path
+vars.put('basePath', path == null || path == '/' ? '' : path.replaceAll('/$', ''))
+SampleResult.setResponseCode('200')
+SampleResult.setSuccessful(true)
+log.info('APIOPS_JMETER_ACCESS_TOKEN_LENGTH=' + (vars.get('accessToken') ?: '').length())
+]]></stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+        </hashTree>
+        <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Authenticate once per thread" enabled="true"/>
+        <hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="Login when no bearer token was supplied" enabled="true">
+            <stringProp name="IfController.condition">${__groovy(vars.get('accessToken') == null || vars.get('accessToken').trim().isEmpty())}</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
+          </IfController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /api/v1/auth/login" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <stringProp name="HTTPSampler.domain">${serverHost}</stringProp>
+              <stringProp name="HTTPSampler.port">${serverPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${serverProtocol}</stringProp>
+              <stringProp name="HTTPSampler.path">${basePath}/api/v1/auth/login</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.connect_timeout">${connectTimeoutMillis}</stringProp>
+              <stringProp name="HTTPSampler.response_timeout">${responseTimeoutMillis}</stringProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;username&quot;:&quot;${username}&quot;,&quot;password&quot;:&quot;${password}&quot;}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Parse base URL" enabled="true">
+                <stringProp name="cacheKey">parse-base-url</stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="script"><![CDATA[
+def uri = new java.net.URI(vars.get('baseUrl'))
+vars.put('serverProtocol', uri.scheme)
+def port = uri.port > 0 ? uri.port : (uri.scheme.equalsIgnoreCase('https') ? 443 : 80)
+vars.put('serverPort', String.valueOf(port))
+def path = uri.path
+vars.put('basePath', path == null || path == '/' ? '' : path.replaceAll('/$', ''))
+]]></stringProp>
+              </JSR223PreProcessor>
+              <hashTree/>
+              <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract access token" enabled="true">
+                <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+                <stringProp name="RegexExtractor.refname">accessToken</stringProp>
+                <stringProp name="RegexExtractor.regex">&quot;accessToken&quot;\\s*:\\s*&quot;([^&quot;]+)&quot;</stringProp>
+                <stringProp name="RegexExtractor.template">$1$</stringProp>
+                <stringProp name="RegexExtractor.default"></stringProp>
+                <stringProp name="RegexExtractor.match_number">1</stringProp>
+              </RegexExtractor>
+              <hashTree/>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Login returned HTTP 200" enabled="true">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="login-status">200</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">8</intProp>
+              </ResponseAssertion>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+        <GenericController guiclass="LogicControllerGui" testclass="GenericController" testname="Protected Runner calls" enabled="true"/>
+        <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Protected Runner authorization in scope" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="Authorization" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="runner.submit" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <stringProp name="HTTPSampler.domain">${serverHost}</stringProp>
+          <stringProp name="HTTPSampler.port">${serverPort}</stringProp>
+          <stringProp name="HTTPSampler.protocol">${serverProtocol}</stringProp>
+          <stringProp name="HTTPSampler.path">${basePath}/api/v1/projects/${projectId}/test-batches</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.connect_timeout">${connectTimeoutMillis}</stringProp>
+          <stringProp name="HTTPSampler.response_timeout">${responseTimeoutMillis}</stringProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;testCases&quot;:[${runnerBody}]}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Protected Runner authorization" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="Authorization" elementType="Header">
+                <stringProp name="Header.name">Authorization</stringProp>
+                <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Build deterministic TestCase fixture" enabled="true">
+            <stringProp name="cacheKey">build-runner-fixture</stringProp>
+            <stringProp name="filename"></stringProp>
+            <stringProp name="parameters"></stringProp>
+            <stringProp name="scriptLanguage">groovy</stringProp>
+            <stringProp name="script"><![CDATA[
+def iteration = (vars.getObject('iteration') ?: 0) as int
+iteration++
+vars.putObject('iteration', iteration)
+def caseId = vars.get('runTag') + '-' + ctx.getThreadNum() + '-' + iteration + '-' + java.util.UUID.randomUUID().toString().substring(0, 8)
+def body = new File(vars.get('runnerFixturePath')).getText('UTF-8')
+body = body.replace('@@CASE_ID@@', caseId)
+        .replace('@@PROJECT_ID@@', vars.get('projectId'))
+        .replace('@@TARGET_BASE_URL@@', vars.get('targetBaseUrl'))
+vars.put('lastCaseId', caseId)
+vars.put('runnerBody', body)
+def uri = new java.net.URI(vars.get('baseUrl'))
+vars.put('serverProtocol', uri.scheme)
+def port = uri.port > 0 ? uri.port : (uri.scheme.equalsIgnoreCase('https') ? 443 : 80)
+vars.put('serverPort', String.valueOf(port))
+def path = uri.path
+vars.put('basePath', path == null || path == '/' ? '' : path.replaceAll('/$', ''))
+def headers = sampler.getHeaderManager()
+if (headers == null) {
+    headers = new org.apache.jmeter.protocol.http.control.HeaderManager()
+    sampler.setHeaderManager(headers)
+}
+headers.add(new org.apache.jmeter.protocol.http.control.Header('Authorization', 'Bearer ' + vars.get('accessToken')))
+]]></stringProp>
+          </JSR223PreProcessor>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Runner accepted batch" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="runner-status">202</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">8</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

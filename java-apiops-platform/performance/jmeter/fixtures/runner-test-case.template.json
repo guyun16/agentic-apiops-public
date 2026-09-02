@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "@@CASE_ID@@",
+  "projectId": @@PROJECT_ID@@,
+  "apiId": "jmeter-performance-fixture",
+  "name": "@@CASE_ID@@",
+  "environment": {
+    "baseUrl": "@@TARGET_BASE_URL@@",
+    "variables": {}
+  },
+  "description": "Deterministic read-only performance fixture.",
+  "tags": ["jmeter", "performance", "stage13"],
+  "steps": [
+    {
+      "stepId": "jmeter-health-step",
+      "name": "health fixture",
+      "request": {
+        "method": "GET",
+        "path": "/users/1",
+        "pathParams": null,
+        "query": null,
+        "headers": null,
+        "body": null
+      },
+      "assertions": [
+        {
+          "type": "STATUS_CODE",
+          "expected": 200
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

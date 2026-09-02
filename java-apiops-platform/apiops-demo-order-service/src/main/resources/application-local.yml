@@ -1,0 +1,9 @@
+apiops:
+  fault:
+    enabled: true
+
+spring:
+  datasource:
+    url: ${APIOPS_ORDER_DB_URL:jdbc:mysql://localhost:3306/apiops_demo_order}
+    username: ${APIOPS_ORDER_DB_USERNAME:root}
+    password: ${APIOPS_ORDER_DB_PASSWORD:}

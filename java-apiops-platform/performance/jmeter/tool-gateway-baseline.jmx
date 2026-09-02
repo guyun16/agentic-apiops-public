@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="APIOps Tool Gateway baseline" enabled="true">
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="baseUrl" elementType="Argument">
+            <stringProp name="Argument.name">baseUrl</stringProp>
+            <stringProp name="Argument.value">${__P(baseUrl,http://127.0.0.1:8080)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="projectId" elementType="Argument">
+            <stringProp name="Argument.name">projectId</stringProp>
+            <stringProp name="Argument.value">${__P(projectId,19)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="username" elementType="Argument">
+            <stringProp name="Argument.name">username</stringProp>
+            <stringProp name="Argument.value">${__P(username,demo-user)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="password" elementType="Argument">
+            <stringProp name="Argument.name">password</stringProp>
+            <stringProp name="Argument.value">${__P(password,)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="accessToken" elementType="Argument">
+            <stringProp name="Argument.name">accessToken</stringProp>
+            <stringProp name="Argument.value">${__P(accessToken,)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="concurrency" elementType="Argument">
+            <stringProp name="Argument.name">concurrency</stringProp>
+            <stringProp name="Argument.value">${__P(concurrency,1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="rampUpSeconds" elementType="Argument">
+            <stringProp name="Argument.name">rampUpSeconds</stringProp>
+            <stringProp name="Argument.value">${__P(rampUpSeconds,1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="durationSeconds" elementType="Argument">
+            <stringProp name="Argument.name">durationSeconds</stringProp>
+            <stringProp name="Argument.value">${__P(durationSeconds,10)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="warmupSeconds" elementType="Argument">
+            <stringProp name="Argument.name">warmupSeconds</stringProp>
+            <stringProp name="Argument.value">${__P(warmupSeconds,2)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="toolMode" elementType="Argument">
+            <stringProp name="Argument.name">toolMode</stringProp>
+            <stringProp name="Argument.value">${__P(toolMode,allowed)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="toolKey" elementType="Argument">
+            <stringProp name="Argument.name">toolKey</stringProp>
+            <stringProp name="Argument.value">${__P(toolKey,apiops:runner:progress:19:1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="crossProjectKey" elementType="Argument">
+            <stringProp name="Argument.name">crossProjectKey</stringProp>
+            <stringProp name="Argument.value">${__P(crossProjectKey,apiops:runner:progress:20:1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="toolField" elementType="Argument">
+            <stringProp name="Argument.name">toolField</stringProp>
+            <stringProp name="Argument.value">${__P(toolField,status)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="runTag" elementType="Argument">
+            <stringProp name="Argument.name">runTag</stringProp>
+            <stringProp name="Argument.value">${__P(runTag,jmeter-tool)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="connectTimeoutMillis" elementType="Argument">
+            <stringProp name="Argument.name">connectTimeoutMillis</stringProp>
+            <stringProp name="Argument.value">${__P(connectTimeoutMillis,2000)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="responseTimeoutMillis" elementType="Argument">
+            <stringProp name="Argument.name">responseTimeoutMillis</stringProp>
+            <stringProp name="Argument.value">${__P(responseTimeoutMillis,5000)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="toolPacingMillis" elementType="Argument">
+            <stringProp name="Argument.name">toolPacingMillis</stringProp>
+            <stringProp name="Argument.value">${__P(toolPacingMillis,250)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Tool Gateway steady state" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController">
+          <boolProp name="LoopController.continue_forever">true</boolProp>
+          <stringProp name="LoopController.loops">-1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">${concurrency}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${rampUpSeconds}</stringProp>
+        <boolProp name="ThreadGroup.scheduler">true</boolProp>
+        <stringProp name="ThreadGroup.duration">${durationSeconds}</stringProp>
+        <stringProp name="ThreadGroup.delay">${warmupSeconds}</stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Formal API headers" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="Content-Type" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+            <elementProp name="Authorization" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+            </elementProp>
+            <elementProp name="X-Trace-Id" elementType="Header">
+              <stringProp name="Header.name">X-Trace-Id</stringProp>
+              <stringProp name="Header.value">${runTag}-${__threadNum}</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <ConstantTimer guiclass="TestBeanGUI" testclass="ConstantTimer" testname="Deterministic tool pacing" enabled="true">
+          <stringProp name="ConstantTimer.delay">${toolPacingMillis}</stringProp>
+        </ConstantTimer>
+        <hashTree/>
+        <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Initialize endpoint variables once" enabled="true"/>
+        <hashTree>
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="Initialize endpoint variables" enabled="true">
+          <stringProp name="cacheKey">initialize-tool-endpoint</stringProp>
+          <stringProp name="filename"></stringProp>
+          <stringProp name="parameters"></stringProp>
+          <stringProp name="scriptLanguage">groovy</stringProp>
+          <stringProp name="script"><![CDATA[
+def envAccessToken = System.getenv('APIOPS_PERF_ACCESS_TOKEN')
+if (envAccessToken != null && !envAccessToken.isBlank()) {
+    vars.put('accessToken', envAccessToken)
+}
+def uri = new java.net.URI(vars.get('baseUrl'))
+vars.put('serverProtocol', uri.scheme)
+def port = uri.port > 0 ? uri.port : (uri.scheme.equalsIgnoreCase('https') ? 443 : 80)
+vars.put('serverPort', String.valueOf(port))
+vars.put('serverHost', uri.host)
+def path = uri.path
+vars.put('basePath', path == null || path == '/' ? '' : path.replaceAll('/$', ''))
+SampleResult.setResponseCode('200')
+SampleResult.setSuccessful(true)
+log.info('APIOPS_JMETER_ACCESS_TOKEN_LENGTH=' + (vars.get('accessToken') ?: '').length())
+]]></stringProp>
+        </JSR223Sampler>
+        <hashTree/>
+        </hashTree>
+        <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Authenticate once per thread" enabled="true"/>
+        <hashTree>
+          <IfController guiclass="IfControllerPanel" testclass="IfController" testname="Login when no bearer token was supplied" enabled="true">
+            <stringProp name="IfController.condition">${__groovy(vars.get('accessToken') == null || vars.get('accessToken').trim().isEmpty())}</stringProp>
+            <boolProp name="IfController.evaluateAll">false</boolProp>
+            <boolProp name="IfController.useExpression">true</boolProp>
+          </IfController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /api/v1/auth/login" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <stringProp name="HTTPSampler.domain">${serverHost}</stringProp>
+              <stringProp name="HTTPSampler.port">${serverPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${serverProtocol}</stringProp>
+              <stringProp name="HTTPSampler.path">${basePath}/api/v1/auth/login</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <stringProp name="HTTPSampler.connect_timeout">${connectTimeoutMillis}</stringProp>
+              <stringProp name="HTTPSampler.response_timeout">${responseTimeoutMillis}</stringProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;username&quot;:&quot;${username}&quot;,&quot;password&quot;:&quot;${password}&quot;}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                    <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Parse base URL" enabled="true">
+                <stringProp name="cacheKey">parse-base-url</stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="script"><![CDATA[
+def uri = new java.net.URI(vars.get('baseUrl'))
+vars.put('serverProtocol', uri.scheme)
+def port = uri.port > 0 ? uri.port : (uri.scheme.equalsIgnoreCase('https') ? 443 : 80)
+vars.put('serverPort', String.valueOf(port))
+def path = uri.path
+vars.put('basePath', path == null || path == '/' ? '' : path.replaceAll('/$', ''))
+]]></stringProp>
+              </JSR223PreProcessor>
+              <hashTree/>
+              <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract access token" enabled="true">
+                <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+                <stringProp name="RegexExtractor.refname">accessToken</stringProp>
+                <stringProp name="RegexExtractor.regex">&quot;accessToken&quot;\\s*:\\s*&quot;([^&quot;]+)&quot;</stringProp>
+                <stringProp name="RegexExtractor.template">$1$</stringProp>
+                <stringProp name="RegexExtractor.default"></stringProp>
+                <stringProp name="RegexExtractor.match_number">1</stringProp>
+              </RegexExtractor>
+              <hashTree/>
+              <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Login returned HTTP 200" enabled="true">
+                <collectionProp name="Asserion.test_strings">
+                  <stringProp name="login-status">200</stringProp>
+                </collectionProp>
+                <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+                <boolProp name="Assertion.assume_success">false</boolProp>
+                <intProp name="Assertion.test_type">8</intProp>
+              </ResponseAssertion>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+        </hashTree>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="Run allowed read mode" enabled="true">
+          <stringProp name="IfController.condition">${__groovy(vars.get('toolMode') == 'allowed' || vars.get('toolMode') == 'result-limit')}</stringProp>
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+          <boolProp name="IfController.useExpression">true</boolProp>
+        </IfController>
+        <hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="tool.read.allowed" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <stringProp name="HTTPSampler.domain">${serverHost}</stringProp>
+            <stringProp name="HTTPSampler.port">${serverPort}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${serverProtocol}</stringProp>
+            <stringProp name="HTTPSampler.path">${basePath}/api/v1/projects/${projectId}/tool-calls</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.connect_timeout">${connectTimeoutMillis}</stringProp>
+            <stringProp name="HTTPSampler.response_timeout">${responseTimeoutMillis}</stringProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&quot;schemaVersion&quot;:&quot;0.2.0&quot;,&quot;agentRunId&quot;:&quot;${runTag}&quot;,&quot;projectId&quot;:&quot;${projectId}&quot;,&quot;toolName&quot;:&quot;redis.read&quot;,&quot;params&quot;:{&quot;command&quot;:&quot;HGET&quot;,&quot;keys&quot;:[&quot;${toolKey}&quot;],&quot;fields&quot;:[&quot;${toolField}&quot;]},&quot;traceId&quot;:&quot;${runTag}&quot;}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Protected Tool authorization" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="Authorization" elementType="Header">
+                  <stringProp name="Header.name">Authorization</stringProp>
+                  <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Parse base URL" enabled="true">
+<stringProp name="cacheKey">parse-base-url-tool-allowed</stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="script"><![CDATA[
+def uri = new java.net.URI(vars.get('baseUrl'))
+vars.put('serverProtocol', uri.scheme)
+def port = uri.port > 0 ? uri.port : (uri.scheme.equalsIgnoreCase('https') ? 443 : 80)
+vars.put('serverPort', String.valueOf(port))
+def path = uri.path
+vars.put('basePath', path == null || path == '/' ? '' : path.replaceAll('/$', ''))
+def headers = sampler.getHeaderManager()
+if (headers == null) {
+    headers = new org.apache.jmeter.protocol.http.control.HeaderManager()
+    sampler.setHeaderManager(headers)
+}
+headers.add(new org.apache.jmeter.protocol.http.control.Header('Authorization', 'Bearer ' + vars.get('accessToken')))
+]]></stringProp>
+            </JSR223PreProcessor>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Allowed read is SUCCESS" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="allowed-status">&quot;status&quot;:&quot;SUCCESS&quot;</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Result-limit marker assertion" enabled="true">
+              <stringProp name="cacheKey">assert-result-limit-marker</stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="script"><![CDATA[
+if (vars.get('toolMode') == 'result-limit'
+        && !prev.getResponseDataAsString().contains('"_resultTruncated":true')) {
+    prev.setSuccessful(false)
+    prev.setResponseMessage('Result limiter marker was missing')
+}
+]]></stringProp>
+            </JSR223PostProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="Run cross-project guard-deny mode" enabled="true">
+          <stringProp name="IfController.condition">${__groovy(vars.get('toolMode') == 'guard-deny')}</stringProp>
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+          <boolProp name="IfController.useExpression">true</boolProp>
+        </IfController>
+        <hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="tool.read.guard-deny" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <stringProp name="HTTPSampler.domain">${serverHost}</stringProp>
+            <stringProp name="HTTPSampler.port">${serverPort}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${serverProtocol}</stringProp>
+            <stringProp name="HTTPSampler.path">${basePath}/api/v1/projects/${projectId}/tool-calls</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.connect_timeout">${connectTimeoutMillis}</stringProp>
+            <stringProp name="HTTPSampler.response_timeout">${responseTimeoutMillis}</stringProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&quot;schemaVersion&quot;:&quot;0.2.0&quot;,&quot;agentRunId&quot;:&quot;${runTag}&quot;,&quot;projectId&quot;:&quot;${projectId}&quot;,&quot;toolName&quot;:&quot;redis.read&quot;,&quot;params&quot;:{&quot;command&quot;:&quot;HGET&quot;,&quot;keys&quot;:[&quot;${crossProjectKey}&quot;],&quot;fields&quot;:[&quot;${toolField}&quot;]},&quot;traceId&quot;:&quot;${runTag}&quot;}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Protected Tool authorization" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="Authorization" elementType="Header">
+                  <stringProp name="Header.name">Authorization</stringProp>
+                  <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Parse base URL" enabled="true">
+<stringProp name="cacheKey">parse-base-url-tool-deny</stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="script"><![CDATA[
+def uri = new java.net.URI(vars.get('baseUrl'))
+vars.put('serverProtocol', uri.scheme)
+def port = uri.port > 0 ? uri.port : (uri.scheme.equalsIgnoreCase('https') ? 443 : 80)
+vars.put('serverPort', String.valueOf(port))
+def path = uri.path
+vars.put('basePath', path == null || path == '/' ? '' : path.replaceAll('/$', ''))
+def headers = sampler.getHeaderManager()
+if (headers == null) {
+    headers = new org.apache.jmeter.protocol.http.control.HeaderManager()
+    sampler.setHeaderManager(headers)
+}
+headers.add(new org.apache.jmeter.protocol.http.control.Header('Authorization', 'Bearer ' + vars.get('accessToken')))
+]]></stringProp>
+            </JSR223PreProcessor>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Guard returns FORBIDDEN" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="guard-status">&quot;status&quot;:&quot;FORBIDDEN&quot;</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <IfController guiclass="IfControllerPanel" testclass="IfController" testname="Run invalid-contract mode" enabled="true">
+          <stringProp name="IfController.condition">${__groovy(vars.get('toolMode') == 'invalid')}</stringProp>
+          <boolProp name="IfController.evaluateAll">false</boolProp>
+          <boolProp name="IfController.useExpression">true</boolProp>
+        </IfController>
+        <hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="tool.read.invalid" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <stringProp name="HTTPSampler.domain">${serverHost}</stringProp>
+            <stringProp name="HTTPSampler.port">${serverPort}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${serverProtocol}</stringProp>
+            <stringProp name="HTTPSampler.path">${basePath}/api/v1/projects/${projectId}/tool-calls</stringProp>
+            <stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <stringProp name="HTTPSampler.connect_timeout">${connectTimeoutMillis}</stringProp>
+            <stringProp name="HTTPSampler.response_timeout">${responseTimeoutMillis}</stringProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.value">{&quot;schemaVersion&quot;:&quot;0.2.0&quot;,&quot;agentRunId&quot;:&quot;${runTag}&quot;,&quot;projectId&quot;:&quot;${projectId}&quot;,&quot;toolName&quot;:&quot;redis.read&quot;,&quot;params&quot;:{&quot;command&quot;:&quot;HGET&quot;,&quot;keys&quot;:[&quot;${toolKey}&quot;],&quot;fields&quot;:[&quot;${toolField}&quot;],&quot;path&quot;:&quot;unexpected&quot;},&quot;traceId&quot;:&quot;${runTag}&quot;}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Protected Tool authorization" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="Authorization" elementType="Header">
+                  <stringProp name="Header.name">Authorization</stringProp>
+                  <stringProp name="Header.value">Bearer ${accessToken}</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Parse base URL" enabled="true">
+<stringProp name="cacheKey">parse-base-url-tool-invalid</stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="script"><![CDATA[
+def uri = new java.net.URI(vars.get('baseUrl'))
+vars.put('serverProtocol', uri.scheme)
+def port = uri.port > 0 ? uri.port : (uri.scheme.equalsIgnoreCase('https') ? 443 : 80)
+vars.put('serverPort', String.valueOf(port))
+def path = uri.path
+vars.put('basePath', path == null || path == '/' ? '' : path.replaceAll('/$', ''))
+def headers = sampler.getHeaderManager()
+if (headers == null) {
+    headers = new org.apache.jmeter.protocol.http.control.HeaderManager()
+    sampler.setHeaderManager(headers)
+}
+headers.add(new org.apache.jmeter.protocol.http.control.Header('Authorization', 'Bearer ' + vars.get('accessToken')))
+]]></stringProp>
+            </JSR223PreProcessor>
+            <hashTree/>
+            <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Validator returns PARAM_INVALID" enabled="true">
+              <collectionProp name="Asserion.test_strings">
+                <stringProp name="invalid-status">&quot;status&quot;:&quot;PARAM_INVALID&quot;</stringProp>
+              </collectionProp>
+              <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+              <boolProp name="Assertion.assume_success">false</boolProp>
+              <intProp name="Assertion.test_type">16</intProp>
+            </ResponseAssertion>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "stage7_create_order_success",
+  "projectId": 1001,
+  "apiId": "api_create_order",
+  "name": "Create order success E2E",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {}
+  },
+  "description": "Stage 7 in-memory E2E for the Stage 6 createOrder API semantics.",
+  "tags": ["stage7", "e2e", "happy-path"],
+  "steps": [
+    {
+      "stepId": "create-order-success",
+      "name": "Create order with valid inventory",
+      "request": {
+        "method": "POST",
+        "path": "/orders",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "userId": 1,
+          "items": [
+            {
+              "productId": 1,
+              "quantity": 1
+            }
+          ]
+        }
+      },
+      "assertions": [
+        {
+          "type": "STATUS_CODE",
+          "expected": 200
+        },
+        {
+          "type": "HEADER",
+          "name": "content-type",
+          "operator": "CONTAINS",
+          "expected": "application/json"
+        },
+        {
+          "type": "JSON_PATH",
+          "expression": "$.code",
+          "operator": "EQUALS",
+          "expected": "ORDER_SUCCESS"
+        },
+        {
+          "type": "JSON_PATH",
+          "expression": "$.data",
+          "operator": "EXISTS"
+        },
+        {
+          "type": "RESPONSE_TIME",
+          "maxMs": 1000
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

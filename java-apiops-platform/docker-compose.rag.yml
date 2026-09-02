@@ -1,0 +1,13 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.19.0
+    container_name: apiops-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - apiops_qdrant_data:/qdrant/storage
+
+volumes:
+  apiops_qdrant_data:

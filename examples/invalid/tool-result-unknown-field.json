@@ -1,0 +1,17 @@
+{
+    "schemaVersion": "0.1.0",
+    "toolCallId": "tool_call_001",
+    "status": "SUCCESS",
+    "data": {
+        "rows": [
+            {
+                "id": "order_001",
+                "status": "CREATED"
+            }
+        ]
+    },
+    "error": null,
+    "sanitized": true,
+    "traceId": "trace_001",
+    "unknownField": true
+}

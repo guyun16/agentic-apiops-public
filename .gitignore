@@ -1,0 +1,97 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+.kotlin
+
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+### Java compilation output ###
+**/out/
+**/out-*/
+*.class
+
+### IntelliJ IDEA local files ###
+.idea/
+
+### Local runtime and secret files ###
+*.log
+*.tmp
+*.pid
+.env
+.env.*
+!.env.example
+*.jtl
+
+### Local test coverage ###
+coverage/
+
+### Python AgentLab local artifacts ###
+/python-apiops-agentlab/.venv/
+/python-apiops-agentlab/.pytest_cache/
+/python-apiops-agentlab/.ruff_cache/
+/python-apiops-agentlab/**/__pycache__/
+/python-apiops-agentlab/data/historical-memory.sqlite3
+/python-apiops-agentlab/data/historical-memory.sqlite3-shm
+/python-apiops-agentlab/data/historical-memory.sqlite3-wal
+/python-apiops-agentlab/data/agentlab-runtime.sqlite3
+/python-apiops-agentlab/data/agentlab-runtime.sqlite3-shm
+/python-apiops-agentlab/data/agentlab-runtime.sqlite3-wal
+/python-apiops-agentlab/data/traces/
+
+### APIOps Console frontend ###
+/apiops-console/node_modules/
+/apiops-console/dist/
+/apiops-console/*.tsbuildinfo
+
+### Public release guardrails ###
+**/docs/
+/zh/
+**/artifacts/
+**/data/
+/f105r/
+/python-apiops-agentlab/app/benchmark/
+/python-apiops-agentlab/tests/benchmark/
+/apiops-console/src/features/benchmark/
+benchmark-results/
+benchmark-artifacts/
+venv/
+**/venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+**/.pytest_cache/
+.ruff_cache/
+**/.ruff_cache/

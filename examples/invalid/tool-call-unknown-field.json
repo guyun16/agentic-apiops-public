@@ -1,0 +1,15 @@
+{
+    "schemaVersion": "0.2.0",
+    "agentRunId": "agent_run_001",
+    "agentStepId": "agent_step_001",
+    "projectId": "42",
+    "toolName": "sql.read",
+    "params": {
+        "query": "select id, status from orders where id = ?",
+        "args": [
+            "order_001"
+        ]
+    },
+    "traceId": "trace_001",
+    "unknownField": true
+}

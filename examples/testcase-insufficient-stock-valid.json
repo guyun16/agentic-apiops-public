@@ -1,0 +1,49 @@
+{
+    "schemaVersion": "1.0.0",
+    "caseId": "case_create_order_insufficient_stock",
+    "projectId": 1001,
+    "apiId": "api_create_order",
+    "name": "Create order with insufficient stock",
+    "environment": {
+        "baseUrl": "http://localhost:8080",
+        "variables": {}
+    },
+    "description": "Verify that creating an order with quantity larger than stock returns business error.",
+    "tags": [
+        "order",
+        "business-error",
+        "negative"
+    ],
+    "steps": [
+        {
+            "stepId": "step_001",
+            "name": "Submit create order request with excessive quantity",
+            "request": {
+                "method": "POST",
+                "path": "/api/orders",
+                "query": {},
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer {{token}}"
+                },
+                "body": {
+                    "productId": "prod_low_stock",
+                    "quantity": 9999
+                }
+            },
+            "assertions": [
+                {
+                    "type": "STATUS_CODE",
+                    "expected": 409
+                },
+                {
+                    "type": "JSON_PATH",
+                    "expression": "$.code",
+                    "operator": "EQUALS",
+                    "expected": "INVENTORY_NOT_ENOUGH"
+                }
+            ],
+            "extractors": []
+        }
+    ]
+}

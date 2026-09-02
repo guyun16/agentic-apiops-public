@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "stage8_demo_product_assertion_failed",
+  "projectId": 1001,
+  "apiId": "listProducts",
+  "name": "List demo products with an intentionally wrong expectation",
+  "environment": {
+    "baseUrl": "http://127.0.0.1:18080",
+    "variables": {}
+  },
+  "tags": ["stage8", "real-http", "assertion-failed"],
+  "steps": [
+    {
+      "stepId": "list-products-mismatch",
+      "name": "List products but expect a created response",
+      "request": {
+        "method": "GET",
+        "path": "/products",
+        "query": {
+          "pageNo": 1,
+          "pageSize": 1
+        }
+      },
+      "assertions": [
+        {
+          "type": "STATUS_CODE",
+          "expected": 201
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

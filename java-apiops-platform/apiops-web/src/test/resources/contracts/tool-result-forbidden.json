@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "0.1.0",
+  "toolCallId": "java-generated-denied-1",
+  "status": "FORBIDDEN",
+  "data": null,
+  "error": {
+    "code": "FORBIDDEN",
+    "message": "tool call forbidden"
+  },
+  "sanitized": true,
+  "traceId": "trace-contract-1"
+}

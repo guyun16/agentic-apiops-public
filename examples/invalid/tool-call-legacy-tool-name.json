@@ -1,0 +1,11 @@
+{
+    "schemaVersion": "0.2.0",
+    "agentRunId": "agent_run_001",
+    "projectId": "42",
+    "toolName": "RAG_SEARCH",
+    "params": {
+        "query": "order timeout",
+        "topK": 2
+    },
+    "traceId": "trace_001"
+}

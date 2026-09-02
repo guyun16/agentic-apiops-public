@@ -1,0 +1,28 @@
+{
+    "schemaVersion": "1.0.0",
+    "caseId": "case_project_id_string",
+    "projectId": "1001",
+    "apiId": "api_create_order",
+    "name": "String project id",
+    "environment": {
+        "baseUrl": "http://localhost:8080",
+        "variables": {}
+    },
+    "steps": [
+        {
+            "stepId": "step_001",
+            "name": "Submit request",
+            "request": {
+                "method": "GET",
+                "path": "/api/orders"
+            },
+            "assertions": [
+                {
+                    "type": "STATUS_CODE",
+                    "expected": 200
+                }
+            ],
+            "extractors": []
+        }
+    ]
+}

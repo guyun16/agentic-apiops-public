@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "9.9.9",
+  "caseId": "case_unsupported_version",
+  "projectId": 1001,
+  "apiId": "api_create_order",
+  "name": "Unsupported version",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {}
+  },
+  "steps": []
+}

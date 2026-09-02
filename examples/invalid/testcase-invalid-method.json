@@ -1,0 +1,28 @@
+{
+    "schemaVersion": "1.0.0",
+    "caseId": "case_invalid_method",
+    "projectId": 1001,
+    "apiId": "api_create_order",
+    "name": "Invalid method example",
+    "environment": {
+        "baseUrl": "http://localhost:8080",
+        "variables": {}
+    },
+    "steps": [
+        {
+            "stepId": "step_001",
+            "name": "Submit request with invalid method",
+            "request": {
+                "method": "CREATE",
+                "path": "/api/orders"
+            },
+            "assertions": [
+                {
+                    "type": "STATUS_CODE",
+                    "expected": 200
+                }
+            ],
+            "extractors": []
+        }
+    ]
+}

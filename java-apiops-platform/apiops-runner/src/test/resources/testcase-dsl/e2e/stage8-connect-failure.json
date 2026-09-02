@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "stage8_connect_failure",
+  "projectId": 1001,
+  "apiId": "listProducts",
+  "name": "Classify an unreachable demo target",
+  "environment": {
+    "baseUrl": "http://127.0.0.1:1",
+    "variables": {}
+  },
+  "tags": ["stage8", "real-http", "execution-failed"],
+  "steps": [
+    {
+      "stepId": "list-products-connect-failure",
+      "name": "Call an unreachable local target",
+      "request": {
+        "method": "GET",
+        "path": "/products"
+      },
+      "assertions": [
+        {
+          "type": "STATUS_CODE",
+          "expected": 200
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

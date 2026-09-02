@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "candidate_create_order",
+  "projectId": 42,
+  "apiId": "api_create_order",
+  "name": "Create order candidate",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {}
+  },
+  "steps": [
+    {
+      "stepId": "submit-order",
+      "name": "Submit order",
+      "request": {
+        "method": "POST",
+        "path": "/orders"
+      },
+      "assertions": [
+        {
+          "type": "STATUS_CODE",
+          "expected": 201
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

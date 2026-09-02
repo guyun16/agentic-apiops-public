@@ -1,0 +1,48 @@
+{
+    "schemaVersion": "1.0.0",
+    "caseId": "case_create_order_missing_token",
+    "projectId": 1001,
+    "apiId": "api_create_order",
+    "name": "Create order without token",
+    "environment": {
+        "baseUrl": "http://localhost:8080",
+        "variables": {}
+    },
+    "description": "Verify that creating an order without Authorization header returns 401.",
+    "tags": [
+        "order",
+        "auth",
+        "negative"
+    ],
+    "steps": [
+        {
+            "stepId": "step_001",
+            "name": "Submit create order request without token",
+            "request": {
+                "method": "POST",
+                "path": "/api/orders",
+                "query": {},
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "body": {
+                    "productId": "prod_001",
+                    "quantity": 1
+                }
+            },
+            "assertions": [
+                {
+                    "type": "STATUS_CODE",
+                    "expected": 401
+                },
+                {
+                    "type": "JSON_PATH",
+                    "expression": "$.code",
+                    "operator": "EQUALS",
+                    "expected": "AUTH_UNAUTHORIZED"
+                }
+            ],
+            "extractors": []
+        }
+    ]
+}

@@ -1,0 +1,238 @@
+openapi: 3.0.3
+info:
+  title: Metadata Normalization API
+  version: 1.0.0
+servers:
+  - url: https://root.example.test
+security:
+  - oauth2: [read]
+paths:
+  /rooted:
+    get:
+      operationId: rootedOperation
+      responses:
+        '200':
+          description: rooted
+  /items/{id}:
+    servers:
+      - url: https://path.example.test
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: path-level id
+        schema:
+          type: string
+      - name: locale
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: header
+        schema:
+          type: string
+    get:
+      operationId: getItem
+      summary: Get item
+      description: Reads one item
+      tags: [items, read]
+      deprecated: true
+      servers:
+        - url: https://operation.example.test
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: operation-level id
+          example: item-42
+          schema:
+            type: string
+            enum: [item-42, item-43]
+        - name: q
+          in: query
+          schema:
+            type: string
+          examples:
+            common:
+              summary: common query
+              value: shoes
+        - name: trace
+          in: header
+          schema:
+            type: string
+        - name: session
+          in: cookie
+          schema:
+            type: string
+      responses:
+        '200':
+          description: found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required: [id]
+                  properties:
+                    id:
+                      type: string
+              examples:
+                named:
+                  summary: named response
+                  value:
+                    - id: item-43
+            application/xml:
+              schema:
+                type: string
+              example: '<id>item-42</id>'
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: server error
+          content:
+            application/json:
+              schema:
+                type: object
+        default:
+          description: fallback
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                fallback:
+                  description: fallback response
+                  value:
+                    message: failed
+    post:
+      operationId: createItem
+      summary: Create item
+      tags: [items]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, kind]
+              properties:
+                name:
+                  type: string
+                  nullable: true
+                  minLength: 2
+                  maxLength: 40
+                  pattern: '^[a-z]+$'
+                  default: sample
+                  example: widget
+                kind:
+                  type: string
+                  enum: [STANDARD, PREMIUM]
+                quantity:
+                  type: number
+                  minimum: 1
+                  maximum: 100
+                children:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                choice:
+                  oneOf:
+                    - type: string
+                    - type: integer
+                flexible:
+                  anyOf:
+                    - type: boolean
+                    - type: string
+                composed:
+                  allOf:
+                    - type: object
+                      properties:
+                        base:
+                          type: string
+                    - type: object
+                      properties:
+                        extra:
+                          type: string
+            examples:
+              minimal:
+                summary: minimal request
+                value:
+                  name: widget
+                  kind: STANDARD
+              premium:
+                description: premium request
+                value:
+                  name: premium
+                  kind: PREMIUM
+          text/plain:
+            schema:
+              type: string
+              format: plain
+            example: widget
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+    put:
+      operationId: replaceItem
+      security:
+        - apiKeyAuth: []
+      responses:
+        '200':
+          description: replaced
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      operationId: deleteItem
+      responses:
+        '204':
+          description: deleted
+    patch:
+      operationId: patchItem
+      responses:
+        '409':
+          description: conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example.test/token
+          scopes:
+            read: Read access
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string

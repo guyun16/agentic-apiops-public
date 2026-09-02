@@ -1,0 +1,51 @@
+openapi: 3.0.3
+info:
+  title: Schema Ref Fixture
+  version: 1.0.0
+paths: {}
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+    DirectAddress:
+      $ref: '#/components/schemas/Address'
+    Customer:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+    Order:
+      type: object
+      properties:
+        billingAddress:
+          $ref: '#/components/schemas/Address'
+        shippingAddress:
+          $ref: '#/components/schemas/Address'
+        customer:
+          $ref: '#/components/schemas/Customer'
+    TreeNode:
+      type: object
+      properties:
+        child:
+          $ref: '#/components/schemas/TreeNode'
+    TreeNodeRequest:
+      $ref: '#/components/schemas/TreeNode'
+    A:
+      type: object
+      properties:
+        b:
+          $ref: '#/components/schemas/B'
+    B:
+      type: object
+      properties:
+        a:
+          $ref: '#/components/schemas/A'
+    ARequest:
+      $ref: '#/components/schemas/A'
+    HttpRoot:
+      $ref: 'http://example.test/schema.yaml#/Remote'
+    HttpsRoot:
+      $ref: 'https://example.test/schema.yaml#/Remote'

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "case_missing_api_id",
+  "projectId": 1001,
+  "name": "Missing api id",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {}
+  },
+  "steps": []
+}

@@ -1,0 +1,134 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": false,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {"type": "prometheus", "uid": "apiops-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 8, "x": 0, "y": 0},
+      "id": 1,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [{"expr": "sum(rate(http_server_requests_seconds_count{job=\"apiops-java-platform\"}[5m]))", "legendFormat": "requests/s", "refId": "A"}],
+      "title": "HTTP Request Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "apiops-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "percentunit", "min": 0, "max": 1}, "overrides": []},
+      "gridPos": {"h": 7, "w": 8, "x": 8, "y": 0},
+      "id": 2,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [{"expr": "sum(rate(http_server_requests_seconds_count{job=\"apiops-java-platform\",status=~\"4..|5..\"}[5m])) / clamp_min(sum(rate(http_server_requests_seconds_count{job=\"apiops-java-platform\"}[5m])), 1)", "legendFormat": "error ratio", "refId": "A"}],
+      "title": "HTTP Error Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "apiops-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 8, "x": 0, "y": 7},
+      "id": 5,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [{"expr": "sum(rate(apiops_runner_executions_seconds_count{job=\"apiops-java-platform\"}[5m]))", "legendFormat": "executions/s", "refId": "A"}],
+      "title": "Runner Execution Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "apiops-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 8, "x": 8, "y": 7},
+      "id": 6,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [{"expr": "sum by (status) (rate(apiops_runner_executions_seconds_count{job=\"apiops-java-platform\"}[5m]))", "legendFormat": "{{status}}", "refId": "A"}],
+      "title": "Runner Status Distribution",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "apiops-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 8, "x": 0, "y": 14},
+      "id": 9,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [{"expr": "sum(rate(apiops_tool_calls_seconds_count{job=\"apiops-java-platform\"}[5m]))", "legendFormat": "calls/s", "refId": "A"}],
+      "title": "Tool Gateway Call Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "apiops-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 8, "x": 8, "y": 14},
+      "id": 10,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [{"expr": "sum by (status) (rate(apiops_tool_calls_seconds_count{job=\"apiops-java-platform\"}[5m]))", "legendFormat": "{{status}}", "refId": "A"}],
+      "title": "Tool Gateway Status Distribution",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "apiops-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 8, "x": 0, "y": 21},
+      "id": 13,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [{"expr": "sum(rate(apiops_tool_safety_violations_total{job=\"apiops-java-platform\"}[5m]))", "legendFormat": "violations/s", "refId": "A"}],
+      "title": "Tool SafetyViolation Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "apiops-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "bytes"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 8, "x": 8, "y": 21},
+      "id": 14,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [
+        {"expr": "sum(jvm_memory_used_bytes{job=\"apiops-java-platform\",area=\"heap\"})", "legendFormat": "heap used", "refId": "A"},
+        {"expr": "sum(jvm_memory_max_bytes{job=\"apiops-java-platform\",area=\"heap\"})", "legendFormat": "heap max", "refId": "B"}
+      ],
+      "title": "JVM Heap",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "apiops-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 8, "x": 16, "y": 21},
+      "id": 15,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [{"expr": "sum(rate(jvm_gc_pause_seconds_sum{job=\"apiops-java-platform\"}[5m]))", "legendFormat": "GC pause seconds/s", "refId": "A"}],
+      "title": "JVM GC Pause",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "apiops-prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "gridPos": {"h": 7, "w": 8, "x": 0, "y": 28},
+      "id": 16,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "multi"}},
+      "targets": [{"expr": "jvm_threads_live_threads{job=\"apiops-java-platform\"}", "legendFormat": "live threads", "refId": "A"}],
+      "title": "JVM Live Threads",
+      "type": "timeseries"
+    },
+    {
+      "gridPos": {"h": 5, "w": 8, "x": 8, "y": 28},
+      "id": 17,
+      "options": {
+        "content": "P95/P99 panels are intentionally not provisioned: the current application exports Timer count/sum/max but no histogram bucket series. Enable an approved histogram distribution before adding `histogram_quantile` panels.",
+        "mode": "markdown"
+      },
+      "title": "Latency Quantiles",
+      "type": "text"
+    }
+  ],
+  "refresh": "15s",
+  "schemaVersion": 39,
+  "tags": ["apiops", "stage13", "prometheus"],
+  "templating": {"list": []},
+  "time": {"from": "now-1h", "to": "now"},
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "APIOps Java Platform",
+  "uid": "apiops-java-platform",
+  "version": 1
+}

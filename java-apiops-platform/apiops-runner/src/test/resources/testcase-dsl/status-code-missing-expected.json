@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "case_missing_status_expected",
+  "projectId": 1001,
+  "apiId": "api_create_order",
+  "name": "Missing status expected",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {}
+  },
+  "steps": [
+    {
+      "stepId": "step_001",
+      "name": "Request",
+      "request": {
+        "method": "GET",
+        "path": "/api/orders"
+      },
+      "assertions": [
+        {
+          "type": "STATUS_CODE"
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

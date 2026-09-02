@@ -1,0 +1,27 @@
+{
+  "caseId": "case_missing_schema_version",
+  "projectId": 1001,
+  "apiId": "api_create_order",
+  "name": "Missing schema version",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {}
+  },
+  "steps": [
+    {
+      "stepId": "step_001",
+      "name": "Submit request",
+      "request": {
+        "method": "GET",
+        "path": "/api/orders"
+      },
+      "assertions": [
+        {
+          "type": "STATUS_CODE",
+          "expected": 200
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

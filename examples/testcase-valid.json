@@ -1,0 +1,53 @@
+{
+    "schemaVersion": "1.0.0",
+    "caseId": "case_create_order_success",
+    "projectId": 1001,
+    "apiId": "api_create_order",
+    "name": "Create order success",
+    "environment": {
+        "baseUrl": "http://localhost:8080",
+        "variables": {}
+    },
+    "description": "Verify that a user can create an order with valid productId and quantity.",
+    "tags": [
+        "order",
+        "happy-path"
+    ],
+    "steps": [
+        {
+            "stepId": "step_001",
+            "name": "Submit create order request",
+            "request": {
+                "method": "POST",
+                "path": "/api/orders/{orderId}",
+                "pathParams": {
+                    "orderId": "order_001"
+                },
+                "query": {
+                    "dryRun": false
+                },
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer {{token}}"
+                },
+                "body": {
+                    "productId": "prod_001",
+                    "quantity": 1
+                }
+            },
+            "assertions": [
+                {
+                    "type": "STATUS_CODE",
+                    "expected": 200
+                },
+                {
+                    "type": "JSON_PATH",
+                    "expression": "$.code",
+                    "operator": "EQUALS",
+                    "expected": "SUCCESS"
+                }
+            ],
+            "extractors": []
+        }
+    ]
+}

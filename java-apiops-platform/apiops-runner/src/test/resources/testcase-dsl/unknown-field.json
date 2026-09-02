@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "case_unknown_field",
+  "projectId": 1001,
+  "apiId": "api_create_order",
+  "name": "Unknown field",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {}
+  },
+  "unknownField": true,
+  "steps": []
+}

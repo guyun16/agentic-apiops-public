@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://apiops.example/schemas/openapi-metadata-schema.json",
+  "title": "OpenAPI Metadata Detail",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiId", "apiDocId", "operationId", "method", "path", "summary",
+    "description", "tags", "servers", "security", "deprecated",
+    "parameters", "requestSchemas", "responseSchemas", "examples"
+  ],
+  "properties": {
+    "apiId": { "type": "string" },
+    "apiDocId": { "type": "string" },
+    "operationId": { "type": ["string", "null"] },
+    "method": { "type": "string" },
+    "path": { "type": "string" },
+    "summary": { "type": ["string", "null"] },
+    "description": { "type": ["string", "null"] },
+    "tags": {
+      "type": ["array", "null"],
+      "items": { "type": "string" }
+    },
+    "servers": {
+      "type": ["array", "null"],
+      "items": { "type": "object" }
+    },
+    "security": {
+      "type": ["array", "null"],
+      "items": { "type": "object" }
+    },
+    "deprecated": { "type": "boolean" },
+    "parameters": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/parameter" }
+    },
+    "requestSchemas": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/requestSchema" }
+    },
+    "responseSchemas": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/responseSchema" }
+    },
+    "examples": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/example" }
+    }
+  },
+  "$defs": {
+    "jsonObject": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "parameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "location", "required", "description", "schema", "example"],
+      "properties": {
+        "name": { "type": "string" },
+        "location": { "type": "string", "enum": ["path", "query", "header", "cookie"] },
+        "required": { "type": "boolean" },
+        "description": { "type": ["string", "null"] },
+        "schema": { "$ref": "#/$defs/jsonObject" },
+        "example": {}
+      }
+    },
+    "requestSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "mediaType", "schema"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "mediaType": { "type": "string" },
+        "schema": { "$ref": "#/$defs/jsonObject" }
+      }
+    },
+    "responseSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statusCode", "description", "mediaType", "schema"],
+      "properties": {
+        "statusCode": { "type": "string" },
+        "description": { "type": ["string", "null"] },
+        "mediaType": { "type": "string" },
+        "schema": { "$ref": "#/$defs/jsonObject" }
+      }
+    },
+    "exampleOwner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "parameterName", "parameterLocation", "mediaType", "statusCode"],
+      "properties": {
+        "type": { "type": "string", "enum": ["PARAMETER", "REQUEST_SCHEMA", "RESPONSE_SCHEMA"] },
+        "parameterName": { "type": ["string", "null"] },
+        "parameterLocation": { "type": ["string", "null"] },
+        "mediaType": { "type": ["string", "null"] },
+        "statusCode": { "type": ["string", "null"] }
+      }
+    },
+    "example": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "exampleName", "summary", "description", "value"],
+      "properties": {
+        "owner": { "$ref": "#/$defs/exampleOwner" },
+        "exampleName": { "type": "string" },
+        "summary": { "type": ["string", "null"] },
+        "description": { "type": ["string", "null"] },
+        "value": {}
+      }
+    }
+  }
+}

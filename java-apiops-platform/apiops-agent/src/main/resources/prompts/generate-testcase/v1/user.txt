@@ -1,0 +1,2 @@
+Create a TestCase candidate for projectId={{projectId}} and apiId={{apiId}}.
+Task: {{task}}

@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: apiops-java-platform
+    metrics_path: /actuator/prometheus
+    static_configs:
+      # For a Prometheus container scraping a platform running on the host.
+      # Use the platform's configured host name/port when deployed elsewhere.
+      - targets: ["host.docker.internal:8080"]

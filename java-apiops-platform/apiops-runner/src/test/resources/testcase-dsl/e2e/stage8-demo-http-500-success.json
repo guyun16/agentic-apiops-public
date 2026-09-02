@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "stage8_demo_http_500_success",
+  "projectId": 1001,
+  "apiId": "simulateSlowSqlFault",
+  "name": "Treat an expected real HTTP 500 as assertion success",
+  "environment": {
+    "baseUrl": "http://127.0.0.1:18081",
+    "variables": {}
+  },
+  "tags": ["stage8", "real-http", "expected-500"],
+  "steps": [
+    {
+      "stepId": "slow-sql-infrastructure-failure",
+      "name": "Invoke slow SQL against an unavailable fault database",
+      "request": {
+        "method": "GET",
+        "path": "/api/faults/slow-sql",
+        "query": {
+          "delayMs": 100
+        }
+      },
+      "assertions": [
+        {
+          "type": "STATUS_CODE",
+          "expected": 500
+        },
+        {
+          "type": "JSON_PATH",
+          "expression": "$.code",
+          "operator": "EQUALS",
+          "expected": "ORDER_SYSTEM_ERROR"
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

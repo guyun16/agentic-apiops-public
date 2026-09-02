@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: apiops-demo-order-service
+
+springdoc:
+  api-docs:
+    version: openapi-3-0
+
+apiops:
+  fault:
+    enabled: false
+    slow-sql:
+      default-delay-ms: 500

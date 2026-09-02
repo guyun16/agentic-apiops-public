@@ -1,0 +1,93 @@
+spring:
+  application:
+    name: apiops-web
+  ai:
+    model:
+      chat: none
+      embedding: none
+      image: none
+      moderation: none
+      audio:
+        speech: none
+        transcription: none
+  rabbitmq:
+    host: ${APIOPS_RABBITMQ_HOST:localhost}
+    port: ${APIOPS_RABBITMQ_PORT:5672}
+    username: ${APIOPS_RABBITMQ_USERNAME:guest}
+    password: ${APIOPS_RABBITMQ_PASSWORD:guest}
+  data:
+    redis:
+      host: ${APIOPS_REDIS_HOST:localhost}
+      port: ${APIOPS_REDIS_PORT:6379}
+      password: ${APIOPS_REDIS_PASSWORD:}
+      timeout: ${APIOPS_REDIS_TIMEOUT:2s}
+
+apiops:
+  application:
+    name: Agentic APIOps Java Platform
+    version: 0.1.0-SNAPSHOT
+  tracing:
+    header-name: X-Trace-Id
+  auth:
+    jwt:
+      issuer: apiops-platform
+      access-token-ttl: 15m
+      secret: ${APIOPS_JWT_SECRET}
+  rabbitmq:
+    execution:
+      enabled: ${APIOPS_RABBITMQ_EXECUTION_ENABLED:false}
+      exchange: ${APIOPS_RABBITMQ_EXECUTION_EXCHANGE:apiops.execution.exchange}
+      routing-key: ${APIOPS_RABBITMQ_EXECUTION_ROUTING_KEY:apiops.execution.run}
+      queue: ${APIOPS_RABBITMQ_EXECUTION_QUEUE:apiops.execution.queue}
+      dead-letter-exchange: ${APIOPS_RABBITMQ_EXECUTION_DLX:apiops.execution.dlx}
+      dead-letter-routing-key: ${APIOPS_RABBITMQ_EXECUTION_DLQ_ROUTING_KEY:apiops.execution.dead}
+      dead-letter-queue: ${APIOPS_RABBITMQ_EXECUTION_DLQ:apiops.execution.dlq}
+      max-attempts: ${APIOPS_RABBITMQ_EXECUTION_MAX_ATTEMPTS:3}
+  runner:
+    progress:
+      enabled: ${APIOPS_RUNNER_PROGRESS_ENABLED:false}
+      ttl: ${APIOPS_RUNNER_PROGRESS_TTL:24h}
+      sse-timeout: ${APIOPS_RUNNER_PROGRESS_SSE_TIMEOUT:30m}
+    executor:
+      core-pool-size: ${APIOPS_RUNNER_EXECUTOR_CORE_POOL_SIZE:2}
+      maximum-pool-size: ${APIOPS_RUNNER_EXECUTOR_MAXIMUM_POOL_SIZE:4}
+      keep-alive-time: ${APIOPS_RUNNER_EXECUTOR_KEEP_ALIVE_TIME:30s}
+      queue-capacity: ${APIOPS_RUNNER_EXECUTOR_QUEUE_CAPACITY:32}
+      thread-name-prefix: ${APIOPS_RUNNER_EXECUTOR_THREAD_NAME_PREFIX:apiops-runner-}
+  rag:
+    ingestion:
+      chunk-size: ${APIOPS_RAG_CHUNK_SIZE:1000}
+      chunk-overlap: ${APIOPS_RAG_CHUNK_OVERLAP:100}
+    retrieval:
+      min-relevance-score: ${APIOPS_RAG_MIN_RELEVANCE_SCORE:}
+    embedding:
+      zhipu:
+        api-key: ${ZHIPU_API_KEY:}
+        timeout: ${ZHIPU_EMBEDDING_TIMEOUT:30s}
+    vector-store:
+      qdrant:
+        enabled: ${APIOPS_RAG_QDRANT_ENABLED:false}
+        base-url: ${APIOPS_RAG_QDRANT_BASE_URL:http://127.0.0.1:6333}
+        collection: ${APIOPS_RAG_QDRANT_COLLECTION:apiops_rag_chunks_v1}
+        timeout: ${APIOPS_RAG_QDRANT_TIMEOUT:10s}
+        api-key: ${APIOPS_RAG_QDRANT_API_KEY:}
+
+management:
+  defaults:
+    metrics:
+      export:
+        enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  health:
+    redis:
+      enabled: ${APIOPS_REDIS_HEALTH_ENABLED:${APIOPS_RUNNER_PROGRESS_ENABLED:false}}
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  endpoint:
+    health:
+      show-details: never

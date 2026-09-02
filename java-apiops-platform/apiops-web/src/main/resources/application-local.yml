@@ -1,0 +1,33 @@
+apiops:
+  application:
+    name: Agentic APIOps Java Platform Local
+  datasource:
+    auth:
+      url: ${APIOPS_AUTH_DB_URL:jdbc:mysql://localhost:3306/apiops_auth}
+      username: ${APIOPS_AUTH_DB_USERNAME:root}
+      password: ${APIOPS_AUTH_DB_PASSWORD:Qwerty123456}
+    openapi:
+      url: ${APIOPS_OPENAPI_DB_URL:jdbc:mysql://localhost:3306/apiops_openapi}
+      username: ${APIOPS_OPENAPI_DB_USERNAME:root}
+      password: ${APIOPS_OPENAPI_DB_PASSWORD:Qwerty123456}
+    runner:
+      url: ${APIOPS_RUNNER_DB_URL:jdbc:mysql://localhost:3306/apiops_runner}
+      username: ${APIOPS_RUNNER_DB_USERNAME:root}
+      password: ${APIOPS_RUNNER_DB_PASSWORD:Qwerty123456}
+    rag:
+      url: ${APIOPS_RAG_DB_URL:jdbc:mysql://localhost:3306/apiops_rag}
+      username: ${APIOPS_RAG_DB_USERNAME:root}
+      password: ${APIOPS_RAG_DB_PASSWORD:Qwerty123456}
+
+spring:
+  ai:
+    model:
+      chat: openai
+    openai:
+      api-key: ${DEEPSEEK_API_KEY}
+      base-url: https://api.deepseek.com
+      chat:
+        options:
+          model: deepseek-v4-flash
+          response-format:
+            type: JSON_OBJECT

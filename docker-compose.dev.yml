@@ -1,0 +1,71 @@
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${APIOPS_DEV_MYSQL_PORT:-3306}:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: apiops_auth
+    volumes:
+      - apiops_dev_mysql_data:/var/lib/mysql
+      - ./java-apiops-platform/ops/mysql/dev-init.sql:/docker-entrypoint-initdb.d/00-apiops-dev-init.sql:ro
+      - ./java-apiops-platform/apiops-auth/src/main/resources/db/auth-schema.sql:/docker-entrypoint-initdb.d/schema/auth-schema.sql:ro
+      - ./java-apiops-platform/apiops-auth/src/main/resources/db/auth-seed.sql:/docker-entrypoint-initdb.d/schema/auth-seed.sql:ro
+      - ./java-apiops-platform/apiops-openapi/src/main/resources/db/openapi-schema.sql:/docker-entrypoint-initdb.d/schema/openapi-schema.sql:ro
+      - ./java-apiops-platform/apiops-runner/src/main/resources/db/runner-schema.sql:/docker-entrypoint-initdb.d/schema/runner-schema.sql:ro
+      - ./java-apiops-platform/apiops-rag/src/main/resources/db/rag-schema.sql:/docker-entrypoint-initdb.d/schema/rag-schema.sql:ro
+      - ./java-apiops-platform/apiops-demo-order-service/src/main/resources/db/schema.sql:/docker-entrypoint-initdb.d/schema/demo-order-schema.sql:ro
+      - ./java-apiops-platform/apiops-demo-order-service/src/main/resources/db/seed.sql:/docker-entrypoint-initdb.d/schema/demo-order-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      - apiops-dev
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${APIOPS_DEV_REDIS_PORT:-6379}:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - apiops_dev_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - apiops-dev
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${APIOPS_DEV_RABBITMQ_PORT:-5672}:5672"
+      - "127.0.0.1:${APIOPS_DEV_RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - apiops_dev_rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      - apiops-dev
+
+volumes:
+  apiops_dev_mysql_data:
+  apiops_dev_redis_data:
+  apiops_dev_rabbitmq_data:
+
+networks:
+  apiops-dev:

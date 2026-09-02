@@ -1,0 +1,29 @@
+{
+    "schemaVersion": "0.1.0",
+    "reportId": "report:1001001",
+    "agentRunId": "agent_run_001",
+    "projectId": 1001,
+    "runId": 1001001,
+    "failureType": "DATABASE_CONSTRAINT_ERROR",
+    "summary": "Create order API failed because the database rejected the insert operation.",
+    "rootCauseHypotheses": [
+        {
+            "statement": "The order insert operation violated a database constraint on the orders table.",
+            "confidence": "HIGH",
+            "evidenceRefs": [
+                {
+                    "itemId": "chunk:chunk-1"
+                },
+                {
+                    "itemId": "run:1001001"
+                }
+            ]
+        }
+    ],
+    "sufficientEvidence": true,
+    "limitations": [],
+    "recommendedChecks": [
+        "Review the unique index constraints on the orders table."
+    ],
+    "traceId": "trace_001"
+}

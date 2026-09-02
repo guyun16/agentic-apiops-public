@@ -1,0 +1,54 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://apiops.local/schemas/tool-call-schema.json",
+    "title": "ToolCall",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schemaVersion",
+        "agentRunId",
+        "projectId",
+        "toolName",
+        "params",
+        "traceId"
+    ],
+    "properties": {
+        "schemaVersion": {
+            "type": "string",
+            "const": "0.2.0"
+        },
+        "agentRunId": {
+            "type": "string",
+            "minLength": 1
+        },
+        "agentStepId": {
+            "type": "string",
+            "minLength": 1
+        },
+        "projectId": {
+            "type": "string",
+            "minLength": 1
+        },
+        "toolName": {
+            "type": "string",
+            "enum": [
+                "openapi.metadata.read",
+                "testcase.validate",
+                "runner.submit",
+                "report.read",
+                "sql.read",
+                "redis.read",
+                "log.search",
+                "rag.search"
+            ]
+        },
+        "params": {
+            "type": "object",
+            "additionalProperties": true
+        },
+        "traceId": {
+            "type": "string",
+            "minLength": 1
+        }
+    }
+}

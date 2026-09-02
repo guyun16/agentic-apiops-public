@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.apiops.demo.order.inventory.mapper.InventoryMapper">
+
+    <update id="deductIfEnough">
+        UPDATE demo_inventory
+        SET available_stock = available_stock - #{quantity},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE product_id = #{productId}
+          AND available_stock &gt;= #{quantity}
+    </update>
+
+</mapper>

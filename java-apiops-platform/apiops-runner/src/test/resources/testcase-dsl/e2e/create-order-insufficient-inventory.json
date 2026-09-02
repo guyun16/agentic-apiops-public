@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "stage7_create_order_insufficient_inventory",
+  "projectId": 1001,
+  "apiId": "api_create_order",
+  "name": "Create order insufficient inventory E2E",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {}
+  },
+  "description": "Stage 7 in-memory E2E for the expected 409 business conflict.",
+  "tags": ["stage7", "e2e", "negative-business"],
+  "steps": [
+    {
+      "stepId": "create-order-insufficient-inventory",
+      "name": "Create order with insufficient inventory",
+      "request": {
+        "method": "POST",
+        "path": "/orders",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "userId": 1,
+          "items": [
+            {
+              "productId": 10,
+              "quantity": 999
+            }
+          ]
+        }
+      },
+      "assertions": [
+        {
+          "type": "STATUS_CODE",
+          "expected": 409
+        },
+        {
+          "type": "HEADER",
+          "name": "Content-Type",
+          "operator": "EQUALS",
+          "expected": "application/json"
+        },
+        {
+          "type": "JSON_PATH",
+          "expression": "$.code",
+          "operator": "EQUALS",
+          "expected": "ORDER_BUSINESS_CONFLICT"
+        },
+        {
+          "type": "JSON_PATH",
+          "expression": "$.data",
+          "operator": "EXISTS"
+        },
+        {
+          "type": "RESPONSE_TIME",
+          "maxMs": 1000
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

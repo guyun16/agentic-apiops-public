@@ -1,0 +1,146 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://apiops.local/schemas/diagnosis-report-schema.json",
+    "title": "DiagnosisReport",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schemaVersion",
+        "reportId",
+        "agentRunId",
+        "projectId",
+        "runId",
+        "failureType",
+        "summary",
+        "rootCauseHypotheses",
+        "sufficientEvidence",
+        "limitations",
+        "recommendedChecks",
+        "traceId"
+    ],
+    "properties": {
+        "schemaVersion": {
+            "type": "string",
+            "const": "0.1.0"
+        },
+        "reportId": {
+            "type": "string",
+            "minLength": 1
+        },
+        "agentRunId": {
+            "type": "string",
+            "minLength": 1
+        },
+        "projectId": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "runId": {
+            "type": "integer",
+            "minimum": 1
+        },
+        "failureType": {
+            "type": "string",
+            "enum": [
+                "NONE",
+                "ASSERTION_MISMATCH",
+                "ASSERTION_EVALUATION_ERROR",
+                "HTTP_STATUS_ERROR",
+                "TIMEOUT",
+                "NETWORK_ERROR",
+                "REQUEST_BUILD_ERROR",
+                "INVALID_TARGET_URI",
+                "DNS_ERROR",
+                "CONNECT_ERROR",
+                "TLS_ERROR",
+                "IO_ERROR",
+                "SCHEMA_INVALID",
+                "BUSINESS_ERROR",
+                "TOOL_ERROR",
+                "SYSTEM_ERROR",
+                "UNKNOWN",
+                "ASSERTION_FAILED",
+                "AUTH_ERROR",
+                "VALIDATION_ERROR",
+                "DATABASE_CONSTRAINT_ERROR",
+                "UPSTREAM_SERVICE_ERROR"
+            ]
+        },
+        "summary": {
+            "type": "string",
+            "minLength": 1
+        },
+        "rootCauseHypotheses": {
+            "type": "array",
+            "items": {
+                "$ref": "#/$defs/RootCauseHypothesis"
+            }
+        },
+        "sufficientEvidence": {
+            "type": "boolean"
+        },
+        "limitations": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "recommendedChecks": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "minLength": 1
+            }
+        },
+        "traceId": {
+            "type": "string",
+            "minLength": 1
+        }
+    },
+    "$defs": {
+        "RootCauseHypothesis": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "statement",
+                "confidence",
+                "evidenceRefs"
+            ],
+            "properties": {
+                "statement": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "confidence": {
+                    "type": "string",
+                    "enum": [
+                        "LOW",
+                        "MEDIUM",
+                        "HIGH"
+                    ]
+                },
+                "evidenceRefs": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/$defs/EvidenceRef"
+                    }
+                }
+            }
+        },
+        "EvidenceRef": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "itemId"
+            ],
+            "properties": {
+                "itemId": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        }
+    }
+}

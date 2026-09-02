@@ -1,0 +1,27 @@
+{
+    "schemaVersion": "1.0.0",
+    "caseId": "case_missing_api_id",
+    "projectId": 1001,
+    "name": "Missing apiId example",
+    "environment": {
+        "baseUrl": "http://localhost:8080",
+        "variables": {}
+    },
+    "steps": [
+        {
+            "stepId": "step_001",
+            "name": "Submit request",
+            "request": {
+                "method": "POST",
+                "path": "/api/orders"
+            },
+            "assertions": [
+                {
+                    "type": "STATUS_CODE",
+                    "expected": 200
+                }
+            ],
+            "extractors": []
+        }
+    ]
+}

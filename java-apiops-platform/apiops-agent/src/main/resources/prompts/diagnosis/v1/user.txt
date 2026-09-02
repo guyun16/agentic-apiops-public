@@ -1,0 +1,20 @@
+Prepare a DiagnosisReport candidate for projectId={{projectId}} and runId={{runId}}.
+Copy these identity values exactly into the output:
+schemaVersion=0.1.0, reportId={{reportId}}, agentRunId={{agentRunId}}, traceId={{traceId}}.
+The failureType must be copied from the authoritative TestReport context item.
+Task: {{task}}
+Use rootCauseHypotheses as a list. For each hypothesis, include statement, confidence, and
+one or more evidenceRefs objects whose itemId is one of the supplied ContextPack itemId values.
+Use an empty rootCauseHypotheses list when evidence does not support a hypothesis.
+The JSON types are strict: summary is one plain string (never an object or array),
+failureType is one plain enum string, sufficientEvidence is a boolean, limitations and
+recommendedChecks are arrays of strings, rootCauseHypotheses is an array, and evidenceRefs
+is an array of objects. Use this type-only shape and replace every placeholder with a value:
+{"schemaVersion":"0.1.0","reportId":"<reportId>","agentRunId":"<agentRunId>",
+"projectId":1,"runId":1,"failureType":"ASSERTION_MISMATCH","summary":"<plain text>",
+"rootCauseHypotheses":[{"statement":"<plain text>","confidence":"LOW",
+"evidenceRefs":[{"itemId":"run:1"}]}],"sufficientEvidence":false,
+"limitations":["<plain text>"],"recommendedChecks":["<plain text>"],"traceId":"<traceId>"}
+Do not emit the type-only placeholders or angle brackets; use the exact identities and evidence
+itemIds supplied above. If evidence is insufficient, keep the hypotheses array empty rather than
+changing any field type.

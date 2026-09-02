@@ -1,0 +1,312 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://apiops.local/schemas/testcase-dsl-schema.json",
+    "title": "TestCaseDSL",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schemaVersion",
+        "caseId",
+        "projectId",
+        "apiId",
+        "name",
+        "environment",
+        "steps"
+    ],
+    "properties": {
+        "schemaVersion": {
+            "type": "string",
+            "const": "1.0.0"
+        },
+        "caseId": {
+            "type": "string",
+            "minLength": 1
+        },
+        "projectId": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "apiId": {
+            "type": "string",
+            "minLength": 1
+        },
+        "name": {
+            "type": "string",
+            "minLength": 1
+        },
+        "environment": {
+            "$ref": "#/$defs/Environment"
+        },
+        "description": {
+            "type": "string"
+        },
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "steps": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "$ref": "#/$defs/TestStep"
+            }
+        }
+    },
+    "$defs": {
+        "Environment": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "baseUrl",
+                "variables"
+            ],
+            "properties": {
+                "baseUrl": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "variables": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "TestStep": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "stepId",
+                "name",
+                "request",
+                "assertions",
+                "extractors"
+            ],
+            "properties": {
+                "stepId": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "request": {
+                    "$ref": "#/$defs/RequestSpec"
+                },
+                "assertions": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/$defs/AssertionSpec"
+                    }
+                },
+                "extractors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/ExtractorSpec"
+                    }
+                }
+            }
+        },
+        "RequestSpec": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "method",
+                "path"
+            ],
+            "properties": {
+                "method": {
+                    "type": "string",
+                    "enum": [
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE",
+                        "PATCH",
+                        "HEAD",
+                        "OPTIONS",
+                        "TRACE"
+                    ]
+                },
+                "path": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "pathParams": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "query": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "headers": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "body": {
+                    "type": [
+                        "object",
+                        "array",
+                        "string",
+                        "number",
+                        "boolean",
+                        "null"
+                    ]
+                }
+            }
+        },
+        "AssertionSpec": {
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/StatusCodeAssertion"
+                },
+                {
+                    "$ref": "#/$defs/HeaderAssertion"
+                },
+                {
+                    "$ref": "#/$defs/JsonPathEqualsAssertion"
+                },
+                {
+                    "$ref": "#/$defs/JsonPathExistsAssertion"
+                },
+                {
+                    "$ref": "#/$defs/ResponseTimeAssertion"
+                }
+            ]
+        },
+        "StatusCodeAssertion": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "type",
+                "expected"
+            ],
+            "properties": {
+                "type": {
+                    "const": "STATUS_CODE"
+                },
+                "expected": {
+                    "type": "integer",
+                    "minimum": 100,
+                    "maximum": 599
+                }
+            }
+        },
+        "HeaderAssertion": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "type",
+                "name",
+                "operator",
+                "expected"
+            ],
+            "properties": {
+                "type": {
+                    "const": "HEADER"
+                },
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "operator": {
+                    "type": "string",
+                    "enum": [
+                        "EQUALS",
+                        "CONTAINS"
+                    ]
+                },
+                "expected": {
+                    "type": "string"
+                }
+            }
+        },
+        "JsonPathEqualsAssertion": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "type",
+                "expression",
+                "operator",
+                "expected"
+            ],
+            "properties": {
+                "type": {
+                    "const": "JSON_PATH"
+                },
+                "expression": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "operator": {
+                    "const": "EQUALS"
+                },
+                "expected": {}
+            }
+        },
+        "JsonPathExistsAssertion": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "type",
+                "expression",
+                "operator"
+            ],
+            "properties": {
+                "type": {
+                    "const": "JSON_PATH"
+                },
+                "expression": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "operator": {
+                    "const": "EXISTS"
+                }
+            }
+        },
+        "ResponseTimeAssertion": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "type",
+                "maxMs"
+            ],
+            "properties": {
+                "type": {
+                    "const": "RESPONSE_TIME"
+                },
+                "maxMs": {
+                    "type": "integer",
+                    "minimum": 1
+                }
+            }
+        },
+        "ExtractorSpec": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "name",
+                "expression"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "expression": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            }
+        }
+    }
+}

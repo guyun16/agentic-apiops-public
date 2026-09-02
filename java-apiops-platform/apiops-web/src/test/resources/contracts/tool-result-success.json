@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "0.1.0",
+  "toolCallId": "java-generated-call-1",
+  "status": "SUCCESS",
+  "data": {
+    "value": "progress",
+    "nested": [true, 7, 1.5, null]
+  },
+  "error": null,
+  "sanitized": true,
+  "traceId": "trace-contract-1"
+}

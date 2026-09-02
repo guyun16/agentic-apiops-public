@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "case_one_of_mismatch",
+  "projectId": 1001,
+  "apiId": "api_create_order",
+  "name": "JSON path operator mismatch",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {}
+  },
+  "steps": [
+    {
+      "stepId": "step_001",
+      "name": "Request",
+      "request": {
+        "method": "GET",
+        "path": "/api/orders"
+      },
+      "assertions": [
+        {
+          "type": "JSON_PATH",
+          "expression": "$.code",
+          "operator": "CONTAINS",
+          "expected": "SUCCESS"
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

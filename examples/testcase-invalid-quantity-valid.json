@@ -1,0 +1,49 @@
+{
+    "schemaVersion": "1.0.0",
+    "caseId": "case_create_order_invalid_quantity",
+    "projectId": 1001,
+    "apiId": "api_create_order",
+    "name": "Create order with invalid quantity",
+    "environment": {
+        "baseUrl": "http://localhost:8080",
+        "variables": {}
+    },
+    "description": "Verify that creating an order with quantity 0 returns validation error.",
+    "tags": [
+        "order",
+        "validation",
+        "negative"
+    ],
+    "steps": [
+        {
+            "stepId": "step_001",
+            "name": "Submit create order request with quantity 0",
+            "request": {
+                "method": "POST",
+                "path": "/api/orders",
+                "query": {},
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer {{token}}"
+                },
+                "body": {
+                    "productId": "prod_001",
+                    "quantity": 0
+                }
+            },
+            "assertions": [
+                {
+                    "type": "STATUS_CODE",
+                    "expected": 400
+                },
+                {
+                    "type": "JSON_PATH",
+                    "expression": "$.code",
+                    "operator": "EQUALS",
+                    "expected": "VALIDATION_ERROR"
+                }
+            ],
+            "extractors": []
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "case_runner_round_trip",
+  "projectId": 1001,
+  "apiId": "api_create_order",
+  "name": "Runner DSL round trip",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {
+      "region": "test"
+    }
+  },
+  "description": "Valid DSL fixture for Stage 7.2.",
+  "tags": ["stage7", "contract"],
+  "steps": [
+    {
+      "stepId": "step_001",
+      "name": "Submit request",
+      "request": {
+        "method": "POST",
+        "path": "/api/orders/{orderId}",
+        "pathParams": {
+          "orderId": "order_001"
+        },
+        "query": {
+          "dryRun": false
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "quantity": 1
+        }
+      },
+      "assertions": [
+        {
+          "type": "STATUS_CODE",
+          "expected": 200
+        },
+        {
+          "type": "HEADER",
+          "name": "Content-Type",
+          "operator": "CONTAINS",
+          "expected": "application/json"
+        },
+        {
+          "type": "JSON_PATH",
+          "expression": "$.code",
+          "operator": "EQUALS",
+          "expected": "SUCCESS"
+        },
+        {
+          "type": "JSON_PATH",
+          "expression": "$.data",
+          "operator": "EXISTS"
+        },
+        {
+          "type": "RESPONSE_TIME",
+          "maxMs": 1000
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}

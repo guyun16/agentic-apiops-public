@@ -1,0 +1,61 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://apiops.local/schemas/tool-result-schema.json",
+    "title": "ToolResult",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schemaVersion",
+        "toolCallId",
+        "status",
+        "data",
+        "error",
+        "sanitized",
+        "traceId"
+    ],
+    "properties": {
+        "schemaVersion": {
+            "type": "string",
+            "const": "0.1.0"
+        },
+        "toolCallId": {
+            "type": "string",
+            "minLength": 1
+        },
+        "status": {
+            "type": "string",
+            "enum": [
+                "SUCCESS",
+                "FAILED",
+                "FORBIDDEN",
+                "TIMEOUT",
+                "PARAM_INVALID",
+                "RESULT_INVALID"
+            ]
+        },
+        "data": {
+            "type": [
+                "object",
+                "array",
+                "string",
+                "number",
+                "boolean",
+                "null"
+            ]
+        },
+        "error": {
+            "type": [
+                "object",
+                "null"
+            ],
+            "additionalProperties": true
+        },
+        "sanitized": {
+            "type": "boolean"
+        },
+        "traceId": {
+            "type": "string",
+            "minLength": 1
+        }
+    }
+}

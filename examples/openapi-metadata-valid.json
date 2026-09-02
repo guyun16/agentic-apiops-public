@@ -1,0 +1,71 @@
+{
+    "apiId": "api-1",
+    "apiDocId": "doc-1",
+    "operationId": "getOrders",
+    "method": "GET",
+    "path": "/orders",
+    "summary": "List orders",
+    "description": "Returns orders",
+    "tags": [
+        "orders"
+    ],
+    "servers": [
+        {
+            "url": "https://api.example"
+        }
+    ],
+    "security": [
+        {
+            "apiKeyAuth": []
+        }
+    ],
+    "deprecated": false,
+    "parameters": [
+        {
+            "name": "limit",
+            "location": "query",
+            "required": false,
+            "description": null,
+            "schema": {
+                "type": "integer"
+            },
+            "example": 10
+        }
+    ],
+    "requestSchemas": [
+        {
+            "required": true,
+            "mediaType": "application/json",
+            "schema": {
+                "type": "object"
+            }
+        }
+    ],
+    "responseSchemas": [
+        {
+            "statusCode": "200",
+            "description": "ok",
+            "mediaType": "application/json",
+            "schema": {
+                "type": "object"
+            }
+        }
+    ],
+    "examples": [
+        {
+            "owner": {
+                "type": "RESPONSE_SCHEMA",
+                "parameterName": null,
+                "parameterLocation": null,
+                "mediaType": "application/json",
+                "statusCode": "200"
+            },
+            "exampleName": "success",
+            "summary": null,
+            "description": null,
+            "value": {
+                "id": 1
+            }
+        }
+    ]
+}

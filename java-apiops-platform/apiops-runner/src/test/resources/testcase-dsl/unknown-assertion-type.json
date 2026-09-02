@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "caseId": "case_unknown_assertion",
+  "projectId": 1001,
+  "apiId": "api_create_order",
+  "name": "Unknown assertion",
+  "environment": {
+    "baseUrl": "http://localhost:8080",
+    "variables": {}
+  },
+  "steps": [
+    {
+      "stepId": "step_001",
+      "name": "Request",
+      "request": {
+        "method": "GET",
+        "path": "/api/orders"
+      },
+      "assertions": [
+        {
+          "type": "NOT_SUPPORTED",
+          "expected": true
+        }
+      ],
+      "extractors": []
+    }
+  ]
+}
