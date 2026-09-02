@@ -1,412 +1,44 @@
-# Agentic APIOps Portfolio
+# Agentic APIOps
 
-Agentic APIOps Portfolio is a dual-project portfolio for API testing, test execution, failure diagnosis, controlled tool use, and Agent evaluation.
+Production-style API testing and diagnosis platform with Java execution authority, Python Agent workflows, a guarded Tool Gateway, tracing/evaluation, and a React console.
 
-The project is built around one business domain:
+[![Java CI](https://github.com/guyun16/agentic-apiops-public/actions/workflows/java-ci.yml/badge.svg)](https://github.com/guyun16/agentic-apiops-public/actions/workflows/java-ci.yml)
+![Java 21](https://img.shields.io/badge/Java-21-007396?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-6DB33F?logo=springboot&logoColor=white)
+![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-1F2937?logo=langchain&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=111827)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
 
-```text
-APIOps: API testing, execution, diagnosis, evidence collection, and evaluation.
-```
+## Why this project is different
 
-It is not a Postman clone and not a simple LLM wrapper. The goal is to show how a production-style Java platform and an experimental Python Agent lab can work together through stable contracts, shared schemas, security boundaries, and measurable evaluation.
+- Java is the execution and security authority: `OpenAPI → TestCase DSL → Runner → Assertion → TestReport`.
+- Python AgentLab handles TestCase generation, diagnosis, tool-use orchestration, tracing, and runtime evaluation.
+- Agents cannot bypass Java-owned resources; tool access goes through the guarded Java Tool Gateway.
+- The Java ↔ Python boundary is verified with cross-process E2E tests and GitHub Actions CI.
 
-## Public release scope
+## Quick start
 
-This repository is a code-only public snapshot of the Agentic APIOps portfolio. Documentation directories and Benchmark materials are intentionally not included in this release. The public snapshot keeps the executable source, shared contracts, ordinary tests, and public-safe configuration needed to inspect and verify the platform.
+Run each verification block from the repository root.
 
-## 1. Project Overview
-
-The portfolio contains two independent but connected projects:
-
-```text
-Java Agentic APIOps Platform
-Python APIOps-AgentLab
-```
-
-Their responsibilities are intentionally different:
-
-| Project | Position | Main Responsibility |
-|---|---|---|
-| Java Agentic APIOps Platform | Production-oriented backend platform | Formal execution, validation, report authority, Tool Gateway, audit, security boundary |
-| Python APIOps-AgentLab | Agent workflow and evaluation lab | TestCase generation, failure diagnosis, tool-use planning, tracing, runtime evaluation |
-
-The key design principle is:
-
-```text
-Java closes the formal business loop.
-Python explores, optimizes, and evaluates Agent workflows.
-```
-
-## 2. Why This Project
-
-Traditional API testing platforms mainly focus on:
-
-```text
-sending requests
-checking assertions
-generating reports
-```
-
-This project extends that workflow with Agentic capabilities:
-
-```text
-OpenAPI-based TestCase DSL generation
-controlled tool-use diagnosis
-traceable evidence collection
-structured diagnosis reports
-runtime Agent evaluation
-safety and audit constraints
-```
-
-The portfolio is designed to demonstrate four engineering capabilities:
-
-- Java backend platform engineering
-- API testing platform design
-- Python Agent workflow engineering
-- Agent evaluation and safety measurement
-
-## 3. Core Business Flow
-
-The main APIOps flow is:
-
-```text
-OpenAPI Document
-→ API Metadata
-→ TestCase DSL
-→ Java Runner
-→ TestReport
-→ Diagnosis
-→ Evidence / Tool
-→ DiagnosisReport
-→ Trace / Evaluation
-```
-
-Meaning of each step:
-
-| Step | Meaning |
-|---|---|
-| OpenAPI Document | Source API facts |
-| API Metadata | Normalized API structure |
-| TestCase DSL | Executable test case contract |
-| Java DSL Validation | Schema and rule validation before execution |
-| Java Runner | Formal API test execution |
-| Assertion Result | Status, header, body, JSONPath, and latency assertion outcomes |
-| Test Report | Authoritative execution result |
-| Context Pack / Tool Evidence | Controlled evidence for diagnosis |
-| Diagnosis Report | Structured, evidence-based failure explanation |
-| Evaluation Result | Agent behavior and output quality metrics |
-
-Agent output must not remain free-form natural language. It must be converted into schema-validated artifacts such as:
-
-```text
-TestCase DSL
-ToolCall
-ToolResult
-DiagnosisReport
-Runtime Evaluation facts
-```
-
-## 4. Java Platform Responsibility
-
-Java Agentic APIOps Platform is the trusted platform boundary.
-
-It owns:
-
-- OpenAPI metadata management
-- TestCase DSL validation
-- HTTP Runner
-- Assertion Engine
-- Test Report
-- Tool Gateway
-- Security Guard
-- Audit Log
-- RAG / Context Pack integration position
-- production-oriented Java AI capabilities
-
-Java is authoritative for:
-
-```text
-formal execution
-security boundary
-audit logging
-report generation
-permission control
-tool access governance
-platform-level reliability
-```
-
-Current Java modules include:
-
-```text
-apiops-common
-apiops-auth
-apiops-web
-apiops-openapi
-apiops-runner
-apiops-report
-apiops-agent
-apiops-rag
-apiops-tool-gateway
-apiops-demo-order-service
-```
-
-The public snapshot includes the executable platform source and ordinary tests for these modules.
-
-## 5. Python AgentLab Responsibility
-
-Python APIOps-AgentLab is the Agent workflow laboratory.
-
-It owns:
-
-- Agent Workflow
-- TestCase generation
-- failure diagnosis
-- tool-use planning
-- Agent Trace
-- Runtime Evaluation
-
-Python does not replace Java Platform. It calls Java Platform APIs and Java Tool Gateway to complete APIOps workflows.
-
-Current Python packages include:
-
-```text
-app/api
-app/agents
-app/clients
-app/core
-app/evaluator
-app/guardrails
-app/memory
-app/rag
-app/reports
-app/schemas
-app/services
-app/tools
-app/tracing
-app/workflows
-```
-
-## 6. Java AI and Python AI Boundary
-
-This project has two AI positions:
-
-```text
-Java AI = production-oriented AI inside Java Platform.
-Python AI = experiment-oriented Agent workflow capability inside AgentLab.
-```
-
-Java AI is used for:
-
-- production-facing intelligent features
-- structured output validation
-- controlled tool calling
-- platform-integrated diagnosis
-- auditable model call records
-- stable business integration
-
-Python AI is used for:
-
-- Agent workflow experiments
-- prompt structure optimization
-- tool-use strategy exploration
-- RAG strategy experiments
-- runtime evaluation
-- trace analysis
-
-When a good strategy is discovered in Python AgentLab, the transferable assets are not the Python code itself. They are:
-
-```text
-Prompt structure
-Workflow steps
-Structured output schema
-Tool-use strategy
-RAG usage position
-Guardrail rules
-Evaluation findings
-Error repair strategy
-```
-
-## 7. Java × Python Integration
-
-The main integration direction is:
-
-```text
-Python AgentLab → Java Agentic APIOps Platform
-```
-
-Python calls Java because Java is the formal platform provider.
-
-Core integration APIs:
-
-| Scenario | Method | Path | Purpose |
-|---|---|---|---|
-| Get API metadata | GET | `/api/v1/projects/{projectId}/openapi/apis/{apiId}` | Read normalized API metadata |
-| Submit test batch | POST | `/api/v1/projects/{projectId}/test-batches` | Submit executable test cases to Java Runner |
-| Query report | GET | `/api/v1/projects/{projectId}/test-runs/{runId}/report` | Read Java authoritative test report |
-| Call tool | POST | `/api/v1/projects/{projectId}/tool-calls` | Access controlled tools through Java Tool Gateway |
-
-TestCase DSL validation is enforced inside the Java Agent and Runner service boundaries; the current public REST surface does not expose a standalone validation endpoint.
-
-Unified response format:
-
-```json
-{
-  "code": "SUCCESS",
-  "message": "ok",
-  "data": {},
-  "traceId": "trace_001"
-}
-```
-
-Machine behavior must branch on `code`, not on `message`.
-
-## 8. Shared Schemas
-
-Shared schemas are placed under:
-
-```text
-shared-schemas/
-```
-
-They define the contract between Java Platform and Python AgentLab.
-
-Public shared schemas:
-
-```text
-testcase-dsl-schema.json
-openapi-metadata-schema.json
-tool-call-schema.json
-tool-result-schema.json
-diagnosis-report-schema.json
-```
-
-Schema responsibilities:
-
-| Schema | Producer | Consumer |
-|---|---|---|
-| `testcase-dsl-schema.json` | Python Agent / Java Agent | Java Runner |
-| `openapi-metadata-schema.json` | Java Platform | Python AgentLab / Console |
-| `tool-call-schema.json` | Python Agent / Java Agent | Java Tool Gateway |
-| `tool-result-schema.json` | Java Tool Gateway | Python Agent / Java Agent |
-| `diagnosis-report-schema.json` | Diagnosis Agent | Evaluator / Report UI |
-
-Shared schemas make Agent output:
-
-```text
-validatable
-executable
-auditable
-versioned
-cross-language compatible
-```
-
-## 9. Tool Gateway and Security Boundary
-
-Tool Gateway is located in Java Platform. It is the controlled tool-use entry point for Agents.
-
-Python AgentLab must not directly access:
-
-```text
-production MySQL
-production Redis
-internal HTTP services
-raw log files
-sensitive runtime resources
-```
-
-All tool access must follow:
-
-```text
-Python AgentLab
-→ Java Tool Gateway
-→ ToolAuth
-→ ParamValidator
-→ Guard
-→ Executor
-→ ResultSanitizer
-→ AuditLogger
-→ ToolResult
-```
-
-Planned tool categories include:
-
-```text
-SQL_READ
-REDIS_READ
-HTTP_CALL
-LOG_SEARCH
-RAG_SEARCH
-REPORT_READ
-RUNNER_SUBMIT
-OPENAPI_METADATA_READ
-```
-
-This design ensures that Agent tool-use is controlled, traceable, auditable, and measurable.
-
-## 10. Runtime Evaluation
-
-The public Console and AgentLab expose runtime evaluation facts for observed Agent executions. These facts cover validation, tool activity, safety outcomes, latency, token usage, and cost while keeping Java Platform as the authority for execution, reports, and access control.
-
-Benchmark materials are not included in this public release.
-
-## 11. Repository Structure
-
-Current repository structure:
-
-```text
-agentic-apiops-public
-├── README.md
-├── .github
-├── examples
-├── scripts
-├── shared-schemas
-├── java-apiops-platform
-│   ├── apiops-common
-│   ├── apiops-auth
-│   ├── apiops-openapi
-│   ├── apiops-runner
-│   ├── apiops-report
-│   ├── apiops-rag
-│   ├── apiops-tool-gateway
-│   ├── apiops-agent
-│   ├── apiops-web
-│   └── apiops-demo-order-service
-├── apiops-console
-│   ├── src
-│   └── scripts
-└── python-apiops-agentlab
-    ├── app
-    └── tests
-```
-
-## 12. Current Public Implementation
-
-The Java platform includes the web/API surface, OpenAPI metadata, TestCase DSL validation, Runner, reports, RAG, Tool Gateway, agent integration, and the demo order service. The Python AgentLab includes FastAPI workflows, generation, diagnosis, memory, RAG, tracing, runtime evaluation, reports, and ordinary tests. The Console exposes the current non-Benchmark workflows through these contracts.
-
-## 13. Final Positioning
-
-```text
-Java is responsible for platformization, execution, security, audit, and formal business closure.
-Python is responsible for Agent workflow, tool orchestration, tracing, and runtime evaluation.
-The two projects are connected through shared schemas, REST contracts, and Tool Gateway.
-Benchmark materials are not included in this public release.
-```
-
-## Public verification commands
-
-Run commands from the corresponding project directory:
+### Verify the repository
 
 ```bash
 # Java Platform
 cd java-apiops-platform
 ./mvnw clean verify
+```
 
+```bash
 # Python AgentLab
 cd python-apiops-agentlab
 uv run ruff check .
 uv run pytest
+```
 
-# Console
+```bash
+# React Console
 cd apiops-console
 npm ci
 npm run lint
@@ -414,4 +46,204 @@ npm run test:context
 npm run build
 ```
 
-For local development, start the Python API with `uv run uvicorn app.main:app --reload` and the Console with `npm run dev`. Configure credentials through the public-safe `.env.example` templates; real credentials are never committed.
+On Windows, use `./mvnw.cmd clean verify` for the Java command.
+
+### Local development
+
+```bash
+# Python API
+cd python-apiops-agentlab
+uv run uvicorn app.main:app --reload
+```
+
+```bash
+# Console
+cd apiops-console
+npm run dev
+```
+
+The Console and AgentLab connect to their configured Java/Python services. `docker-compose.dev.yml` provides local MySQL, Redis, and RabbitMQ infrastructure; it is not a one-command application deployment.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    user["User"] --> console["React Console"]
+
+    subgraph J["Java Platform — execution / security authority"]
+        metadata["OpenAPI metadata"]
+        dsl["TestCase DSL"]
+        runner["HTTP Runner"]
+        assertion["Assertion Engine"]
+        report["TestReport"]
+        evidence["RAG / Evidence"]
+        gateway["Tool Gateway"]
+        auth["Authentication<br/>Project authorization<br/>Guards"]
+        resources["Java-owned resources"]
+        metadata --> dsl --> runner --> assertion --> report --> evidence
+        gateway --> auth --> resources
+    end
+
+    subgraph P["Python AgentLab — orchestration / experimentation / evaluation"]
+        generation["Generation"]
+        diagnosis["Diagnosis"]
+        planning["Tool planning"]
+        hitl["HITL"]
+        trace["Trace"]
+        evaluation["Runtime evaluation"]
+        generation --> diagnosis --> planning --> hitl
+        diagnosis --> trace
+        diagnosis --> evaluation
+    end
+
+    contracts["REST / Shared Schemas"]
+    console --> metadata
+    generation --> contracts
+    contracts --> metadata
+    report --> contracts
+    contracts --> diagnosis
+    hitl --> gateway
+```
+
+Java owns formal execution, security, reports, and Java-managed resources. Python owns Agent orchestration, tool intent, tracing, and evaluation. The tool path is `Python Agent → Java Tool Gateway → Auth / Guard → Java-owned resource`.
+
+## Core flow
+
+```text
+OpenAPI → Metadata → TestCase DSL → Async Runner → Assertion → TestReport
+→ Diagnosis → Evidence / Tool → DiagnosisReport → Trace / Evaluation
+```
+
+OpenAPI facts become normalized metadata and an executable DSL. Java validates and runs the test, then publishes the authoritative report. AgentLab consumes that report and controlled evidence to produce structured diagnosis and evaluation outputs.
+
+## Authority boundary
+
+| Fact / Responsibility | Authority |
+| --- | --- |
+| OpenAPI metadata | Java Platform |
+| DSL validation | Java Platform |
+| HTTP execution | Java Runner |
+| Assertions | Java Platform |
+| TestReport | Java Platform |
+| Tool authorization | Java Tool Gateway |
+| Agent workflow | Python AgentLab |
+| Diagnosis reasoning | Python AgentLab |
+| Agent trace | Python AgentLab |
+| Runtime evaluation | Python AgentLab |
+
+`LLM output` is a candidate or inference. `Java TestReport` is execution truth. Python Diagnosis is not execution truth; Human Approval is not Java Authorization; and Python `ALLOW` is not Java `ALLOW`.
+
+## Implemented & Verified
+
+### Java Platform
+
+- OpenAPI metadata and project-scoped API access
+- TestCase DSL validation
+- HTTP Runner and asynchronous batch execution
+- Assertion Engine and authoritative TestReport
+- JWT/project authorization
+- RAG retrieval and Context Pack construction
+- Structured Agent generation and diagnosis integration
+- Tool Gateway, guards, sanitization, and audit
+
+### Python AgentLab
+
+- TestCase Generation workflow
+- Diagnosis workflow with structured outputs
+- Context engineering and Java evidence consumption
+- Tool planning and guarded tool-use workflow
+- HITL approval flow
+- Trace recording and redaction
+- Runtime evaluator, metrics, judge, and reporting
+
+### Console
+
+- Overview
+- API Studio
+- Runs
+- Diagnosis Studio and Diagnosis execution
+- Traces
+- Evaluation
+- Settings
+
+## Implementation Evidence
+
+| Capability | Implementation | Verification |
+| --- | --- | --- |
+| OpenAPI metadata | [OpenAPI metadata controller](java-apiops-platform/apiops-openapi/src/main/java/com/apiops/openapi/controller/OpenApiMetadataQueryController.java) | [Controller test](java-apiops-platform/apiops-openapi/src/test/java/com/apiops/openapi/controller/OpenApiMetadataQueryControllerTest.java) |
+| TestCase DSL validation | [DSL validator](java-apiops-platform/apiops-runner/src/main/java/com/apiops/runner/validation/TestCaseDslValidator.java) | [Validation tests](java-apiops-platform/apiops-runner/src/test/java/com/apiops/runner/validation/TestCaseDslValidationTest.java) |
+| HTTP execution | [Run execution service](java-apiops-platform/apiops-runner/src/main/java/com/apiops/runner/application/RunExecutionService.java) | [Runner service tests](java-apiops-platform/apiops-runner/src/test/java/com/apiops/runner/application/RunExecutionServiceTest.java) |
+| Assertions | [Assertion Engine](java-apiops-platform/apiops-runner/src/main/java/com/apiops/runner/assertion/AssertionEngine.java) | [Assertion tests](java-apiops-platform/apiops-runner/src/test/java/com/apiops/runner/assertion/AssertionEngineTest.java) |
+| Async test batches | [Batch controller](java-apiops-platform/apiops-web/src/main/java/com/apiops/web/runner/controller/AsyncBatchController.java) | [Batch controller tests](java-apiops-platform/apiops-web/src/test/java/com/apiops/web/runner/controller/AsyncBatchControllerTest.java) |
+| TestReport | [Report controller](java-apiops-platform/apiops-report/src/main/java/com/apiops/report/controller/TestReportController.java) | [Report controller tests](java-apiops-platform/apiops-report/src/test/java/com/apiops/report/TestReportControllerTest.java) |
+| Tool Gateway | [Tool Gateway](java-apiops-platform/apiops-tool-gateway/src/main/java/com/apiops/tool/gateway/ToolGateway.java) | [Gateway tests](java-apiops-platform/apiops-tool-gateway/src/test/java/com/apiops/tool/gateway/ToolGatewayTest.java) |
+| RAG / evidence | [Context Pack builder](java-apiops-platform/apiops-rag/src/main/java/com/apiops/rag/context/ContextPackBuilder.java) | [Context Pack tests](java-apiops-platform/apiops-rag/src/test/java/com/apiops/rag/context/ContextPackBuilderTest.java) |
+| Python generation | [Generation workflow](python-apiops-agentlab/app/workflows/testcase_generation_graph.py) | [Generation workflow tests](python-apiops-agentlab/tests/workflows/test_testcase_generation_graph.py) |
+| Python diagnosis | [Diagnosis workflow](python-apiops-agentlab/app/workflows/diagnosis_workflow.py) | [Diagnosis workflow tests](python-apiops-agentlab/tests/workflows/test_diagnosis_workflow.py) |
+| Tracing | [Trace recorder](python-apiops-agentlab/app/tracing/recorder.py) | [Trace recorder tests](python-apiops-agentlab/tests/tracing/test_recorder.py) |
+| Runtime evaluation | [Evaluator](python-apiops-agentlab/app/evaluator/evaluator.py) | [Evaluator tests](python-apiops-agentlab/tests/evaluator/test_evaluator.py) |
+| Java ↔ Python integration | [Java API client](python-apiops-agentlab/app/clients/java_apiops.py) | [Cross-process E2E test](java-apiops-platform/apiops-web/src/test/java/com/apiops/web/tool/Stage20FinalAcceptanceCrossProcessE2ETest.java) |
+| Console navigation | [Console shell](apiops-console/src/components/layout/AppShell.tsx) | [Context-trail verification](apiops-console/scripts/verify-context-trail.ts) |
+
+## Agent Safety Boundary
+
+```text
+Agent ToolIntent
+→ Python Guard / optional HITL
+→ Java Tool Gateway
+→ Authentication
+→ Project Authorization
+→ ToolAuth
+→ Parameter / Resource Guard
+→ Execution
+→ Sanitization
+→ Audit
+```
+
+Python AgentLab does not directly access Java-owned MySQL, Redis, RabbitMQ, internal services, raw logs, or vector resources. Requests cross the guarded Java boundary and return structured, sanitized results with audit context.
+
+## REST integration
+
+The public integration surface is project-scoped:
+
+| Capability | Method | Path |
+| --- | --- | --- |
+| OpenAPI metadata | `GET` | `/api/v1/projects/{projectId}/openapi/apis/{apiId}` |
+| Submit test batch | `POST` | `/api/v1/projects/{projectId}/test-batches` |
+| Read test report | `GET` | `/api/v1/projects/{projectId}/test-runs/{runId}/report` |
+| Call a guarded tool | `POST` | `/api/v1/projects/{projectId}/tool-calls` |
+
+TestCase DSL validation is enforced inside Java Agent and Runner service boundaries; there is no standalone validation REST endpoint in the current public implementation.
+
+## Verification
+
+These figures come from the current public release verification:
+
+- **Java:** 11-module Maven reactor, `BUILD SUCCESS`
+- **Python:** Ruff `PASS`; `740 passed`, 4 warnings
+- **Console:** lint `PASS`, context test `PASS`, build `PASS`
+- **GitHub Actions:** Java CI `PASS`
+
+## Public scope
+
+This public portfolio intentionally excludes private/internal documentation, Benchmark / Stage21 materials, runtime artifacts, and credentials. It includes executable production source, ordinary tests, shared schemas, and public-safe configuration.
+
+Benchmark materials are not included in this public release.
+
+## Repository structure
+
+```text
+agentic-apiops-public
+├── .github
+├── examples
+├── scripts
+├── shared-schemas
+├── java-apiops-platform
+├── python-apiops-agentlab
+├── apiops-console
+└── README.md
+```
+
+Java is responsible for platformization, execution, security, audit, and formal business closure. Python is responsible for Agent workflow, tool orchestration, tracing, and runtime evaluation. The projects meet through shared schemas, REST contracts, and the Java Tool Gateway.
+
+Configuration templates are provided as `.env.example` files; real credentials are never committed.
