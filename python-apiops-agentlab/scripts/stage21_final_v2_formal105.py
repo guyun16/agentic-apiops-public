@@ -607,7 +607,7 @@ def _prompt_freeze() -> list[dict[str, object]]:
     values: list[dict[str, object]] = []
     for prompt in PROMPT_SOURCES:
         files = [
-            (relative, REPOSITORY_ROOT / relative.replace("/", "\\"))
+            (relative, REPOSITORY_ROOT / relative)
             for relative in prompt["files"]
         ]
         values.append(

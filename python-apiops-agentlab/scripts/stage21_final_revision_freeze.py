@@ -146,7 +146,7 @@ def verify_prior_evidence() -> dict:
         normalized = relative.replace("\\", "/")
         if normalized.startswith("python-apiops-agentlab/scripts/") or "/target/" in normalized:
             continue  # New admission scripts tested separately; rebuilt jars frozen below.
-        if gate.digest(ROOT / relative) != expected:
+        if gate.digest(ROOT / normalized) != expected:
             raise RuntimeError("ACCEPTANCE_IMPLEMENTATION_SOURCE_DRIFT")
         checked += 1
     provider = formal._read_json(PRIMARY / "provider-integrity.json")
