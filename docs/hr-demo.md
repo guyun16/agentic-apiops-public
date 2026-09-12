@@ -12,6 +12,10 @@
 和 `APIOPS_AUTH_DB_PASSWORD`。Java 已构建，Python 虚拟环境位于
 `python-apiops-agentlab/.venv`。
 
+演示初始化工具要求非空数据库密码。如果使用默认开发 Compose 的空密码数据库，
+请先为该数据库配置本地密码，再把相同值写入 `.env.local`。不要只修改客户端配置，
+否则数据库认证会失败。
+
 ```powershell
 .\scripts\setup-hr-demo.ps1 -SkipStart
 ```
