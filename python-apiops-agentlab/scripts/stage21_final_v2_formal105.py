@@ -641,11 +641,11 @@ def _accuracy_repair_contract_freeze() -> dict[str, object]:
         for row in prerequisite_tasks
     )
     schema_paths = [
-        (relative, REPOSITORY_ROOT / relative.replace("/", "\\"))
+        (relative, REPOSITORY_ROOT / relative)
         for relative in SCHEMA_SOURCES
     ]
     workflow_paths = [
-        (relative, REPOSITORY_ROOT / relative.replace("/", "\\"))
+        (relative, REPOSITORY_ROOT / relative)
         for relative in ACCURACY_REPAIR_WORKFLOW_SOURCES
     ]
     if guarded_task.get("benchmarkTaskId") != "bench_task_e2e_diagnosis_tool_guarded":

@@ -51,3 +51,20 @@ def test_windows_manifest_keys_resolve_before_source_drift_check(monkeypatch) ->
     with pytest.raises(RuntimeError, match="ACCEPTANCE_IMPLEMENTATION_SOURCE_DRIFT"):
         freeze.verify_prior_evidence()
     assert observed == [PurePosixPath("/snapshot/java-apiops-platform/src/Example.java")]
+
+
+def test_contract_freeze_resolves_schema_and_workflow_paths(monkeypatch) -> None:
+    monkeypatch.setattr(formal, "REPOSITORY_ROOT", PurePosixPath("/snapshot"))
+    observed = []
+
+    def digest(files):
+        observed.extend(files)
+        return "fixture-digest"
+
+    monkeypatch.setattr(formal, "_digest_paths", digest)
+    formal._accuracy_repair_contract_freeze()
+    sources = (*formal.SCHEMA_SOURCES, *formal.ACCURACY_REPAIR_WORKFLOW_SOURCES)
+    assert len(observed) == len(sources)
+    assert set(observed) == {
+        (relative, PurePosixPath("/snapshot") / relative) for relative in sources
+    }
