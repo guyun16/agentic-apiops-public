@@ -1,0 +1,160 @@
+{
+  "benchmarkRevision": "stage21-formal105-accuracy-repair-v3",
+  "evaluationRunId": "evaluation_run:stage21-v3-residual-live-20260904T132824Z",
+  "failureClassificationCounts": {},
+  "full105Status": "NOT_RUN",
+  "historicalOfficialDigestsAfter": {
+    "freeze": "0adc681945cb599a3159b23c876a5bb76d6c7812bc651ba9a9c2ee493d2c62cb",
+    "outcome": "8fb236a248184c3c776791b02daa48712d7d5f1aea7fc39166f3e1cab1c14471",
+    "run": "019f4266a4fbd17a2a82d71d4e78f3f42a3ed9e8ef8622189245af6833dff147"
+  },
+  "historicalOfficialDigestsBefore": {
+    "freeze": "0adc681945cb599a3159b23c876a5bb76d6c7812bc651ba9a9c2ee493d2c62cb",
+    "outcome": "8fb236a248184c3c776791b02daa48712d7d5f1aea7fc39166f3e1cab1c14471",
+    "run": "019f4266a4fbd17a2a82d71d4e78f3f42a3ed9e8ef8622189245af6833dff147"
+  },
+  "javaExecutionStatusCounts": {
+    "EXECUTED": 11,
+    "NOT_APPLICABLE": 2
+  },
+  "leakageScan": {
+    "matchingPathCount": 0,
+    "status": "PASS"
+  },
+  "provider": {
+    "model": "qwen3.8-max",
+    "provider": "Qwen"
+  },
+  "providerIntegrity": {
+    "actualFallbackTaskIds": [],
+    "callsWithResponseProof": 9,
+    "expectedModel": "qwen3.8-max",
+    "expectedProvider": "Qwen",
+    "mismatchTaskIds": [],
+    "noModelCallTaskIds": [
+      "bench_task_failure_insufficient_missing",
+      "bench_task_formal_failure_business_report_authority",
+      "bench_task_formal_failure_insufficient_missing_headers",
+      "bench_task_golden_rag_evidence"
+    ],
+    "observedIdentities": [
+      {
+        "model": "qwen3.8-max",
+        "provider": "qwen"
+      }
+    ],
+    "observedResponseModels": [
+      "qwen3.8-max"
+    ],
+    "provenTaskIds": [
+      "bench_task_e2e_diagnosis_tool_guarded",
+      "bench_task_formal_failure_business_acceptable_alt",
+      "bench_task_formal_failure_report_constraint_primary",
+      "bench_task_formal_testcase_happy_create_order_contract",
+      "bench_task_formal_testcase_inventory_conflict_runner",
+      "bench_task_formal_testcase_missing_json_path_expected",
+      "bench_task_formal_tool_deny_no_alternate_path",
+      "bench_task_testcase_boundary_quantity_zero",
+      "bench_task_testcase_happy_create_order_runner"
+    ],
+    "schemaVersion": "stage21-provider-integrity/v2",
+    "silentFallbackDetected": false,
+    "status": "PROVIDER_PROVEN",
+    "taskCount": 13,
+    "terminalModelCallCount": 9,
+    "unprovenTaskIds": []
+  },
+  "qwen38ProviderAcceptance": {
+    "acceptanceArtifact": "artifacts/stage21/qwen38-provider-acceptance-v3/final-gate.md",
+    "acceptanceDigest": "8515ebfb1b0667eb2bcd12c067cde7d4f1e59a76f1b8f872e4739dd40a38feec",
+    "formal105Status": "NOT_RUN",
+    "markers": {
+      "DEEPSEEK_REGRESSION = PASS": "PASS",
+      "FORMAL105_STATUS = NOT_RUN": "PASS",
+      "QWEN_DIAGNOSIS_SEMANTIC = PASS": "PASS",
+      "QWEN_PROVIDER = PASS": "PASS",
+      "QWEN_PROVIDER_CHAIN = PASS": "PASS",
+      "QWEN_RUNTIME_WIRING = PASS": "PASS",
+      "QWEN_TESTCASE_NATIVE_INTENTIONAL_INVALID = PASS": "PASS",
+      "QWEN_TESTCASE_NATIVE_POSITIVE = PASS": "PASS"
+    },
+    "model": "qwen3.8-max",
+    "provider": "Qwen",
+    "qualityGateArtifact": "artifacts/stage21/qwen38-provider-acceptance-v3/quality-gate.json",
+    "qualityGateDigest": "0e559b364b4bc01348722262911ef1830a811610ade8a0b1cb4e90c2db63650b",
+    "sourceFreezeArtifact": "artifacts/stage21/qwen38-provider-acceptance-v3/source-freeze.json",
+    "sourceFreezeDigest": "9e065c6c12dd32a7c0e5a3ef6da03c6401cc7081d313eb4a994ece6855de894d",
+    "status": "PASS",
+    "structuredOutputProfile": {
+      "diagnosisInitial": {
+        "allowedOutputs": [
+          "DiagnosisReport",
+          "ToolIntent"
+        ],
+        "mode": "JSON_OBJECT"
+      },
+      "diagnosisMemoryRefinement": {
+        "mode": "JSON_SCHEMA",
+        "schemaDigest": "3a5fef50c9b2944a9ea92c6842c0857363c3991d3c7ed1d65b6fbfbe58ccd339",
+        "schemaName": "diagnosis_report_v1"
+      },
+      "diagnosisNativeCoverage": "REPORT_PATH_ONLY",
+      "diagnosisReportContinuation": {
+        "mode": "JSON_SCHEMA",
+        "schemaDigest": "3a5fef50c9b2944a9ea92c6842c0857363c3991d3c7ed1d65b6fbfbe58ccd339",
+        "schemaName": "diagnosis_report_v1"
+      },
+      "testcase": {
+        "mode": "JSON_SCHEMA",
+        "schemaDigest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schemaName": "testcase_candidate_object_v1"
+      }
+    }
+  },
+  "residualOutcomeAccuracy": {
+    "denominator": 13,
+    "numerator": 13,
+    "status": "VALUE",
+    "unknownCount": 0,
+    "value": 1.0
+  },
+  "residualPassRate": 1.0,
+  "runtimeStatusCounts": {
+    "SUCCESS": 13
+  },
+  "schemaVersion": "stage21-v3-residual-live-summary/v1",
+  "selectedTaskCount": 13,
+  "selectedTaskIds": [
+    "bench_task_golden_rag_evidence",
+    "bench_task_formal_failure_report_constraint_primary",
+    "bench_task_formal_failure_business_report_authority",
+    "bench_task_testcase_happy_create_order_runner",
+    "bench_task_formal_testcase_inventory_conflict_runner",
+    "bench_task_formal_testcase_happy_create_order_contract",
+    "bench_task_testcase_boundary_quantity_zero",
+    "bench_task_formal_testcase_missing_json_path_expected",
+    "bench_task_formal_failure_business_acceptable_alt",
+    "bench_task_failure_insufficient_missing",
+    "bench_task_formal_failure_insufficient_missing_headers",
+    "bench_task_formal_tool_deny_no_alternate_path",
+    "bench_task_e2e_diagnosis_tool_guarded"
+  ],
+  "status": "PASS",
+  "systemChecks": {
+    "credentialLeakageAbsent": true,
+    "evaluationFactsPersisted": true,
+    "full105NotRun": true,
+    "historicalOfficialPreserved": true,
+    "outcomeV2Projected": true,
+    "providerIntegrity": true,
+    "residualOnly": true,
+    "revisionFrozenBeforeCohort": true
+  },
+  "transitionCounts": {
+    "FAIL->PASS": 4,
+    "UNKNOWN->PASS": 9
+  },
+  "v2StatusCounts": {
+    "PASS": 13
+  }
+}

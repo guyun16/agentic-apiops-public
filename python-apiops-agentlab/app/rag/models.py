@@ -8,6 +8,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
+    StrictBool,
     StrictFloat,
     StrictInt,
     StrictStr,
@@ -77,7 +78,14 @@ class RetrievedEvidence(_EvidenceModel):
 
 
 class EvidenceRetrieval(_EvidenceModel):
-    """The successful Java RAG result, retaining query identity and order."""
+    """The successful Java RAG result, retaining query identity and order.
+
+    ``_resultTruncated`` is Java Tool Gateway metadata added by ``ResultLimiter``
+    after the RAG tool's domain result has been sanitized.  It is part of the
+    wire contract rather than an unknown RAG field, so model it explicitly while
+    continuing to reject every other extra field and every non-boolean marker.
+    """
 
     rag_query_id: StrictStr = Field(alias="ragQueryId", min_length=1)
     evidence: list[RetrievedEvidence] = Field(alias="results")
+    result_truncated: StrictBool = Field(default=False, alias="_resultTruncated")

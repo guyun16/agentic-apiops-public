@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "stage21-known-limitations/v1",
+  "revision": "stage21-formal105-final-closure-v5",
+  "admissionOnly": true,
+  "changesEvaluator": false,
+  "prepopulatesOutcomes": false,
+  "excludesTasks": false,
+  "limitations": [
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_auth_missing_token_post",
+      "scope": "TASK_LOCAL_RESPONSE_CONTRACT_AUTHORITY",
+      "authorityReadiness": "INCOMPLETE_NOT_READY",
+      "missingEvidence": "Matching real Java create-order/apiKeyAuth endpoint and exact 401 business-code response schema or bound Runner report/assertion facts.",
+      "whyNotPass": "A readable metadata identity or a candidate code guess does not prove AUTH_UNAUTHORIZED. The current demo POST /orders is public; metadata-only /stage21/auth-check has no corresponding controller or exact 401 code schema.",
+      "sharedSecurityNotExempt": "Platform JWT Bearer authentication returns A0004 on protected operations, a different contract. Live profile login, project ownership, unauthenticated denial and cross-project denial must still pass independently.",
+      "impact": "One testcase-generation outcome authority gap only; all 105 tasks including this task remain selected, executed and scored normally. No predicted next-run outcome.",
+      "taskFile": "python-apiops-agentlab/tests/benchmark/fixtures/formal/tasks/bench_task_formal_testcase_auth_missing_token_post.json",
+      "taskSha256": "89c1974237ef5bff1363f3e2d8bb11c0475a4488e6ffa386cfb2cbf8e811624b",
+      "groundTruthFile": "python-apiops-agentlab/tests/benchmark/fixtures/formal/ground_truth/gt_stage21_testcase_auth_missing_token_post.json",
+      "groundTruthSha256": "5b917eb75a6a9136490c58f5c150f5c0e6130af82cebb5cec7ec2d1b05dc8b1e",
+      "observedTaskArtifact": "f105r/final-six-closure-20260905T022608Z/final-residual/results/run-701d5cc6d8824ab975ce4830/task-926ed50c8366bb2d6b6f2f47.json",
+      "rootCauseEvidence": "docs/stage21-final-six-business-contracts.md",
+      "resolutionRequires": "A separately authorized correction to the real endpoint/response contract, followed by genuine Java-authoritative validation; not GT adaptation or a guessed alias."
+    }
+  ]
+}

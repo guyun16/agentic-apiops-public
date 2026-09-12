@@ -1,0 +1,354 @@
+{
+  "schemaVersion": "stage21-runner-runtime-recipe/v1",
+  "recipes": [
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_assertion_contract",
+      "sourceReference": "java://runner-testcase-dsl/one-of-mismatch-formal.json",
+      "recipeFamily": "ASSERTION_EVALUATION_ERROR",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-assertion-contract",
+        "projectId": 41,
+        "apiId": "listProducts",
+        "name": "Stage 21 formal assertion contract evaluation recipe",
+        "environment": {"baseUrl": "http://127.0.0.1:18080", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "assertion-contract"],
+        "steps": [{
+          "stepId": "stage21-formal-assertion-contract-step",
+          "name": "Evaluate an invalid JSONPath after an HTTP response",
+          "request": {"method": "GET", "path": "/products", "query": {"pageNo": 1, "pageSize": 1}},
+          "assertions": [{"type": "JSON_PATH", "expression": "$[", "operator": "EXISTS"}],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_assertion_evidence_root",
+      "sourceReference": "java://runner-testcase-dsl/stage21/formal/assertion-evidence-root.json",
+      "recipeFamily": "ASSERTION_MISMATCH",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-assertion-evidence-root",
+        "projectId": 41,
+        "apiId": "listProducts",
+        "name": "Stage 21 formal assertion evidence root recipe",
+        "environment": {"baseUrl": "http://127.0.0.1:18080", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "assertion-mismatch"],
+        "steps": [{
+          "stepId": "stage21-formal-assertion-evidence-root-step",
+          "name": "Record a status assertion mismatch",
+          "request": {"method": "GET", "path": "/products", "query": {"pageNo": 1, "pageSize": 1}},
+          "assertions": [{"type": "STATUS_CODE", "expected": 201}],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_assertion_json_path",
+      "sourceReference": "java://runner-testcase-dsl/e2e/stage8-demo-product-json-path-failed.json",
+      "recipeFamily": "ASSERTION_MISMATCH",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-assertion-json-path",
+        "projectId": 41,
+        "apiId": "listProducts",
+        "name": "Stage 21 formal JSON path assertion recipe",
+        "environment": {"baseUrl": "http://127.0.0.1:18080", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "json-path"],
+        "steps": [{
+          "stepId": "stage21-formal-assertion-json-path-step",
+          "name": "Record a missing JSON path assertion",
+          "request": {"method": "GET", "path": "/products", "query": {"pageNo": 1, "pageSize": 1}},
+          "assertions": [{"type": "JSON_PATH", "expression": "$.stage21Missing", "operator": "EXISTS"}],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_assertion_status",
+      "sourceReference": "java://runner-testcase-dsl/stage21/formal/assertion-status.json",
+      "recipeFamily": "ASSERTION_MISMATCH",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-assertion-status",
+        "projectId": 41,
+        "apiId": "listProducts",
+        "name": "Stage 21 formal status assertion recipe",
+        "environment": {"baseUrl": "http://127.0.0.1:18080", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "status-mismatch"],
+        "steps": [{
+          "stepId": "stage21-formal-assertion-status-step",
+          "name": "Record a response status mismatch",
+          "request": {"method": "GET", "path": "/products", "query": {"pageNo": 1, "pageSize": 1}},
+          "assertions": [{"type": "STATUS_CODE", "expected": 201}],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_business_acceptable_alt",
+      "sourceReference": "java://runner-testcase-dsl/e2e/create-order-insufficient-inventory-formal.json",
+      "recipeFamily": "BUSINESS_INVENTORY_CONFLICT",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-business-acceptable-alt",
+        "projectId": 41,
+        "apiId": "api_create_order",
+        "name": "Stage 21 formal inventory business conflict recipe",
+        "environment": {"baseUrl": "http://localhost:8080", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "business-conflict"],
+        "steps": [{
+          "stepId": "stage21-formal-business-acceptable-alt-step",
+          "name": "Request more product than inventory permits",
+          "request": {"method": "POST", "path": "/orders", "headers": {"Content-Type": "application/json"}, "body": {"userId": 1, "items": [{"productId": 2, "quantity": 3}]}},
+          "assertions": [
+            {"type": "STATUS_CODE", "expected": 409},
+            {"type": "JSON_PATH", "expression": "$.code", "operator": "EQUALS", "expected": "ORDER_BUSINESS_CONFLICT"}
+          ],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_http500_diagnosis_boundary",
+      "sourceReference": "java://runner-testcase-dsl/e2e/stage8-demo-http-500-formal.json",
+      "recipeFamily": "HTTP_500_RESPONSE",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-http500-boundary",
+        "projectId": 41,
+        "apiId": "simulateSlowSqlFault",
+        "name": "Stage 21 formal HTTP 500 boundary recipe",
+        "environment": {"baseUrl": "http://127.0.0.1:18081", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "http-500"],
+        "steps": [{
+          "stepId": "stage21-formal-http500-boundary-step",
+          "name": "Invoke the controlled HTTP 500 endpoint",
+          "request": {"method": "GET", "path": "/api/faults/slow-sql", "query": {"delayMs": 100}},
+          "assertions": [{"type": "STATUS_CODE", "expected": 500}],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_http500_payload",
+      "sourceReference": "java://runner-testcase-dsl/stage21/formal/http500-payload.json",
+      "recipeFamily": "HTTP_500_RESPONSE",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-http500-payload",
+        "projectId": 41,
+        "apiId": "simulateSlowSqlFault",
+        "name": "Stage 21 formal HTTP 500 payload recipe",
+        "environment": {"baseUrl": "http://127.0.0.1:18081", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "http-500"],
+        "steps": [{
+          "stepId": "stage21-formal-http500-payload-step",
+          "name": "Observe the controlled HTTP 500 payload",
+          "request": {"method": "GET", "path": "/api/faults/slow-sql", "query": {"delayMs": 100}},
+          "assertions": [
+            {"type": "STATUS_CODE", "expected": 500},
+            {"type": "JSON_PATH", "expression": "$.code", "operator": "EQUALS", "expected": "ORDER_SYSTEM_ERROR"}
+          ],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_http500_transport_distinction",
+      "sourceReference": "java://runner-testcase-dsl/stage21/formal/http500-transport-distinction.json",
+      "recipeFamily": "HTTP_500_RESPONSE",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-http500-transport",
+        "projectId": 41,
+        "apiId": "simulateSlowSqlFault",
+        "name": "Stage 21 formal HTTP versus transport recipe",
+        "environment": {"baseUrl": "http://127.0.0.1:18081", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "http-500"],
+        "steps": [{
+          "stepId": "stage21-formal-http500-transport-step",
+          "name": "Keep HTTP failure distinct from connection failure",
+          "request": {"method": "GET", "path": "/api/faults/slow-sql", "query": {"delayMs": 100}},
+          "assertions": [{"type": "STATUS_CODE", "expected": 500}],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_inventory_business",
+      "sourceReference": "java://runner-testcase-dsl/e2e/create-order-insufficient-inventory.json",
+      "recipeFamily": "BUSINESS_INVENTORY_CONFLICT",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-inventory-business",
+        "projectId": 41,
+        "apiId": "api_create_order",
+        "name": "Stage 21 formal inventory business response recipe",
+        "environment": {"baseUrl": "http://localhost:8080", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "business-conflict"],
+        "steps": [{
+          "stepId": "stage21-formal-inventory-business-step",
+          "name": "Observe a deterministic inventory conflict",
+          "request": {"method": "POST", "path": "/orders", "headers": {"Content-Type": "application/json"}, "body": {"userId": 1, "items": [{"productId": 2, "quantity": 3}]}},
+          "assertions": [
+            {"type": "STATUS_CODE", "expected": 409},
+            {"type": "JSON_PATH", "expression": "$.code", "operator": "EQUALS", "expected": "ORDER_BUSINESS_CONFLICT"}
+          ],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_e2e_generation_runner_success",
+      "sourceReference": "java://runner-testcase-dsl/e2e/create-order-success.json",
+      "recipeFamily": "CREATE_ORDER_SUCCESS",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-e2e-create-order-success-project-1001",
+        "projectId": 1001,
+        "apiId": "api_create_order",
+        "name": "Stage 21 E2E create-order success recipe for project 1001",
+        "environment": {"baseUrl": "http://localhost:8080", "variables": {}},
+        "description": "Stage 21 Runner input recipe reusing the existing create-order success contract.",
+        "tags": ["stage21", "runtime-recipe", "create-order-success", "project-1001"],
+        "steps": [{
+          "stepId": "stage21-e2e-create-order-success-project-1001-step",
+          "name": "Create an order with valid inventory in project 1001",
+          "request": {"method": "POST", "path": "/orders", "headers": {"Content-Type": "application/json"}, "body": {"userId": 1, "items": [{"productId": 1, "quantity": 1}]}},
+          "assertions": [
+            {"type": "STATUS_CODE", "expected": 200},
+            {"type": "HEADER", "name": "content-type", "operator": "CONTAINS", "expected": "application/json"},
+            {"type": "JSON_PATH", "expression": "$.code", "operator": "EQUALS", "expected": "ORDER_SUCCESS"},
+            {"type": "JSON_PATH", "expression": "$.data", "operator": "EXISTS"},
+            {"type": "RESPONSE_TIME", "maxMs": 1000}
+          ],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_e2e_generation_business_failure",
+      "sourceReference": "java://runner-testcase-dsl/e2e/create-order-insufficient-inventory-project-1001.json",
+      "recipeFamily": "BUSINESS_INVENTORY_CONFLICT",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-e2e-inventory-business-project-1001",
+        "projectId": 1001,
+        "apiId": "api_create_order",
+        "name": "Stage 21 E2E inventory business response recipe for project 1001",
+        "environment": {"baseUrl": "http://localhost:8080", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "business-conflict", "project-1001"],
+        "steps": [{
+          "stepId": "stage21-e2e-inventory-business-project-1001-step",
+          "name": "Observe a deterministic inventory conflict in project 1001",
+          "request": {"method": "POST", "path": "/orders", "headers": {"Content-Type": "application/json"}, "body": {"userId": 1, "items": [{"productId": 2, "quantity": 3}]}},
+          "assertions": [
+            {"type": "STATUS_CODE", "expected": 409},
+            {"type": "JSON_PATH", "expression": "$.code", "operator": "EQUALS", "expected": "ORDER_BUSINESS_CONFLICT"}
+          ],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_timeout_deadline",
+      "sourceReference": "java://runner-unit/TestStepRunnerTest/formal-timeout",
+      "recipeFamily": "TIMEOUT",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-timeout-deadline",
+        "projectId": 41,
+        "apiId": "stage21-timeout-target",
+        "name": "Stage 21 formal Runner timeout deadline recipe",
+        "environment": {"baseUrl": "http://127.0.0.1:18082", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "timeout"],
+        "steps": [{
+          "stepId": "stage21-formal-timeout-deadline-step",
+          "name": "Cross the Runner timeout boundary",
+          "request": {"method": "GET", "path": "/timeout"},
+          "assertions": [{"type": "STATUS_CODE", "expected": 200}],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_timeout_partial_report",
+      "sourceReference": "java://runner-unit/TestStepRunnerTest/formal-partial-timeout",
+      "recipeFamily": "TIMEOUT",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-timeout-partial",
+        "projectId": 41,
+        "apiId": "stage21-timeout-target",
+        "name": "Stage 21 formal partial timeout recipe",
+        "environment": {"baseUrl": "http://127.0.0.1:18082", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "timeout"],
+        "steps": [{
+          "stepId": "stage21-formal-timeout-partial-step",
+          "name": "Observe timeout without a completed target response",
+          "request": {"method": "GET", "path": "/timeout"},
+          "assertions": [{"type": "STATUS_CODE", "expected": 200}],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_transport_connect",
+      "sourceReference": "java://runner-testcase-dsl/e2e/stage8-connect-failure-formal.json",
+      "recipeFamily": "TRANSPORT_CONNECT_FAILURE",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-transport-connect",
+        "projectId": 41,
+        "apiId": "listProducts",
+        "name": "Stage 21 formal transport connection failure recipe",
+        "environment": {"baseUrl": "http://127.0.0.1:1", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "connect-failure"],
+        "steps": [{
+          "stepId": "stage21-formal-transport-connect-step",
+          "name": "Connect to an unreachable local port",
+          "request": {"method": "GET", "path": "/products"},
+          "assertions": [{"type": "STATUS_CODE", "expected": 200}],
+          "extractors": []
+        }]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_transport_dns",
+      "sourceReference": "java://runner-testcase-dsl/e2e/stage8-connect-failure-dns.json",
+      "recipeFamily": "TRANSPORT_DNS_FAILURE",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21-formal-transport-dns",
+        "projectId": 41,
+        "apiId": "listProducts",
+        "name": "Stage 21 formal DNS transport failure recipe",
+        "environment": {"baseUrl": "http://stage21-unresolvable.invalid:18080", "variables": {}},
+        "tags": ["stage21", "runtime-recipe", "dns-failure"],
+        "steps": [{
+          "stepId": "stage21-formal-transport-dns-step",
+          "name": "Resolve an intentionally unreachable target",
+          "request": {"method": "GET", "path": "/products"},
+          "assertions": [{"type": "STATUS_CODE", "expected": 200}],
+          "extractors": []
+        }]
+      }
+    }
+  ]
+}

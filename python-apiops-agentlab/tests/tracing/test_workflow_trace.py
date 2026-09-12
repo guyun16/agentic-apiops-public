@@ -17,7 +17,20 @@ from app.tools import (
     ToolRiskClassifier,
     ToolRouter,
 )
-from app.tracing import InMemoryTraceSink, TraceRecorder
+from app.tracing import (
+    AgentRun,
+    ApprovalFact,
+    InMemoryTraceSink,
+    InterruptFact,
+    JsonlTraceSink,
+    ModelCall,
+    ResumeFact,
+    ToolResultRecord,
+    TraceEvent,
+    TraceRecorder,
+    TraceStatus,
+    read_trace_jsonl,
+)
 from app.workflows.approval import ApprovalAction, ApprovalDecision, ApprovalRequest
 from app.workflows.generation_context import (
     DocumentedResponse,
@@ -104,6 +117,11 @@ class SequenceLLM:
         return response
 
 
+class DeepSeekSequenceLLM(SequenceLLM):
+    provider = "DeepSeek"
+    model = "deepseek-test-model"
+
+
 def generation_state() -> APIOpsAgentState:
     return {
         "trace_id": "trace-generation",
@@ -165,6 +183,35 @@ async def test_generation_trace_has_success_steps_and_nested_model_call() -> Non
     assert calls[0]["parent_identity"]["identity"] == calls[0]["agent_step_id"]
     assert calls[1]["model_output"] is not None
     assert [record["sequence"] for record in stored] == list(range(1, len(stored) + 1))
+
+
+@pytest.mark.anyio
+async def test_generation_model_call_jsonl_readback_is_typed_and_bounded(tmp_path) -> None:
+    path = tmp_path / "generation-trace.jsonl"
+    recorder = TraceRecorder(JsonlTraceSink(path))
+    graph = build_testcase_generation_graph(
+        TestCaseGenerator(DeepSeekSequenceLLM([candidate_json()])),
+        trace_recorder=recorder,
+    )
+
+    result = await graph.ainvoke(generation_state())
+    persisted = read_trace_jsonl(path)
+    calls = [record for record in persisted if isinstance(record, ModelCall)]
+    start, terminal = calls
+
+    assert result["generation_status"] is TestCaseGenerationStatus.ACCEPTED
+    assert start.event is TraceEvent.START
+    assert terminal.event is TraceEvent.TERMINAL
+    assert terminal.status is TraceStatus.SUCCESS
+    assert start.model_call_id == terminal.model_call_id
+    assert start.model_identity.provider == terminal.model_identity.provider == "DeepSeek"
+    assert start.model_identity.model == terminal.model_identity.model == "deepseek-test-model"
+    assert start.prompt.name == "testcase_generate"
+    assert start.prompt.version == "v1"
+    assert start.trace_id == terminal.trace_id == "trace-generation"
+    assert start.agent_run_id == terminal.agent_run_id == "run-generation"
+    assert start.model_input.summary
+    assert terminal.model_output is not None
 
 
 @pytest.mark.anyio
@@ -338,6 +385,73 @@ async def test_tool_trace_preserves_java_tool_call_id_and_nested_parent() -> Non
 
 
 @pytest.mark.anyio
+async def test_tool_result_jsonl_readback_preserves_java_owned_identity(tmp_path) -> None:
+    path = tmp_path / "tool-trace.jsonl"
+    gateway = FakeToolGatewayAdapter(tool_result(tool_call_id="java-authority-jsonl-007"))
+    call = tool_call()
+    intent = ToolIntent(tool_name="rag.search", arguments={"query": "orders", "topK": 2})
+    sink = JsonlTraceSink(path)
+    recorder = TraceRecorder(sink)
+    graph = build_tool_use_graph(
+        ToolRouter(ToolCatalog(), {"rag.search": gateway}),
+        trace_recorder=recorder,
+    )
+
+    result = await graph.ainvoke(tool_state(call=call, intent=intent))
+    persisted = read_trace_jsonl(path)
+    tool_record = next(record for record in persisted if isinstance(record, ToolResultRecord))
+
+    assert result["tool_result"].tool_call_id == "java-authority-jsonl-007"
+    assert tool_record.java_tool_call_id == "java-authority-jsonl-007"
+    assert tool_record.tool_call_id == "java-authority-jsonl-007"
+    assert "toolCallId" not in call.model_dump(by_alias=True)
+    assert all(record.agent_run_id == "run-tool" for record in persisted)
+
+
+def test_missing_java_tool_call_id_and_redacted_summary_survive_typed_jsonl_readback(
+    tmp_path,
+) -> None:
+    path = tmp_path / "safe-tool-trace.jsonl"
+    recorder = TraceRecorder(JsonlTraceSink(path))
+    recorder.record(
+        ToolResultRecord(
+            trace_id="trace-safe-tool",
+            agent_run_id="run-safe-tool",
+            tool_name="rag.search",
+            java_tool_call_id=None,
+            result_summary=(
+                "Authorization: Bearer test-secret-token; "
+                "Cookie: session=test-cookie; "
+                "apiKey=test-api-key; password=test-password"
+            ),
+            sanitized=True,
+            truncated=False,
+            status=TraceStatus.SUCCESS,
+        )
+    )
+
+    raw = path.read_text(encoding="utf-8")
+    persisted = read_trace_jsonl(path)
+    record = persisted[0]
+
+    assert isinstance(record, ToolResultRecord)
+    assert record.java_tool_call_id is None
+    assert all(secret not in raw for secret in (
+        "test-secret-token",
+        "test-cookie",
+        "test-api-key",
+        "test-password",
+    ))
+    typed_text = str(record.model_dump(mode="json", exclude_none=False))
+    assert all(secret not in typed_text for secret in (
+        "test-secret-token",
+        "test-cookie",
+        "test-api-key",
+        "test-password",
+    ))
+
+
+@pytest.mark.anyio
 async def test_preflight_denial_is_trace_denied_with_safety_fact() -> None:
     gateway = FakeToolGatewayAdapter(tool_result())
     intent = ToolIntent(tool_name="rag.search", arguments={"query": "orders", "topK": 2})
@@ -434,6 +548,78 @@ async def test_hitl_interrupt_resume_keeps_run_and_approval_correlation() -> Non
     )
     assert resumed["tool_result"].tool_call_id == "java-hitl-009"
     assert all("approval_id" not in record for record in stored)
+
+
+@pytest.mark.anyio
+async def test_hitl_jsonl_readback_persists_interrupt_resume_and_terminal_facts(tmp_path) -> None:
+    params = {"key": "task:41"}
+    call = tool_call(
+        name="redis.read",
+        params=params,
+        trace_id="trace-hitl-jsonl",
+        agent_run_id="run-hitl-jsonl",
+    )
+    intent = ToolIntent(tool_name="redis.read", arguments=params)
+    state = tool_state(
+        call=call,
+        intent=intent,
+        intent_id="intent-hitl-jsonl",
+        workflow_id="workflow-hitl-jsonl",
+    )
+    gateway = FakeToolGatewayAdapter(
+        tool_result(tool_call_id="java-hitl-jsonl-009").model_copy(
+            update={"trace_id": "trace-hitl-jsonl"}
+        )
+    )
+    path = tmp_path / "hitl-trace.jsonl"
+    recorder = TraceRecorder(JsonlTraceSink(path))
+    config = checkpoint_config("workflow-hitl-jsonl")
+    graph = build_tool_use_graph(
+        ToolRouter(ToolCatalog(), {"redis.read": gateway}),
+        preflight_guard=ToolPreflightGuard(
+            ToolRiskClassifier(ToolCatalog(), trusted_project_id="41")
+        ),
+        checkpointer=InMemorySaver(),
+        trace_recorder=recorder,
+    )
+
+    paused = await graph.ainvoke(state, config=config)
+    request = ApprovalRequest.model_validate(paused["__interrupt__"][0].value)
+    decision = ApprovalDecision.model_validate(
+        {
+            **request.model_dump(),
+            "decision": ApprovalAction.APPROVE,
+            "edited_arguments": None,
+        }
+    )
+    resumed = await graph.ainvoke(
+        Command(resume=decision.model_dump(mode="json")),
+        config=config,
+    )
+    persisted = read_trace_jsonl(path)
+    run_records = [record for record in persisted if isinstance(record, AgentRun)]
+    approval_records = [record for record in persisted if isinstance(record, ApprovalFact)]
+
+    assert resumed["status"] is ToolUseStatus.CONTINUE
+    assert [record.event for record in run_records] == [
+        TraceEvent.START,
+        TraceEvent.INTERRUPT,
+        TraceEvent.RESUME,
+        TraceEvent.TERMINAL,
+    ]
+    assert {record.trace_id for record in persisted} == {"trace-hitl-jsonl"}
+    assert {record.agent_run_id for record in persisted} == {"run-hitl-jsonl"}
+    assert [record.event for record in approval_records] == [
+        TraceEvent.REQUEST,
+        TraceEvent.DECISION,
+    ]
+    assert any(isinstance(record, InterruptFact) for record in persisted)
+    assert any(isinstance(record, ResumeFact) for record in persisted)
+    assert all(record.sequence == index for index, record in enumerate(persisted, start=1))
+    assert all(
+        "approval_id" not in record.model_dump(mode="json", exclude_none=False)
+        for record in approval_records
+    )
 
 
 @pytest.mark.anyio

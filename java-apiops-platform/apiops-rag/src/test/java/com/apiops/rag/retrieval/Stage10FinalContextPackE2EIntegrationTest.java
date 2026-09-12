@@ -85,8 +85,8 @@ class Stage10FinalContextPackE2EIntegrationTest {
     private static final String QUERY = "Why did inventory reservation fail with insufficient stock?";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().findAndRegisterModules();
     private static final List<String> TEST_SECRETS = List.of(
-            "TEST_ONLY_BEARER_TOKEN", "TEST_ONLY_SESSION_COOKIE", "TEST_ONLY_REFRESH_COOKIE",
-            "TEST_ONLY_PASSWORD", "TEST_ONLY_API_KEY", "TEST_ONLY_SECRET");
+            "stage10-e2e-secret", "stage10-cookie-secret", "stage10-set-cookie-secret",
+            "stage10-password-secret", "stage10-api-key-secret", "stage10-generic-secret");
 
     private static DataSource ragDataSource;
     private static DataSource runnerDataSource;
@@ -277,7 +277,7 @@ class Stage10FinalContextPackE2EIntegrationTest {
             }
         }
         assertTrue(report.cases().getFirst().steps().getFirst().assertionResults()
-                .getFirst().message().contains("TEST_ONLY_BEARER_TOKEN"));
+                .getFirst().message().contains("stage10-e2e-secret"));
 
         RagQueryRecord queryFact = queryRecords.findById(
                 projectA, retrieval.ragQueryId()).orElseThrow();
@@ -315,8 +315,8 @@ class Stage10FinalContextPackE2EIntegrationTest {
                         FailureType.ASSERTION_MISMATCH,
                         List.of(new AssertionResult(
                                 AssertionType.STATUS_CODE, false, 201, 409,
-                                "INSUFFICIENT_STOCK Authorization: Bearer TEST_ONLY_BEARER_TOKEN "
-                                        + "Cookie: SESSION=TEST_ONLY_SESSION_COOKIE")),
+                                "INSUFFICIENT_STOCK Authorization: Bearer stage10-e2e-secret "
+                                        + "Cookie: SESSION=stage10-cookie-secret")),
                         new HttpResponseSnapshot(409, Map.of(), "", 125)));
         return persistedRunId;
     }
@@ -331,7 +331,7 @@ class Stage10FinalContextPackE2EIntegrationTest {
         repository.save(new ApiEndpoint(
                 0, API_ID, apiDocId, projectA, "createOrder", "POST", "/orders",
                 "Create order", "Reserves inventory and creates an order. "
-                        + "api_key=TEST_ONLY_API_KEY secret=TEST_ONLY_SECRET",
+                        + "api_key=stage10-api-key-secret secret=stage10-generic-secret",
                 "[\"orders\"]", "[]", "[]", false, null, null));
     }
 

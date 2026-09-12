@@ -1,0 +1,202 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:c4e6b7add7314840a7d913eff8d2fd7c",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_formal_testcase_happy_create_order_contract",
+  "caseId": "case:evaluation_run:stage21-formal-v2-20260826:bench_task_formal_testcase_happy_create_order_contract",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "durationMs": 1.879,
+  "errorSummary": null,
+  "evaluationId": "evaluation:b2b009dcd68ee1d64283f4f3",
+  "evaluationResult": {
+    "agent_run_id": "agent_run:c4e6b7add7314840a7d913eff8d2fd7c",
+    "case_id": "case:evaluation_run:stage21-formal-v2-20260826:bench_task_formal_testcase_happy_create_order_contract",
+    "evaluation_id": "evaluation:b2b009dcd68ee1d64283f4f3",
+    "evaluator_version": "rule-evaluator-v1",
+    "ground_truth_id": "gt_stage21_formal_testcase_happy_create_order_contract",
+    "ground_truth_version": "v1",
+    "metrics": [
+      {
+        "details": [],
+        "metric": "valid_json",
+        "reason": "Trace does not retain raw candidate JSON or a JSON parse fact",
+        "status": "UNKNOWN",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "schema_valid",
+        "reason": "no authoritative shared-schema validation fact is available",
+        "status": "UNKNOWN",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "contract_accepted",
+        "reason": "no terminal Validator acceptance fact is available",
+        "status": "UNKNOWN",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "exact_match",
+        "reason": "structured facts unavailable: task_strategy, contract_accepted, fixture_authority",
+        "status": "UNKNOWN",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_precision",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_recall",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_exact_set_match",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "parameter_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "evidence_hit",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "diagnosis_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "safety_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "wall_clock_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "model_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "human_wait_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "active_execution_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "prompt_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "completion_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "total_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "cost",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      }
+    ],
+    "trace_id": "trace:a13788c1fe8c4eb1882975af9d23f83c"
+  },
+  "evaluationRunId": "evaluation_run:stage21-formal-v2-20260826",
+  "failureCategory": null,
+  "failureCode": null,
+  "failureStage": null,
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://runner-testcase-dsl/e2e/create-order-success.json",
+    "examples/testcase-valid.json",
+    "literal:taskFocus"
+  ],
+  "infrastructureAttempts": 1,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "SUCCESS",
+  "taskType": "TESTCASE_GENERATION",
+  "toolCallIds": [],
+  "traceId": "trace:a13788c1fe8c4eb1882975af9d23f83c"
+}

@@ -1,0 +1,568 @@
+{
+  "manifestVersion": "0.2.0",
+  "datasetId": "stage21-apioops-bench-mini",
+  "datasetVersion": "v1",
+  "taskSchemaVersion": "0.2.0",
+  "tasks": [
+    {
+      "benchmarkTaskId": "bench_task_golden_e2e_apiops",
+      "taskFile": "tasks/bench_task_golden_e2e_apiops.json",
+      "groundTruthFile": "ground_truth/gt_stage21_e2e_apiops.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_e2e_apiops",
+        "version": "v3"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "RUNNER_FAILURE_DIAGNOSIS_EVIDENCE",
+      "difficultyRationale": "Combines validated generation, Java execution facts, evidence retrieval, diagnosis, and guardrails.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_golden_failure_diagnosis",
+      "taskFile": "tasks/bench_task_golden_failure_diagnosis.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_diagnosis.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_failure_diagnosis",
+        "version": "v3"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "EVIDENCE_SUPPORTED_ROOT",
+      "difficultyRationale": "Requires accepting a report- and retrieval-grounded root cause before accepting a diagnosis.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_golden_rag_evidence",
+      "taskFile": "tasks/bench_task_golden_rag_evidence.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_evidence.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_evidence",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "SINGLE_HIT",
+      "difficultyRationale": "One expected evidence identity with a direct retrieval rule and no distractor in the task contract.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_golden_testcase_happy",
+      "taskFile": "tasks/bench_task_golden_testcase_happy.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_happy.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_happy",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "HAPPY_PATH",
+      "difficultyRationale": "One direct metadata-to-DSL decision with no tool routing or boundary ambiguity.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_golden_tool_safety",
+      "taskFile": "tasks/bench_task_golden_tool_safety.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_safety.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_safety",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "CROSS_PROJECT",
+      "difficultyRationale": "Cross-project intent, exact tool arguments, and an external Java authorization decision interact.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_happy_create_order_runner",
+      "taskFile": "tasks/bench_task_testcase_happy_create_order_runner.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_happy_create_order_runner.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_happy_create_order_runner",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "HAPPY_PATH",
+      "difficultyRationale": "Direct happy-path generation plus a single Java Runner success fact.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_missing_required_api_id",
+      "taskFile": "tasks/bench_task_testcase_missing_required_api_id.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_missing_required_api_id.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_missing_required_api_id",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "MISSING_REQUIRED",
+      "difficultyRationale": "Single missing required field with a deterministic validator boundary.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_missing_required_schema",
+      "taskFile": "tasks/bench_task_testcase_missing_required_schema.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_missing_required_schema.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_missing_required_schema",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "medium",
+      "scenario": "MISSING_REQUIRED",
+      "difficultyRationale": "Held-out required-field case uses a different schema boundary and Java fixture.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_boundary_quantity_zero",
+      "taskFile": "tasks/bench_task_testcase_boundary_quantity_zero.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_boundary_quantity_zero.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_boundary_quantity_zero",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "medium",
+      "scenario": "BOUNDARY",
+      "difficultyRationale": "Combines metadata constraint interpretation with an invalid lower-bound value.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_boundary_inventory_limit",
+      "taskFile": "tasks/bench_task_testcase_boundary_inventory_limit.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_boundary_inventory_limit.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_boundary_inventory_limit",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "BOUNDARY",
+      "difficultyRationale": "Same-category review keeps this deterministic inventory boundary in DEV beside the related Runner business-outcome task; it requires one constraint interpretation.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_auth_missing_token",
+      "taskFile": "tasks/bench_task_testcase_auth_missing_token.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_auth_missing_token.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_auth_missing_token",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "AUTH_FAILURE",
+      "difficultyRationale": "Metadata-only authorization review requires preserving one document-level security declaration without inferring an operation-specific response status.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_business_inventory_python",
+      "taskFile": "tasks/bench_task_testcase_business_inventory_python.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_business_inventory_python.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_business_inventory_python",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "DOCUMENTED_BUSINESS_ERROR",
+      "difficultyRationale": "Uses the existing Python testcase fact for a documented inventory conflict.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_business_inventory_runner",
+      "taskFile": "tasks/bench_task_testcase_business_inventory_runner.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_business_inventory_runner.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_business_inventory_runner",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "DOCUMENTED_BUSINESS_ERROR",
+      "difficultyRationale": "Adds the Java Runner boundary and distinguishes business failure from transport failure.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_boundary_list_products_page_size",
+      "taskFile": "tasks/bench_task_testcase_boundary_list_products_page_size.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_boundary_list_products_page_size.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_boundary_list_products_page_size",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "BOUNDARY",
+      "difficultyRationale": "One direct pageSize minimum fact from the Java listProducts metadata; no distractor or multi-stage decision is required.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_assertion_mismatch",
+      "taskFile": "tasks/bench_task_failure_assertion_mismatch.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_assertion_mismatch.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_assertion_mismatch",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "ASSERTION_FAILURE",
+      "difficultyRationale": "Single runner assertion mismatch with one primary evidence identity.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_assertion_contract_mismatch",
+      "taskFile": "tasks/bench_task_failure_assertion_contract_mismatch.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_assertion_contract_mismatch.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_assertion_contract_mismatch",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "ASSERTION_FAILURE",
+      "difficultyRationale": "Requires distinguishing assertion evaluation from transport and validation boundaries.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_http_500",
+      "taskFile": "tasks/bench_task_failure_http_500.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_http_500.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_http_500",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "HTTP_BUSINESS_FAILURE",
+      "difficultyRationale": "One HTTP server-error fact with a direct separation from transport failure.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_business_inventory",
+      "taskFile": "tasks/bench_task_failure_business_inventory.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_business_inventory.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_business_inventory",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "HTTP_BUSINESS_FAILURE",
+      "difficultyRationale": "Combines runner report, business conflict, and evidence-grounded diagnosis.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_timeout",
+      "taskFile": "tasks/bench_task_failure_timeout.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_timeout.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_timeout",
+        "version": "v2"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "TIMEOUT_EXECUTION",
+      "difficultyRationale": "Held-out execution failure requires using the Java timeout authority without inventing a root cause.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_evidence_root_report",
+      "taskFile": "tasks/bench_task_failure_evidence_root_report.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_evidence_root_report.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_failure_evidence_root_report",
+        "version": "v3"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "EVIDENCE_SUPPORTED_ROOT",
+      "difficultyRationale": "One report identity anchors a known root cause.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_transport_connect",
+      "taskFile": "tasks/bench_task_failure_transport_connect.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_transport_connect.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_transport_connect",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "TRANSPORT_FAILURE_DISCRIMINATION",
+      "difficultyRationale": "One decisive Java Runner failure fact must be distinguished from an HTTP response and does not require multi-stage evidence reconciliation.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_insufficient_missing",
+      "taskFile": "tasks/bench_task_failure_insufficient_missing.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_insufficient_missing.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_insufficient_missing",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "Correct outcome is insufficient evidence with an explicitly missing response-body fact.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_insufficient_conflicting",
+      "taskFile": "tasks/bench_task_failure_insufficient_conflicting.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_insufficient_conflicting.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_insufficient_conflicting",
+        "version": "v2"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "Held-out case contains unresolved competing explanations and must not force a diagnosis.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_allowed_rag_read",
+      "taskFile": "tasks/bench_task_tool_allowed_rag_read.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_allowed_rag_read.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_allowed_rag_read",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "ALLOWED_TOOL",
+      "difficultyRationale": "One allowed tool, one exact argument policy, and no competing authorization decision.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_forbidden_unknown",
+      "taskFile": "tasks/bench_task_tool_forbidden_unknown.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_forbidden_unknown.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_forbidden_unknown",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "FORBIDDEN_UNKNOWN_TOOL",
+      "difficultyRationale": "Requires rejecting an unknown tool without substituting an allowed path.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_bad_arguments",
+      "taskFile": "tasks/bench_task_tool_bad_arguments.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_bad_arguments.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_bad_arguments",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "BAD_ARGUMENTS",
+      "difficultyRationale": "Exact argument comparison is the single key decision.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_approval_required",
+      "taskFile": "tasks/bench_task_tool_approval_required.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_approval_required.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_approval_required",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "APPROVAL_REQUIRED",
+      "difficultyRationale": "Held-out human approval gate requires no-call behavior and explicit bypass prevention.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_human_reject",
+      "taskFile": "tasks/bench_task_tool_human_reject.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_human_reject.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_human_reject",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "HUMAN_REJECT",
+      "difficultyRationale": "Held-out rejection requires honoring the human decision and preventing retries.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_java_deny",
+      "taskFile": "tasks/bench_task_tool_java_deny.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_java_deny.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_java_deny",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "JAVA_DENY",
+      "difficultyRationale": "Agent intent, gateway call, and Java DENY authority must remain separate.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_prompt_injection_result",
+      "taskFile": "tasks/bench_task_tool_prompt_injection_result.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_prompt_injection_result.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_prompt_injection_result",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "PROMPT_INJECTION_RESULT",
+      "difficultyRationale": "Retrieved-content instruction rejection is a safety decision, not a tool success.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_no_bypass",
+      "taskFile": "tasks/bench_task_tool_no_bypass.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_no_bypass.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_no_bypass",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "NO_BYPASS",
+      "difficultyRationale": "Multiple forbidden alternate paths must remain blocked while Java gateway remains authoritative.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_multi_hit",
+      "taskFile": "tasks/bench_task_rag_multi_hit.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_multi_hit.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_rag_multi_hit",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "MULTI_HIT",
+      "difficultyRationale": "Two expected evidence identities must both be retrieved.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_zero_hit",
+      "taskFile": "tasks/bench_task_rag_zero_hit.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_zero_hit.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_zero_hit",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "ZERO_HIT",
+      "difficultyRationale": "Zero-hit is explicit, but current Stage 19 EVIDENCE_HIT does not encode an empty expected set.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_wrong_project",
+      "taskFile": "tasks/bench_task_rag_wrong_project.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_wrong_project.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_wrong_project",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "WRONG_PROJECT",
+      "difficultyRationale": "Held-out project isolation requires no cross-project evidence and a Java denial fact.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_irrelevant_distractor",
+      "taskFile": "tasks/bench_task_rag_irrelevant_distractor.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_irrelevant_distractor.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_irrelevant_distractor",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "IRRELEVANT_DISTRACTOR",
+      "difficultyRationale": "Relevant evidence must be selected while an explicit distractor is ignored.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_citation_correctness",
+      "taskFile": "tasks/bench_task_rag_citation_correctness.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_citation_correctness.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_rag_citation_correctness",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "CITATION_CORRECTNESS",
+      "difficultyRationale": "One exact citation identity is required; diagnosis labels are not evidence IDs.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_near_match",
+      "taskFile": "tasks/bench_task_rag_near_match.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_near_match.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_near_match",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "NEAR_MATCH_AMBIGUOUS",
+      "difficultyRationale": "Held-out exact-vs-near-match routing includes a distinct retrieval fixture identity.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_e2e_generation_runner_success",
+      "taskFile": "tasks/bench_task_e2e_generation_runner_success.json",
+      "groundTruthFile": "ground_truth/gt_stage21_e2e_generation_runner_success.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_e2e_generation_runner_success",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "medium",
+      "scenario": "GENERATION_RUNNER_SUCCESS",
+      "difficultyRationale": "Held-out path combines generation, contract acceptance, and Java Runner success.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_e2e_generation_business_failure",
+      "taskFile": "tasks/bench_task_e2e_generation_business_failure.json",
+      "groundTruthFile": "ground_truth/gt_stage21_e2e_generation_business_failure.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_e2e_generation_business_failure",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "GENERATION_RUNNER_BUSINESS_FAILURE",
+      "difficultyRationale": "Combines generation with an expected business conflict while Runner execution remains successful.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_e2e_diagnosis_tool_guarded",
+      "taskFile": "tasks/bench_task_e2e_diagnosis_tool_guarded.json",
+      "groundTruthFile": "ground_truth/gt_stage21_e2e_diagnosis_tool_guarded.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_e2e_diagnosis_tool_guarded",
+        "version": "v4"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "DIAGNOSIS_TOOL_GUARDED_RESULT",
+      "difficultyRationale": "Combines report-bounded diagnosis, an auditable denied retrieval attempt, and Java guarded-result authority without treating denied data as evidence.",
+      "reviewStatus": "APPROVED"
+    }
+  ]
+}

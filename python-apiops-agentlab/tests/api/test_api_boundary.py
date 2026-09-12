@@ -18,10 +18,23 @@ from pydantic import ValidationError
 from app.api import routes as api_routes
 from app.core.errors import ApplicationError, register_exception_handlers
 from app.core.logging import LOGGER_NAME
-from app.core.settings import AppSettings
+from app.core.settings import AppSettings, get_settings
+from app.evaluator import (
+    EvaluationCase,
+    EvaluationFacts,
+    GroundTruth,
+    JudgeConfiguration,
+    JudgeDimension,
+    JudgeResult,
+    JudgeRubric,
+    MetricName,
+    ValidityFacts,
+)
 from app.main import app as application
 from app.memory import MemoryWriteOutcome, MemoryWriteReason
+from app.schemas.diagnosis_api import DiagnosisRunSummary
 from app.schemas.testcase_dsl import TestCaseDSL as CaseModel
+from app.services.runtime_evaluation import RuntimeEvaluationStore
 from app.tracing import (
     AgentRun,
     InMemoryTraceSink,
@@ -93,6 +106,20 @@ def empty_runtime_store():
     api_routes.runtime_evaluation_store.clear()
     yield
     api_routes.runtime_evaluation_store.clear()
+
+
+@pytest.fixture
+def memory_trace_settings():
+    settings = AppSettings(trace_sink="memory")
+    previous = application.dependency_overrides.get(get_settings)
+    application.dependency_overrides[get_settings] = lambda: settings
+    try:
+        yield
+    finally:
+        if previous is None:
+            application.dependency_overrides.pop(get_settings, None)
+        else:
+            application.dependency_overrides[get_settings] = previous
 
 
 def load_fixture(path: Path) -> dict[str, object]:
@@ -238,6 +265,103 @@ def test_diagnosis_memory_route_accepts_only_hypothesis_index(
     assert len(calls) == 1
 
 
+def test_diagnosis_history_authorizes_project_and_returns_durable_summaries(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[int] = []
+
+    class FakeDiagnosisService:
+        def list(self, *, project_id: int) -> tuple[DiagnosisRunSummary, ...]:
+            calls.append(project_id)
+            return (
+                DiagnosisRunSummary.model_validate(
+                    {
+                        "status": "COMPLETED",
+                        "provider": "DeepSeek",
+                        "model": "deepseek-chat",
+                        "projectId": project_id,
+                        "runId": 701,
+                        "taskId": 301,
+                        "agentRunId": "agent_run:persisted",
+                        "traceId": "trace:persisted",
+                        "workflowId": "workflow:persisted",
+                        "apiId": "orders.get",
+                        "reportId": "test-report:701",
+                        "diagnosisReportId": "diagnosis-report:701",
+                        "summary": "Persisted diagnosis summary.",
+                        "createdAt": datetime(2026, 8, 23, 12, 0, tzinfo=UTC),
+                        "updatedAt": datetime(2026, 8, 23, 12, 1, tzinfo=UTC),
+                    }
+                ),
+            )
+
+    requests = patch_java_project_response(monkeypatch)
+    monkeypatch.setattr(api_routes, "_diagnosis_service", FakeDiagnosisService())
+
+    status, body, caught = asgi_request(
+        application,
+        "GET",
+        "/api/v1/diagnosis/runs?projectId=41",
+        headers={"Authorization": "Bearer user-token"},
+    )
+
+    assert caught is None
+    assert status == 200
+    assert body == [
+        {
+            "status": "COMPLETED",
+            "provider": "DeepSeek",
+            "model": "deepseek-chat",
+            "projectId": 41,
+            "runId": 701,
+            "taskId": 301,
+            "agentRunId": "agent_run:persisted",
+            "traceId": "trace:persisted",
+            "workflowId": "workflow:persisted",
+            "apiId": "orders.get",
+            "reportId": "test-report:701",
+            "diagnosisReportId": "diagnosis-report:701",
+            "summary": "Persisted diagnosis summary.",
+            "createdAt": "2026-08-23T12:00:00Z",
+            "updatedAt": "2026-08-23T12:01:00Z",
+        }
+    ]
+    assert calls == [41]
+    assert requests[0].url.path == "/api/v1/projects/41"
+    assert requests[0].headers["authorization"] == "Bearer user-token"
+
+
+@pytest.mark.parametrize("java_status", (401, 403))
+def test_diagnosis_history_fails_closed_before_reading_repository(
+    monkeypatch: pytest.MonkeyPatch,
+    java_status: int,
+) -> None:
+    calls: list[int] = []
+
+    class FakeDiagnosisService:
+        def list(self, *, project_id: int) -> tuple[DiagnosisRunSummary, ...]:
+            calls.append(project_id)
+            return ()
+
+    requests = patch_java_project_response(monkeypatch, java_status)
+    monkeypatch.setattr(api_routes, "_diagnosis_service", FakeDiagnosisService())
+
+    status, body, caught = asgi_request(
+        application,
+        "GET",
+        "/api/v1/diagnosis/runs?projectId=99",
+        headers={"Authorization": "Bearer user-token"},
+    )
+
+    assert caught is None
+    assert status == java_status
+    assert body["error"]["code"] == (
+        "JAVA_AUTHENTICATION_FAILED" if java_status == 401 else "JAVA_AUTHORIZATION_DENIED"
+    )
+    assert calls == []
+    assert requests[0].url.path == "/api/v1/projects/99"
+
+
 @pytest.mark.parametrize(
     "path",
     (
@@ -337,6 +461,97 @@ def test_runtime_detail_authorizes_record_project_before_returning_data(
     assert requests[0].url.path == "/api/v1/projects/42"
 
 
+def test_runtime_detail_returns_persisted_evaluation_after_store_reopen(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    database_path = tmp_path / "agentlab-runtime.sqlite3"
+    first = RuntimeEvaluationStore(database_path)
+    first.begin(
+        agent_run_id="agent_run:formal",
+        trace_id="trace:formal",
+        execution_type="DIAGNOSIS",
+        provider="DeepSeek",
+        model="deepseek-chat",
+        project_id=41,
+    )
+    case = EvaluationCase(
+        case_id="case:formal",
+        trace_id="trace:formal",
+        agent_run_id="agent_run:formal",
+        ground_truth_id="gt:formal",
+        ground_truth_version="v1",
+        facts=EvaluationFacts(validity=ValidityFacts(valid_json=True)),
+        applicable_metrics=(MetricName.VALID_JSON,),
+    )
+    configuration = JudgeConfiguration(
+        rubric=JudgeRubric(
+            rubric_id="diagnosis-quality",
+            version="rubric-v1",
+            dimension=JudgeDimension.DIAGNOSIS_QUALITY,
+            criteria=("Use the supplied reference.",),
+        ),
+        prompt=PromptIdentity(name="judge", version="prompt-v1"),
+        model_identity=ModelIdentity(
+            provider="judge-provider",
+            model="judge-model",
+            version="judge-v1",
+        ),
+    )
+    first.evaluate_and_persist(
+        case=case,
+        ground_truth=GroundTruth(ground_truth_id="gt:formal", version="v1"),
+        trace_records=(),
+        judge_results=(
+            JudgeResult(
+                judge_result_id="judge_result:formal",
+                judge_case_id="judge_case:formal",
+                trace_id=case.trace_id,
+                agent_run_id=case.agent_run_id,
+                dimension=JudgeDimension.DIAGNOSIS_QUALITY,
+                score=0.8,
+                reason="The diagnosis is supported by the reference.",
+                configuration=configuration,
+            ),
+        ),
+    )
+    first.close()
+
+    reopened = RuntimeEvaluationStore(database_path)
+    monkeypatch.setattr(api_routes, "runtime_evaluation_store", reopened)
+    requests = patch_java_project_response(monkeypatch)
+
+    status, body, caught = asgi_request(
+        application,
+        "GET",
+        "/api/v1/evaluation/runtime/runs/agent_run:formal",
+        headers={"Authorization": "Bearer user-token"},
+    )
+
+    assert caught is None
+    assert status == 200
+    assert body["evaluationResult"]["evaluation_id"].startswith("evaluation:")
+    assert body["evaluationResult"]["metrics"][0] == {
+        "metric": "valid_json",
+        "status": "VALUE",
+        "value": 1,
+        "unit": None,
+        "reason": None,
+        "details": [],
+    }
+    assert body["judgeResults"][0]["score"] == 0.8
+    assert body["judgeResults"][0]["configuration"]["rubric"]["version"] == "rubric-v1"
+    assert body["judgeResults"][0]["configuration"]["prompt"]["version"] == "prompt-v1"
+    assert body["judgeResults"][0]["configuration"]["model_identity"] == {
+        "provider": "judge-provider",
+        "model": "judge-model",
+        "deployment": None,
+        "version": "judge-v1",
+    }
+    assert requests[0].url.path == "/api/v1/projects/41"
+    reopened.close()
+
+
 def observed_trace_records(
     *,
     trace_id: str = "trace:real",
@@ -406,6 +621,7 @@ def observed_trace_records(
 def test_trace_read_routes_return_real_typed_records_after_java_authorization(
     monkeypatch: pytest.MonkeyPatch,
     empty_runtime_store: None,
+    memory_trace_settings: None,
 ) -> None:
     requests = patch_java_project_response(monkeypatch)
     records = observed_trace_records()
@@ -455,6 +671,7 @@ def test_trace_read_routes_return_real_typed_records_after_java_authorization(
 def test_trace_detail_denies_cross_project_access_before_returning_records(
     monkeypatch: pytest.MonkeyPatch,
     empty_runtime_store: None,
+    memory_trace_settings: None,
 ) -> None:
     requests = patch_java_project_response(monkeypatch, 403)
     records = tuple(

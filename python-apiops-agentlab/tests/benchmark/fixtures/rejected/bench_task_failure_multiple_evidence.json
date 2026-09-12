@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_failure_multiple_evidence",
+  "taskType": "FAILURE_DIAGNOSIS",
+  "instruction": "Diagnose the create-order failure only after reconciling the report evidence and the unique-index evidence.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 42
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "testReport",
+        "ref": "java://test-report/project-42/run-701/report-701"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "diagnosisContext",
+        "ref": "examples/diagnosis-report-valid.json"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search",
+    "redis.read"
+  ],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "tool_exact_set_match",
+    "parameter_accuracy",
+    "evidence_hit",
+    "diagnosis_accuracy"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_failure_multiple_evidence",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "tool_exact_set_match",
+      "parameter_accuracy",
+      "evidence_hit",
+      "diagnosis_accuracy"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "duplicate key orders unique index"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

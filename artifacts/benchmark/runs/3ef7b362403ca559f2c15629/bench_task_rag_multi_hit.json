@@ -1,0 +1,58 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:50763e82cf114e10ba2ba44ccef5bce9",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_rag_multi_hit",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260827T171024Z:bench_task_rag_multi_hit",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 27.509,
+  "errorSummary": "BenchmarkTaskFailure: required Java execution path failed: Java API Ops request returned HTTP 403",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260827T171024Z",
+  "executionMode": "UNKNOWN",
+  "failureCategory": "INFRASTRUCTURE_FAILURE",
+  "failureCode": "JAVA_REQUIRED_PATH_FAILED",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://test-report/project-42/run-701/report-701",
+    "examples/openapi-metadata-valid.json",
+    "python-apiops-agentlab/tests/benchmark/fixtures/support/evidence-catalog.json"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTION_FAILED",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "RAG_EVIDENCE_RETRIEVAL",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:f45d0d46c23e4f4a8a7ca25da23f8a42"
+}

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_failure_timeout",
+  "taskType": "FAILURE_DIAGNOSIS",
+  "instruction": "Diagnose the timeout execution fact using the existing Runner timeout test boundary; do not infer a business root cause.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 1001
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "testReport",
+        "ref": "java://runner-unit/TestStepRunnerTest/timeout"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "diagnosisContext",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/diagnosis-timeout.json"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search",
+    "redis.read"
+  ],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "tool_exact_set_match",
+    "parameter_accuracy",
+    "evidence_hit",
+    "diagnosis_accuracy"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_failure_timeout",
+    "version": "v2"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "tool_exact_set_match",
+      "parameter_accuracy",
+      "evidence_hit",
+      "diagnosis_accuracy"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "runner timeout execution fact"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

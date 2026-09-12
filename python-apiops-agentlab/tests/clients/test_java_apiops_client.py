@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Awaitable, Callable
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -111,7 +112,7 @@ def login_payload() -> dict[str, Any]:
         "message": "success",
         "data": {
             "userId": 8,
-            "username": "test-safety41",
+            "username": "stage21-safety41",
             "tokenType": "Bearer",
             "accessToken": "java-issued-token",
             "expiresAt": "2026-08-28T00:00:00Z",
@@ -174,14 +175,15 @@ async def test_login_uses_public_auth_boundary_and_returns_java_session() -> Non
             timeout_seconds=2.5,
         )
         session = await client.login(
-            username="test-safety41",
+            username="stage21-safety41",
             password="test-password",
         )
 
     assert session.user_id == 8
-    assert session.username == "test-safety41"
+    assert session.username == "stage21-safety41"
     assert session.token_type == "Bearer"
     assert session.token == "java-issued-token"
+    assert session.expires_at == datetime(2026, 8, 28, tzinfo=UTC)
     assert "java-issued-token" not in repr(session)
     assert len(requests) == 1
     request = requests[0]
@@ -189,9 +191,25 @@ async def test_login_uses_public_auth_boundary_and_returns_java_session() -> Non
     assert str(request.url) == "https://java.example.test/api/v1/auth/login"
     assert "authorization" not in request.headers
     assert json.loads(request.content) == {
-        "username": "test-safety41",
+        "username": "stage21-safety41",
         "password": "test-password",
     }
+
+
+@pytest.mark.anyio
+@pytest.mark.parametrize('expiry', ['not-a-date', '2026-09-06T00:00:00', ''])
+async def test_login_rejects_unusable_expiry_without_token_disclosure(expiry) -> None:
+    payload = login_payload()
+    payload['data']['expiresAt'] = expiry
+    async with httpx.AsyncClient(transport=httpx.MockTransport(
+        lambda request: httpx.Response(200, json=payload)
+    )) as http_client:
+        client = JavaApiOpsClient(
+            http_client, base_url='https://java.example.test', timeout_seconds=2.5
+        )
+        with pytest.raises(JavaApiOpsResponseValidationError) as error:
+            await client.login(username='stage21-safety41', password='test-password')
+    assert 'java-issued-token' not in str(error.value)
 
 
 @pytest.mark.anyio
@@ -209,9 +227,9 @@ async def test_list_test_runs_validates_java_owned_summary_contract() -> None:
                 "data": [
                     {
                         "runId": 9876,
-                        "caseId": "initial-report:task",
-                        "apiId": "initial-report",
-                        "testCaseName": "Initial TestReport",
+                        "caseId": "stage21-initial-report:task",
+                        "apiId": "stage21-initial-report",
+                        "testCaseName": "Stage 21 initial TestReport",
                         "status": "ASSERTION_FAILED",
                         "failureType": "BUSINESS_ERROR",
                         "createdAt": "2026-08-29T00:00:00Z",
@@ -239,13 +257,13 @@ async def test_list_test_runs_validates_java_owned_summary_contract() -> None:
     assert summaries == (
         JavaRunSummary(
             run_id=9876,
-            case_id="initial-report:task",
-            api_id="initial-report",
+            case_id="stage21-initial-report:task",
+            api_id="stage21-initial-report",
         ),
     )
     assert summaries[0].run_id == 9876
-    assert summaries[0].case_id == "initial-report:task"
-    assert summaries[0].api_id == "initial-report"
+    assert summaries[0].case_id == "stage21-initial-report:task"
+    assert summaries[0].api_id == "stage21-initial-report"
     assert len(requests) == 1
     assert requests[0].method == "GET"
     assert str(requests[0].url) == "https://java.example.test/api/v1/projects/41/test-runs"
@@ -254,13 +272,138 @@ async def test_list_test_runs_validates_java_owned_summary_contract() -> None:
 
 
 @pytest.mark.anyio
+async def test_find_latest_test_run_uses_exact_case_boundary_outside_list_window() -> None:
+    requests: list[httpx.Request] = []
+    case_id = "stage21-initial-report:older-case"
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(
+            200,
+            json={
+                "success": True,
+                "code": "00000",
+                "message": "success",
+                "data": {
+                    "runId": 7001,
+                    "caseId": case_id,
+                    "apiId": "stage21-initial-report",
+                    "testCaseName": "Stable symbolic report",
+                    "status": "ASSERTION_FAILED",
+                    "failureType": "BUSINESS_ERROR",
+                    "createdAt": "2026-08-29T00:00:00Z",
+                    "startedAt": "2026-08-29T00:00:00Z",
+                    "finishedAt": "2026-08-29T00:00:01Z",
+                    "durationMs": 1000,
+                },
+            },
+        )
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http_client:
+        result = await JavaApiOpsClient(
+            http_client,
+            base_url="https://java.example.test",
+            timeout_seconds=2.5,
+        ).find_latest_test_run(
+            project_id=41,
+            case_id=case_id,
+            token="java-issued-token",
+            trace_id="trace:case-lookup",
+        )
+
+    assert result == JavaRunSummary(
+        run_id=7001,
+        case_id=case_id,
+        api_id="stage21-initial-report",
+    )
+    assert len(requests) == 1
+    assert requests[0].url.path.endswith("/test-runs/latest-by-case")
+    assert requests[0].url.params["caseId"] == case_id
+
+
+@pytest.mark.anyio
+async def test_find_latest_test_run_returns_none_for_missing_exact_case() -> None:
+    async def handler(request: httpx.Request) -> httpx.Response:
+        del request
+        return httpx.Response(
+            200,
+            json={"success": True, "code": "00000", "message": "success", "data": None},
+        )
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http_client:
+        result = await JavaApiOpsClient(
+            http_client,
+            base_url="https://java.example.test",
+            timeout_seconds=2.5,
+        ).find_latest_test_run(
+            project_id=41,
+            case_id="stage21-initial-report:absent",
+            token="java-issued-token",
+            trace_id="trace:case-missing",
+        )
+
+    assert result is None
+
+
+@pytest.mark.anyio
+async def test_find_latest_test_run_falls_back_to_exhaustive_advancing_pages() -> None:
+    paths: list[str] = []
+
+    def summary(run_id: int, case_id: str) -> dict[str, object]:
+        return {
+            "runId": run_id,
+            "caseId": case_id,
+            "apiId": "stage21-initial-report",
+            "testCaseName": case_id,
+            "status": "ASSERTION_FAILED",
+            "failureType": "BUSINESS_ERROR",
+            "createdAt": "2026-08-29T00:00:00Z",
+            "startedAt": "2026-08-29T00:00:00Z",
+            "finishedAt": "2026-08-29T00:00:01Z",
+            "durationMs": 1000,
+        }
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        paths.append(str(request.url))
+        if request.url.path.endswith("/latest-by-case"):
+            return httpx.Response(404)
+        before = request.url.params.get("beforeRunId")
+        if before is None:
+            page = [summary(run_id, f"unrelated-{run_id}") for run_id in range(300, 200, -1)]
+        else:
+            assert before == "201"
+            page = [summary(200, "stage21-initial-report:older-case")]
+        return httpx.Response(
+            200,
+            json={"success": True, "code": "00000", "message": "success", "data": page},
+        )
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as http_client:
+        result = await JavaApiOpsClient(
+            http_client,
+            base_url="https://java.example.test",
+            timeout_seconds=2.5,
+        ).find_latest_test_run(
+            project_id=41,
+            case_id="stage21-initial-report:older-case",
+            token="java-issued-token",
+            trace_id="trace:paged-case-lookup",
+        )
+
+    assert result is not None and result.run_id == 200
+    assert len(paths) == 3
+    assert "limit=100" in paths[1]
+    assert "beforeRunId=201" in paths[2]
+
+
+@pytest.mark.anyio
 @pytest.mark.parametrize("api_id", [None, ""])
 async def test_list_test_runs_rejects_missing_or_empty_api_id(api_id: str | None) -> None:
     summary = {
         "runId": 9876,
-        "caseId": "initial-report:task",
-        "apiId": "initial-report",
-        "testCaseName": "Initial TestReport",
+        "caseId": "stage21-initial-report:task",
+        "apiId": "stage21-initial-report",
+        "testCaseName": "Stage 21 initial TestReport",
         "status": "ASSERTION_FAILED",
         "failureType": "BUSINESS_ERROR",
         "createdAt": "2026-08-29T00:00:00Z",
@@ -315,7 +458,7 @@ async def test_login_http_401_is_an_authentication_failure_without_body_leakage(
             timeout_seconds=2.5,
         )
         with pytest.raises(JavaApiOpsAuthenticationError) as error:
-            await client.login(username="test-normal", password="password-value")
+            await client.login(username="stage21-normal", password="password-value")
 
     assert error.value.status_code == 401
     assert "password-value" not in str(error.value)

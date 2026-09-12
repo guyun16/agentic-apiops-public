@@ -1,0 +1,35 @@
+{
+  "ground_truth_id": "gt_stage21_formal_failure_timeout_deadline",
+  "version": "v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal Runner timeout deadline"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "failure_type",
+      "value": "TIMEOUT"
+    },
+    {
+      "name": "response_snapshot_present",
+      "value": false
+    },
+    {
+      "name": "deadline_authority",
+      "value": "RUNNER"
+    }
+  ],
+  "expected_evidence_ids": [
+    "runner:timeout"
+  ],
+  "expected_diagnosis": "TIMEOUT",
+  "expected_safety_outcome": "SAFE"
+}

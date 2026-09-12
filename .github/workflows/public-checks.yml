@@ -1,0 +1,54 @@
+name: Public source and evidence
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  public-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+          cache-dependency-path: java-apiops-platform/**/pom.xml
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: python-apiops-agentlab/uv.lock
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apiops-console/package-lock.json
+      - name: Verify immutable public evidence
+        run: python scripts/verify-public-evidence.py
+      - name: Verify Python, schemas and publication
+        working-directory: python-apiops-agentlab
+        run: |
+          uv sync --frozen
+          uv run ruff check .
+          uv run pytest
+          uv run python ../scripts/validate-schemas.py
+          uv run python scripts/freeze_benchmark_portfolio.py
+      - name: Verify Console
+        working-directory: apiops-console
+        run: |
+          npm ci
+          npm run build
+          npm run test:context
+          npm run test:console-execution
+          npm run test:diagnosis
+          npm run test:evaluation
+          npm run test:routes
+          npm run test:editor
+          npm run test:i18n
+          npm run test:reports
+          npm run verify:benchmark
+          npm run build:benchmark

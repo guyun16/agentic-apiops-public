@@ -1,6 +1,7 @@
 package com.apiops.web.tool;
 
 import com.apiops.common.tool.ToolResult;
+import com.apiops.tool.gateway.RedisReadTool;
 import com.apiops.tool.gateway.ToolCallIntent;
 
 import java.util.Map;
@@ -51,10 +52,11 @@ final class ToolGatewayContractMapper {
         return null;
     }
 
-    ToolCallIntent toInternalIntent(ToolCallRequest request) {
-        return new ToolCallIntent(
+    ToolCallIntent toInternalIntent(ToolCallRequest request, long trustedProjectId) {
+        ToolCallIntent intent = new ToolCallIntent(
                 PUBLIC_TO_INTERNAL_TOOL.get(request.toolName()),
                 request.params());
+        return RedisReadTool.normalizePublicIntent(trustedProjectId, intent);
     }
 
     ToolCallIntent invalidAuditIntent(ToolCallRequest request) {

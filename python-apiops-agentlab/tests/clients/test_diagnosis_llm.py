@@ -31,7 +31,7 @@ def test_qwen_identity_is_configured_snapshot() -> None:
     settings = AppSettings(diagnosis_llm_provider="qwen")
 
     assert diagnosis_llm_identity(settings).provider == "Qwen"
-    assert diagnosis_llm_identity(settings).model == "qwen3.7-plus-2026-05-26"
+    assert diagnosis_llm_identity(settings).model == "qwen3.8-max"
 
 
 def test_missing_deepseek_key_is_rejected_without_secret_value(

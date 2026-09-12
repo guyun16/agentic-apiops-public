@@ -1,0 +1,57 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:18b9d8ee3cca47e1b01bfb26fb1c94e8",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_failure_transport_connect",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260827T171024Z:bench_task_failure_transport_connect",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 2.657,
+  "errorSummary": "BenchmarkTaskFailure: Java TestReport resource could not be resolved through the public boundary",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260827T171024Z",
+  "executionMode": "UNKNOWN",
+  "failureCategory": "CONTRACT_FAILURE",
+  "failureCode": "JAVA_REPORT_REFERENCE_UNRESOLVED",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://runner-testcase-dsl/e2e/stage8-connect-failure.json",
+    "python-apiops-agentlab/tests/benchmark/fixtures/support/diagnosis-transport-connect.json"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "NOT_APPLICABLE",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "FAILURE_DIAGNOSIS",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:fab78fa8279d446cab66e22022d8e42b"
+}

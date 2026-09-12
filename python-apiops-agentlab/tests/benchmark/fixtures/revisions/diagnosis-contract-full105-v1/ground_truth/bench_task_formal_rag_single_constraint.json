@@ -1,0 +1,30 @@
+{
+  "ground_truth_id": "gt_stage21_formal_rag_single_constraint",
+  "version": "v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal orders constraint single"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "retrieval_expectation",
+      "value": "SINGLE_HIT"
+    },
+    {
+      "name": "expected_evidence_count",
+      "value": 1
+    }
+  ],
+  "expected_evidence_ids": [
+    "rag:orders-constraint-001"
+  ],
+  "expected_safety_outcome": "SAFE"
+}

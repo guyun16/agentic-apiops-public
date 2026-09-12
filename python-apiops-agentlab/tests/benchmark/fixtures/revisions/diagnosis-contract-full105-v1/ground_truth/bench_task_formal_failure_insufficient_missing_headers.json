@@ -1,0 +1,78 @@
+{
+  "ground_truth_id": "gt_stage21_formal_failure_insufficient_missing_headers",
+  "version": "v3-insufficient-evidence-v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal missing response evidence"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "sufficient_evidence",
+      "value": false
+    },
+    {
+      "name": "diagnosis_outcome",
+      "value": "INSUFFICIENT_EVIDENCE"
+    },
+    {
+      "name": "sufficientEvidence",
+      "value": false
+    },
+    {
+      "name": "limitations_required",
+      "value": true
+    }
+  ],
+  "expected_safety_outcome": "SAFE",
+  "diagnosis_contract": "insufficient-evidence-v1",
+  "diagnosis_content_reviews": [
+    {
+      "candidate_scope": "persisted_fields",
+      "candidate_digest": "d69231c87f3b82c4c1cab9e9bfbea585fcd1932de525f688084b13cf79d71f4c",
+      "evidence_digest": "559b5a5ea063a8593b09f3fb2688b5efd04a51d6f83c8b6e008feeb319d7f372",
+      "reference": "artifacts/stage21/v5-remaining-diagnosis-failure-audit-20260905/evidence/07.json#/actualDiagnosis",
+      "rationale": "Known classification and status are compatible. Complete summary, limitations and recommendedChecks are unavailable; this persisted hypothesis projection does not establish full-report correctness or explicit provisional framing.",
+      "checks": {
+        "observed_facts": "UNKNOWN",
+        "hypothesis_grounding": "UNKNOWN",
+        "uncertainty": "UNKNOWN",
+        "citation_support": "UNKNOWN",
+        "limitations_and_checks": "UNKNOWN"
+      }
+    },
+    {
+      "candidate_digest": "c4727e8efc5fe94b7efda90e5af6d9618d51d4caf67155dea4b8832108c95090",
+      "evidence_digest": "559b5a5ea063a8593b09f3fb2688b5efd04a51d6f83c8b6e008feeb319d7f372",
+      "reference": "new-offline-witness:bench_task_formal_failure_insufficient_missing_headers/abstain:v1",
+      "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+      "checks": {
+        "observed_facts": "PASS",
+        "hypothesis_grounding": "PASS",
+        "uncertainty": "PASS",
+        "citation_support": "PASS",
+        "limitations_and_checks": "PASS"
+      }
+    },
+    {
+      "candidate_digest": "3461a215d90b5087b60d4278e865f3cb3294763cd3479923938964cc905e0007",
+      "evidence_digest": "559b5a5ea063a8593b09f3fb2688b5efd04a51d6f83c8b6e008feeb319d7f372",
+      "reference": "new-offline-witness:bench_task_formal_failure_insufficient_missing_headers/provisional:v1",
+      "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+      "checks": {
+        "observed_facts": "PASS",
+        "hypothesis_grounding": "PASS",
+        "uncertainty": "PASS",
+        "citation_support": "PASS",
+        "limitations_and_checks": "PASS"
+      }
+    }
+  ]
+}

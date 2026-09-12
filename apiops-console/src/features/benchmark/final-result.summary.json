@@ -1,0 +1,66 @@
+{
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260905T054023Z",
+  "benchmarkRevision": "stage21-formal105-final-closure-v5",
+  "resultSource": "VERIFIED_ARTIFACT_SNAPSHOT",
+  "datasetId": "stage21-apioops-bench-mini",
+  "datasetVersion": "v3",
+  "datasetSplit": "all",
+  "taskSchemaVersion": "0.2.0",
+  "status": "COMPLETED",
+  "selectedTaskCount": 105,
+  "executedTaskCount": 105,
+  "evaluatedTaskCount": 105,
+  "completedTaskCount": 105,
+  "failedTaskCount": 0,
+  "startedAt": "2026-09-05T05:40:35.039635+00:00",
+  "completedAt": "2026-09-05T05:48:24.071580+00:00",
+  "model": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "AppSettings.qwen_model",
+    "value": {
+      "model": "qwen3.8-max",
+      "provider": "Qwen"
+    }
+  },
+  "prompt": [
+    {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "existing workflow prompt file",
+      "value": {
+        "name": "testcase_generate",
+        "version": "v1"
+      }
+    },
+    {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "existing workflow prompt file",
+      "value": {
+        "name": "testcase_repair",
+        "version": "v1"
+      }
+    },
+    {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "existing workflow prompt file",
+      "value": {
+        "name": "diagnosis",
+        "version": "1"
+      }
+    }
+  ],
+  "evaluator": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "app.evaluator.EVALUATOR_VERSION",
+    "value": {
+      "name": "RuleBasedEvaluator",
+      "version": "rule-evaluator-v1"
+    }
+  },
+  "benchmarkConfigVersion": "stage21.5-real-model-v1",
+  "dataSource": "ARTIFACT"
+}

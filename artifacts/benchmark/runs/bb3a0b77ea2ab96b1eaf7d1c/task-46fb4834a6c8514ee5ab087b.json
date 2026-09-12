@@ -1,0 +1,668 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+  "authProfile": "NORMAL",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_formal_testcase_missing_schema_version_against_contract",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260904T072622Z:bench_task_formal_testcase_missing_schema_version_against_contract",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": 245,
+  "durationMs": 4838.511,
+  "errorSummary": null,
+  "evaluationId": "evaluation:def74d9f6e5e715aa9247c82",
+  "evaluationResult": {
+    "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+    "case_id": "case:evaluation_run:stage21-real-model-full-105-20260904T072622Z:bench_task_formal_testcase_missing_schema_version_against_contract",
+    "evaluation_id": "evaluation:def74d9f6e5e715aa9247c82",
+    "evaluator_version": "rule-evaluator-v1",
+    "ground_truth_id": "gt_stage21_formal_testcase_missing_schema_version_against_contract",
+    "ground_truth_version": "v1",
+    "metrics": [
+      {
+        "details": [],
+        "metric": "valid_json",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [],
+        "metric": "schema_valid",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0
+      },
+      {
+        "details": [],
+        "metric": "contract_accepted",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0
+      },
+      {
+        "details": [
+          "matched=4",
+          "expected=4"
+        ],
+        "metric": "exact_match",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1.0
+      },
+      {
+        "details": [],
+        "metric": "tool_precision",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_recall",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_exact_set_match",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "parameter_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "evidence_hit",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "diagnosis_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "safety_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "wall_clock_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "model_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "human_wait_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "active_execution_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "prompt_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "completion_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "total_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "cost",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      }
+    ],
+    "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d"
+  },
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T072622Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": null,
+  "failureCode": null,
+  "failureStage": null,
+  "fixtureRefs": [
+    "literal:strategy",
+    "literal:projectId",
+    "java://runner-testcase-dsl/missing-required-schema-formal.json",
+    "examples/invalid/testcase-missing-schema-version.json",
+    "literal:taskFocus"
+  ],
+  "formalEvidence": {
+    "diagnosisOutcome": null,
+    "normalizedEvaluationFacts": {
+      "diagnosis": null,
+      "evidence_ids": null,
+      "safety_outcome": null,
+      "structured_facts": [
+        {
+          "name": "task_strategy",
+          "value": "MISSING_REQUIRED"
+        },
+        {
+          "name": "candidate",
+          "value": {
+            "apiId": "api-stage21-generation",
+            "caseId": "tc-missing-schema-version-001",
+            "description": "Test case intentionally missing the required schemaVersion field to validate DSL contract enforcement.",
+            "environment": {
+              "baseUrl": "http://localhost",
+              "variables": {}
+            },
+            "name": "Missing SchemaVersion Validation Case",
+            "projectId": 41,
+            "steps": [
+              {
+                "assertions": [
+                  {
+                    "expected": 201,
+                    "type": "STATUS_CODE"
+                  }
+                ],
+                "extractors": [],
+                "name": "Create Order",
+                "request": {
+                  "body": {
+                    "productId": "prod-123",
+                    "quantity": 1
+                  },
+                  "method": "POST",
+                  "path": "/orders",
+                  "query": {
+                    "quantity": 1
+                  }
+                },
+                "stepId": "step-1"
+              }
+            ]
+          }
+        },
+        {
+          "name": "candidate_status",
+          "value": "INTENTIONAL_INVALIDITY_PRESERVED"
+        },
+        {
+          "name": "schema_valid",
+          "value": false
+        },
+        {
+          "name": "contract_accepted",
+          "value": false
+        },
+        {
+          "name": "java_runner_executable",
+          "value": false
+        },
+        {
+          "name": "operation",
+          "value": "createOrder"
+        },
+        {
+          "name": "assertion_type",
+          "value": "STATUS_CODE"
+        },
+        {
+          "name": "expected_http_status",
+          "value": 201
+        },
+        {
+          "name": "security_requirement",
+          "value": "apiKeyAuth"
+        },
+        {
+          "name": "security_scope",
+          "value": "DOCUMENT_LEVEL"
+        },
+        {
+          "name": "idempotency_contract",
+          "value": "NOT_PROVEN"
+        },
+        {
+          "name": "undocumented_fields",
+          "value": false
+        },
+        {
+          "name": "missing_field",
+          "value": "schemaVersion"
+        },
+        {
+          "name": "default_invention_forbidden",
+          "value": true
+        }
+      ],
+      "tool_arguments": [],
+      "validity": {
+        "contract_accepted": false,
+        "schema_valid": false,
+        "valid_json": true
+      }
+    },
+    "redactedCandidate": {
+      "apiId": "api-stage21-generation",
+      "caseId": "tc-missing-schema-version-001",
+      "description": "Test case intentionally missing the required schemaVersion field to validate DSL contract enforcement.",
+      "environment": {
+        "baseUrl": "http://localhost",
+        "variables": {}
+      },
+      "name": "Missing SchemaVersion Validation Case",
+      "projectId": 41,
+      "steps": [
+        {
+          "assertions": [
+            {
+              "expected": 201,
+              "type": "STATUS_CODE"
+            }
+          ],
+          "extractors": [],
+          "name": "Create Order",
+          "request": {
+            "body": {
+              "productId": "prod-123",
+              "quantity": 1
+            },
+            "method": "POST",
+            "path": "/orders",
+            "query": {
+              "quantity": 1
+            }
+          },
+          "stepId": "step-1"
+        }
+      ]
+    },
+    "terminalDecisionFacts": [],
+    "toolResultMappings": [],
+    "traceEvidence": [
+      {
+        "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+        "agent_step_id": null,
+        "event": "START",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "record_type": "agent_run",
+        "sequence": 1,
+        "status": "RUNNING",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:04.999428Z",
+        "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+        "agent_step_id": "agent_step:b682900f4b38496ea52d3da9082d3248",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 2,
+        "status": "RUNNING",
+        "step_type": "context_enrichment",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:05.000152Z",
+        "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+        "agent_step_id": "agent_step:b682900f4b38496ea52d3da9082d3248",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 3,
+        "status": "SUCCESS",
+        "step_type": "context_enrichment",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:05.000470Z",
+        "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+        "agent_step_id": "agent_step:414d14ae34af4dc595736897c0fa34bc",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 4,
+        "status": "RUNNING",
+        "step_type": "generate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:05.001322Z",
+        "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+        "agent_step_id": "agent_step:414d14ae34af4dc595736897c0fa34bc",
+        "event": "START",
+        "failure": null,
+        "latency": null,
+        "model_call_id": "model_call:34b75798ad7d45de8999db294fce4a7e",
+        "model_identity": {
+          "deployment": null,
+          "model": "qwen3.7-plus-2026-05-26",
+          "provider": "Qwen",
+          "version": null
+        },
+        "model_input": {
+          "sha256": "c80c354a03479c154e822b927398efb0b5ca75d3b9c3b0f62d6745746e2d573b",
+          "summary": "GENERATION RULES (trusted control instructions)\n\n- Produce one raw, structured TestCase DSL Candidate JSON object for the selected strategy.\n- The JSON root must be the TestCase DSL object itself. Never wrap it in `candidate`, `testCase`, `result`, or another envelope.\n- Keep the response JSON parseable, but distinguish that transport requirement from candidate DSL validity.\n- For positive, valid-boundary, and business-outcome scenarios, conform exactly to the TestCase DSL Contract authority below, including required fields and additionalProperties rules.\n- Treat an explicit validation objective in Additional Context `USER_INTENT` or `SHORT_TERM_CONTEXT` as part of the requested scenario. When it requests a schema-invalid or contract-invalid candidate, preserve exactly the requested missing field, extra field, wrong scalar type, invalid enum/method, or unknown assertion type so the authoritative Validator can reject it.\n- For that negative validation objective, do not repair, normalize, coerce, fill, remove,…",
+          "truncated": true
+        },
+        "model_output": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:414d14ae34af4dc595736897c0fa34bc",
+          "kind": "agent_step"
+        },
+        "project_id": null,
+        "prompt": {
+          "name": "testcase_generate",
+          "version": "v1"
+        },
+        "record_type": "model_call",
+        "schema_digest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schema_name": "testcase_candidate_object_v1",
+        "sequence": 5,
+        "status": "RUNNING",
+        "structured_output_mode": "JSON_SCHEMA",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:05.003060Z",
+        "token_usage": null,
+        "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+        "agent_step_id": "agent_step:414d14ae34af4dc595736897c0fa34bc",
+        "event": "TERMINAL",
+        "failure": null,
+        "latency": {
+          "duration_ms": 4795.6686,
+          "finished_at": "2026-09-04T07:32:09.797310Z",
+          "started_at": "2026-09-04T07:32:05.001644Z"
+        },
+        "model_call_id": "model_call:34b75798ad7d45de8999db294fce4a7e",
+        "model_identity": {
+          "deployment": null,
+          "model": "qwen3.7-plus-2026-05-26",
+          "provider": "Qwen",
+          "version": null
+        },
+        "model_input": {
+          "sha256": "c80c354a03479c154e822b927398efb0b5ca75d3b9c3b0f62d6745746e2d573b",
+          "summary": "GENERATION RULES (trusted control instructions)\n\n- Produce one raw, structured TestCase DSL Candidate JSON object for the selected strategy.\n- The JSON root must be the TestCase DSL object itself. Never wrap it in `candidate`, `testCase`, `result`, or another envelope.\n- Keep the response JSON parseable, but distinguish that transport requirement from candidate DSL validity.\n- For positive, valid-boundary, and business-outcome scenarios, conform exactly to the TestCase DSL Contract authority below, including required fields and additionalProperties rules.\n- Treat an explicit validation objective in Additional Context `USER_INTENT` or `SHORT_TERM_CONTEXT` as part of the requested scenario. When it requests a schema-invalid or contract-invalid candidate, preserve exactly the requested missing field, extra field, wrong scalar type, invalid enum/method, or unknown assertion type so the authoritative Validator can reject it.\n- For that negative validation objective, do not repair, normalize, coerce, fill, remove,…",
+          "truncated": true
+        },
+        "model_output": {
+          "sha256": "fe02410f48bc27027af39d9bedda5695d0b1f971e5289e9481326b3445eb099f",
+          "summary": "{\n  \"caseId\": \"tc-missing-schema-version-001\",\n  \"projectId\": 41,\n  \"apiId\": \"api-stage21-generation\",\n  \"name\": \"Missing SchemaVersion Validation Case\",\n  \"description\": \"Test case intentionally missing the required schemaVersion field to validate DSL contract enforcement.\",\n  \"environment\": {\n    \"baseUrl\": \"http://localhost\",\n    \"variables\": {}\n  },\n  \"steps\": [\n    {\n      \"stepId\": \"step-1\",\n      \"name\": \"Create Order\",\n      \"request\": {\n        \"method\": \"POST\",\n        \"path\": \"/orders\",\n        \"query\": {\n          \"quantity\": 1\n        },\n        \"body\": {\n          \"productId\": \"prod-123\",\n          \"quantity\": 1\n        }\n      },\n      \"assertions\": [\n        {\n          \"type\": \"STATUS_CODE\",\n          \"expected\": 201\n        }\n      ],\n      \"extractors\": []\n    }\n  ]\n}",
+          "truncated": false
+        },
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:414d14ae34af4dc595736897c0fa34bc",
+          "kind": "agent_step"
+        },
+        "project_id": null,
+        "prompt": {
+          "name": "testcase_generate",
+          "version": "v1"
+        },
+        "record_type": "model_call",
+        "schema_digest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schema_name": "testcase_candidate_object_v1",
+        "sequence": 6,
+        "status": "SUCCESS",
+        "structured_output_mode": "JSON_SCHEMA",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:09.799569Z",
+        "token_usage": {
+          "completion_tokens": 245,
+          "prompt_tokens": 2116,
+          "provider_metadata": {
+            "cached_prompt_tokens": null,
+            "finish_reason": "stop",
+            "provider_request_id": "2baa1c4d-e97b-967a-ac52-c277b8c44943",
+            "reasoning_tokens": null,
+            "response_model": "qwen3.7-plus-2026-05-26"
+          },
+          "total_tokens": 2361
+        },
+        "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+        "agent_step_id": "agent_step:414d14ae34af4dc595736897c0fa34bc",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 7,
+        "status": "SUCCESS",
+        "step_type": "generate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:09.800453Z",
+        "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+        "agent_step_id": "agent_step:9d98287d46aa4228b5c6f520f867c014",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 8,
+        "status": "RUNNING",
+        "step_type": "validate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:09.801666Z",
+        "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+        "agent_step_id": "agent_step:9d98287d46aa4228b5c6f520f867c014",
+        "event": "TERMINAL",
+        "failure": {
+          "error_type": null,
+          "failure_category": "VALIDATION_FAILURE",
+          "failure_code": "SHARED_SCHEMA_REQUIRED",
+          "message": "Required property is missing.",
+          "retryable": null
+        },
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 9,
+        "status": "FAILED",
+        "step_type": "validate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:09.802399Z",
+        "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:6e18bc6f084c461aabe31c591efa8c44",
+        "agent_step_id": null,
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "record_type": "agent_run",
+        "sequence": 10,
+        "status": "SUCCESS",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:09.804783Z",
+        "trace_id": "trace:018c9276cc504fb490c30c26bb8e0e8d",
+        "workflow_id": null
+      }
+    ]
+  },
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "NOT_APPLICABLE",
+  "modelCallCount": 1,
+  "modelCallIds": [
+    "model_call:34b75798ad7d45de8999db294fce4a7e"
+  ],
+  "modelLatencyMs": 4795.6686,
+  "principalId": 45,
+  "principalLabel": "stage21-normal",
+  "promptTokens": 2116,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "semanticAdjudication": null,
+  "setupStatus": "SUCCESS",
+  "status": "SUCCESS",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": "valid_json",
+        "metricStatus": "VALUE",
+        "name": "valid_json",
+        "reason": "valid_json observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "schema_valid",
+        "metricStatus": "VALUE",
+        "name": "schema_valid",
+        "reason": "schema_valid observed 0, expected 0",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "contract_accepted",
+        "metricStatus": "VALUE",
+        "name": "contract_accepted",
+        "reason": "contract_accepted observed 0, expected 1",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "metric": "exact_match",
+        "metricStatus": "VALUE",
+        "name": "exact_match",
+        "reason": "exact_match observed 1.0, expected 1",
+        "required": true,
+        "status": "PASS"
+      }
+    ],
+    "failCount": 1,
+    "notApplicableCount": 0,
+    "passCount": 3,
+    "status": "FAIL",
+    "unknownCount": 0
+  },
+  "taskType": "TESTCASE_GENERATION",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": 2361,
+  "traceId": "trace:018c9276cc504fb490c30c26bb8e0e8d"
+}

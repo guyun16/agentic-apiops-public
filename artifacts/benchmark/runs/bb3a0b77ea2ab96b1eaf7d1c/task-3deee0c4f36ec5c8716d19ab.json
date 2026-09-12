@@ -1,0 +1,683 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+  "authProfile": "NORMAL",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_testcase_boundary_inventory_limit",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260904T072622Z:bench_task_testcase_boundary_inventory_limit",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": 337,
+  "durationMs": 6493.555,
+  "errorSummary": null,
+  "evaluationId": "evaluation:2388644bbc58017012ebd7a2",
+  "evaluationResult": {
+    "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+    "case_id": "case:evaluation_run:stage21-real-model-full-105-20260904T072622Z:bench_task_testcase_boundary_inventory_limit",
+    "evaluation_id": "evaluation:2388644bbc58017012ebd7a2",
+    "evaluator_version": "rule-evaluator-v1",
+    "ground_truth_id": "gt_stage21_testcase_boundary_inventory_limit",
+    "ground_truth_version": "v1",
+    "metrics": [
+      {
+        "details": [],
+        "metric": "valid_json",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [],
+        "metric": "schema_valid",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [],
+        "metric": "contract_accepted",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [
+          "matched=1",
+          "expected=3"
+        ],
+        "metric": "exact_match",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0.3333333333333333
+      },
+      {
+        "details": [],
+        "metric": "tool_precision",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_recall",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_exact_set_match",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "parameter_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "evidence_hit",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "diagnosis_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "safety_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "wall_clock_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "model_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "human_wait_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "active_execution_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "prompt_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "completion_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "total_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "cost",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      }
+    ],
+    "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e"
+  },
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T072622Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": null,
+  "failureCode": null,
+  "failureStage": null,
+  "fixtureRefs": [
+    "literal:strategy",
+    "literal:projectId",
+    "java://runner-testcase-dsl/e2e/create-order-insufficient-inventory.json",
+    "examples/testcase-insufficient-stock-valid.json"
+  ],
+  "formalEvidence": {
+    "diagnosisOutcome": null,
+    "normalizedEvaluationFacts": {
+      "diagnosis": null,
+      "evidence_ids": null,
+      "safety_outcome": null,
+      "structured_facts": [
+        {
+          "name": "task_strategy",
+          "value": "BOUNDARY"
+        },
+        {
+          "name": "candidate",
+          "value": {
+            "apiId": "api-stage21-generation",
+            "caseId": "tc-boundary-qty-max-1001",
+            "description": "Boundary test for createOrder using maximum allowed quantity (100) as defined in schema constraints.",
+            "environment": {
+              "baseUrl": "http://localhost",
+              "variables": {}
+            },
+            "name": "Create Order with Maximum Quantity Boundary",
+            "projectId": 1001,
+            "schemaVersion": "1.0.0",
+            "steps": [
+              {
+                "assertions": [
+                  {
+                    "expected": 201,
+                    "type": "STATUS_CODE"
+                  },
+                  {
+                    "expected": 100,
+                    "expression": "$.quantity",
+                    "operator": "EQUALS",
+                    "type": "JSON_PATH"
+                  }
+                ],
+                "extractors": [],
+                "name": "POST /orders with max quantity",
+                "request": {
+                  "body": {
+                    "productId": "prod-boundary-test",
+                    "quantity": 100
+                  },
+                  "method": "POST",
+                  "path": "/orders",
+                  "query": {
+                    "quantity": 100
+                  }
+                },
+                "stepId": "step-1"
+              }
+            ],
+            "tags": [
+              "boundary",
+              "quantity-max"
+            ]
+          }
+        },
+        {
+          "name": "candidate_status",
+          "value": "ACCEPTED"
+        },
+        {
+          "name": "schema_valid",
+          "value": true
+        },
+        {
+          "name": "contract_accepted",
+          "value": true
+        },
+        {
+          "name": "java_runner_executable",
+          "value": false
+        },
+        {
+          "name": "operation",
+          "value": "createOrder"
+        },
+        {
+          "name": "expected_http_status",
+          "value": 201
+        },
+        {
+          "name": "security_requirement",
+          "value": "apiKeyAuth"
+        },
+        {
+          "name": "security_scope",
+          "value": "DOCUMENT_LEVEL"
+        },
+        {
+          "name": "idempotency_contract",
+          "value": "NOT_PROVEN"
+        },
+        {
+          "name": "undocumented_fields",
+          "value": false
+        },
+        {
+          "name": "constraint",
+          "value": "quantity.maximum"
+        },
+        {
+          "name": "constraint_value",
+          "value": 100
+        },
+        {
+          "name": "boundary_value",
+          "value": 100
+        }
+      ],
+      "tool_arguments": [],
+      "validity": {
+        "contract_accepted": true,
+        "schema_valid": true,
+        "valid_json": true
+      }
+    },
+    "redactedCandidate": {
+      "apiId": "api-stage21-generation",
+      "caseId": "tc-boundary-qty-max-1001",
+      "description": "Boundary test for createOrder using maximum allowed quantity (100) as defined in schema constraints.",
+      "environment": {
+        "baseUrl": "http://localhost",
+        "variables": {}
+      },
+      "name": "Create Order with Maximum Quantity Boundary",
+      "projectId": 1001,
+      "schemaVersion": "1.0.0",
+      "steps": [
+        {
+          "assertions": [
+            {
+              "expected": 201,
+              "type": "STATUS_CODE"
+            },
+            {
+              "expected": 100,
+              "expression": "$.quantity",
+              "operator": "EQUALS",
+              "type": "JSON_PATH"
+            }
+          ],
+          "extractors": [],
+          "name": "POST /orders with max quantity",
+          "request": {
+            "body": {
+              "productId": "prod-boundary-test",
+              "quantity": 100
+            },
+            "method": "POST",
+            "path": "/orders",
+            "query": {
+              "quantity": 100
+            }
+          },
+          "stepId": "step-1"
+        }
+      ],
+      "tags": [
+        "boundary",
+        "quantity-max"
+      ]
+    },
+    "terminalDecisionFacts": [],
+    "toolResultMappings": [],
+    "traceEvidence": [
+      {
+        "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+        "agent_step_id": null,
+        "event": "START",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 1001,
+        "record_type": "agent_run",
+        "sequence": 1,
+        "status": "RUNNING",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:43.408083Z",
+        "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+        "agent_step_id": "agent_step:07db739fef824abd9673674a8323d550",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+          "kind": "agent_run"
+        },
+        "project_id": 1001,
+        "record_type": "agent_step",
+        "sequence": 2,
+        "status": "RUNNING",
+        "step_type": "context_enrichment",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:43.409168Z",
+        "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+        "agent_step_id": "agent_step:07db739fef824abd9673674a8323d550",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+          "kind": "agent_run"
+        },
+        "project_id": 1001,
+        "record_type": "agent_step",
+        "sequence": 3,
+        "status": "SUCCESS",
+        "step_type": "context_enrichment",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:43.409507Z",
+        "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+        "agent_step_id": "agent_step:0d89b90bd1da433c80776e22a4733e8f",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+          "kind": "agent_run"
+        },
+        "project_id": 1001,
+        "record_type": "agent_step",
+        "sequence": 4,
+        "status": "RUNNING",
+        "step_type": "generate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:43.410502Z",
+        "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+        "agent_step_id": "agent_step:0d89b90bd1da433c80776e22a4733e8f",
+        "event": "START",
+        "failure": null,
+        "latency": null,
+        "model_call_id": "model_call:77ee71c27c18412e819a60c704177316",
+        "model_identity": {
+          "deployment": null,
+          "model": "qwen3.7-plus-2026-05-26",
+          "provider": "Qwen",
+          "version": null
+        },
+        "model_input": {
+          "sha256": "b13c8120b7c96ab6e7aa2b768ce1c656949e858b1549ddc8af130afb4e116903",
+          "summary": "GENERATION RULES (trusted control instructions)\n\n- Produce one raw, structured TestCase DSL Candidate JSON object for the selected strategy.\n- The JSON root must be the TestCase DSL object itself. Never wrap it in `candidate`, `testCase`, `result`, or another envelope.\n- Keep the response JSON parseable, but distinguish that transport requirement from candidate DSL validity.\n- For positive, valid-boundary, and business-outcome scenarios, conform exactly to the TestCase DSL Contract authority below, including required fields and additionalProperties rules.\n- Treat an explicit validation objective in Additional Context `USER_INTENT` or `SHORT_TERM_CONTEXT` as part of the requested scenario. When it requests a schema-invalid or contract-invalid candidate, preserve exactly the requested missing field, extra field, wrong scalar type, invalid enum/method, or unknown assertion type so the authoritative Validator can reject it.\n- For that negative validation objective, do not repair, normalize, coerce, fill, remove,…",
+          "truncated": true
+        },
+        "model_output": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:0d89b90bd1da433c80776e22a4733e8f",
+          "kind": "agent_step"
+        },
+        "project_id": null,
+        "prompt": {
+          "name": "testcase_generate",
+          "version": "v1"
+        },
+        "record_type": "model_call",
+        "schema_digest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schema_name": "testcase_candidate_object_v1",
+        "sequence": 5,
+        "status": "RUNNING",
+        "structured_output_mode": "JSON_SCHEMA",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:43.413863Z",
+        "token_usage": null,
+        "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+        "agent_step_id": "agent_step:0d89b90bd1da433c80776e22a4733e8f",
+        "event": "TERMINAL",
+        "failure": null,
+        "latency": {
+          "duration_ms": 6445.7495,
+          "finished_at": "2026-09-04T07:27:49.856853Z",
+          "started_at": "2026-09-04T07:27:43.411103Z"
+        },
+        "model_call_id": "model_call:77ee71c27c18412e819a60c704177316",
+        "model_identity": {
+          "deployment": null,
+          "model": "qwen3.7-plus-2026-05-26",
+          "provider": "Qwen",
+          "version": null
+        },
+        "model_input": {
+          "sha256": "b13c8120b7c96ab6e7aa2b768ce1c656949e858b1549ddc8af130afb4e116903",
+          "summary": "GENERATION RULES (trusted control instructions)\n\n- Produce one raw, structured TestCase DSL Candidate JSON object for the selected strategy.\n- The JSON root must be the TestCase DSL object itself. Never wrap it in `candidate`, `testCase`, `result`, or another envelope.\n- Keep the response JSON parseable, but distinguish that transport requirement from candidate DSL validity.\n- For positive, valid-boundary, and business-outcome scenarios, conform exactly to the TestCase DSL Contract authority below, including required fields and additionalProperties rules.\n- Treat an explicit validation objective in Additional Context `USER_INTENT` or `SHORT_TERM_CONTEXT` as part of the requested scenario. When it requests a schema-invalid or contract-invalid candidate, preserve exactly the requested missing field, extra field, wrong scalar type, invalid enum/method, or unknown assertion type so the authoritative Validator can reject it.\n- For that negative validation objective, do not repair, normalize, coerce, fill, remove,…",
+          "truncated": true
+        },
+        "model_output": {
+          "sha256": "5eb6f713ca6087ad88f7c5a7f21649e9b48f7704610a2f549074b8aee715177a",
+          "summary": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"caseId\": \"tc-boundary-qty-max-1001\",\n  \"projectId\": 1001,\n  \"apiId\": \"api-stage21-generation\",\n  \"name\": \"Create Order with Maximum Quantity Boundary\",\n  \"description\": \"Boundary test for createOrder using maximum allowed quantity (100) as defined in schema constraints.\",\n  \"environment\": {\n    \"baseUrl\": \"http://localhost\",\n    \"variables\": {}\n  },\n  \"steps\": [\n    {\n      \"stepId\": \"step-1\",\n      \"name\": \"POST /orders with max quantity\",\n      \"request\": {\n        \"method\": \"POST\",\n        \"path\": \"/orders\",\n        \"query\": {\n          \"quantity\": 100\n        },\n        \"body\": {\n          \"productId\": \"prod-boundary-test\",\n          \"quantity\": 100\n        }\n      },\n      \"assertions\": [\n        {\n          \"type\": \"STATUS_CODE\",\n          \"expected\": 201\n        },\n        {\n          \"type\": \"JSON_PATH\",\n          \"expression\": \"$.quantity\",\n          \"operator\": \"EQUALS\",\n          \"expected\": 100\n        }\n      ],\n      \"extractors\": []\n    }\n  ],\n  \"tags\": [\n    \"…",
+          "truncated": true
+        },
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:0d89b90bd1da433c80776e22a4733e8f",
+          "kind": "agent_step"
+        },
+        "project_id": null,
+        "prompt": {
+          "name": "testcase_generate",
+          "version": "v1"
+        },
+        "record_type": "model_call",
+        "schema_digest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schema_name": "testcase_candidate_object_v1",
+        "sequence": 6,
+        "status": "SUCCESS",
+        "structured_output_mode": "JSON_SCHEMA",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:49.857886Z",
+        "token_usage": {
+          "completion_tokens": 337,
+          "prompt_tokens": 2106,
+          "provider_metadata": {
+            "cached_prompt_tokens": null,
+            "finish_reason": "stop",
+            "provider_request_id": "2b40f132-7967-9121-93e6-4cd6a6f3e60f",
+            "reasoning_tokens": null,
+            "response_model": "qwen3.7-plus-2026-05-26"
+          },
+          "total_tokens": 2443
+        },
+        "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+        "agent_step_id": "agent_step:0d89b90bd1da433c80776e22a4733e8f",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+          "kind": "agent_run"
+        },
+        "project_id": 1001,
+        "record_type": "agent_step",
+        "sequence": 7,
+        "status": "SUCCESS",
+        "step_type": "generate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:49.858522Z",
+        "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+        "agent_step_id": "agent_step:a098f0e902ee4f5f8f525c8fa79983ef",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+          "kind": "agent_run"
+        },
+        "project_id": 1001,
+        "record_type": "agent_step",
+        "sequence": 8,
+        "status": "RUNNING",
+        "step_type": "validate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:49.859787Z",
+        "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+        "agent_step_id": "agent_step:a098f0e902ee4f5f8f525c8fa79983ef",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+          "kind": "agent_run"
+        },
+        "project_id": 1001,
+        "record_type": "agent_step",
+        "sequence": 9,
+        "status": "SUCCESS",
+        "step_type": "validate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:49.861328Z",
+        "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:8cbe21d535064bee8a33e9443c3b572e",
+        "agent_step_id": null,
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 1001,
+        "record_type": "agent_run",
+        "sequence": 10,
+        "status": "SUCCESS",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:49.864014Z",
+        "trace_id": "trace:e1d9180ab84344a2b428166c4d43df1e",
+        "workflow_id": null
+      }
+    ]
+  },
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "NOT_APPLICABLE",
+  "modelCallCount": 1,
+  "modelCallIds": [
+    "model_call:77ee71c27c18412e819a60c704177316"
+  ],
+  "modelLatencyMs": 6445.7495,
+  "principalId": 45,
+  "principalLabel": "stage21-normal",
+  "promptTokens": 2106,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "semanticAdjudication": null,
+  "setupStatus": "SUCCESS",
+  "status": "SUCCESS",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": "valid_json",
+        "metricStatus": "VALUE",
+        "name": "valid_json",
+        "reason": "valid_json observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "schema_valid",
+        "metricStatus": "VALUE",
+        "name": "schema_valid",
+        "reason": "schema_valid observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "contract_accepted",
+        "metricStatus": "VALUE",
+        "name": "contract_accepted",
+        "reason": "contract_accepted observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "exact_match",
+        "metricStatus": "VALUE",
+        "name": "exact_match",
+        "reason": "exact_match observed 0.3333333333333333, expected 1",
+        "required": true,
+        "status": "FAIL"
+      }
+    ],
+    "failCount": 1,
+    "notApplicableCount": 0,
+    "passCount": 3,
+    "status": "FAIL",
+    "unknownCount": 0
+  },
+  "taskType": "TESTCASE_GENERATION",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": 2443,
+  "traceId": "trace:e1d9180ab84344a2b428166c4d43df1e"
+}

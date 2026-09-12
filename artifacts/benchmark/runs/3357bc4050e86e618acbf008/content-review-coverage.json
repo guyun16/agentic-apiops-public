@@ -1,0 +1,146 @@
+[
+  {
+    "taskId": "bench_task_failure_insufficient_missing",
+    "reviewed": true,
+    "metric": {
+      "metric": "diagnosis_contract",
+      "status": "VALUE",
+      "value": 1,
+      "unit": null,
+      "reason": "CODEX_REVIEW:reviews/01.json",
+      "details": [
+        "observed_facts=PASS",
+        "hypothesis_grounding=PASS",
+        "uncertainty=PASS",
+        "citation_support=PASS",
+        "limitations_and_checks=PASS"
+      ]
+    }
+  },
+  {
+    "taskId": "bench_task_failure_insufficient_conflicting",
+    "reviewed": true,
+    "metric": {
+      "metric": "diagnosis_contract",
+      "status": "VALUE",
+      "value": 1,
+      "unit": null,
+      "reason": "CODEX_REVIEW:reviews/02.json",
+      "details": [
+        "observed_facts=PASS",
+        "hypothesis_grounding=PASS",
+        "uncertainty=PASS",
+        "citation_support=PASS",
+        "limitations_and_checks=PASS"
+      ]
+    }
+  },
+  {
+    "taskId": "bench_task_formal_failure_insufficient_conflicting",
+    "reviewed": true,
+    "metric": {
+      "metric": "diagnosis_contract",
+      "status": "VALUE",
+      "value": 1,
+      "unit": null,
+      "reason": "CODEX_REVIEW:reviews/03.json",
+      "details": [
+        "observed_facts=PASS",
+        "hypothesis_grounding=PASS",
+        "uncertainty=PASS",
+        "citation_support=PASS",
+        "limitations_and_checks=PASS"
+      ]
+    }
+  },
+  {
+    "taskId": "bench_task_formal_failure_insufficient_heldout_conflict",
+    "reviewed": true,
+    "metric": {
+      "metric": "diagnosis_contract",
+      "status": "VALUE",
+      "value": 0,
+      "unit": null,
+      "reason": "FAIL：对本次v2完整实际输出按冻结五维契约独立审查；详见逐维理由。",
+      "details": [
+        "observed_facts=FAIL",
+        "hypothesis_grounding=FAIL",
+        "uncertainty=PASS",
+        "citation_support=FAIL",
+        "limitations_and_checks=PASS"
+      ]
+    }
+  },
+  {
+    "taskId": "bench_task_formal_failure_insufficient_heldout_missing",
+    "reviewed": true,
+    "metric": {
+      "metric": "diagnosis_contract",
+      "status": "VALUE",
+      "value": 1,
+      "unit": null,
+      "reason": "CODEX_REVIEW:reviews/05.json",
+      "details": [
+        "observed_facts=PASS",
+        "hypothesis_grounding=PASS",
+        "uncertainty=PASS",
+        "citation_support=PASS",
+        "limitations_and_checks=PASS"
+      ]
+    }
+  },
+  {
+    "taskId": "bench_task_formal_failure_insufficient_missing_auth",
+    "reviewed": true,
+    "metric": {
+      "metric": "diagnosis_contract",
+      "status": "VALUE",
+      "value": 0,
+      "unit": null,
+      "reason": "FAIL：对本次v2完整实际输出按冻结五维契约独立审查；详见逐维理由。",
+      "details": [
+        "observed_facts=PASS",
+        "hypothesis_grounding=FAIL",
+        "uncertainty=PASS",
+        "citation_support=FAIL",
+        "limitations_and_checks=FAIL"
+      ]
+    }
+  },
+  {
+    "taskId": "bench_task_formal_failure_insufficient_missing_headers",
+    "reviewed": true,
+    "metric": {
+      "metric": "diagnosis_contract",
+      "status": "VALUE",
+      "value": 1,
+      "unit": null,
+      "reason": "CODEX_REVIEW:reviews/07.json",
+      "details": [
+        "observed_facts=PASS",
+        "hypothesis_grounding=PASS",
+        "uncertainty=PASS",
+        "citation_support=PASS",
+        "limitations_and_checks=PASS"
+      ]
+    }
+  },
+  {
+    "taskId": "bench_task_formal_failure_insufficient_partial_facts",
+    "reviewed": true,
+    "metric": {
+      "metric": "diagnosis_contract",
+      "status": "VALUE",
+      "value": 1,
+      "unit": null,
+      "reason": "CODEX_REVIEW:reviews/08.json",
+      "details": [
+        "observed_facts=PASS",
+        "hypothesis_grounding=PASS",
+        "uncertainty=PASS",
+        "citation_support=PASS",
+        "limitations_and_checks=PASS"
+      ]
+    }
+  }
+]

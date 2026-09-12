@@ -14,7 +14,7 @@ from app.workflows.candidate_validation import (
     ValidationIssue,
     validate_candidate,
 )
-from app.workflows.generation_context import GenerationContext
+from app.workflows.generation_context import DocumentedResponse, GenerationContext
 from app.workflows.generation_context import TestStrategy as Strategy
 
 
@@ -28,6 +28,27 @@ def make_context() -> GenerationContext:
         base_url="https://example.test",
         strategy=Strategy.HAPPY_PATH,
         supporting_evidence=("responseSchemas[0].statusCode=200",),
+    )
+
+
+def context_with_responses(
+    strategy: Strategy,
+    *statuses: str,
+) -> GenerationContext:
+    context = make_context()
+    return context.model_copy(
+        update={
+            "strategy": strategy,
+            "documented_responses": tuple(
+                DocumentedResponse(
+                    status_code=status,
+                    description="documented response",
+                    media_type="application/json",
+                    schema_={"type": "object"},
+                )
+                for status in statuses
+            ),
+        }
     )
 
 
@@ -167,6 +188,64 @@ def test_operation_snapshot_mismatch_is_semantic_issue(
     result = validate(make_candidate(payload))
 
     assert [issue.code for issue in result.issues] == [expected_code]
+
+
+@pytest.mark.parametrize(
+    ("strategy", "documented", "candidate_status"),
+    (
+        (Strategy.HAPPY_PATH, "200", 500),
+        (Strategy.AUTH_FAILURE, "401", 200),
+        (Strategy.BUSINESS_ERROR, "409", 200),
+    ),
+)
+def test_strategy_requires_a_documented_status_assertion(
+    strategy: Strategy,
+    documented: str,
+    candidate_status: int,
+) -> None:
+    payload = valid_payload()
+    payload["steps"][0]["assertions"] = [
+        {"type": "STATUS_CODE", "expected": candidate_status}
+    ]
+    context = context_with_responses(strategy, documented)
+
+    result = validate_candidate(
+        make_candidate(payload),
+        project_id=101,
+        generation_context=context,
+    )
+
+    assert result.valid is False
+    assert result.issues[0].code == "STRATEGY_STATUS_EXPECTATION_MISSING"
+    if strategy is Strategy.BUSINESS_ERROR:
+        assert result.issues[1].code == "BUSINESS_ERROR_STATUS_EXPECTATION_MISSING"
+
+
+@pytest.mark.parametrize(
+    ("strategy", "documented", "candidate_status"),
+    (
+        (Strategy.HAPPY_PATH, "200", 200),
+        (Strategy.AUTH_FAILURE, "401", 401),
+        (Strategy.BUSINESS_ERROR, "409", 409),
+    ),
+)
+def test_strategy_accepts_its_documented_status_assertion(
+    strategy: Strategy,
+    documented: str,
+    candidate_status: int,
+) -> None:
+    payload = valid_payload()
+    payload["steps"][0]["assertions"] = [
+        {"type": "STATUS_CODE", "expected": candidate_status}
+    ]
+
+    result = validate_candidate(
+        make_candidate(payload),
+        project_id=101,
+        generation_context=context_with_responses(strategy, documented),
+    )
+
+    assert result.valid is True
 
 
 def test_validator_does_not_modify_candidate() -> None:

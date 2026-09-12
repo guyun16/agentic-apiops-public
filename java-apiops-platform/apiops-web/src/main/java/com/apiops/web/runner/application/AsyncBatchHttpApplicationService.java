@@ -32,6 +32,71 @@ import java.util.UUID;
 /** Project-authorized HTTP boundary for durable asynchronous batches. */
 public class AsyncBatchHttpApplicationService {
 
+    private static final String SOURCE_TAG = "apiops:rerun-of:";
+
+    public record RunControls(UUID batchId, int batchSize, boolean cancelRequested,
+                              boolean canCancel, boolean canRerun, Long sourceRunId) {}
+
+    @PreAuthorize("isAuthenticated()")
+    public RunControls controls(long projectId, long runId) {
+        authorization.requireProjectReadable(principal().getUserId(), projectId);
+        var input = runInput(projectId, runId);
+        var facts = repository.findRun(projectId, runId).orElseThrow(() -> invalid("run not found"));
+        var batch = repository.findBatchIdForRun(projectId, runId)
+                .flatMap(id -> repository.findBatch(projectId, id)).orElse(null);
+        Long sourceRunId = null;
+        try {
+            var tags = objectMapper.readValue(input.testCaseDslJson(), TestCase.class).tags();
+            if (tags != null) for (String tag : tags) {
+                if (tag.startsWith(SOURCE_TAG)) sourceRunId = Long.valueOf(tag.substring(SOURCE_TAG.length()));
+            }
+        } catch (JsonProcessingException | NumberFormatException ignored) {
+            // Legacy malformed snapshots have no readable source link.
+        }
+        return new RunControls(batch == null ? null : batch.batchId(),
+                batch == null ? 0 : batch.members().size(), batch != null && batch.cancelRequested(),
+                batch != null && !batch.status().isTerminal() && !facts.status().isTerminal(),
+                facts.status().isTerminal(), sourceRunId);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public BatchCancelResult cancelRun(long projectId, long runId) {
+        authorization.requireProjectEditable(principal().getUserId(), projectId);
+        runInput(projectId, runId);
+        if (repository.findRun(projectId, runId).map(facts -> facts.status().isTerminal()).orElse(false)) {
+            return BatchCancelResult.TERMINAL;
+        }
+        UUID batchId = repository.findBatchIdForRun(projectId, runId)
+                .orElseThrow(() -> invalid("run has no cancellable asynchronous batch"));
+        return cancel(projectId, batchId);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public AsyncBatchSubmission rerun(long projectId, long runId) {
+        authorization.requireProjectEditable(principal().getUserId(), projectId);
+        var input = runInput(projectId, runId);
+        var facts = repository.findRun(projectId, runId).orElseThrow(() -> invalid("run not found"));
+        if (!facts.status().isTerminal()) throw invalid("only terminal runs can be rerun");
+        try {
+            TestCase original = objectMapper.readValue(input.testCaseDslJson(), TestCase.class);
+            var tags = new java.util.ArrayList<String>();
+            if (original.tags() != null) original.tags().stream()
+                    .filter(tag -> !tag.startsWith(SOURCE_TAG)).forEach(tags::add);
+            tags.add(SOURCE_TAG + runId);
+            TestCase copy = new TestCase(original.schemaVersion(), original.caseId(), original.projectId(),
+                    original.apiId(), original.name(), original.environment(), original.description(),
+                    tags, original.steps());
+            return submit(projectId, new AsyncBatchSubmitRequest(List.of(copy)));
+        } catch (JsonProcessingException exception) {
+            throw invalid("saved TestCase snapshot cannot be rerun");
+        }
+    }
+
+    private ExecutionFactRepository.RunExecutionInput runInput(long projectId, long runId) {
+        return repository.findExecutionInput(runId).filter(input -> input.projectId() == projectId)
+                .orElseThrow(() -> invalid("run not found"));
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(
             AsyncBatchHttpApplicationService.class);
 

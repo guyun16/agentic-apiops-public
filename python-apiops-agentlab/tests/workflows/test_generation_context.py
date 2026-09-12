@@ -9,7 +9,11 @@ import pytest
 
 from app.schemas.openapi_metadata import OpenApiMetadataDetail
 from app.workflows.generation_context import TestStrategy as Strategy
-from app.workflows.generation_context import build_generation_context, strategy_applicability
+from app.workflows.generation_context import (
+    build_generation_context,
+    documented_business_boundaries,
+    strategy_applicability,
+)
 from app.workflows.state import APIOpsAgentState
 
 
@@ -232,6 +236,72 @@ def test_context_retains_operation_identity_required_control_facts_and_responses
     assert [response.status_code for response in context.documented_responses] == ["200"]
 
 
+def test_happy_context_retains_documented_optional_parameter_example() -> None:
+    metadata = make_metadata(
+        path="/orders",
+        parameters=[
+            {
+                "name": "limit",
+                "location": "query",
+                "required": False,
+                "description": "Maximum orders to return",
+                "schema": {"type": "integer"},
+                "example": 10,
+            },
+            {
+                "name": "cursor",
+                "location": "query",
+                "required": False,
+                "description": "Optional cursor without an example",
+                "schema": {"type": "string"},
+                "example": None,
+            },
+        ],
+    )
+
+    context = build_generation_context(metadata, Strategy.HAPPY_PATH)
+
+    assert [(fact.name, fact.location, fact.example) for fact in context.request_facts] == [
+        ("limit", "query", 10)
+    ]
+
+
+def test_boundary_context_retains_success_and_business_response_authority() -> None:
+    metadata = make_metadata(
+        parameters=[
+            {
+                "name": "quantity",
+                "location": "query",
+                "required": True,
+                "description": "Requested quantity",
+                "schema": {"type": "integer", "minimum": 1},
+                "example": 1,
+            }
+        ],
+        responseSchemas=[
+            {
+                "statusCode": "200",
+                "description": "accepted boundary",
+                "mediaType": "application/json",
+                "schema": {"type": "object"},
+            },
+            {
+                "statusCode": "409",
+                "description": "inventory boundary crossed",
+                "mediaType": "application/json",
+                "schema": {"type": "object"},
+            },
+        ],
+    )
+
+    context = build_generation_context(metadata, Strategy.BOUNDARY)
+
+    assert [response.status_code for response in context.documented_responses] == [
+        "200",
+        "409",
+    ]
+
+
 def test_context_does_not_mutate_or_alias_metadata() -> None:
     metadata = make_metadata(
         parameters=[
@@ -252,3 +322,82 @@ def test_context_does_not_mutate_or_alias_metadata() -> None:
     assert metadata.model_dump() == before
     assert context.request_facts[0].schema_ == {"type": "integer", "minimum": 1}
     assert context.request_facts[0].schema_ is not metadata.parameters[0].schema_
+
+
+def business_boundary_metadata() -> OpenApiMetadataDetail:
+    return make_metadata(
+        parameters=[],
+        requestSchemas=[{
+            "required": True,
+            "mediaType": "application/json",
+            "schema": {
+                "type": "object",
+                "properties": {"items": {
+                    "type": "array",
+                    "items": {"type": "object", "properties": {
+                        "productId": {"type": "integer"},
+                        "quantity": {"type": "integer"},
+                    }},
+                }},
+                "x-business-boundaries": [{
+                    "name": "inventory.available_quantity",
+                    "requestPath": "items[].quantity",
+                    "selector": {"path": "items[].productId", "value": 2},
+                    "limit": 2,
+                    "operator": "GT",
+                    "statusCode": 409,
+                }],
+            },
+        }],
+        responseSchemas=[{
+            "statusCode": "409", "description": "Business rejection",
+            "mediaType": "application/json", "schema": {"type": "object"},
+        }],
+    )
+
+
+def test_structured_business_boundary_uses_documented_integer_rejection_edge() -> None:
+    metadata = business_boundary_metadata()
+
+    context = build_generation_context(metadata, Strategy.BOUNDARY)
+
+    assert context.business_boundaries[0]["boundaryValue"] == 3
+    assert context.business_boundaries[0]["limit"] == 2
+    assert context.business_boundaries[0]["selector"] == {
+        "path": "items[].productId", "value": 2,
+    }
+    assert context.supporting_evidence == (
+        "requestSchemas[0].schema.x-business-boundaries[0]: "
+        "inventory.available_quantity rejection boundary=3",
+    )
+    assert "maximum" not in metadata.request_schemas[0].schema_["properties"]["items"][
+        "items"
+    ]["properties"]["quantity"]
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("requestPath", "items[].missing"),
+        ("requestPath", "other[].quantity"),
+        ("selector", {"path": "items[].productId", "value": "2"}),
+        ("statusCode", 418),
+        ("limit", True),
+        ("operator", "UNPROVEN"),
+    ],
+)
+def test_business_boundary_rejects_unbound_or_ill_typed_authority(
+    field: str, value: object,
+) -> None:
+    metadata = business_boundary_metadata()
+    metadata.request_schemas[0].schema_["x-business-boundaries"][0][field] = value
+
+    with pytest.raises(ValueError):
+        documented_business_boundaries(metadata)
+
+
+def test_business_boundary_is_not_inferred_from_description() -> None:
+    metadata = make_metadata(description="Inventory 2; above 2 returns 409.")
+
+    assert documented_business_boundaries(metadata) == ()
+    assert not strategy_applicability(metadata)[Strategy.BOUNDARY].applicable

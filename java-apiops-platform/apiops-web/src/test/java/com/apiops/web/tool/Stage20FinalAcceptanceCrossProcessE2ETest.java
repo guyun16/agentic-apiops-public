@@ -247,7 +247,7 @@ class Stage20FinalAcceptanceCrossProcessE2ETest {
                     result.path("tool").path("ragQueryId").asText("NOT_PRESENT"),
                     event.status(),
                     diagnosis.path("sufficientEvidence").asBoolean());
-            System.out.println("STAGE20_FINAL_CORRELATION " + result);
+            System.out.println("STAGE21_FINAL_CORRELATION " + result);
         } finally {
             stop(demo.process());
         }

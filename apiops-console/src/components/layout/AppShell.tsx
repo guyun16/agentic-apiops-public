@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Theme, ThemePreference } from '../../app/App'
 import type { ContextTrailTarget } from '../../app/ContextTrailContext'
 import { useConsoleLanguage } from '../../app/ConsoleLanguage'
 import { useProject } from '../../app/ProjectContext'
+import { consoleRouteUrl, consoleViewForItem, parseConsoleRoute, type ConsoleView, type RouteDetails } from '../../app/consoleRoute'
 import { ApiStudioPage } from '../../features/api-studio/ApiStudioPage'
+import { BenchmarkPage } from '../../features/benchmark/BenchmarkPage'
 import { DiagnosisPage } from '../../features/diagnosis/DiagnosisPage'
 import { DiagnosisAgentExecutionPage } from '../../features/diagnosis-execution/DiagnosisAgentExecutionPage'
 import { EvaluationPage } from '../../features/evaluation/EvaluationPage'
@@ -34,6 +36,10 @@ type DiagnosisExecutionContext = {
 
 const SIDEBAR_STORAGE_KEY = 'apiops-console-sidebar-collapsed'
 
+function initialConsoleRoute() {
+  return parseConsoleRoute(typeof window === 'undefined' ? '' : window.location.search)
+}
+
 function getInitialSidebarCollapsed() {
   try {
     return window.localStorage.getItem(SIDEBAR_STORAGE_KEY) === 'true'
@@ -43,11 +49,12 @@ function getInitialSidebarCollapsed() {
 }
 
 function PlaceholderPage({ title }: { title: string }) {
+  const { ui } = useConsoleLanguage()
   return (
     <section className="placeholder-page" aria-labelledby="placeholder-title">
-      <div className="placeholder-eyebrow">APIOps workspace</div>
+      <div className="placeholder-eyebrow">{ui('APIOps workspace')}</div>
       <h1 id="placeholder-title">{title}</h1>
-      <p>This module is reserved for the next console phase.</p>
+      <p>{ui('This module is reserved for the next console phase.')}</p>
     </section>
   )
 }
@@ -64,88 +71,126 @@ export function AppShell({
   themePreference,
 }: AppShellProps) {
   const { t } = useConsoleLanguage()
-  const { currentProject, error: projectError, loading: projectsLoading, refreshProjects } = useProject()
-  const [activeItem, setActiveItem] = useState('Overview')
+  const { currentProject, availableProjects, selectProject, error: projectError, loading: projectsLoading, refreshProjects } = useProject()
+  const projectId = currentProject?.projectId ?? null
+  const [route, setRoute] = useState(initialConsoleRoute)
+  const activeItem = route.activeItem
   const [collapsed, setCollapsed] = useState(getInitialSidebarCollapsed)
-  const [diagnosisStudioRunId, setDiagnosisStudioRunId] = useState<string | null>(null)
-  const [diagnosisAgentRunId, setDiagnosisAgentRunId] = useState<string | null>(null)
   const [executionContext, setExecutionContext] = useState<DiagnosisExecutionContext | null>(null)
-  const [apiStudioTarget, setApiStudioTarget] = useState<Extract<ContextTrailTarget, { type: 'endpoint' | 'testcase' }> | null>(null)
-  const [runsTargetId, setRunsTargetId] = useState<number | null>(null)
-  const [tracesTargetId, setTracesTargetId] = useState<string | null>(null)
+  const [contextTarget, setContextTarget] = useState<Extract<ContextTrailTarget, { type: 'endpoint' | 'testcase' }> | null>(null)
+  const previousProjectId = useRef<string | null>(null)
+  const apiStudioTarget = useMemo(() => contextTarget ?? (route.apiId
+    ? { type: 'endpoint' as const, id: route.apiId, apiDocId: route.apiDocId ?? '' } : null),
+  [contextTarget, route.apiId, route.apiDocId])
+
+  const commitLocation = useCallback((url: URL, replace = false) => {
+    if (url.href === window.location.href) return
+    window.history[replace ? 'replaceState' : 'pushState'](null, '', url)
+    setRoute(parseConsoleRoute(url.search))
+  }, [])
+
+  const navigate = useCallback((view: ConsoleView, runId: number | null = null, details: RouteDetails = {}, replace = false) => {
+    commitLocation(consoleRouteUrl(window.location.href, view, runId, projectId, details), replace)
+  }, [commitLocation, projectId])
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(SIDEBAR_STORAGE_KEY, String(collapsed))
-    } catch {
-      // The navigation still works when storage is unavailable.
+    const restore = () => {
+      let next = parseConsoleRoute(window.location.search)
+      if (next.projectId && next.projectId !== projectId) {
+        if (availableProjects.some((project) => project.projectId === next.projectId)) {
+          previousProjectId.current = next.projectId
+          selectProject(next.projectId)
+        } else {
+          const url = consoleRouteUrl(window.location.href, next.view, null, projectId)
+          window.history.replaceState(null, '', url)
+          next = parseConsoleRoute(url.search)
+        }
+      }
+      setExecutionContext(null)
+      setContextTarget(null)
+      setRoute(next)
     }
+    window.addEventListener('popstate', restore)
+    return () => window.removeEventListener('popstate', restore)
+  }, [availableProjects, projectId, selectProject])
+
+  useEffect(() => {
+    if (!projectId) return
+    if ((previousProjectId.current && previousProjectId.current !== projectId)
+      || (route.projectId && route.projectId !== projectId)) {
+      setExecutionContext(null)
+      setContextTarget(null)
+      navigate(route.view, null, {}, previousProjectId.current === null)
+    }
+    previousProjectId.current = projectId
+  }, [projectId, route.projectId, route.view, navigate])
+
+  useEffect(() => {
+    try { window.localStorage.setItem(SIDEBAR_STORAGE_KEY, String(collapsed)) } catch { /* Navigation works without storage. */ }
   }, [collapsed])
 
-  const openDiagnosisExecution = (runId: string, returnTo: 'Runs' | 'Diagnosis') => {
-    setDiagnosisStudioRunId(runId)
-    setExecutionContext({ runId, returnTo })
-    setActiveItem('Diagnosis Studio')
-  }
+  // Selection already lives in the mounted page. Updating its input props here
+  // would reload its list and discard loaded history pages.
+  const rememberLocation = useCallback((view: ConsoleView, runId: number | null, details: RouteDetails = {}, replace = true) => {
+    const current = parseConsoleRoute(window.location.search)
+    if (current.view !== view || (current.projectId && current.projectId !== projectId)) return
+    const url = consoleRouteUrl(window.location.href, view, runId, projectId, details)
+    if (url.href !== window.location.href) window.history[replace ? 'replaceState' : 'pushState'](null, '', url)
+  }, [projectId])
+  const rememberRunLocation = useCallback((runId: number, replace = true) => {
+    rememberLocation('runs', runId, {}, replace)
+  }, [rememberLocation])
+  const rememberDiagnosisLocation = useCallback((runId: number) => {
+    rememberLocation('diagnosis-studio', runId)
+  }, [rememberLocation])
+  const rememberEndpointLocation = useCallback((apiId: string, apiDocId: string) => {
+    rememberLocation('api-studio', null, { apiId, apiDocId })
+  }, [rememberLocation])
+  const rememberDiagnosisResult = useCallback((agentRunId: string) => {
+    rememberLocation('diagnosis', null, { agentRunId }, false)
+  }, [rememberLocation])
+  const rememberTrace = useCallback((traceId: string) => {
+    rememberLocation('traces', null, { traceId }, false)
+  }, [rememberLocation])
 
+  const openDiagnosisExecution = (runId: string, returnTo: 'Runs' | 'Diagnosis') => {
+    setExecutionContext({ runId, returnTo })
+    navigate('diagnosis-studio', Number(runId))
+  }
   const closeDiagnosisExecution = () => {
     const returnTo = executionContext?.returnTo ?? 'Diagnosis'
     setExecutionContext(null)
-    setActiveItem(returnTo)
+    navigate(returnTo === 'Runs' ? 'runs' : 'diagnosis')
   }
-
   const viewDiagnosisResult = (agentRunId: string) => {
-    setDiagnosisAgentRunId(agentRunId)
     setExecutionContext(null)
-    setActiveItem('Diagnosis')
+    navigate('diagnosis', null, { agentRunId })
   }
-
   const viewRunReport = (runId: number) => {
     setExecutionContext(null)
-    setRunsTargetId(runId)
-    setActiveItem('Runs')
+    navigate('runs', runId)
   }
-
   const viewTrace = (traceId: string) => {
     setExecutionContext(null)
-    setTracesTargetId(traceId)
-    setActiveItem('Traces')
+    navigate('traces', null, { traceId })
   }
-
   const handleNavigation = (item: string) => {
     setExecutionContext(null)
-    if (item !== 'API Studio') setApiStudioTarget(null)
-    if (item !== 'Runs') setRunsTargetId(null)
-    if (item !== 'Traces') setTracesTargetId(null)
-    setActiveItem(item)
+    setContextTarget(null)
+    navigate(consoleViewForItem(item))
   }
-
   const handleContextNavigation = (target: ContextTrailTarget) => {
     setExecutionContext(null)
     if (target.type === 'endpoint' || target.type === 'testcase') {
-      setRunsTargetId(null)
-      setTracesTargetId(null)
-      setApiStudioTarget(target)
-      setActiveItem('API Studio')
-      return
-    }
-
-    if (target.type === 'run') {
-      setApiStudioTarget(null)
-      setRunsTargetId(target.runId)
-      setTracesTargetId(null)
-      setActiveItem('Runs')
-      return
-    }
-
-    setTracesTargetId(null)
-    setDiagnosisAgentRunId(target.agentRunId)
-    setActiveItem('Diagnosis')
+      setContextTarget(target)
+      navigate('api-studio', null, { apiId: target.type === 'endpoint' ? target.id : target.apiId, apiDocId: target.apiDocId })
+    } else if (target.type === 'run') viewRunReport(target.runId)
+    else viewDiagnosisResult(target.agentRunId)
   }
-
   const pageContent = executionContext ? (
     <DiagnosisAgentExecutionPage
       initialRunId={executionContext.runId}
+      onRunSelected={rememberDiagnosisLocation}
       onClose={closeDiagnosisExecution}
       onViewRunReport={viewRunReport}
       onViewResult={viewDiagnosisResult}
@@ -154,31 +199,40 @@ export function AppShell({
   ) : activeItem === 'Overview' ? (
     <OverviewPage onNavigate={handleNavigation} />
   ) : activeItem === 'API Studio' ? (
-    <ApiStudioPage contextTarget={apiStudioTarget} onContextNavigate={handleContextNavigation} />
+    <ApiStudioPage onEndpointSelected={rememberEndpointLocation} contextTarget={apiStudioTarget} onContextNavigate={handleContextNavigation} onViewRun={viewRunReport} />
   ) : activeItem === 'Runs' ? (
     <RunsPage
-      initialRunId={runsTargetId}
+      initialRunId={route.runId}
       onContextNavigate={handleContextNavigation}
       onDiagnose={(runId) => openDiagnosisExecution(runId, 'Runs')}
+      onRunSelected={rememberRunLocation}
     />
   ) : activeItem === 'Diagnosis Studio' ? (
     <DiagnosisAgentExecutionPage
-      initialRunId={diagnosisStudioRunId}
+      initialRunId={route.runId === null ? null : String(route.runId)}
+      onRunSelected={rememberDiagnosisLocation}
       onViewRunReport={viewRunReport}
       onViewResult={viewDiagnosisResult}
     />
   ) : activeItem === 'Diagnosis' ? (
     <DiagnosisPage
-      initialAgentRunId={diagnosisAgentRunId}
+      initialAgentRunId={route.agentRunId} onSelected={rememberDiagnosisResult}
       onContextNavigate={handleContextNavigation}
       onOpenDiagnosisStudio={(runId) => openDiagnosisExecution(String(runId), 'Diagnosis')}
       onOpenSourceRun={viewRunReport}
       onViewTrace={viewTrace}
     />
   ) : activeItem === 'Traces' ? (
-    <TracesPage initialTraceId={tracesTargetId} onContextNavigate={handleContextNavigation} />
+    <TracesPage initialTraceId={route.traceId} onSelected={rememberTrace} onContextNavigate={handleContextNavigation} />
   ) : activeItem === 'Evaluation' ? (
-    <EvaluationPage />
+    <EvaluationPage
+      onContextNavigate={handleContextNavigation}
+      onViewDiagnosis={viewDiagnosisResult}
+      onViewRun={viewRunReport}
+      onViewTrace={viewTrace}
+    />
+  ) : activeItem === 'Benchmark' ? (
+    <BenchmarkPage />
   ) : activeItem === 'Settings' ? (
     <SettingsPage
       autoDiagnose={autoDiagnose}
@@ -194,7 +248,7 @@ export function AppShell({
     <PlaceholderPage title={activeItem} />
   )
 
-  const guardedPageContent = projectsLoading ? (
+  const guardedPageContent = projectsLoading || Boolean(route.projectId && projectId && route.projectId !== projectId) ? (
     <PageState
       description={t('project.loadingProjectsDescription')}
       kind="loading"
@@ -231,7 +285,7 @@ export function AppShell({
       />
       <div className="shell-main">
         <main className={`main-content${isApiStudio ? ' main-content-api-studio' : ''}${isRuns ? ' main-content-runs' : ''}${isDiagnosis ? ' main-content-diagnosis' : ''}`}>
-          {guardedPageContent}
+          <Fragment key={projectId}>{guardedPageContent}</Fragment>
         </main>
       </div>
     </div>

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_testcase_boundary_quantity_zero",
+  "taskType": "TESTCASE_GENERATION",
+  "instruction": "Generate a boundary testcase for quantity zero using the documented quantity constraint; keep the expected validation response explicit.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "strategy",
+        "value": "BOUNDARY"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "apiMetadata",
+        "ref": "java://metadata/project-41/api-api-1"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "candidateFixture",
+        "ref": "examples/testcase-invalid-quantity-valid.json"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "submit_unvalidated_dsl"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "valid_json",
+    "schema_valid",
+    "contract_accepted",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_testcase_boundary_quantity_zero",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "valid_json",
+      "schema_valid",
+      "contract_accepted",
+      "exact_match"
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "fallbackCount": 0,
+  "formal105Status": "NOT_RUN",
+  "freeze": {
+    "fallbackAbsent": true,
+    "providerIdentity": true,
+    "requestProvenance": true,
+    "schemaIdentity": true,
+    "structuredOutputCompatibility": true
+  },
+  "frozenAt": "2026-09-04T12:18:37.489603Z",
+  "mismatchCount": 0,
+  "provider": {
+    "model": "qwen3.8-max",
+    "provider": "Qwen"
+  },
+  "providerCallCount": 11,
+  "revision": "stage21-formal105-accuracy-repair-v3",
+  "schemaIdentityChecks": {
+    "diagnosis": true,
+    "nativeProbe": true,
+    "testcaseIntentionalInvalid": true,
+    "testcasePositive": true,
+    "unionProbe": true
+  },
+  "schemaVersion": "stage21-qwen38-provider-source-freeze/v1",
+  "structuredOutputProfile": {
+    "diagnosisInitial": {
+      "allowedOutputs": [
+        "DiagnosisReport",
+        "ToolIntent"
+      ],
+      "mode": "JSON_OBJECT"
+    },
+    "diagnosisMemoryRefinement": {
+      "mode": "JSON_SCHEMA",
+      "schemaDigest": "3a5fef50c9b2944a9ea92c6842c0857363c3991d3c7ed1d65b6fbfbe58ccd339",
+      "schemaName": "diagnosis_report_v1"
+    },
+    "diagnosisNativeCoverage": "REPORT_PATH_ONLY",
+    "diagnosisReportContinuation": {
+      "mode": "JSON_SCHEMA",
+      "schemaDigest": "3a5fef50c9b2944a9ea92c6842c0857363c3991d3c7ed1d65b6fbfbe58ccd339",
+      "schemaName": "diagnosis_report_v1"
+    },
+    "testcase": {
+      "mode": "JSON_SCHEMA",
+      "schemaDigest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+      "schemaName": "testcase_candidate_object_v1"
+    }
+  },
+  "unprovenCount": 0
+}

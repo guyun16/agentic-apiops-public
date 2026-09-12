@@ -80,7 +80,7 @@ public final class ToolGatewayRestApplicationService {
             return contractMapper.toPublicResult(invalid, traceId);
         }
 
-        ToolCallIntent intent = contractMapper.toInternalIntent(request);
+        ToolCallIntent intent = contractMapper.toInternalIntent(request, projectId);
         ToolGateway.ToolHandler handler = handlers.getOrDefault(
                 intent.toolName(), unavailableHandler());
         return contractMapper.toPublicResult(

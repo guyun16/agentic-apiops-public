@@ -1,0 +1,479 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:9c61bfd8922a4496bfa495cff64572ec",
+  "authProfile": "NORMAL",
+  "authorityReferences": [
+    "java:run:4623",
+    "java:report:report:4623"
+  ],
+  "benchmarkTaskId": "bench_task_formal_failure_business_report_authority",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260904T145654Z:bench_task_formal_failure_business_report_authority",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 158.589,
+  "errorSummary": null,
+  "evaluationId": "evaluation:491bb16a4b6e8ed970ba8871",
+  "evaluationResult": {
+    "agent_run_id": "agent_run:9c61bfd8922a4496bfa495cff64572ec",
+    "case_id": "case:evaluation_run:stage21-real-model-full-105-20260904T145654Z:bench_task_formal_failure_business_report_authority",
+    "evaluation_id": "evaluation:491bb16a4b6e8ed970ba8871",
+    "evaluator_version": "rule-evaluator-v1",
+    "ground_truth_id": "gt_stage21_formal_failure_business_report_authority",
+    "ground_truth_version": "v2",
+    "metrics": [
+      {
+        "details": [],
+        "metric": "valid_json",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "schema_valid",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "contract_accepted",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "exact_match",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_precision",
+        "reason": "precision denominator is zero because no tool was selected",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [
+          "correct=-",
+          "extra=-",
+          "missing=rag.search",
+          "denominator_expected=1"
+        ],
+        "metric": "tool_recall",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0.0
+      },
+      {
+        "details": [
+          "correct=-",
+          "extra=-",
+          "missing=rag.search"
+        ],
+        "metric": "tool_exact_set_match",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0
+      },
+      {
+        "details": [],
+        "metric": "parameter_accuracy",
+        "reason": "no expected Tool was selected, so no parameters are comparable",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [
+          "hit_count=0",
+          "denominator_expected_evidence=1",
+          "accepted_source_authority=not-used"
+        ],
+        "metric": "evidence_hit",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0.0
+      },
+      {
+        "details": [
+          "match=expected"
+        ],
+        "metric": "diagnosis_accuracy",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [],
+        "metric": "safety_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "wall_clock_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "model_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "human_wait_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "active_execution_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "prompt_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "completion_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "total_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "cost",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      }
+    ],
+    "trace_id": "trace:f3e9f8f7b39c4f3ab4a3e05aac3d9da8"
+  },
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T145654Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": null,
+  "failureCode": null,
+  "failureStage": null,
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://test-report/project-41/stage21-initial/business-report",
+    "examples/testcase-insufficient-stock-valid.json",
+    "literal:taskFocus"
+  ],
+  "formalEvidence": {
+    "diagnosisOutcome": {
+      "evidenceIds": [
+        "report:4623"
+      ],
+      "failureType": "BUSINESS_ERROR",
+      "outcome": "INSUFFICIENT_EVIDENCE",
+      "rootCauseHypotheses": [],
+      "sufficientEvidence": false
+    },
+    "normalizedEvaluationFacts": {
+      "diagnosis": "BUSINESS_ERROR",
+      "evidence_ids": [
+        "report:4623"
+      ],
+      "safety_outcome": null,
+      "structured_facts": [
+        {
+          "name": "runner_status",
+          "value": "ASSERTION_FAILED"
+        },
+        {
+          "name": "failure_type",
+          "value": "BUSINESS_ERROR"
+        },
+        {
+          "name": "assertion_count",
+          "value": 1
+        },
+        {
+          "name": "response_snapshot_present",
+          "value": true
+        },
+        {
+          "name": "response_status",
+          "value": 409
+        },
+        {
+          "name": "http_status",
+          "value": 409
+        },
+        {
+          "name": "assertion_layer",
+          "value": "STATUS_CODE"
+        },
+        {
+          "name": "report_completion",
+          "value": "COMPLETE"
+        },
+        {
+          "name": "transport_failure",
+          "value": false
+        },
+        {
+          "name": "java_runner_status",
+          "value": "ASSERTION_FAILED"
+        },
+        {
+          "name": "java_runner_executable",
+          "value": true
+        },
+        {
+          "name": "report_authority",
+          "value": "JAVA_TEST_REPORT"
+        },
+        {
+          "name": "diagnosis_failure_type",
+          "value": "BUSINESS_ERROR"
+        },
+        {
+          "name": "sufficient_evidence",
+          "value": false
+        },
+        {
+          "name": "sufficientEvidence",
+          "value": false
+        },
+        {
+          "name": "root_cause_hypotheses",
+          "value": []
+        },
+        {
+          "name": "rootCauseHypotheses",
+          "value": []
+        },
+        {
+          "name": "diagnosis_evidence_ids",
+          "value": []
+        },
+        {
+          "name": "evidence_ids",
+          "value": []
+        },
+        {
+          "name": "limitations_present",
+          "value": true
+        },
+        {
+          "name": "limitations_required",
+          "value": true
+        },
+        {
+          "name": "diagnosis_outcome",
+          "value": "INSUFFICIENT_EVIDENCE"
+        },
+        {
+          "name": "tool_invoked",
+          "value": false
+        },
+        {
+          "name": "tool_status",
+          "value": "NOT_CALLED"
+        },
+        {
+          "name": "citation_ids",
+          "value": [
+            "report:4623"
+          ]
+        },
+        {
+          "name": "citation_identity",
+          "value": [
+            {
+              "projectId": 41,
+              "reportId": "report:4623",
+              "sourceId": "report:4623",
+              "sourceType": "JAVA_TEST_REPORT"
+            }
+          ]
+        },
+        {
+          "name": "citation_expectation",
+          "value": "report:4623"
+        },
+        {
+          "name": "citation_source",
+          "value": "JAVA_TEST_REPORT"
+        }
+      ],
+      "tool_arguments": [],
+      "validity": {
+        "contract_accepted": null,
+        "schema_valid": null,
+        "valid_json": null
+      }
+    },
+    "redactedCandidate": null,
+    "terminalDecisionFacts": [],
+    "toolResultMappings": [],
+    "traceEvidence": [
+      {
+        "agent_run_id": "agent_run:9c61bfd8922a4496bfa495cff64572ec",
+        "agent_step_id": null,
+        "allowed": false,
+        "authority_source": "MISSING_EXECUTION_CONTRACT",
+        "capability_available": null,
+        "event": "DECISION",
+        "evidence_sufficiency": "UNRESOLVED",
+        "failure": {
+          "error_type": null,
+          "failure_category": "TOOL_PLANNING_UNRESOLVED",
+          "failure_code": "EXECUTION_TOOL_REQUIREMENT_MISSING",
+          "message": "BLOCKER: formal execution-side Tool Requirement Contract is missing.",
+          "retryable": null
+        },
+        "parent_identity": null,
+        "project_id": 41,
+        "reason": "BLOCKER: formal execution-side Tool Requirement Contract is missing.",
+        "record_type": "tool_planning",
+        "requirement": "UNRESOLVED",
+        "selected_tool": null,
+        "sequence": 1,
+        "status": "FAILED",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:59:18.534412Z",
+        "trace_id": "trace:f3e9f8f7b39c4f3ab4a3e05aac3d9da8",
+        "workflow_id": "diagnosis:agent_run:9c61bfd8922a4496bfa495cff64572ec"
+      },
+      {
+        "agent_run_id": "agent_run:9c61bfd8922a4496bfa495cff64572ec",
+        "agent_step_id": null,
+        "event": "FACT",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "query_digest": null,
+        "record_type": "retrieval",
+        "reference": {
+          "evidence_references": [],
+          "memory_id": null,
+          "rag_query_id": null,
+          "report_id": "report:4623",
+          "run_id": 4623
+        },
+        "result_count": 1,
+        "retrieval_kind": "JAVA_TEST_REPORT",
+        "sequence": 2,
+        "status": "SUCCESS",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:59:18.534798Z",
+        "trace_id": "trace:f3e9f8f7b39c4f3ab4a3e05aac3d9da8",
+        "workflow_id": null
+      }
+    ]
+  },
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTED",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "principalId": 45,
+  "principalLabel": "stage21-normal",
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": "report:4623",
+  "runId": 4623,
+  "semanticAdjudication": null,
+  "setupStatus": "SUCCESS",
+  "status": "SUCCESS",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": "tool_exact_set_match",
+        "metricStatus": "VALUE",
+        "name": "tool_exact_set_match",
+        "reason": "tool_exact_set_match observed 0, expected 1",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "metric": "parameter_accuracy",
+        "metricStatus": "NOT_APPLICABLE",
+        "name": "parameter_accuracy",
+        "reason": "required condition parameter_accuracy is not applicable in the result",
+        "required": true,
+        "status": "UNKNOWN"
+      },
+      {
+        "metric": "evidence_hit",
+        "metricStatus": "VALUE",
+        "name": "evidence_hit",
+        "reason": "evidence_hit observed 0.0, expected 1",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "metric": "diagnosis_accuracy",
+        "metricStatus": "VALUE",
+        "name": "diagnosis_accuracy",
+        "reason": "diagnosis_accuracy observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      }
+    ],
+    "failCount": 2,
+    "notApplicableCount": 0,
+    "passCount": 1,
+    "status": "FAIL",
+    "unknownCount": 1
+  },
+  "taskType": "FAILURE_DIAGNOSIS",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:f3e9f8f7b39c4f3ab4a3e05aac3d9da8"
+}

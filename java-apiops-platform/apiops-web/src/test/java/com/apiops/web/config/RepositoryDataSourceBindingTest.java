@@ -14,6 +14,8 @@ import com.apiops.runner.application.AsyncExecutionApplicationService;
 import com.apiops.runner.application.RunExecutionService;
 import com.apiops.runner.persistence.ExecutionFactRepository;
 import com.apiops.runner.persistence.JdbcExecutionFactRepository;
+import com.apiops.tool.gateway.audit.JdbcToolAuditRepository;
+import com.apiops.tool.gateway.audit.ToolAuditRepository;
 import com.apiops.web.project.repository.JdbcProjectRepository;
 import com.apiops.web.project.repository.ProjectRepository;
 import org.junit.jupiter.api.Test;
@@ -37,6 +39,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
         "apiops.datasource.openapi.username=root",
         "apiops.datasource.runner.url=jdbc:mysql://localhost:3306/apiops_runner",
         "apiops.datasource.runner.username=root",
+        "apiops.datasource.tool-gateway.url=jdbc:mysql://localhost:3306/apiops_tool_gateway",
+        "apiops.datasource.tool-gateway.username=root",
         "apiops.datasource.rag.url=jdbc:mysql://localhost:3306/apiops_rag",
         "apiops.datasource.rag.username=root"
 })
@@ -54,6 +58,10 @@ class RepositoryDataSourceBindingTest {
     @Autowired
     @Qualifier("runnerDataSource")
     private DataSource runnerDataSource;
+
+    @Autowired
+    @Qualifier("toolGatewayDataSource")
+    private DataSource toolGatewayDataSource;
 
     @Autowired
     @Qualifier("ragDataSource")
@@ -76,6 +84,9 @@ class RepositoryDataSourceBindingTest {
 
     @Autowired
     private ExecutionFactRepository executionFactRepository;
+
+    @Autowired
+    private ToolAuditRepository toolAuditRepository;
 
     @Autowired
     private DocumentRepository documentRepository;
@@ -112,6 +123,8 @@ class RepositoryDataSourceBindingTest {
         assertSame(runnerDataSource, repositoryDataSource(
                 assertInstanceOf(JdbcExecutionFactRepository.class,
                         executionFactRepository)));
+        assertSame(toolGatewayDataSource, repositoryDataSource(
+                assertInstanceOf(JdbcToolAuditRepository.class, toolAuditRepository)));
         assertSame(ragDataSource, repositoryDataSource(
                 assertInstanceOf(JdbcDocumentRepository.class, documentRepository)));
         assertNotNull(runExecutionService);

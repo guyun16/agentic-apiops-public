@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_failure_insufficient_missing",
+  "taskType": "FAILURE_DIAGNOSIS",
+  "instruction": "Decide that the available report is insufficient for a diagnosis and state the missing evidence instead of guessing a root cause.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 42
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "testReport",
+        "ref": "java://test-report/project-42/stage21-initial/insufficient-missing"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "diagnosisContext",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/diagnosis-insufficient-missing.json"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search",
+    "redis.read"
+  ],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "tool_exact_set_match",
+    "parameter_accuracy",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_failure_insufficient_missing",
+    "version": "v2"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "tool_exact_set_match",
+      "parameter_accuracy",
+      "exact_match"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "missing evidence for run 702"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

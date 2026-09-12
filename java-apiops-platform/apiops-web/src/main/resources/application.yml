@@ -71,6 +71,10 @@ apiops:
         collection: ${APIOPS_RAG_QDRANT_COLLECTION:apiops_rag_chunks_v1}
         timeout: ${APIOPS_RAG_QDRANT_TIMEOUT:10s}
         api-key: ${APIOPS_RAG_QDRANT_API_KEY:}
+  tool:
+    gateway:
+      # Must stay below Python JAVA_APIOPS_TIMEOUT_SECONDS (5s by default).
+      execution-timeout: ${APIOPS_TOOL_GATEWAY_EXECUTION_TIMEOUT:4s}
 
 management:
   defaults:

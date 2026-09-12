@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_rag_irrelevant_distractor",
+  "taskType": "RAG_EVIDENCE_RETRIEVAL",
+  "instruction": "Retrieve the orders constraint evidence while ignoring an irrelevant product-catalog distractor.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "testReport",
+        "ref": "java://test-report/project-41/stage21-initial/rag-irrelevant-distractor"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "retrievalContext",
+        "ref": "examples/openapi-metadata-valid.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "benchmarkEvidence",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/evidence-catalog.json"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search"
+  ],
+  "forbiddenActions": [
+    "distractor_as_evidence",
+    "sql.write",
+    "redis.delete"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "parameter_accuracy",
+    "evidence_hit"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_rag_irrelevant_distractor",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "parameter_accuracy",
+      "evidence_hit"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "orders constraint precise"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

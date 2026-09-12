@@ -1,0 +1,41 @@
+{
+  "fixtureId": "stage21-static-evidence-v1",
+  "fixtureType": "STATIC_BENCHMARK_FIXTURE",
+  "provenance": "Checked-in Stage 21 deterministic evidence world. These IDs are benchmark evidence identities, not Java runId, reportId, toolCallId, or ragQueryId values.",
+  "setup": "Load the immutable JSON catalog before evaluating a task that references benchmark evidence.",
+  "reset": "Discard the in-memory catalog and reload this file for every task; no task may mutate or inherit evidence state.",
+  "evidence": [
+    {
+      "evidenceId": "rag:orders-constraint-001",
+      "kind": "RAG_CHUNK",
+      "projectIds": [41, 42],
+      "documentId": "orders-constraints",
+      "chunkId": "orders-constraint-001",
+      "content": "A duplicate key while creating an order is explained by the orders unique constraint."
+    },
+    {
+      "evidenceId": "rag:orders-unique-index",
+      "kind": "RAG_CHUNK",
+      "projectIds": [41, 42],
+      "documentId": "orders-runbook",
+      "chunkId": "orders-unique-index",
+      "content": "The orders unique index rejects a duplicate order key; use the report evidence before assigning the database constraint diagnosis."
+    },
+    {
+      "evidenceId": "rag:orders-unique-index-summary",
+      "kind": "RAG_CHUNK",
+      "projectIds": [41, 42],
+      "documentId": "orders-runbook",
+      "chunkId": "orders-unique-index-summary",
+      "content": "Summary: orders uniqueness is relevant, but this abbreviated chunk is not the exact unique-index evidence."
+    },
+    {
+      "evidenceId": "rag:product-catalog-999",
+      "kind": "RAG_CHUNK",
+      "projectIds": [41, 42],
+      "documentId": "product-catalog",
+      "chunkId": "product-catalog-999",
+      "content": "Product catalog metadata is unrelated to the create-order unique-constraint failure."
+    }
+  ]
+}

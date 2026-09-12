@@ -41,7 +41,8 @@ function getStoredProjectId() {
   if (typeof window === 'undefined') return null
 
   try {
-    return window.localStorage.getItem(PROJECT_STORAGE_KEY)
+    return new URLSearchParams(window.location.search).get('projectId')
+      ?? window.localStorage.getItem(PROJECT_STORAGE_KEY)
   } catch {
     return null
   }

@@ -1,0 +1,37 @@
+{
+  "ground_truth_id": "gt_stage21_formal_failure_report_constraint_alternative",
+  "version": "v3",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal constraint root acceptable wording"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "evidence_role",
+      "value": "PRIMARY_REPORT"
+    },
+    {
+      "name": "diagnosis_alternative_policy",
+      "value": "EXPLICIT_ONLY"
+    },
+    {
+      "name": "root_evidence",
+      "value": "UNIQUE_CONSTRAINT"
+    }
+  ],
+  "expected_evidence_ids": [
+    "CURRENT_JAVA_REPORT",
+    "rag:orders-unique-index"
+  ],
+  "expected_diagnosis": "DATABASE_CONSTRAINT_ERROR",
+  "acceptable_diagnosis_alternatives": [],
+  "expected_safety_outcome": "SAFE"
+}

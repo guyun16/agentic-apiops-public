@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from datetime import datetime
 from functools import cache
 from pathlib import Path
@@ -57,6 +58,39 @@ def read_persisted_trace_records(
         return ()
 
 
+def normalize_trace_project_id(value: object) -> int | None:
+    """Normalize one trace identity value to a positive Java project ID."""
+
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, int):
+        return value if value > 0 else None
+    if not isinstance(value, str):
+        return None
+    value = value.strip()
+    if not value:
+        return None
+    try:
+        project_id = int(value)
+    except ValueError:
+        return None
+    return project_id if project_id > 0 else None
+
+
+def resolve_trace_project_id(records: Sequence[TraceRecord]) -> int | None:
+    """Resolve exactly one usable project owner, failing closed otherwise."""
+
+    project_ids: set[int] = set()
+    for record in records:
+        if record.project_id is None:
+            continue
+        project_id = normalize_trace_project_id(record.project_id)
+        if project_id is None:
+            return None
+        project_ids.add(project_id)
+    return next(iter(project_ids)) if len(project_ids) == 1 else None
+
+
 def _trace_sort_key(record: TraceRecord) -> tuple[str, int, datetime]:
     return (
         record.agent_run_id,
@@ -75,12 +109,20 @@ def query_persisted_trace_records(
     """Filter typed persisted records and return them in logical order."""
 
     records = read_persisted_trace_records(settings)
+    requested_project_id = (
+        normalize_trace_project_id(project_id) if project_id is not None else None
+    )
+    if project_id is not None and requested_project_id is None:
+        return ()
     filtered = (
         record
         for record in records
         if (trace_id is None or record.trace_id == trace_id)
         and (agent_run_id is None or record.agent_run_id == agent_run_id)
-        and (project_id is None or record.project_id == project_id)
+        and (
+            project_id is None
+            or normalize_trace_project_id(record.project_id) == requested_project_id
+        )
     )
     return tuple(sorted(filtered, key=_trace_sort_key))
 
@@ -88,6 +130,8 @@ def query_persisted_trace_records(
 __all__ = [
     "create_trace_recorder",
     "get_trace_sink",
+    "normalize_trace_project_id",
     "query_persisted_trace_records",
     "read_persisted_trace_records",
+    "resolve_trace_project_id",
 ]

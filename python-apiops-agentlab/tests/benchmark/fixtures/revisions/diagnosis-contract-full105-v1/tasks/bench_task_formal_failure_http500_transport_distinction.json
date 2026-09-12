@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_formal_failure_http500_transport_distinction",
+  "taskType": "FAILURE_DIAGNOSIS",
+  "instruction": "Decide whether this report is an HTTP 500 system response or a transport failure; use the response status as the boundary.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "authorityFixture",
+        "ref": "java://runner-testcase-dsl/stage21/formal/http500-transport-distinction.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "taskFixture",
+        "ref": "examples/diagnosis-report-valid.json"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "taskFocus",
+        "value": "HTTP 500 versus transport failure"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search",
+    "redis.read"
+  ],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "tool_exact_set_match",
+    "parameter_accuracy",
+    "evidence_hit",
+    "diagnosis_accuracy"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_formal_failure_http500_transport_distinction",
+    "version": "v2"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "tool_exact_set_match",
+      "parameter_accuracy",
+      "evidence_hit",
+      "diagnosis_accuracy"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "formal response snapshot versus transport"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

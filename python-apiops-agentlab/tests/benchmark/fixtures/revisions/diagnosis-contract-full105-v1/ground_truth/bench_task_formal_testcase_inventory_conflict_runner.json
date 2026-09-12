@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_formal_testcase_inventory_conflict_runner",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "DOCUMENTED_BUSINESS_ERROR"
+    },
+    {
+      "name": "business_error",
+      "value": "INVENTORY_NOT_ENOUGH"
+    },
+    {
+      "name": "expected_http_status",
+      "value": 409
+    },
+    {
+      "name": "java_runner_business_outcome",
+      "value": "ORDER_BUSINESS_CONFLICT"
+    }
+  ]
+}

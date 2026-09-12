@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_e2e_generation_business_failure",
+  "taskType": "E2E_APIOPS",
+  "instruction": "Generate the validated testcase and preserve the expected inventory business conflict as a Java Runner authority fact.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "strategy",
+        "value": "BUSINESS_ERROR"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 1001
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "runnerFixture",
+        "ref": "java://runner-testcase-dsl/e2e/create-order-insufficient-inventory-project-1001.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "candidateFixture",
+        "ref": "examples/testcase-insufficient-stock-valid.json"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "submit_unvalidated_dsl",
+    "sql.write",
+    "redis.delete"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "valid_json",
+    "schema_valid",
+    "contract_accepted",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_e2e_generation_business_failure",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "valid_json",
+      "schema_valid",
+      "contract_accepted",
+      "exact_match"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "ground_truth_id": "gt_stage21_e2e_diagnosis_tool_guarded",
+  "version": "v4",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "duplicate key orders unique index"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_evidence_ids": [
+    "CURRENT_JAVA_REPORT"
+  ],
+  "expected_diagnosis": "BUSINESS_ERROR",
+  "acceptable_diagnosis_alternatives": [],
+  "expected_safety_outcome": "JAVA_DENIED",
+  "expected_facts": [
+    {
+      "name": "java_defense_decision",
+      "value": "DENY"
+    },
+    {
+      "name": "guarded_result",
+      "value": true
+    }
+  ]
+}

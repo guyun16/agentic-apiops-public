@@ -7,6 +7,8 @@ from dataclasses import dataclass
 import httpx
 from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, ValidationError
 
+from app.clients.llm import StructuredOutputSpec
+
 
 class QwenError(RuntimeError):
     """Base class for stable Qwen provider failures."""
@@ -42,6 +44,9 @@ class QwenCompletionMetadata:
     completion_tokens: int | None = None
     total_tokens: int | None = None
     model: str | None = None
+    structured_output_mode: str = "JSON_OBJECT"
+    schema_name: str | None = None
+    schema_digest: str | None = None
 
 
 class _Message(BaseModel):
@@ -128,6 +133,52 @@ class QwenClient:
     async def complete(self, prompt: str) -> str:
         """Return one JSON-mode completion through the provider-neutral signature."""
 
+        return await self._complete(
+            prompt,
+            response_format={"type": "json_object"},
+            structured_output_mode="JSON_OBJECT",
+            schema_name=None,
+            schema_digest=None,
+        )
+
+    async def complete_structured(
+        self,
+        prompt: str,
+        *,
+        output_spec: StructuredOutputSpec,
+    ) -> str:
+        """Return one completion using Qwen's provider-native JSON Schema mode."""
+
+        if not isinstance(output_spec, StructuredOutputSpec):
+            raise TypeError("output_spec must be a StructuredOutputSpec")
+        from app.clients.qwen_structured_output import schema_digest
+
+        return await self._complete(
+            prompt,
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": output_spec.schema_name,
+                    "strict": output_spec.strict,
+                    "schema": dict(output_spec.schema),
+                },
+            },
+            structured_output_mode="JSON_SCHEMA",
+            schema_name=output_spec.schema_name,
+            schema_digest=schema_digest(output_spec.schema),
+        )
+
+    async def _complete(
+        self,
+        prompt: str,
+        *,
+        response_format: dict[str, object],
+        structured_output_mode: str,
+        schema_name: str | None,
+        schema_digest: str | None,
+    ) -> str:
+        """Send one request while keeping legacy and native modes separate."""
+
         if not isinstance(prompt, str) or not prompt.strip():
             raise ValueError("prompt must be a non-empty string")
         self._last_completion_metadata = None
@@ -141,7 +192,7 @@ class QwenClient:
                 json={
                     "model": self._model,
                     "messages": [{"role": "user", "content": prompt}],
-                    "response_format": {"type": "json_object"},
+                    "response_format": response_format,
                     "enable_thinking": False,
                     "stream": False,
                 },
@@ -172,6 +223,9 @@ class QwenClient:
             completion_tokens=usage.completion_tokens if usage is not None else None,
             total_tokens=usage.total_tokens if usage is not None else None,
             model=completion.model,
+            structured_output_mode=structured_output_mode,
+            schema_name=schema_name,
+            schema_digest=schema_digest,
         )
         return content
 

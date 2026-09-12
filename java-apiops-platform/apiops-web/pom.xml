@@ -118,6 +118,10 @@
                 <configuration>
                     <excludes>
                         <exclude>**/Stage9RealE2EAcceptanceTest.java</exclude>
+                        <exclude>**/Stage21RemainingRagRuntimeRecipeAcceptanceTest.java</exclude>
+                        <exclude>**/Stage21StandaloneAuthPrerequisiteSetupTest.java</exclude>
+                        <exclude>**/Stage21RealModelFourE2ECrossProcessE2ETest.java</exclude>
+                        <exclude>**/Stage21RealModelRepresentativeCrossProcessE2ETest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -147,6 +151,56 @@
                         <configuration>
                             <includes>
                                 <include>**/Stage9RealE2EAcceptanceTest.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>stage21-live-acceptance</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <includes>
+                                <include>**/Stage21RemainingRagRuntimeRecipeAcceptanceTest.java</include>
+                                <include>**/Stage21StandaloneAuthPrerequisiteSetupTest.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>stage21-real-model</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <includes>
+                                <include>**/Stage21RealModelFourE2ECrossProcessE2ETest.java</include>
+                                <include>**/Stage21RealModelRepresentativeCrossProcessE2ETest.java</include>
                             </includes>
                         </configuration>
                     </plugin>

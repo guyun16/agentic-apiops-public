@@ -1,0 +1,1478 @@
+{
+  "manifestVersion": "0.2.0",
+  "datasetId": "stage21-apioops-bench-mini",
+  "datasetVersion": "v3",
+  "taskSchemaVersion": "0.2.0",
+  "tasks": [
+    {
+      "benchmarkTaskId": "bench_task_golden_e2e_apiops",
+      "taskFile": "tasks/bench_task_golden_e2e_apiops.json",
+      "groundTruthFile": "ground_truth/gt_stage21_e2e_apiops.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_e2e_apiops",
+        "version": "v3"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "RUNNER_FAILURE_DIAGNOSIS_EVIDENCE",
+      "difficultyRationale": "Combines validated generation, Java execution facts, evidence retrieval, diagnosis, and guardrails.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_golden_failure_diagnosis",
+      "taskFile": "tasks/bench_task_golden_failure_diagnosis.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_diagnosis.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_failure_diagnosis",
+        "version": "v3"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "EVIDENCE_SUPPORTED_ROOT",
+      "difficultyRationale": "Requires accepting a report- and retrieval-grounded root cause before accepting a diagnosis.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_golden_rag_evidence",
+      "taskFile": "tasks/bench_task_golden_rag_evidence.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_evidence.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_evidence",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "SINGLE_HIT",
+      "difficultyRationale": "One expected evidence identity with a direct retrieval rule and no distractor in the task contract.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_golden_testcase_happy",
+      "taskFile": "tasks/bench_task_golden_testcase_happy.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_happy.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_happy",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "HAPPY_PATH",
+      "difficultyRationale": "One direct metadata-to-DSL decision with no tool routing or boundary ambiguity.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_golden_tool_safety",
+      "taskFile": "tasks/bench_task_golden_tool_safety.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_safety.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_safety",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "CROSS_PROJECT",
+      "difficultyRationale": "Cross-project intent, exact tool arguments, and an external Java authorization decision interact.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_happy_create_order_runner",
+      "taskFile": "tasks/bench_task_testcase_happy_create_order_runner.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_happy_create_order_runner.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_happy_create_order_runner",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "HAPPY_PATH",
+      "difficultyRationale": "Direct happy-path generation plus a single Java Runner success fact.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_missing_required_api_id",
+      "taskFile": "tasks/bench_task_testcase_missing_required_api_id.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_missing_required_api_id.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_missing_required_api_id",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "MISSING_REQUIRED",
+      "difficultyRationale": "Single missing required field with a deterministic validator boundary.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_missing_required_schema",
+      "taskFile": "tasks/bench_task_testcase_missing_required_schema.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_missing_required_schema.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_missing_required_schema",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "medium",
+      "scenario": "MISSING_REQUIRED",
+      "difficultyRationale": "Held-out required-field case uses a different schema boundary and Java fixture.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_boundary_quantity_zero",
+      "taskFile": "tasks/bench_task_testcase_boundary_quantity_zero.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_boundary_quantity_zero.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_boundary_quantity_zero",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "medium",
+      "scenario": "BOUNDARY",
+      "difficultyRationale": "Combines metadata constraint interpretation with an invalid lower-bound value.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_boundary_inventory_limit",
+      "taskFile": "tasks/bench_task_testcase_boundary_inventory_limit.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_boundary_inventory_limit.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_boundary_inventory_limit",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "BOUNDARY",
+      "difficultyRationale": "Same-category review keeps this deterministic inventory boundary in DEV beside the related Runner business-outcome task; it requires one constraint interpretation.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_auth_missing_token",
+      "taskFile": "tasks/bench_task_testcase_auth_missing_token.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_auth_missing_token.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_auth_missing_token",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "AUTH_FAILURE",
+      "difficultyRationale": "Metadata-only authorization review requires preserving one document-level security declaration without inferring an operation-specific response status.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_business_inventory_python",
+      "taskFile": "tasks/bench_task_testcase_business_inventory_python.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_business_inventory_python.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_business_inventory_python",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "DOCUMENTED_BUSINESS_ERROR",
+      "difficultyRationale": "Uses the existing Python testcase fact for a documented inventory conflict.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_business_inventory_runner",
+      "taskFile": "tasks/bench_task_testcase_business_inventory_runner.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_business_inventory_runner.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_business_inventory_runner",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "DOCUMENTED_BUSINESS_ERROR",
+      "difficultyRationale": "Adds the Java Runner boundary and distinguishes business failure from transport failure.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_boundary_list_products_page_size",
+      "taskFile": "tasks/bench_task_testcase_boundary_list_products_page_size.json",
+      "groundTruthFile": "ground_truth/gt_stage21_testcase_boundary_list_products_page_size.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_boundary_list_products_page_size",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "BOUNDARY",
+      "difficultyRationale": "One direct pageSize minimum fact from the Java listProducts metadata; no distractor or multi-stage decision is required.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_assertion_mismatch",
+      "taskFile": "tasks/bench_task_failure_assertion_mismatch.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_assertion_mismatch.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_assertion_mismatch",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "ASSERTION_FAILURE",
+      "difficultyRationale": "Single runner assertion mismatch with one primary evidence identity.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_assertion_contract_mismatch",
+      "taskFile": "tasks/bench_task_failure_assertion_contract_mismatch.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_assertion_contract_mismatch.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_assertion_contract_mismatch",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "ASSERTION_FAILURE",
+      "difficultyRationale": "Requires distinguishing assertion evaluation from transport and validation boundaries.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_http_500",
+      "taskFile": "tasks/bench_task_failure_http_500.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_http_500.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_http_500",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "HTTP_BUSINESS_FAILURE",
+      "difficultyRationale": "One HTTP server-error fact with a direct separation from transport failure.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_business_inventory",
+      "taskFile": "tasks/bench_task_failure_business_inventory.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_business_inventory.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_business_inventory",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "HTTP_BUSINESS_FAILURE",
+      "difficultyRationale": "Combines runner report, business conflict, and evidence-grounded diagnosis.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_timeout",
+      "taskFile": "tasks/bench_task_failure_timeout.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_timeout.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_timeout",
+        "version": "v2"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "TIMEOUT_EXECUTION",
+      "difficultyRationale": "Held-out execution failure requires using the Java timeout authority without inventing a root cause.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_evidence_root_report",
+      "taskFile": "tasks/bench_task_failure_evidence_root_report.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_evidence_root_report.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_failure_evidence_root_report",
+        "version": "v3"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "EVIDENCE_SUPPORTED_ROOT",
+      "difficultyRationale": "One report identity anchors a known root cause.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_transport_connect",
+      "taskFile": "tasks/bench_task_failure_transport_connect.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_transport_connect.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_transport_connect",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "TRANSPORT_FAILURE_DISCRIMINATION",
+      "difficultyRationale": "One decisive Java Runner failure fact must be distinguished from an HTTP response and does not require multi-stage evidence reconciliation.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_insufficient_missing",
+      "taskFile": "tasks/bench_task_failure_insufficient_missing.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_insufficient_missing.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_insufficient_missing",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "Correct outcome is insufficient evidence with an explicitly missing response-body fact.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_insufficient_conflicting",
+      "taskFile": "tasks/bench_task_failure_insufficient_conflicting.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_insufficient_conflicting.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_insufficient_conflicting",
+        "version": "v2"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "Held-out case contains unresolved competing explanations and must not force a diagnosis.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_allowed_rag_read",
+      "taskFile": "tasks/bench_task_tool_allowed_rag_read.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_allowed_rag_read.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_allowed_rag_read",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "ALLOWED_TOOL",
+      "difficultyRationale": "One allowed tool, one exact argument policy, and no competing authorization decision.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_forbidden_unknown",
+      "taskFile": "tasks/bench_task_tool_forbidden_unknown.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_forbidden_unknown.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_forbidden_unknown",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "FORBIDDEN_UNKNOWN_TOOL",
+      "difficultyRationale": "Requires rejecting an unknown tool without substituting an allowed path.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_bad_arguments",
+      "taskFile": "tasks/bench_task_tool_bad_arguments.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_bad_arguments.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_bad_arguments",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "BAD_ARGUMENTS",
+      "difficultyRationale": "Exact argument comparison is the single key decision.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_approval_required",
+      "taskFile": "tasks/bench_task_tool_approval_required.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_approval_required.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_approval_required",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "APPROVAL_REQUIRED",
+      "difficultyRationale": "Held-out human approval gate requires no-call behavior and explicit bypass prevention.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_human_reject",
+      "taskFile": "tasks/bench_task_tool_human_reject.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_human_reject.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_human_reject",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "HUMAN_REJECT",
+      "difficultyRationale": "Held-out rejection requires honoring the human decision and preventing retries.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_java_deny",
+      "taskFile": "tasks/bench_task_tool_java_deny.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_java_deny.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_java_deny",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "JAVA_DENY",
+      "difficultyRationale": "Agent intent, gateway call, and Java DENY authority must remain separate.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_prompt_injection_result",
+      "taskFile": "tasks/bench_task_tool_prompt_injection_result.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_prompt_injection_result.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_prompt_injection_result",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "PROMPT_INJECTION_RESULT",
+      "difficultyRationale": "Retrieved-content instruction rejection is a safety decision, not a tool success.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_tool_no_bypass",
+      "taskFile": "tasks/bench_task_tool_no_bypass.json",
+      "groundTruthFile": "ground_truth/gt_stage21_tool_no_bypass.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_tool_no_bypass",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "NO_BYPASS",
+      "difficultyRationale": "Multiple forbidden alternate paths must remain blocked while Java gateway remains authoritative.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_multi_hit",
+      "taskFile": "tasks/bench_task_rag_multi_hit.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_multi_hit.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_rag_multi_hit",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "MULTI_HIT",
+      "difficultyRationale": "Two expected evidence identities must both be retrieved.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_zero_hit",
+      "taskFile": "tasks/bench_task_rag_zero_hit.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_zero_hit.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_zero_hit",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "ZERO_HIT",
+      "difficultyRationale": "Zero-hit is explicit, but current Stage 19 EVIDENCE_HIT does not encode an empty expected set.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_wrong_project",
+      "taskFile": "tasks/bench_task_rag_wrong_project.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_wrong_project.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_wrong_project",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "WRONG_PROJECT",
+      "difficultyRationale": "Held-out project isolation requires no cross-project evidence and a Java denial fact.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_irrelevant_distractor",
+      "taskFile": "tasks/bench_task_rag_irrelevant_distractor.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_irrelevant_distractor.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_irrelevant_distractor",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "IRRELEVANT_DISTRACTOR",
+      "difficultyRationale": "Relevant evidence must be selected while an explicit distractor is ignored.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_citation_correctness",
+      "taskFile": "tasks/bench_task_rag_citation_correctness.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_citation_correctness.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_rag_citation_correctness",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "CITATION_CORRECTNESS",
+      "difficultyRationale": "One exact citation identity is required; diagnosis labels are not evidence IDs.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_near_match",
+      "taskFile": "tasks/bench_task_rag_near_match.json",
+      "groundTruthFile": "ground_truth/gt_stage21_rag_near_match.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_near_match",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "NEAR_MATCH_AMBIGUOUS",
+      "difficultyRationale": "Held-out exact-vs-near-match routing includes a distinct retrieval fixture identity.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_e2e_generation_runner_success",
+      "taskFile": "tasks/bench_task_e2e_generation_runner_success.json",
+      "groundTruthFile": "ground_truth/gt_stage21_e2e_generation_runner_success.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_e2e_generation_runner_success",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "medium",
+      "scenario": "GENERATION_RUNNER_SUCCESS",
+      "difficultyRationale": "Held-out path combines generation, contract acceptance, and Java Runner success.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_e2e_generation_business_failure",
+      "taskFile": "tasks/bench_task_e2e_generation_business_failure.json",
+      "groundTruthFile": "ground_truth/gt_stage21_e2e_generation_business_failure.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_e2e_generation_business_failure",
+        "version": "v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "GENERATION_RUNNER_BUSINESS_FAILURE",
+      "difficultyRationale": "Combines generation with an expected business conflict while Runner execution remains successful.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_e2e_diagnosis_tool_guarded",
+      "taskFile": "tasks/bench_task_e2e_diagnosis_tool_guarded.json",
+      "groundTruthFile": "ground_truth/gt_stage21_e2e_diagnosis_tool_guarded.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_e2e_diagnosis_tool_guarded",
+        "version": "v4"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "DIAGNOSIS_TOOL_GUARDED_RESULT",
+      "difficultyRationale": "Combines report-bounded diagnosis, an auditable denied retrieval attempt, and Java guarded-result authority without treating denied data as evidence.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_e2e_generation_diagnosis_guarded",
+      "taskFile": "formal/tasks/bench_task_formal_e2e_generation_diagnosis_guarded.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_e2e_generation_diagnosis_guarded.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_e2e_generation_diagnosis_guarded",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "generation to diagnosis with guarded evidence",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=generation to diagnosis with guarded evidence.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_assertion_contract",
+      "taskFile": "formal/tasks/bench_task_formal_failure_assertion_contract.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_assertion_contract.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_assertion_contract",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "assertion contract evaluation error",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=assertion contract evaluation error.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_assertion_evidence_root",
+      "taskFile": "formal/tasks/bench_task_formal_failure_assertion_evidence_root.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_assertion_evidence_root.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_assertion_evidence_root",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "assertion root with report evidence",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=assertion root with report evidence.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_assertion_json_path",
+      "taskFile": "formal/tasks/bench_task_formal_failure_assertion_json_path.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_assertion_json_path.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_assertion_json_path",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "JSON path assertion mismatch",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=JSON path assertion mismatch.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_assertion_status",
+      "taskFile": "formal/tasks/bench_task_formal_failure_assertion_status.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_assertion_status.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_assertion_status",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "status assertion mismatch",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=status assertion mismatch.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_business_acceptable_alt",
+      "taskFile": "formal/tasks/bench_task_formal_failure_business_acceptable_alt.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_business_acceptable_alt.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_business_acceptable_alt",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "business failure acceptable diagnosis",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=business failure acceptable diagnosis.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_business_report_authority",
+      "taskFile": "formal/tasks/bench_task_formal_failure_business_report_authority.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_business_report_authority.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_business_report_authority",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "business report authority",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=business report authority.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_http500_diagnosis_boundary",
+      "taskFile": "formal/tasks/bench_task_formal_failure_http500_diagnosis_boundary.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_http500_diagnosis_boundary.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_http500_diagnosis_boundary",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "diagnosis boundary after HTTP response",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=diagnosis boundary after HTTP response.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_http500_payload",
+      "taskFile": "formal/tasks/bench_task_formal_failure_http500_payload.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_http500_payload.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_http500_payload",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "HTTP 500 payload",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=HTTP 500 payload.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_http500_transport_distinction",
+      "taskFile": "formal/tasks/bench_task_formal_failure_http500_transport_distinction.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_http500_transport_distinction.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_http500_transport_distinction",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "HTTP 500 versus transport failure",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=HTTP 500 versus transport failure.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_conflicting",
+      "taskFile": "formal/tasks/bench_task_formal_failure_insufficient_conflicting.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_insufficient_conflicting.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_conflicting",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=conflicting plausible roots.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_heldout_conflict",
+      "taskFile": "formal/tasks/bench_task_formal_failure_insufficient_heldout_conflict.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_insufficient_heldout_conflict.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_heldout_conflict",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=held-out conflicting evidence case.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_heldout_missing",
+      "taskFile": "formal/tasks/bench_task_formal_failure_insufficient_heldout_missing.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_insufficient_heldout_missing.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_heldout_missing",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=held-out missing evidence case.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_missing_auth",
+      "taskFile": "formal/tasks/bench_task_formal_failure_insufficient_missing_auth.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_insufficient_missing_auth.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_missing_auth",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=missing authentication evidence.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_missing_headers",
+      "taskFile": "formal/tasks/bench_task_formal_failure_insufficient_missing_headers.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_insufficient_missing_headers.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_missing_headers",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=missing response evidence.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_partial_facts",
+      "taskFile": "formal/tasks/bench_task_formal_failure_insufficient_partial_facts.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_insufficient_partial_facts.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_partial_facts",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=partial facts without root.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_inventory_business",
+      "taskFile": "formal/tasks/bench_task_formal_failure_inventory_business.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_inventory_business.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_inventory_business",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "inventory business response",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=inventory business response.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_inventory_duplicate_key",
+      "taskFile": "formal/tasks/bench_task_formal_failure_inventory_duplicate_key.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_inventory_duplicate_key.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_formal_failure_inventory_duplicate_key",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "duplicate order key business failure",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=duplicate order key business failure.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_multi_evidence_report",
+      "taskFile": "formal/tasks/bench_task_formal_failure_multi_evidence_report.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_multi_evidence_report.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_formal_failure_multi_evidence_report",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "report plus unique index evidence",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=report plus unique index evidence.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_report_constraint_alternative",
+      "taskFile": "formal/tasks/bench_task_formal_failure_report_constraint_alternative.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_report_constraint_alternative.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_formal_failure_report_constraint_alternative",
+        "version": "v3"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "constraint root with acceptable wording",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=constraint root with acceptable wording.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_report_constraint_primary",
+      "taskFile": "formal/tasks/bench_task_formal_failure_report_constraint_primary.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_report_constraint_primary.json",
+      "groundTruthRef": {
+      "groundTruthId": "gt_stage21_formal_failure_report_constraint_primary",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "primary report constraint root",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=primary report constraint root.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_timeout_deadline",
+      "taskFile": "formal/tasks/bench_task_formal_failure_timeout_deadline.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_timeout_deadline.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_timeout_deadline",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "Runner timeout deadline",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=Runner timeout deadline.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_timeout_partial_report",
+      "taskFile": "formal/tasks/bench_task_formal_failure_timeout_partial_report.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_timeout_partial_report.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_timeout_partial_report",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "timeout without complete report",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=timeout without complete report.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_transport_connect",
+      "taskFile": "formal/tasks/bench_task_formal_failure_transport_connect.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_transport_connect.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_transport_connect",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "connection failure before HTTP",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=connection failure before HTTP.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_transport_dns",
+      "taskFile": "formal/tasks/bench_task_formal_failure_transport_dns.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_failure_transport_dns.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_transport_dns",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "unreachable target",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=unreachable target.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_rag_citation_report",
+      "taskFile": "formal/tasks/bench_task_formal_rag_citation_report.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_rag_citation_report.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_rag_citation_report",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "report citation identity",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=report citation identity.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_rag_distractor_filter",
+      "taskFile": "formal/tasks/bench_task_formal_rag_distractor_filter.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_rag_distractor_filter.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_rag_distractor_filter",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "relevant hit over catalog distractor",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=relevant hit over catalog distractor.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_rag_multi_constraint_summary",
+      "taskFile": "formal/tasks/bench_task_formal_rag_multi_constraint_summary.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_rag_multi_constraint_summary.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_rag_multi_constraint_summary",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "two independent constraint identities",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=two independent constraint identities.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_rag_multi_report_index",
+      "taskFile": "formal/tasks/bench_task_formal_rag_multi_report_index.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_rag_multi_report_index.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_rag_multi_report_index",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "report plus index evidence",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=report plus index evidence.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_rag_near_match_exact",
+      "taskFile": "formal/tasks/bench_task_formal_rag_near_match_exact.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_rag_near_match_exact.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_rag_near_match_exact",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "exact evidence over near match",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=exact evidence over near match.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_rag_single_constraint",
+      "taskFile": "formal/tasks/bench_task_formal_rag_single_constraint.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_rag_single_constraint.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_rag_single_constraint",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "single exact constraint evidence",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=single exact constraint evidence.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_rag_wrong_project_isolation",
+      "taskFile": "formal/tasks/bench_task_formal_rag_wrong_project_isolation.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_rag_wrong_project_isolation.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_rag_wrong_project_isolation",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "WRONG_PROJECT",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=wrong-project isolation.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_rag_zero_hit_authorized",
+      "taskFile": "formal/tasks/bench_task_formal_rag_zero_hit_authorized.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_rag_zero_hit_authorized.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_rag_zero_hit_authorized",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "ZERO_HIT",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=authorized zero-hit retrieval.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_auth_missing_token",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_auth_missing_token.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_auth_missing_token.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_auth_missing_token",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "document-level apiKeyAuth",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=document-level apiKeyAuth.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_auth_missing_token_post",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_auth_missing_token_post.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_auth_missing_token_post.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_auth_missing_token_post",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "POST create-order without token",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=POST create-order without token.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_boundary_inventory_zero",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_boundary_inventory_zero.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_boundary_inventory_zero.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_boundary_inventory_zero",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "inventory available quantity boundary",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=inventory available quantity boundary.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_business_inventory_expected",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_business_inventory_expected.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_business_inventory_expected.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_business_inventory_expected",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "inventory 409 response",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=inventory 409 response.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_create_order_quantity_one",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_create_order_quantity_one.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_create_order_quantity_one.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_create_order_quantity_one",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "create order quantity=1",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=create order quantity=1.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_extra_agent_field",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_extra_agent_field.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_extra_agent_field.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_extra_agent_field",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "extra top-level field",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=extra top-level field.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_get_orders_limit",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_get_orders_limit.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_get_orders_limit.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_get_orders_limit",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "GET /orders optional limit=10",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=GET /orders optional limit=10.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_happy_create_order_contract",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_happy_create_order_contract.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_happy_create_order_contract.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_happy_create_order_contract",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "create-order contract acceptance",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=create-order contract acceptance.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_happy_get_orders_metadata",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_happy_get_orders_metadata.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_happy_get_orders_metadata.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_happy_get_orders_metadata",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "GET /orders metadata strategy",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=GET /orders metadata strategy.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_invalid_http_method",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_invalid_http_method.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_invalid_http_method.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_invalid_http_method",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "unsupported HTTP method",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=unsupported HTTP method.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_invalid_quantity_zero",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_invalid_quantity_zero.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_invalid_quantity_zero.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_invalid_quantity_zero",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "quantity minimum violation",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=quantity minimum violation.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_inventory_conflict_metadata",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_inventory_conflict_metadata.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_inventory_conflict_metadata.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_inventory_conflict_metadata",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "Metadata inventory conflict",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=Metadata inventory conflict.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_inventory_conflict_runner",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_inventory_conflict_runner.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_inventory_conflict_runner.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_inventory_conflict_runner",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "Runner inventory conflict",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=Runner inventory conflict.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_list_products_page_size_one",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_list_products_page_size_one.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_list_products_page_size_one.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_list_products_page_size_one",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "listProducts pageSize minimum=1",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=listProducts pageSize minimum=1.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_missing_api_id_against_contract",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_missing_api_id_against_contract.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_missing_api_id_against_contract.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_missing_api_id_against_contract",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "required apiId",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=required apiId.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_missing_json_path_expected",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_missing_json_path_expected.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_missing_json_path_expected.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_missing_json_path_expected",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "JSON path assertion expected value",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=JSON path assertion expected value.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_missing_schema_version_against_contract",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_missing_schema_version_against_contract.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_missing_schema_version_against_contract.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_missing_schema_version_against_contract",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "required schemaVersion",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=required schemaVersion.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_missing_status_expected",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_missing_status_expected.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_missing_status_expected.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_missing_status_expected",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "status assertion expected value",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=status assertion expected value.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_project_id_type",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_project_id_type.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_project_id_type.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_project_id_type",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "projectId type boundary",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=projectId type boundary.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_unknown_assertion_type",
+      "taskFile": "formal/tasks/bench_task_formal_testcase_unknown_assertion_type.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_testcase_unknown_assertion_type.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_testcase_unknown_assertion_type",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "unknown assertion type",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=unknown assertion type.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_allowed_rag_subset",
+      "taskFile": "formal/tasks/bench_task_formal_tool_allowed_rag_subset.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_allowed_rag_subset.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_allowed_rag_subset",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "in-scope RAG read subset",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=in-scope RAG read subset.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_allowed_redis_exact",
+      "taskFile": "formal/tasks/bench_task_formal_tool_allowed_redis_exact.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_allowed_redis_exact.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_allowed_redis_exact",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "easy",
+      "scenario": "in-scope Redis read",
+      "difficultyRationale": "EASY: one primary authority fact, a direct rule, and little distraction; focus=in-scope Redis read.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_approval_redis",
+      "taskFile": "formal/tasks/bench_task_formal_tool_approval_redis.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_approval_redis.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_approval_redis",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "Redis approval gate",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=Redis approval gate.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_bad_arguments_query",
+      "taskFile": "formal/tasks/bench_task_formal_tool_bad_arguments_query.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_bad_arguments_query.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_bad_arguments_query",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "exact query argument",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=exact query argument.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_cross_project_request",
+      "taskFile": "formal/tasks/bench_task_formal_tool_cross_project_request.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_cross_project_request.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_cross_project_request",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "cross-project RAG intent",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=cross-project RAG intent.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_deny_no_alternate_path",
+      "taskFile": "formal/tasks/bench_task_formal_tool_deny_no_alternate_path.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_deny_no_alternate_path.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_deny_no_alternate_path",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "deny with no alternate path",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=deny with no alternate path.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_forbidden_filesystem",
+      "taskFile": "formal/tasks/bench_task_formal_tool_forbidden_filesystem.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_forbidden_filesystem.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_forbidden_filesystem",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "unknown filesystem tool",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=unknown filesystem tool.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_forbidden_shell",
+      "taskFile": "formal/tasks/bench_task_formal_tool_forbidden_shell.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_forbidden_shell.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_forbidden_shell",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "unknown shell tool",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=unknown shell tool.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_human_reject_rag",
+      "taskFile": "formal/tasks/bench_task_formal_tool_human_reject_rag.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_human_reject_rag.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_human_reject_rag",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "human rejection",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=human rejection.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_java_deny_project",
+      "taskFile": "formal/tasks/bench_task_formal_tool_java_deny_project.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_java_deny_project.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_java_deny_project",
+        "version": "v2"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "Java project denial",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=Java project denial.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_no_bypass_database",
+      "taskFile": "formal/tasks/bench_task_formal_tool_no_bypass_database.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_no_bypass_database.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_no_bypass_database",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "Java Gateway authority",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=Java Gateway authority.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_prompt_injection",
+      "taskFile": "formal/tasks/bench_task_formal_tool_prompt_injection.json",
+      "groundTruthFile": "formal/ground_truth/gt_stage21_tool_prompt_injection.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_tool_prompt_injection",
+        "version": "v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "prompt injection tool result",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=prompt injection tool result.",
+      "reviewStatus": "APPROVED"
+    }
+  ]
+}

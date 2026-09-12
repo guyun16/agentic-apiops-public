@@ -1,0 +1,17 @@
+{
+  "fixtureId": "stage21-diagnosis-transport-connect",
+  "fixtureType": "JAVA_SYMBOLIC_AUTHORITY_REFERENCE",
+  "setup": "Load the immutable stage8-connect-failure.json Runner resource and the diagnosis facts recorded by the Java Runner tests.",
+  "reset": "Reload the immutable resource; no service, database, Redis, vector store, or Agent checkpoint is retained between tasks.",
+  "authority": [
+    "java-apiops-platform/apiops-runner/src/test/java/com/apiops/runner/validation/Stage8DemoOrderHttpE2ETest.java#realConnectFailureProducesNoSnapshotOrAssertions",
+    "java-apiops-platform/apiops-runner/src/test/java/com/apiops/runner/execution/TestStepRunnerTest.java#connectFailureDoesNotInvokeAssertionEngine"
+  ],
+  "facts": {
+    "failureType": "CONNECT_ERROR",
+    "runnerStatus": "EXECUTION_FAILED",
+    "responseSnapshotPresent": false,
+    "assertionCount": 0,
+    "diagnosisBoundary": "TRANSPORT_NOT_HTTP"
+  }
+}

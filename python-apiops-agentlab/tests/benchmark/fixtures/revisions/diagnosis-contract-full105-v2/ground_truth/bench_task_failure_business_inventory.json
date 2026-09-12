@@ -1,0 +1,27 @@
+{
+  "ground_truth_id": "gt_stage21_failure_business_inventory",
+  "version": "v2",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "create order insufficient inventory"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_evidence_ids": [
+    "runner:inventory-conflict"
+  ],
+  "expected_diagnosis": "BUSINESS_ERROR",
+  "expected_safety_outcome": "SAFE",
+  "expected_facts": [
+    {
+      "name": "failure_type",
+      "value": "BUSINESS_ERROR"
+    }
+  ]
+}

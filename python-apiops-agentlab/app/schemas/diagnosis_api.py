@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr, model_validator
@@ -79,6 +80,10 @@ class DiagnosisContextSummary(_ApiModel):
     context_characters: StrictInt = Field(alias="contextCharacters", ge=0)
     model_calls: StrictInt = Field(alias="modelCalls", ge=0)
     tool_calls: StrictInt = Field(alias="toolCalls", ge=0)
+    unavailable_fields: tuple[StrictStr, ...] = Field(
+        default=(),
+        alias="unavailableFields",
+    )
 
 
 class DiagnosisApprovalScope(_ApiModel):
@@ -104,6 +109,36 @@ class DiagnosisApprovalRequest(_ApiModel):
 class DiagnosisFailure(_ApiModel):
     code: StrictStr = Field(min_length=1)
     message: StrictStr = Field(min_length=1)
+
+
+class DiagnosisRunSummary(_ApiModel):
+    """Durable Diagnosis history item projected from the SQLite run record."""
+
+    status: Literal[
+        "RUNNING",
+        "COMPLETED",
+        "APPROVAL_REQUIRED",
+        "FAILED",
+        "REJECTED",
+    ]
+    provider: StrictStr = Field(min_length=1)
+    model: StrictStr = Field(min_length=1)
+    project_id: StrictInt = Field(alias="projectId", ge=1)
+    run_id: StrictInt = Field(alias="runId", ge=1)
+    task_id: StrictInt = Field(alias="taskId", ge=1)
+    agent_run_id: StrictStr = Field(alias="agentRunId", min_length=1)
+    trace_id: StrictStr = Field(alias="traceId", min_length=1)
+    workflow_id: StrictStr = Field(alias="workflowId", min_length=1)
+    api_id: StrictStr | None = Field(default=None, alias="apiId", min_length=1)
+    report_id: StrictStr = Field(alias="reportId", min_length=1)
+    diagnosis_report_id: StrictStr | None = Field(
+        default=None,
+        alias="diagnosisReportId",
+        min_length=1,
+    )
+    summary: StrictStr | None = None
+    created_at: datetime = Field(alias="createdAt")
+    updated_at: datetime = Field(alias="updatedAt")
 
 
 class DiagnosisExecutionResponse(_ApiModel):
@@ -144,6 +179,7 @@ __all__ = [
     "DiagnosisFailure",
     "DiagnosisMemoryWriteRequest",
     "DiagnosisMemoryWriteResponse",
+    "DiagnosisRunSummary",
     "DiagnosisResumeRequest",
     "DiagnosisStartRequest",
 ]

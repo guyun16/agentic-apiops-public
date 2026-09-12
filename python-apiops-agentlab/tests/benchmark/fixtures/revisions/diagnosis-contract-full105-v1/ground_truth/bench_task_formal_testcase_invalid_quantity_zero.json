@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_formal_testcase_invalid_quantity_zero",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "BOUNDARY"
+    },
+    {
+      "name": "constraint",
+      "value": "quantity.minimum"
+    },
+    {
+      "name": "boundary_value",
+      "value": 0
+    },
+    {
+      "name": "expected_http_status",
+      "value": 400
+    }
+  ]
+}

@@ -1,4 +1,4 @@
--- Local-only bootstrap for the five logical MySQL schemas used by the Java Platform.
+-- Local-only bootstrap for the six logical MySQL schemas used by the Java Platform.
 -- The schema files remain owned by their modules; this file only selects the
 -- database before sourcing those existing repeatable scripts.
 
@@ -7,6 +7,8 @@ CREATE DATABASE IF NOT EXISTS apiops_auth
 CREATE DATABASE IF NOT EXISTS apiops_openapi
     CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 CREATE DATABASE IF NOT EXISTS apiops_runner
+    CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS apiops_tool_gateway
     CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 CREATE DATABASE IF NOT EXISTS apiops_rag
     CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
@@ -22,6 +24,9 @@ SOURCE /docker-entrypoint-initdb.d/schema/openapi-schema.sql
 
 USE apiops_runner;
 SOURCE /docker-entrypoint-initdb.d/schema/runner-schema.sql
+
+USE apiops_tool_gateway;
+SOURCE /docker-entrypoint-initdb.d/schema/tool-gateway-schema.sql
 
 USE apiops_rag;
 SOURCE /docker-entrypoint-initdb.d/schema/rag-schema.sql

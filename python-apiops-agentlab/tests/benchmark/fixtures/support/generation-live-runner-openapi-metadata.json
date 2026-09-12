@@ -1,0 +1,103 @@
+{
+  "apiId": "api-stage21-generation",
+  "apiDocId": "doc-stage21-generation",
+  "operationId": "createOrder",
+  "method": "POST",
+  "path": "/orders",
+  "summary": "Create an order",
+  "description": "Creates an order. HAPPY_PATH uses userId 1, productId 1, quantity 1 and returns 200 ORDER_SUCCESS. BUSINESS_ERROR uses productId 2 with quantity 999; product 2 has inventory 2 and the service returns 409 ORDER_BUSINESS_CONFLICT. Omit couponId.",
+  "tags": ["orders"],
+  "servers": [{"url": "http://127.0.0.1:8080"}],
+  "security": [],
+  "deprecated": false,
+  "parameters": [],
+  "requestSchemas": [
+    {
+      "required": true,
+      "mediaType": "application/json",
+      "schema": {
+        "type": "object",
+        "x-business-boundaries": [
+          {
+            "name": "inventory.available_quantity",
+            "requestPath": "items[].quantity",
+            "selector": {"path": "items[].productId", "value": 2},
+            "limit": 2,
+            "operator": "GT",
+            "statusCode": 409
+          }
+        ],
+        "required": ["userId", "items"],
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "description": "Existing demo user id.",
+            "example": 1
+          },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Distinct product lines.",
+            "items": {
+              "type": "object",
+              "required": ["productId", "quantity"],
+              "properties": {
+                "productId": {
+                  "type": "integer",
+                  "format": "int64",
+                  "minimum": 1,
+                  "description": "Product id 1 is stocked; product id 2 has inventory 2. Use product id 1 for HAPPY_PATH and product id 2 for BUSINESS_ERROR.",
+                  "example": 1
+                },
+                "quantity": {
+                  "type": "integer",
+                  "format": "int32",
+                  "minimum": 1,
+                  "description": "Use 1 for HAPPY_PATH and 999 for the documented BUSINESS_ERROR scenario.",
+                  "example": 1
+                }
+              }
+            }
+          },
+          "couponId": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "description": "Optional coupon template id; omit for this E2E."
+          }
+        }
+      }
+    }
+  ],
+  "responseSchemas": [
+    {
+      "statusCode": "200",
+      "description": "Order created.",
+      "mediaType": "application/json",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "success": {"type": "boolean"},
+          "code": {"type": "string", "enum": ["ORDER_SUCCESS"]},
+          "data": {"type": "object"}
+        }
+      }
+    },
+    {
+      "statusCode": "409",
+      "description": "Insufficient inventory returns ORDER_BUSINESS_CONFLICT.",
+      "mediaType": "application/json",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "success": {"type": "boolean"},
+          "code": {"type": "string", "enum": ["ORDER_BUSINESS_CONFLICT"]},
+          "data": {"type": "object"}
+        }
+      }
+    }
+  ],
+  "examples": []
+}

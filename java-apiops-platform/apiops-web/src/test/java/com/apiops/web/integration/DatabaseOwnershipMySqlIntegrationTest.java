@@ -36,8 +36,11 @@ class DatabaseOwnershipMySqlIntegrationTest {
                         Set.of("test_task", "test_run", "test_batch", "test_batch_run",
                                 "case_result", "step_result")),
                 new DatabaseSpec(
+                        "apiops_tool_gateway", "APIOPS_TOOL_GATEWAY_DB",
+                        Set.of("tool_audit")),
+                new DatabaseSpec(
                         "apiops_rag", "APIOPS_RAG_DB",
-                        Set.of("rag_document", "rag_document_chunk")),
+                        Set.of("rag_document", "rag_document_chunk", "rag_query_record")),
                 new DatabaseSpec(
                         "apiops_demo_order", "APIOPS_ORDER_DB",
                         Set.of(

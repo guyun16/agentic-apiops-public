@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_failure_business_inventory",
+  "taskType": "FAILURE_DIAGNOSIS",
+  "instruction": "Diagnose the expected insufficient-inventory business failure from the runner report and do not relabel it as a transport error.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 1001
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "testReport",
+        "ref": "java://runner-testcase-dsl/e2e/create-order-insufficient-inventory.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "diagnosisContext",
+        "ref": "examples/testcase-insufficient-stock-valid.json"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search",
+    "redis.read"
+  ],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "tool_exact_set_match",
+    "parameter_accuracy",
+    "evidence_hit",
+    "diagnosis_accuracy"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_failure_business_inventory",
+    "version": "v2"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "tool_exact_set_match",
+      "parameter_accuracy",
+      "evidence_hit",
+      "diagnosis_accuracy"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "create order insufficient inventory"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "benchmarkRunId": "evaluation_run:stage21-real-model-full-105-20260904T145654Z",
+  "failureCount": 2,
+  "items": [
+    {
+      "agentRunId": "agent_run:2a887bd59d61438dbd262438b0d4784c",
+      "artifactRef": "results/run-97539bc88f934d1bc45f3edd/task-7708dc43b2318e26dcf8a3b3.json",
+      "benchmarkTaskId": "bench_task_e2e_diagnosis_tool_guarded",
+      "caseId": "case:evaluation_run:stage21-real-model-full-105-20260904T145654Z:bench_task_e2e_diagnosis_tool_guarded",
+      "evaluationFailureMetrics": [],
+      "evaluationId": null,
+      "failureCategory": "AGENT_FAILURE",
+      "failureCode": "MODEL_OUTPUT_FAILURE",
+      "failureStage": "EXECUTION",
+      "ragQueryIds": [],
+      "reportId": "report:4437",
+      "runId": 4437,
+      "taskStatus": "FAILED",
+      "taskType": "E2E_APIOPS",
+      "toolCallIds": [
+        "0879b754-bacf-43d7-8c86-daee881f2129"
+      ],
+      "traceId": "trace:666c9772de3b4f9bb783d5f2353a9596"
+    },
+    {
+      "agentRunId": "agent_run:534d5f2a25b942f5836ccbf31f28015a",
+      "artifactRef": "results/run-97539bc88f934d1bc45f3edd/task-5b7582f193e0e51289183b43.json",
+      "benchmarkTaskId": "bench_task_formal_e2e_generation_diagnosis_guarded",
+      "caseId": "case:evaluation_run:stage21-real-model-full-105-20260904T145654Z:bench_task_formal_e2e_generation_diagnosis_guarded",
+      "evaluationFailureMetrics": [],
+      "evaluationId": null,
+      "failureCategory": "AGENT_FAILURE",
+      "failureCode": "MODEL_OUTPUT_FAILURE",
+      "failureStage": "EXECUTION",
+      "ragQueryIds": [],
+      "reportId": "report:4645",
+      "runId": 4645,
+      "taskStatus": "FAILED",
+      "taskType": "E2E_APIOPS",
+      "toolCallIds": [
+        "b5e218f0-3c5c-4140-82af-1849dce6462c"
+      ],
+      "traceId": "trace:6b32d26bf6f342d992533f26bd3f4e18"
+    }
+  ]
+}

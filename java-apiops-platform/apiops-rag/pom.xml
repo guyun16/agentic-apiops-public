@@ -71,6 +71,7 @@
                         <exclude>**/DocumentZhipuQdrantE2EIntegrationTest.java</exclude>
                         <exclude>**/QdrantVectorStoreServiceIntegrationTest.java</exclude>
                         <exclude>**/Stage10FinalContextPackE2EIntegrationTest.java</exclude>
+                        <exclude>**/Stage21RagCorpusV2SetupTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -100,6 +101,30 @@
                                 <include>**/DocumentZhipuQdrantE2EIntegrationTest.java</include>
                                 <include>**/QdrantVectorStoreServiceIntegrationTest.java</include>
                                 <include>**/Stage10FinalContextPackE2EIntegrationTest.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>stage21-rag-v2</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <includes>
+                                <include>**/Stage21RagCorpusV2SetupTest.java</include>
                             </includes>
                         </configuration>
                     </plugin>

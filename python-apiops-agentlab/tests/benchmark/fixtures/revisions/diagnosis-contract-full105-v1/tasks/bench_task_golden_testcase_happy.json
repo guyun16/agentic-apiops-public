@@ -1,0 +1,54 @@
+{
+    "schemaVersion": "0.2.0",
+    "benchmarkTaskId": "bench_task_golden_testcase_happy",
+    "taskType": "TESTCASE_GENERATION",
+    "instruction": "Generate a happy-path TestCase DSL for the orders API using the supplied metadata.",
+    "initialState": {
+        "entries": [
+            {
+                "kind": "LITERAL",
+                "key": "strategy",
+                "value": "HAPPY_PATH"
+            },
+            {
+                "kind": "LITERAL",
+                "key": "projectId",
+                "value": 41
+            },
+            {
+                "kind": "JAVA_RESOURCE",
+                "key": "apiMetadata",
+                "ref": "java://metadata/project-41/api-api-1"
+            },
+            {
+                "kind": "PYTHON_FIXTURE",
+                "key": "candidateFixture",
+                "ref": "examples/testcase-valid.json"
+            }
+        ]
+    },
+    "allowedTools": [],
+    "forbiddenActions": [
+        "submit_unvalidated_dsl",
+        "java.runner.write_without_stage16_acceptance"
+    ],
+    "expectedOutput": {},
+    "metrics": [
+        "valid_json",
+        "schema_valid",
+        "contract_accepted",
+        "exact_match"
+    ],
+    "groundTruthRef": {
+        "groundTruthId": "gt_stage21_testcase_happy",
+        "version": "v1"
+    },
+    "evaluationSpec": {
+        "selectedMetrics": [
+            "valid_json",
+            "schema_valid",
+            "contract_accepted",
+            "exact_match"
+        ]
+    }
+}

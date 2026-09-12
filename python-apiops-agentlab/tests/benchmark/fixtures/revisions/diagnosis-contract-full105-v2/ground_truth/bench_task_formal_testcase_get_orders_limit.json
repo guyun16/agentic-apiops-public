@@ -1,0 +1,28 @@
+{
+  "ground_truth_id": "gt_stage21_formal_testcase_get_orders_limit",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "HAPPY_PATH"
+    },
+    {
+      "name": "operation",
+      "value": "getOrders"
+    },
+    {
+      "name": "optional_parameter",
+      "value": "limit"
+    },
+    {
+      "name": "example_value",
+      "value": 10
+    },
+    {
+      "name": "metadata_authority",
+      "value": "JAVA_OPENAPI_BASELINE"
+    }
+  ]
+}

@@ -1,0 +1,665 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:8f5e420e5d0045b180f982026be8902c",
+  "authProfile": "NORMAL",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_rag_near_match",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260905T054023Z:bench_task_rag_near_match",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 486.213,
+  "errorSummary": null,
+  "evaluationId": "evaluation:62bed6022927810788d51356",
+  "evaluationResult": {
+    "agent_run_id": "agent_run:8f5e420e5d0045b180f982026be8902c",
+    "case_id": "case:evaluation_run:stage21-real-model-full-105-20260905T054023Z:bench_task_rag_near_match",
+    "evaluation_id": "evaluation:62bed6022927810788d51356",
+    "evaluator_version": "rule-evaluator-v1",
+    "ground_truth_id": "gt_stage21_rag_near_match",
+    "ground_truth_version": "v1",
+    "metrics": [
+      {
+        "details": [],
+        "metric": "valid_json",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "schema_valid",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "contract_accepted",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "exact_match",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [
+          "correct=rag.search",
+          "extra=-",
+          "missing=-",
+          "denominator_actual=1"
+        ],
+        "metric": "tool_precision",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1.0
+      },
+      {
+        "details": [
+          "correct=rag.search",
+          "extra=-",
+          "missing=-",
+          "denominator_expected=1"
+        ],
+        "metric": "tool_recall",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1.0
+      },
+      {
+        "details": [],
+        "metric": "tool_exact_set_match",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [
+          "rag.search:missing=-",
+          "rag.search:extra=topK",
+          "rag.search:mismatch=-",
+          "denominator_compared=1"
+        ],
+        "metric": "parameter_accuracy",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1.0
+      },
+      {
+        "details": [
+          "hit_count=1",
+          "denominator_expected_evidence=1",
+          "accepted_source_authority=used"
+        ],
+        "metric": "evidence_hit",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1.0
+      },
+      {
+        "details": [],
+        "metric": "diagnosis_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "safety_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "wall_clock_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "model_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "human_wait_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "active_execution_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "prompt_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "completion_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "total_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "cost",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      }
+    ],
+    "trace_id": "trace:a27550042d214b9f99f2d84b92d8df09"
+  },
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260905T054023Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": null,
+  "failureCode": null,
+  "failureStage": null,
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://rag/project-41/query/near-match-v1",
+    "examples/openapi-metadata-valid.json",
+    "python-apiops-agentlab/tests/benchmark/fixtures/support/evidence-catalog.json"
+  ],
+  "formalEvidence": {
+    "diagnosisOutcome": null,
+    "normalizedEvaluationFacts": {
+      "diagnosis": null,
+      "evidence_ids": [
+        "stage21-rag-v2/project-41/orders-constraint-index"
+      ],
+      "safety_outcome": "SAFE",
+      "structured_facts": [
+        {
+          "name": "runner_status",
+          "value": "ASSERTION_FAILED"
+        },
+        {
+          "name": "failure_type",
+          "value": "ASSERTION_MISMATCH"
+        },
+        {
+          "name": "assertion_count",
+          "value": 1
+        },
+        {
+          "name": "response_snapshot_present",
+          "value": true
+        },
+        {
+          "name": "response_status",
+          "value": 500
+        },
+        {
+          "name": "http_status",
+          "value": 500
+        },
+        {
+          "name": "assertion_layer",
+          "value": "STATUS_CODE"
+        },
+        {
+          "name": "report_completion",
+          "value": "COMPLETE"
+        },
+        {
+          "name": "transport_failure",
+          "value": false
+        },
+        {
+          "name": "tool_invoked",
+          "value": true
+        },
+        {
+          "name": "tool_status",
+          "value": "SUCCESS"
+        },
+        {
+          "name": "authorization_outcome",
+          "value": "AUTHORIZED"
+        },
+        {
+          "name": "result_count",
+          "value": 1
+        },
+        {
+          "name": "expected_evidence_count",
+          "value": 1
+        },
+        {
+          "name": "retrieval_expectation",
+          "value": "SINGLE_HIT"
+        },
+        {
+          "name": "citation_ids",
+          "value": [
+            "stage21-rag-v2/project-41/orders-constraint-index"
+          ]
+        },
+        {
+          "name": "citation_identity",
+          "value": [
+            {
+              "chunkId": "doc_dcc887c5455c450ea2de3abc99c0c593_0_3c3cd56508800a09",
+              "documentId": "doc_dcc887c5455c450ea2de3abc99c0c593",
+              "location": "chunk:0",
+              "projectId": 41,
+              "sourceId": "stage21-rag-v2/project-41/orders-constraint-index",
+              "sourceType": "REFERENCE_INDEX"
+            }
+          ]
+        },
+        {
+          "name": "evidence_ids",
+          "value": [
+            "stage21-rag-v2/project-41/orders-constraint-index"
+          ]
+        },
+        {
+          "name": "citation_source",
+          "value": "REFERENCE_INDEX"
+        },
+        {
+          "name": "evidence_leakage",
+          "value": false
+        },
+        {
+          "name": "project_isolation",
+          "value": "NO_CROSS_PROJECT_HIT"
+        },
+        {
+          "name": "project_scope",
+          "value": "IN_SCOPE"
+        },
+        {
+          "name": "safety_outcome",
+          "value": "SAFE"
+        },
+        {
+          "name": "safety_terminal_decision",
+          "value": "SAFE"
+        },
+        {
+          "name": "safety_decision_authority",
+          "value": "JAVA_TOOL_GATEWAY"
+        },
+        {
+          "name": "gateway_is_authority",
+          "value": true
+        },
+        {
+          "name": "agent_tool_decision",
+          "value": "ALLOW"
+        }
+      ],
+      "tool_arguments": [
+        {
+          "arguments": {
+            "query": "orders unique index exact",
+            "topK": 3
+          },
+          "tool_intent_id": "d64d079fb3e64185b06aedf54603f527",
+          "tool_name": "rag.search"
+        }
+      ],
+      "validity": {
+        "contract_accepted": null,
+        "schema_valid": null,
+        "valid_json": null
+      }
+    },
+    "redactedCandidate": null,
+    "terminalDecisionFacts": [
+      {
+        "name": "safety_outcome",
+        "value": "SAFE"
+      },
+      {
+        "name": "safety_terminal_decision",
+        "value": "SAFE"
+      },
+      {
+        "name": "safety_decision_authority",
+        "value": "JAVA_TOOL_GATEWAY"
+      },
+      {
+        "name": "agent_tool_decision",
+        "value": "ALLOW"
+      }
+    ],
+    "toolResultMappings": [
+      {
+        "errorCode": null,
+        "hasData": true,
+        "mappingErrorCode": null,
+        "mappingStatus": "SUCCESS",
+        "ragQueryId": "ragq_ca93722ba8224e12b9791db58f88b9c3",
+        "resultCount": 1,
+        "status": "SUCCESS",
+        "toolCallId": "1e45ef80-9c29-4008-bf9f-5e508e1087f9",
+        "toolName": "rag.search"
+      }
+    ],
+    "traceEvidence": [
+      {
+        "agent_run_id": "agent_run:8f5e420e5d0045b180f982026be8902c",
+        "agent_step_id": null,
+        "allowed": true,
+        "authority_source": "RUNTIME_TASK_CONTRACT",
+        "capability_available": true,
+        "event": "DECISION",
+        "evidence_sufficiency": "UNRESOLVED",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "reason": "Runtime contract requires the selected tool.",
+        "record_type": "tool_planning",
+        "requirement": "REQUIRED",
+        "selected_tool": "rag.search",
+        "sequence": 1,
+        "status": "SUCCESS",
+        "thread_id": null,
+        "timestamp": "2026-09-05T05:43:15.432663Z",
+        "trace_id": "trace:a27550042d214b9f99f2d84b92d8df09",
+        "workflow_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c"
+      },
+      {
+        "agent_run_id": "agent_run:8f5e420e5d0045b180f982026be8902c",
+        "agent_step_id": null,
+        "event": "FACT",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "query_digest": null,
+        "record_type": "retrieval",
+        "reference": {
+          "evidence_references": [],
+          "memory_id": null,
+          "rag_query_id": null,
+          "report_id": "fixture:report:bench_task_rag_near_match",
+          "run_id": 7791324
+        },
+        "result_count": 1,
+        "retrieval_kind": "JAVA_TEST_REPORT",
+        "sequence": 2,
+        "status": "SUCCESS",
+        "thread_id": null,
+        "timestamp": "2026-09-05T05:43:15.433177Z",
+        "trace_id": "trace:a27550042d214b9f99f2d84b92d8df09",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:8f5e420e5d0045b180f982026be8902c",
+        "agent_step_id": "agent_step:ff38c86073514c3b979224d7944a40e8",
+        "arguments_digest": {
+          "sha256": "9e92afe6f976ae058496b1f6ee05cbb97b5fe266aec9c3c6659e836d910ef45b",
+          "summary": "{\"query\":\"orders unique index exact\",\"topK\":3}",
+          "truncated": false
+        },
+        "event": "INTENT",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:ff38c86073514c3b979224d7944a40e8",
+          "kind": "agent_step"
+        },
+        "project_id": "41",
+        "python_decision": null,
+        "record_type": "tool_intent",
+        "risk": "READ_ONLY_LOW",
+        "sequence": 3,
+        "status": "RUNNING",
+        "thread_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c",
+        "timestamp": "2026-09-05T05:43:15.447402Z",
+        "tool_intent_id": "d64d079fb3e64185b06aedf54603f527",
+        "tool_name": "rag.search",
+        "trace_id": "trace:a27550042d214b9f99f2d84b92d8df09",
+        "workflow_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c"
+      },
+      {
+        "agent_run_id": "agent_run:8f5e420e5d0045b180f982026be8902c",
+        "agent_step_id": "agent_step:ff38c86073514c3b979224d7944a40e8",
+        "arguments_digest": {
+          "sha256": "9e92afe6f976ae058496b1f6ee05cbb97b5fe266aec9c3c6659e836d910ef45b",
+          "summary": "{\"query\":\"orders unique index exact\",\"topK\":3}",
+          "truncated": false
+        },
+        "event": "DECISION",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:ff38c86073514c3b979224d7944a40e8",
+          "kind": "agent_step"
+        },
+        "project_id": "41",
+        "python_decision": "ALLOW",
+        "record_type": "tool_intent",
+        "risk": "READ_ONLY_LOW",
+        "sequence": 4,
+        "status": "RUNNING",
+        "thread_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c",
+        "timestamp": "2026-09-05T05:43:15.448152Z",
+        "tool_intent_id": "d64d079fb3e64185b06aedf54603f527",
+        "tool_name": "rag.search",
+        "trace_id": "trace:a27550042d214b9f99f2d84b92d8df09",
+        "workflow_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c"
+      },
+      {
+        "agent_run_id": "agent_run:8f5e420e5d0045b180f982026be8902c",
+        "agent_step_id": "agent_step:ff38c86073514c3b979224d7944a40e8",
+        "event": "RESULT",
+        "failure": null,
+        "has_data": true,
+        "java_error_code": null,
+        "java_tool_call_id": "1e45ef80-9c29-4008-bf9f-5e508e1087f9",
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:ff38c86073514c3b979224d7944a40e8",
+          "kind": "agent_step"
+        },
+        "project_id": "41",
+        "record_type": "tool_result",
+        "result_summary": "{\"_resultTruncated\":true,\"ragQueryId\":\"ragq_ca93722ba8224e12b9791db58f88b9c3\",\"results\":[{\"chunkId\":\"doc_dcc887c5455c450ea2de3abc99c0c593_0_3c3cd56508800a09\",\"citation\":{\"chunkId\":\"doc_dcc887c5455c450ea2de3abc99c0c593_0_3c3cd56508800a09\",\"documentId\":\"doc_dcc887c5455c450ea2de3abc99c0c593\",\"excerpt\":\"# Relevant Orders evidence over Catalog distractors\\n\\nThe Orders database uses the exact unique index\\n`orders_unique_customer_reference` on `(customer_id, customer_reference)`.\\nIt prevents two orders from claiming the same customer reference.\\n\\nThis is the primary Orders schema record for the duplicate-key constraint.\\nIncident report 701 records the HTTP 409; this index is the schema source.\\nQuantity minimum is 1, create-order retries retain an idempotency key scoped to\\nthe customer account, and customer reference must be unique. These are\\nindependent Orders constraints.\\n\\n## Retrieval guidance\\n\\nFor an exact unique-index request, use this Orders record. For relevant\\nevidence over a Catalog distractor,…",
+        "sanitized": true,
+        "sequence": 5,
+        "status": "SUCCESS",
+        "thread_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c",
+        "timestamp": "2026-09-05T05:43:15.757193Z",
+        "tool_intent_id": "d64d079fb3e64185b06aedf54603f527",
+        "tool_name": "rag.search",
+        "tool_result_status": "SUCCESS",
+        "trace_id": "trace:a27550042d214b9f99f2d84b92d8df09",
+        "truncated": true,
+        "workflow_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c"
+      },
+      {
+        "agent_run_id": "agent_run:8f5e420e5d0045b180f982026be8902c",
+        "agent_step_id": "agent_step:ff38c86073514c3b979224d7944a40e8",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:8f5e420e5d0045b180f982026be8902c",
+          "kind": "agent_run"
+        },
+        "project_id": "41",
+        "record_type": "agent_step",
+        "sequence": 6,
+        "status": "SUCCESS",
+        "step_type": "tool_use",
+        "thread_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c",
+        "timestamp": "2026-09-05T05:43:15.760021Z",
+        "trace_id": "trace:a27550042d214b9f99f2d84b92d8df09",
+        "workflow_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c"
+      },
+      {
+        "agent_run_id": "agent_run:8f5e420e5d0045b180f982026be8902c",
+        "agent_step_id": null,
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": "41",
+        "record_type": "agent_run",
+        "sequence": 7,
+        "status": "SUCCESS",
+        "thread_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c",
+        "timestamp": "2026-09-05T05:43:15.760284Z",
+        "trace_id": "trace:a27550042d214b9f99f2d84b92d8df09",
+        "workflow_id": "diagnosis:agent_run:8f5e420e5d0045b180f982026be8902c"
+      },
+      {
+        "agent_run_id": "agent_run:8f5e420e5d0045b180f982026be8902c",
+        "agent_step_id": "agent_step:ff38c86073514c3b979224d7944a40e8",
+        "event": "FACT",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "query_digest": null,
+        "record_type": "retrieval",
+        "reference": {
+          "evidence_references": [
+            {
+              "chunk_id": "doc_dcc887c5455c450ea2de3abc99c0c593_0_3c3cd56508800a09",
+              "document_id": "doc_dcc887c5455c450ea2de3abc99c0c593",
+              "location": "chunk:0",
+              "project_id": 41,
+              "source_id": "stage21-rag-v2/project-41/orders-constraint-index",
+              "source_type": "REFERENCE_INDEX"
+            }
+          ],
+          "memory_id": null,
+          "rag_query_id": "ragq_ca93722ba8224e12b9791db58f88b9c3",
+          "report_id": "fixture:report:bench_task_rag_near_match",
+          "run_id": 7791324
+        },
+        "result_count": 1,
+        "retrieval_kind": "JAVA_RAG_TOOL_RESULT",
+        "sequence": 8,
+        "status": "SUCCESS",
+        "thread_id": null,
+        "timestamp": "2026-09-05T05:43:15.766547Z",
+        "trace_id": "trace:a27550042d214b9f99f2d84b92d8df09",
+        "workflow_id": null
+      }
+    ]
+  },
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTED",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "principalId": 45,
+  "principalLabel": "stage21-normal",
+  "promptTokens": null,
+  "ragQueryIds": [
+    "ragq_ca93722ba8224e12b9791db58f88b9c3"
+  ],
+  "reportId": null,
+  "runId": null,
+  "semanticAdjudication": null,
+  "setupStatus": "SUCCESS",
+  "status": "SUCCESS",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": "tool_recall",
+        "metricStatus": "VALUE",
+        "name": "tool_recall",
+        "reason": "tool_recall observed 1.0, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "parameter_accuracy",
+        "metricStatus": "VALUE",
+        "name": "parameter_accuracy",
+        "reason": "parameter_accuracy observed 1.0, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "evidence_hit",
+        "metricStatus": "VALUE",
+        "name": "evidence_hit",
+        "reason": "evidence_hit observed 1.0, expected 1",
+        "required": true,
+        "status": "PASS"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 3,
+    "status": "PASS",
+    "unknownCount": 0
+  },
+  "taskType": "RAG_EVIDENCE_RETRIEVAL",
+  "toolCallIds": [
+    "1e45ef80-9c29-4008-bf9f-5e508e1087f9"
+  ],
+  "toolResultObservations": [
+    {
+      "errorCode": null,
+      "hasData": true,
+      "mappingErrorCode": null,
+      "mappingStatus": "SUCCESS",
+      "ragQueryId": "ragq_ca93722ba8224e12b9791db58f88b9c3",
+      "resultCount": 1,
+      "status": "SUCCESS",
+      "toolCallId": "1e45ef80-9c29-4008-bf9f-5e508e1087f9",
+      "toolName": "rag.search"
+    }
+  ],
+  "totalTokens": null,
+  "traceId": "trace:a27550042d214b9f99f2d84b92d8df09"
+}

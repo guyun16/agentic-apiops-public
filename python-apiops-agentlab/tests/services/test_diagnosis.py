@@ -25,7 +25,7 @@ from app.memory import (
 from app.schemas.diagnosis_report import DiagnosisReport
 from app.schemas.runner import TestReport as RunnerTestReport
 from app.services.diagnosis import DiagnosisExecutionService, _DiagnosisRun
-from app.services.diagnosis_repository import SQLiteDiagnosisRunRepository
+from app.services.diagnosis_repository import SQLiteDiagnosisRunRepository, StoredDiagnosisRun
 from app.services.runtime_evaluation import runtime_evaluation_store
 from app.tracing import InMemoryTraceSink, TraceRecorder
 from app.workflows.approval import ApprovalAction, ApprovalRequest
@@ -265,6 +265,44 @@ def add_memory_record(
     return record
 
 
+def test_legacy_diagnosis_snapshot_marks_unpersisted_projection_unavailable(
+    tmp_path: Path,
+) -> None:
+    repository = SQLiteDiagnosisRunRepository(tmp_path / "agentlab-runtime.sqlite3")
+    report = memory_test_report()
+    diagnosis = memory_diagnosis_report(agent_run_id="agent_run:legacy")
+    repository.save(
+        StoredDiagnosisRun(
+            agent_run_id="agent_run:legacy",
+            workflow_id="workflow:legacy",
+            trace_id="trace:legacy",
+            project_id=41,
+            run_id=701,
+            api_id="orders.get",
+            test_report=report,
+            model="deepseek-v4-flash",
+            status="COMPLETED",
+            diagnosis_report=diagnosis,
+        )
+    )
+    service = DiagnosisExecutionService(
+        AppSettings(trace_jsonl_path=str(tmp_path / "missing.jsonl")),
+        run_repository=repository,
+        checkpoint_db_path=repository.database_path,
+    )
+
+    response = service._snapshot(service._get_record("agent_run:legacy"))
+
+    assert {step.id for step in response.steps} == {"java-test-report", "diagnosis-report"}
+    assert set(response.context.unavailable_fields) == {
+        "evidenceItems",
+        "contextCharacters",
+        "modelCalls",
+        "toolCalls",
+    }
+    repository.close()
+
+
 def patch_memory_fetch(
     monkeypatch: pytest.MonkeyPatch,
     service: DiagnosisExecutionService,
@@ -292,7 +330,7 @@ def patch_memory_fetch(
                 qwen_api_key=SecretStr("fake-qwen-key"),
             ),
             "Qwen",
-            "qwen3.7-plus-2026-05-26",
+            "qwen3.8-max",
         ),
     ),
 )

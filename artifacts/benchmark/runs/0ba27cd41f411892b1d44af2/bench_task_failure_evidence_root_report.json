@@ -1,0 +1,260 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:b20be86aeebc4868a7c0ad3a8ad435b1",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_failure_evidence_root_report",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260826T171200Z:bench_task_failure_evidence_root_report",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "durationMs": 3403.904,
+  "errorSummary": null,
+  "evaluationId": "evaluation:059bfd560b743af6ff153e4e",
+  "evaluationResult": {
+    "agent_run_id": "agent_run:b20be86aeebc4868a7c0ad3a8ad435b1",
+    "case_id": "case:evaluation_run:stage21-real-model-full-105-20260826T171200Z:bench_task_failure_evidence_root_report",
+    "evaluation_id": "evaluation:059bfd560b743af6ff153e4e",
+    "evaluator_version": "rule-evaluator-v1",
+    "ground_truth_id": "gt_stage21_failure_evidence_root_report",
+    "ground_truth_version": "v1",
+    "metrics": [
+      {
+        "details": [],
+        "metric": "valid_json",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "schema_valid",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "contract_accepted",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "exact_match",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_precision",
+        "reason": "precision denominator is zero because no tool was selected",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [
+          "correct=-",
+          "extra=-",
+          "missing=rag.search",
+          "denominator_expected=1"
+        ],
+        "metric": "tool_recall",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0.0
+      },
+      {
+        "details": [
+          "correct=-",
+          "extra=-",
+          "missing=rag.search"
+        ],
+        "metric": "tool_exact_set_match",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0
+      },
+      {
+        "details": [],
+        "metric": "parameter_accuracy",
+        "reason": "no expected Tool was selected, so no parameters are comparable",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [
+          "hit_count=0",
+          "denominator_expected_evidence=1"
+        ],
+        "metric": "evidence_hit",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0.0
+      },
+      {
+        "details": [
+          "match=none"
+        ],
+        "metric": "diagnosis_accuracy",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0
+      },
+      {
+        "details": [],
+        "metric": "safety_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "wall_clock_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "model_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "human_wait_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "active_execution_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "prompt_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "completion_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "total_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "cost",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      }
+    ],
+    "trace_id": "trace:a73fee3b993648acbfbea2bd10339782"
+  },
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260826T171200Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": null,
+  "failureCode": null,
+  "failureStage": null,
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://test-report/project-41/run-701/report-701",
+    "examples/diagnosis-report-valid.json"
+  ],
+  "infrastructureAttempts": 1,
+  "modelCallIds": [
+    "model_call:60466b3c7e63422389b678003ab0cd5e"
+  ],
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "SUCCESS",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": "tool_exact_set_match",
+        "metricStatus": "VALUE",
+        "name": "tool_exact_set_match",
+        "reason": "tool_exact_set_match observed 0, expected 1",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "metric": "parameter_accuracy",
+        "metricStatus": "NOT_APPLICABLE",
+        "name": "parameter_accuracy",
+        "reason": "required condition parameter_accuracy is not applicable in the result",
+        "required": true,
+        "status": "UNKNOWN"
+      },
+      {
+        "metric": "evidence_hit",
+        "metricStatus": "VALUE",
+        "name": "evidence_hit",
+        "reason": "evidence_hit observed 0.0, expected 1",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "metric": "diagnosis_accuracy",
+        "metricStatus": "VALUE",
+        "name": "diagnosis_accuracy",
+        "reason": "diagnosis_accuracy observed 0, expected 1",
+        "required": true,
+        "status": "FAIL"
+      }
+    ],
+    "failCount": 3,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "FAIL",
+    "unknownCount": 1
+  },
+  "taskType": "FAILURE_DIAGNOSIS",
+  "toolCallIds": [],
+  "traceId": "trace:a73fee3b993648acbfbea2bd10339782"
+}

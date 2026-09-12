@@ -29,6 +29,23 @@ import java.util.UUID;
 /** Plain JDBC adapter for the runner execution fact tables. */
 public final class JdbcExecutionFactRepository implements ExecutionFactRepository {
 
+    @Override
+    public Optional<UUID> findBatchIdForRun(long projectId, long runId) {
+        requirePositive(projectId, "projectId");
+        requirePositive(runId, "runId");
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT batch_id FROM test_batch_run WHERE project_id = ? AND run_id = ?")) {
+            statement.setLong(1, projectId);
+            statement.setLong(2, runId);
+            try (ResultSet result = statement.executeQuery()) {
+                return result.next() ? Optional.of(UUID.fromString(result.getString(1))) : Optional.empty();
+            }
+        } catch (SQLException exception) {
+            throw persistenceFailure("Unable to find execution batch", exception);
+        }
+    }
+
     private static final String INSERT_BATCH = """
             INSERT INTO test_batch (id, project_id, requested_by, status)
             VALUES (?, ?, ?, 'PENDING')
@@ -72,6 +89,17 @@ public final class JdbcExecutionFactRepository implements ExecutionFactRepositor
             INSERT INTO test_task
                 (project_id, case_id, api_id, task_name, testcase_dsl_json)
             VALUES (?, ?, ?, ?, ?)
+            """;
+
+    private static final String CLOSE_UNSTARTED_BATCH_MEMBERS = """
+            UPDATE test_run r
+            JOIN test_batch_run br ON br.project_id = r.project_id AND br.run_id = r.id
+            JOIN test_batch b ON b.project_id = br.project_id AND b.id = br.batch_id
+            SET r.status = b.status,
+                r.failure_type = CASE WHEN b.status = 'CANCELLED' THEN 'NONE' ELSE 'SYSTEM_ERROR' END,
+                r.finished_at = b.finished_at
+            WHERE b.project_id = ? AND b.id = ?
+              AND b.status IN ('EXECUTION_FAILED', 'CANCELLED') AND r.status = 'PENDING'
             """;
 
     private static final String INSERT_RUN = """
@@ -150,6 +178,28 @@ public final class JdbcExecutionFactRepository implements ExecutionFactRepositor
             LIMIT 100
             """;
 
+    private static final String FIND_LATEST_RUN_SUMMARY_BY_CASE = """
+            SELECT r.id AS run_id, t.case_id, t.api_id, t.task_name,
+                   r.status, r.failure_type, r.created_at, r.started_at, r.finished_at
+            FROM test_run r
+            JOIN test_task t
+              ON t.project_id = r.project_id AND t.id = r.task_id
+            WHERE r.project_id = ? AND t.case_id = ?
+            ORDER BY r.created_at DESC, r.id DESC
+            LIMIT 1
+            """;
+
+    private static final String FIND_RUN_SUMMARY_PAGE = """
+            SELECT r.id AS run_id, t.case_id, t.api_id, t.task_name,
+                   r.status, r.failure_type, r.created_at, r.started_at, r.finished_at
+            FROM test_run r
+            JOIN test_task t
+              ON t.project_id = r.project_id AND t.id = r.task_id
+            WHERE r.project_id = ? AND (? IS NULL OR r.id < ?)
+            ORDER BY r.id DESC
+            LIMIT ?
+            """;
+
     private static final String FIND_CASE_RESULTS = """
             SELECT project_id, run_id, id AS case_result_id, case_id,
                    status, failure_type, started_at, finished_at
@@ -159,12 +209,13 @@ public final class JdbcExecutionFactRepository implements ExecutionFactRepositor
             """;
 
     private static final String FIND_STEP_RESULTS = """
-            SELECT project_id, run_id, case_result_id, id AS step_result_id,
-                   step_id, status, failure_type, assertion_results_json,
-                   response_status_code, duration_ms, created_at
-            FROM step_result
-            WHERE project_id = ? AND run_id = ? AND case_result_id = ?
-            ORDER BY id
+            SELECT s.project_id, s.run_id, s.case_result_id, s.id AS step_result_id,
+                   s.step_id, s.status, s.failure_type, s.assertion_results_json,
+                   s.response_status_code, s.duration_ms, s.created_at, x.snapshot_json
+            FROM step_result s
+            LEFT JOIN step_exchange_snapshot x ON x.step_result_id = s.id
+            WHERE s.project_id = ? AND s.run_id = ? AND s.case_result_id = ?
+            ORDER BY s.id
             """;
 
     private final DataSource dataSource;
@@ -283,13 +334,34 @@ public final class JdbcExecutionFactRepository implements ExecutionFactRepositor
         Objects.requireNonNull(finishedAt, "finishedAt must not be null");
         requirePositive(projectId, "projectId");
         Objects.requireNonNull(batchId, "batchId must not be null");
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(COMPLETE_BATCH)) {
-            statement.setString(1, terminalStatus.name());
-            setTimestamp(statement, 2, finishedAt);
-            statement.setLong(3, projectId);
-            statement.setString(4, batchId.toString());
-            return statement.executeUpdate() == 1;
+        try (Connection connection = dataSource.getConnection()) {
+            boolean originalAutoCommit = connection.getAutoCommit();
+            connection.setAutoCommit(false);
+            try {
+                int updated;
+                try (PreparedStatement statement = connection.prepareStatement(COMPLETE_BATCH)) {
+                    statement.setString(1, terminalStatus.name());
+                    setTimestamp(statement, 2, finishedAt);
+                    statement.setLong(3, projectId);
+                    statement.setString(4, batchId.toString());
+                    updated = statement.executeUpdate();
+                }
+                // Started runs retain their owner and outcome; retries cannot rewrite history.
+                if (updated == 1) {
+                    try (PreparedStatement statement = connection.prepareStatement(CLOSE_UNSTARTED_BATCH_MEMBERS)) {
+                        statement.setLong(1, projectId);
+                        statement.setString(2, batchId.toString());
+                        statement.executeUpdate();
+                    }
+                }
+                connection.commit();
+                return updated == 1;
+            } catch (SQLException | RuntimeException exception) {
+                rollback(connection, exception);
+                throw exception;
+            } finally {
+                connection.setAutoCommit(originalAutoCommit);
+            }
         } catch (SQLException exception) {
             throw persistenceFailure("Unable to complete execution batch", exception);
         }
@@ -571,6 +643,64 @@ public final class JdbcExecutionFactRepository implements ExecutionFactRepositor
     }
 
     @Override
+    public Optional<RunSummary> findLatestRunSummary(long projectId, String caseId) {
+        requirePositive(projectId, "projectId");
+        if (caseId == null || caseId.isBlank()) {
+            throw new IllegalArgumentException("caseId must not be blank");
+        }
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     FIND_LATEST_RUN_SUMMARY_BY_CASE)) {
+            statement.setLong(1, projectId);
+            statement.setString(2, caseId);
+            try (ResultSet rows = statement.executeQuery()) {
+                if (!rows.next()) {
+                    return Optional.empty();
+                }
+                return Optional.of(runSummary(rows));
+            }
+        } catch (SQLException exception) {
+            throw persistenceFailure("Unable to resolve test run summary by case", exception);
+        }
+    }
+
+    @Override
+    public List<RunSummary> findRunSummariesPage(
+            long projectId,
+            Long beforeRunId,
+            int limit
+    ) {
+        requirePositive(projectId, "projectId");
+        if (beforeRunId != null) {
+            requirePositive(beforeRunId, "beforeRunId");
+        }
+        if (limit < 1 || limit > 100) {
+            throw new IllegalArgumentException("limit must be between 1 and 100");
+        }
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_RUN_SUMMARY_PAGE)) {
+            statement.setLong(1, projectId);
+            if (beforeRunId == null) {
+                statement.setNull(2, Types.BIGINT);
+                statement.setNull(3, Types.BIGINT);
+            } else {
+                statement.setLong(2, beforeRunId);
+                statement.setLong(3, beforeRunId);
+            }
+            statement.setInt(4, limit);
+            try (ResultSet rows = statement.executeQuery()) {
+                List<RunSummary> summaries = new ArrayList<>();
+                while (rows.next()) {
+                    summaries.add(runSummary(rows));
+                }
+                return summaries;
+            }
+        } catch (SQLException exception) {
+            throw persistenceFailure("Unable to page test run summaries", exception);
+        }
+    }
+
+    @Override
     public Optional<RunExecutionFacts> findRun(long projectId, long runId) {
         requirePositive(projectId, "projectId");
         requirePositive(runId, "runId");
@@ -611,6 +741,19 @@ public final class JdbcExecutionFactRepository implements ExecutionFactRepositor
         } catch (SQLException exception) {
             throw persistenceFailure("Unable to load test run", exception);
         }
+    }
+
+    private RunSummary runSummary(ResultSet rows) throws SQLException {
+        return new RunSummary(
+                rows.getLong("run_id"),
+                rows.getString("case_id"),
+                rows.getString("api_id"),
+                rows.getString("task_name"),
+                runStatus(rows.getString("status")),
+                failureType(rows.getString("failure_type")),
+                timestamp(rows, "created_at"),
+                timestamp(rows, "started_at"),
+                timestamp(rows, "finished_at"));
     }
 
     private List<CaseExecutionFacts> findCaseResults(
@@ -710,7 +853,7 @@ public final class JdbcExecutionFactRepository implements ExecutionFactRepositor
                             rows.getString("assertion_results_json"),
                             nullableInteger(rows, "response_status_code"),
                             nullableLong(rows, "duration_ms"),
-                            timestamp(rows, "created_at")));
+                            timestamp(rows, "created_at"), rows.getString("snapshot_json")));
                 }
             }
         }
@@ -806,7 +949,24 @@ public final class JdbcExecutionFactRepository implements ExecutionFactRepositor
                 statement.setLong(9, response.durationMs());
             }
             statement.executeUpdate();
-            return generatedId(statement);
+            long stepResultId = generatedId(statement);
+            if (result.httpExchange() != null) {
+                try (PreparedStatement exchange = connection.prepareStatement(
+                        "INSERT INTO step_exchange_snapshot (step_result_id, snapshot_json) VALUES (?, ?)")) {
+                    exchange.setLong(1, stepResultId);
+                    exchange.setString(2, exchangeJson(result));
+                    exchange.executeUpdate();
+                }
+            }
+            return stepResultId;
+        }
+    }
+
+    private String exchangeJson(StepResult result) {
+        try {
+            return objectMapper.writeValueAsString(result.httpExchange());
+        } catch (JsonProcessingException exception) {
+            throw new IllegalStateException("Unable to serialize redacted HTTP exchange", exception);
         }
     }
 

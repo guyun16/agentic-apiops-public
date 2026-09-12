@@ -21,6 +21,7 @@ from .errors import (
 )
 from .models import EvidenceCitation, EvidenceRetrieval, RetrievedEvidence
 from .ports import EvidenceRetriever
+from .relevance_selection import select_query_relevant_evidence
 
 __all__ = [
     "EvidenceAuthorizationError",
@@ -42,4 +43,5 @@ __all__ = [
     "ContextSource",
     "DeterministicContextCompressor",
     "SensitiveDataMasker",
+    "select_query_relevant_evidence",
 ]

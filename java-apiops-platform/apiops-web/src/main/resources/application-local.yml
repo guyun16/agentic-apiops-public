@@ -5,19 +5,23 @@ apiops:
     auth:
       url: ${APIOPS_AUTH_DB_URL:jdbc:mysql://localhost:3306/apiops_auth}
       username: ${APIOPS_AUTH_DB_USERNAME:root}
-      password: ${APIOPS_AUTH_DB_PASSWORD:Qwerty123456}
+      password: ${APIOPS_AUTH_DB_PASSWORD:}
     openapi:
       url: ${APIOPS_OPENAPI_DB_URL:jdbc:mysql://localhost:3306/apiops_openapi}
       username: ${APIOPS_OPENAPI_DB_USERNAME:root}
-      password: ${APIOPS_OPENAPI_DB_PASSWORD:Qwerty123456}
+      password: ${APIOPS_OPENAPI_DB_PASSWORD:}
     runner:
       url: ${APIOPS_RUNNER_DB_URL:jdbc:mysql://localhost:3306/apiops_runner}
       username: ${APIOPS_RUNNER_DB_USERNAME:root}
-      password: ${APIOPS_RUNNER_DB_PASSWORD:Qwerty123456}
+      password: ${APIOPS_RUNNER_DB_PASSWORD:}
+    tool-gateway:
+      url: ${APIOPS_TOOL_GATEWAY_DB_URL:jdbc:mysql://localhost:3306/apiops_tool_gateway}
+      username: ${APIOPS_TOOL_GATEWAY_DB_USERNAME:root}
+      password: ${APIOPS_TOOL_GATEWAY_DB_PASSWORD:}
     rag:
       url: ${APIOPS_RAG_DB_URL:jdbc:mysql://localhost:3306/apiops_rag}
       username: ${APIOPS_RAG_DB_USERNAME:root}
-      password: ${APIOPS_RAG_DB_PASSWORD:Qwerty123456}
+      password: ${APIOPS_RAG_DB_PASSWORD:}
 
 spring:
   ai:

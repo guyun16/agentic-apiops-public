@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_formal_failure_transport_dns",
+  "taskType": "FAILURE_DIAGNOSIS",
+  "instruction": "Distinguish an unreachable target from an assertion failure and retain the no-response transport evidence.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "authorityFixture",
+        "ref": "java://runner-testcase-dsl/e2e/stage8-connect-failure-dns.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "taskFixture",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/diagnosis-transport-connect.json"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "taskFocus",
+        "value": "unreachable target"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": ["diagnosis_accuracy"],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_formal_failure_transport_dns",
+    "version": "v2"
+  },
+  "evaluationSpec": {"selectedMetrics": ["diagnosis_accuracy"]},
+  "expectedToolCalls": []
+}

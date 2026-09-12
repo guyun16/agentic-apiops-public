@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_rag_citation_correctness",
+  "taskType": "RAG_EVIDENCE_RETRIEVAL",
+  "instruction": "Return the exact report evidence identity in the citation and do not substitute a diagnosis label for an evidence ID.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "testReport",
+        "ref": "java://test-report/project-41/stage21-initial/citation-current-report"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "retrievalContext",
+        "ref": "examples/diagnosis-report-valid.json"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search"
+  ],
+  "forbiddenActions": [
+    "diagnosis_as_citation",
+    "sql.write",
+    "redis.delete"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "parameter_accuracy",
+    "evidence_hit"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_rag_citation_correctness",
+        "version": "v2"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "parameter_accuracy",
+      "evidence_hit"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "report 701 constraint citation"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

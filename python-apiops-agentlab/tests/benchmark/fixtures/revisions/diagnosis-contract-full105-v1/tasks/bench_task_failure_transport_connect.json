@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_failure_transport_connect",
+  "taskType": "FAILURE_DIAGNOSIS",
+  "instruction": "Distinguish the Java Runner transport failure from an HTTP response failure. Diagnose the unreachable target as CONNECT_ERROR; do not infer an HTTP status or business root cause.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 1001
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "testReport",
+        "ref": "java://runner-testcase-dsl/e2e/stage8-connect-failure.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "diagnosisContext",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/diagnosis-transport-connect.json"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "submit_unvalidated_dsl",
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "diagnosis_accuracy"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_failure_transport_connect",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "diagnosis_accuracy"
+    ]
+  }
+}

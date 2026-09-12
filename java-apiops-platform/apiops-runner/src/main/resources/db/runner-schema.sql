@@ -88,3 +88,11 @@ CREATE TABLE IF NOT EXISTS step_result (
     CONSTRAINT fk_step_result_case
         FOREIGN KEY (case_result_id) REFERENCES case_result (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS step_exchange_snapshot (
+    step_result_id BIGINT UNSIGNED NOT NULL,
+    snapshot_json JSON NOT NULL,
+    PRIMARY KEY (step_result_id),
+    CONSTRAINT fk_step_exchange_snapshot_step
+        FOREIGN KEY (step_result_id) REFERENCES step_result (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

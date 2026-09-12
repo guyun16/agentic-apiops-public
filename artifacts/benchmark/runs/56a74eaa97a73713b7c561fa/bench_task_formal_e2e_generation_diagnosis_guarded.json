@@ -1,0 +1,62 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:2d5637c51fdf4df7962bfd42a5c67c27",
+  "authProfile": null,
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_formal_e2e_generation_diagnosis_guarded",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260830T064628Z:bench_task_formal_e2e_generation_diagnosis_guarded",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 34.146,
+  "errorSummary": "BenchmarkTaskFailure: required Java execution path failed: Java API Ops request returned HTTP 500",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260830T064628Z",
+  "executionMode": "UNKNOWN",
+  "failureCategory": "INFRASTRUCTURE_FAILURE",
+  "failureCode": "JAVA_REQUIRED_PATH_FAILED",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:strategy",
+    "literal:projectId",
+    "java://runner-testcase-dsl/e2e/formal-final-acceptance",
+    "examples/testcase-valid.json",
+    "literal:taskFocus"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTION_FAILED",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "principalId": null,
+  "principalLabel": null,
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "E2E_APIOPS",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:ce5d053d1de3476389d5af5badb6fde2"
+}

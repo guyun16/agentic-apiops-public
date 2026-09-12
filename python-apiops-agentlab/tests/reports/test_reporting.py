@@ -131,7 +131,7 @@ def test_checked_in_fixed_artifacts_match_deterministic_generation(tmp_path: Pat
         judge_results=fixed_judge_results(),
         limitations=FIXED_LIMITATIONS,
     )
-    artifact_dir = Path(__file__).parent / "fixtures"
+    artifact_dir = Path(__file__).parents[2] / "app" / "reports" / "artifacts"
 
     expected_paths = {
         "evaluation_result.csv": generated.evaluation_csv,

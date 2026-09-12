@@ -1,0 +1,63 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:56505be0cde14c7b9618ccb06fbd93ce",
+  "authProfile": null,
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_formal_failure_business_report_authority",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260831T024951Z:bench_task_formal_failure_business_report_authority",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": 405,
+  "durationMs": 3584.835,
+  "errorSummary": "BenchmarkTaskFailure: Diagnosis candidate matched neither DiagnosisReport nor ToolIntent",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260831T024951Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": "AGENT_FAILURE",
+  "failureCode": "MODEL_OUTPUT_FAILURE",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://test-report/project-41/stage21-initial/business-report",
+    "examples/testcase-insufficient-stock-valid.json",
+    "literal:taskFocus"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTED",
+  "modelCallCount": 1,
+  "modelCallIds": [
+    "model_call:42586e0233d1404d9a83085f53af9bd4"
+  ],
+  "modelLatencyMs": 3455.7007,
+  "principalId": null,
+  "principalLabel": null,
+  "promptTokens": 1410,
+  "ragQueryIds": [],
+  "reportId": "report:4438",
+  "runId": 4438,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "FAILURE_DIAGNOSIS",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": 1815,
+  "traceId": "trace:d86fc9750e12486aa755cc71bfa68677"
+}

@@ -1,0 +1,3067 @@
+{
+  "categories": [
+    {
+      "category": "TESTCASE_GENERATION",
+      "outcomeAccuracy": {
+        "denominator": 7,
+        "numerator": 6,
+        "status": "VALUE",
+        "unknownCount": 3,
+        "value": 0.8571428571428571
+      },
+      "outcomeAuthorityGapCount": 3,
+      "taskCount": 10,
+      "v1StatusCounts": {
+        "FAIL": 1,
+        "PASS": 6,
+        "UNKNOWN": 3
+      },
+      "v2StatusCounts": {
+        "FAIL": 1,
+        "PASS": 6,
+        "UNKNOWN": 3
+      }
+    },
+    {
+      "category": "FAILURE_DIAGNOSIS",
+      "outcomeAccuracy": {
+        "denominator": 2,
+        "numerator": 2,
+        "status": "VALUE",
+        "unknownCount": 0,
+        "value": 1.0
+      },
+      "outcomeAuthorityGapCount": 0,
+      "taskCount": 2,
+      "v1StatusCounts": {
+        "PASS": 2
+      },
+      "v2StatusCounts": {
+        "PASS": 2
+      }
+    },
+    {
+      "category": "TOOL_SAFETY",
+      "outcomeAccuracy": {
+        "denominator": 0,
+        "numerator": 0,
+        "status": "NOT_APPLICABLE",
+        "unknownCount": 0,
+        "value": null
+      },
+      "outcomeAuthorityGapCount": 0,
+      "taskCount": 0,
+      "v1StatusCounts": {},
+      "v2StatusCounts": {}
+    },
+    {
+      "category": "RAG_EVIDENCE_RETRIEVAL",
+      "outcomeAccuracy": {
+        "denominator": 3,
+        "numerator": 2,
+        "status": "VALUE",
+        "unknownCount": 2,
+        "value": 0.6666666666666666
+      },
+      "outcomeAuthorityGapCount": 2,
+      "taskCount": 5,
+      "v1StatusCounts": {
+        "FAIL": 1,
+        "PASS": 2,
+        "UNKNOWN": 2
+      },
+      "v2StatusCounts": {
+        "FAIL": 1,
+        "PASS": 2,
+        "UNKNOWN": 2
+      }
+    },
+    {
+      "category": "E2E_APIOPS",
+      "outcomeAccuracy": {
+        "denominator": 1,
+        "numerator": 1,
+        "status": "VALUE",
+        "unknownCount": 0,
+        "value": 1.0
+      },
+      "outcomeAuthorityGapCount": 0,
+      "taskCount": 1,
+      "v1StatusCounts": {
+        "PASS": 1
+      },
+      "v2StatusCounts": {
+        "PASS": 1
+      }
+    }
+  ],
+  "datasetId": "stage21-apioops-bench-mini",
+  "datasetVersion": "v3",
+  "notRequiredToolCount": 0,
+  "optionalToolCount": 0,
+  "optionalToolInvocationCount": 0,
+  "outcomeAccuracy": {
+    "denominator": 13,
+    "numerator": 11,
+    "status": "VALUE",
+    "unknownCount": 5,
+    "value": 0.8461538461538461
+  },
+  "outcomeAuthorityGapCount": 5,
+  "outcomeAuthorityGapTaskIds": [
+    "bench_task_testcase_business_inventory_python",
+    "bench_task_rag_zero_hit",
+    "bench_task_formal_rag_zero_hit_authorized",
+    "bench_task_formal_testcase_auth_missing_token_post",
+    "bench_task_formal_testcase_inventory_conflict_metadata"
+  ],
+  "policyVersion": "stage21-outcome-v2-v2",
+  "projectedTaskCount": 18,
+  "requiredToolCount": 7,
+  "requiredToolInvocationCount": 7,
+  "requiredToolMissCount": 0,
+  "requiredToolMissRate": {
+    "denominator": 7,
+    "numerator": 0,
+    "status": "VALUE",
+    "unknownCount": 0,
+    "value": 0.0
+  },
+  "schemaVersion": "stage21-outcome-v2-projection/v1",
+  "sourceArtifact": "f105r/final-residual-closure-20260905T012116Z",
+  "splitCounts": {
+    "DEV": 18,
+    "HELD_OUT": 0
+  },
+  "taskCount": 105,
+  "taskSchemaVersion": "0.2.0",
+  "tasks": [
+    {
+      "benchmarkTaskId": "bench_task_golden_e2e_apiops",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [
+        "rag.search"
+      ],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "E2E_APIOPS",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "e34bdd39-1636-4dee-8393-eac7a9d148ac"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    },
+    {
+      "benchmarkTaskId": "bench_task_golden_failure_diagnosis",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [
+        "rag.search"
+      ],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "bb51f83d-483c-41dc-adf8-27f5104b8f2f"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_happy_create_order_runner",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": [],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_boundary_inventory_limit",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": [],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_business_inventory_python",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "OUTCOME_AUTHORITY_GAP",
+      "outcomeAuthorityGap": true,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": "structured facts unavailable: business_error",
+          "status": "UNKNOWN",
+          "value": null
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": [],
+      "v1Status": "UNKNOWN",
+      "v2Status": "UNKNOWN"
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_business_inventory_runner",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": [],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_multi_hit",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [
+        "rag.search"
+      ],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "RAG_EVIDENCE_RETRIEVAL",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "7c47c445-2ad4-4a9f-aa59-956b74035418"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_zero_hit",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [
+        "rag.search"
+      ],
+      "outcomeAuthority": "OUTCOME_AUTHORITY_GAP",
+      "outcomeAuthorityGap": true,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": "structured facts unavailable: evidence_leakage",
+          "status": "UNKNOWN",
+          "value": null
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "RAG_EVIDENCE_RETRIEVAL",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "64dc90fc-b531-47d3-b3e7-e73319984125"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ],
+      "v1Status": "UNKNOWN",
+      "v2Status": "UNKNOWN"
+    },
+    {
+      "benchmarkTaskId": "bench_task_rag_irrelevant_distractor",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [
+        "rag.search"
+      ],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": null,
+          "status": "VALUE",
+          "value": 0.0
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "RAG_EVIDENCE_RETRIEVAL",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "8ba3c0a4-ab3b-45e5-9bed-7ba70ffc06d6"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ],
+      "v1Status": "FAIL",
+      "v2Status": "FAIL"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_transport_dns",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "toolRequirements": [],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_rag_near_match_exact",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [
+        "rag.search"
+      ],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "RAG_EVIDENCE_RETRIEVAL",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "d651ef86-1f56-48f9-ac16-c37b4c07f177"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_rag_zero_hit_authorized",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [
+        "rag.search"
+      ],
+      "outcomeAuthority": "OUTCOME_AUTHORITY_GAP",
+      "outcomeAuthorityGap": true,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": "structured facts unavailable: evidence_leakage",
+          "status": "UNKNOWN",
+          "value": null
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "RAG_EVIDENCE_RETRIEVAL",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "821f9763-8c33-4fc4-a50f-39e73734bc6f"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ],
+      "v1Status": "UNKNOWN",
+      "v2Status": "UNKNOWN"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_auth_missing_token_post",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "OUTCOME_AUTHORITY_GAP",
+      "outcomeAuthorityGap": true,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": "structured facts unavailable: expected_error_code",
+          "status": "UNKNOWN",
+          "value": null
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": [],
+      "v1Status": "UNKNOWN",
+      "v2Status": "UNKNOWN"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_boundary_inventory_zero",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": [],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_business_inventory_expected",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 0.75
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": [],
+      "v1Status": "FAIL",
+      "v2Status": "FAIL"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_get_orders_limit",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": [],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_inventory_conflict_metadata",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "OUTCOME_AUTHORITY_GAP",
+      "outcomeAuthorityGap": true,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": "structured facts unavailable: business_error",
+          "status": "UNKNOWN",
+          "value": null
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": [],
+      "v1Status": "UNKNOWN",
+      "v2Status": "UNKNOWN"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_inventory_conflict_runner",
+      "diagnosticMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "tool_precision",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_recall",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_exact_set_match",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "parameter_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "wall_clock_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "model_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "tool_latency_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "human_wait_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "active_execution_ms",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "prompt_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "completion_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "total_tokens",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        },
+        {
+          "expectedValue": 1,
+          "metric": "cost",
+          "reason": "metric excluded by EvaluationCase applicability",
+          "status": "NOT_APPLICABLE",
+          "value": null
+        }
+      ],
+      "observedToolNames": [],
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "semanticAdjudication": null,
+      "semanticUsedForFinalOutcome": false,
+      "split": "dev",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": [],
+      "v1Status": "PASS",
+      "v2Status": "PASS"
+    }
+  ],
+  "toolInvocationRate": {
+    "denominator": 7,
+    "numerator": 7,
+    "status": "VALUE",
+    "unknownCount": 0,
+    "value": 1.0
+  },
+  "v1StatusCounts": {
+    "FAIL": 2,
+    "PASS": 11,
+    "UNKNOWN": 5
+  },
+  "v2StatusCounts": {
+    "FAIL": 2,
+    "PASS": 11,
+    "UNKNOWN": 5
+  }
+}

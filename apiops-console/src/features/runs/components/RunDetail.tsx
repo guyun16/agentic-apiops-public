@@ -1,6 +1,9 @@
 import { Clipboard, Clock3, Database, FileCheck2, ScanSearch, ShieldCheck } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
 import { useConsoleLanguage } from '../../../app/ConsoleLanguage'
+import { ReportExportButtons } from '../../../shared/reports/ReportExportButtons'
+import { testReportExport } from '../../../shared/reports/reportExport'
 import {
   buildExecutionAssertionDisplayGroups,
   buildExecutionStepDisplayProjection,
@@ -149,9 +152,16 @@ function RepeatedStepInspector({ group }: { group: RepeatedStepItem }) {
         <summary>{ui('Raw executions')} ({group.count})</summary>
         <div className="run-raw-execution-list">
           {group.rawSteps.map((step, index) => (
-            <div className="run-raw-execution-row" key={`${step.stepId}-${index}`}>
+            <div key={`${step.stepId}-${index}`}>
+            <div className="run-raw-execution-row">
               <code>{step.stepId}</code>
               <span>{formatDuration(step.durationMs)}</span>
+            </div>
+            {step.httpExchange ? <details>
+              <summary>{ui('Request')} / {ui('Response')}</summary>
+              <RunRequest step={step} />
+              <RunResponse steps={[step]} />
+            </details> : null}
             </div>
           ))}
         </div>
@@ -176,6 +186,7 @@ function ReportState({ onRetry, reportStatus }: { onRetry: () => void; reportSta
 }
 
 type RunDetailProps = {
+  controls?: ReactNode
   run: RunSummary | null
   report: TestReport | null
   reportStatus: ReportStatus
@@ -187,7 +198,7 @@ type RunDetailProps = {
   onDiagnose?: (runId: string) => void
 }
 
-export function RunDetail({ activeTab, liveState, onDiagnose, onRetryReport, onTabChange, progress, report, reportStatus, run }: RunDetailProps) {
+export function RunDetail({ controls, activeTab, liveState, onDiagnose, onRetryReport, onTabChange, progress, report, reportStatus, run }: RunDetailProps) {
   const { language, t, ui } = useConsoleLanguage()
   const locale = language === 'zh-CN' ? 'zh-CN' : 'en-US'
   const projection = report ? buildExecutionStepDisplayProjection(report.cases) : null
@@ -250,6 +261,7 @@ export function RunDetail({ activeTab, liveState, onDiagnose, onRetryReport, onT
           ) : null}
         </div>
         <div className="run-detail-actions">
+          {reportStatus === 'ready' && report?.runId === run.runId ? <ReportExportButtons document={testReportExport(report)} /> : null}
           {canDiagnose ? (
             <button className="panel-action run-detail-diagnose-button" onClick={() => onDiagnose(String(run.runId))} type="button">
               <ScanSearch size={15} strokeWidth={1.8} />
@@ -261,6 +273,8 @@ export function RunDetail({ activeTab, liveState, onDiagnose, onRetryReport, onT
           </button>
         </div>
       </header>
+
+      {controls}
 
       <nav className="run-tabs" aria-label={ui('Run detail tabs')}>
         {tabs.map((tab) => (
@@ -338,7 +352,7 @@ export function RunDetail({ activeTab, liveState, onDiagnose, onRetryReport, onT
                       {selectedStep.failureType !== 'NONE' ? <div><span>{ui('Failure type')}</span><strong>{selectedStep.failureType}</strong></div> : null}
                     </div>
                   ) : reportTab === 'Request' ? (
-                    <RunRequest />
+                    <RunRequest step={selectedStep} />
                   ) : reportTab === 'Response' ? (
                     <RunResponse steps={[selectedStep]} />
                   ) : (

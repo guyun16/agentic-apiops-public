@@ -52,7 +52,8 @@ export function formatValue(value: unknown) {
   }
 }
 
-function offsetFrom(start: string, current: string) {
+function offsetFrom(start: string | null, current: string) {
+  if (!start) return '—'
   const offset = new Date(current).getTime() - new Date(start).getTime()
   if (!Number.isFinite(offset) || offset <= 0) return '0 ms'
   return `+${offset} ms`

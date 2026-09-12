@@ -1,0 +1,764 @@
+{
+  "schemaVersion": "stage21-benchmark-authority/v1",
+  "scope": "All distinct complete formal Stage21 execution runs; contract-specific results, not a model leaderboard",
+  "full105RunCount": 14,
+  "realModelFull105RunCount": 12,
+  "formalMixedFixtureRunCount": 2,
+  "qwenFull105RunCount": 5,
+  "portfolioAuthoritative": {
+    "revision": "stage21-formal105-final-closure-v5",
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260905T054023Z",
+    "officialRoot": "f105r/v5o-20260905T053300Z",
+    "result": {
+      "PASS": 95,
+      "FAIL": 9,
+      "UNKNOWN": 1
+    },
+    "passRate": 0.9047619047619048,
+    "outcomeAccuracy": 0.9134615384615384,
+    "finalAcceptance": "PASS_WITH_LIMITATIONS",
+    "contract": "V2 outcome / stage21-outcome-v2-v2"
+  },
+  "latestFull105": {
+    "revision": "stage21-diagnosis-contract-full105-v2",
+    "evaluationRunId": "evaluation_run:stage21-diagnosis-contract-full105-20260906T034346Z",
+    "officialRoot": "f105r/dc2-20260906T034303Z",
+    "result": {
+      "FAIL": 8,
+      "PASS": 94,
+      "UNKNOWN": 3
+    },
+    "passRate": 0.8952380952380953,
+    "outcomeAccuracy": 0.9215686274509803,
+    "finalAcceptance": "PASS_WITH_LIMITATIONS",
+    "contract": "diagnosis_contract / CODEX_REVIEW"
+  },
+  "frontendDisplayRunId": "evaluation_run:stage21-real-model-full-105-20260905T054023Z",
+  "readmeDisplayRunId": "evaluation_run:stage21-real-model-full-105-20260905T054023Z",
+  "authorityReason": "Default frozen formal revision v5; complete run, sealed artifacts and both 85% gates pass. Diagnosis v2 is an independent eight-task diagnosis contract with CODEX_REVIEW and is the latest full contract-validation run. No score-maximization selection.",
+  "history": [
+    {
+      "revision": null,
+      "baselineConfigId": "stage21-formal-baseline-v2-20260826",
+      "evaluationRunId": "evaluation_run:stage21-formal-v2-20260826",
+      "officialRoot": "python-apiops-agentlab/artifacts/stage21/formal-baseline",
+      "runArtifact": "python-apiops-agentlab/artifacts/stage21/formal-baseline/results/evaluation_run_stage21-formal-v2-20260826/run.json",
+      "completedAt": "2026-08-26T12:29:15.663237Z",
+      "datasetVersion": "v2",
+      "provider": null,
+      "contract": "Pre-Task-Success execution/evaluation only",
+      "result": {
+        "UNAVAILABLE": 105
+      },
+      "passRate": null,
+      "outcomeAccuracy": null,
+      "splits": null,
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 105
+      },
+      "executionModes": {
+        "UNAVAILABLE": 105
+      },
+      "finalAcceptance": "NOT_RECORDED_AT_RUN_ROOT",
+      "resultArtifact": "python-apiops-agentlab/artifacts/stage21/formal-baseline/results/evaluation_run_stage21-formal-v2-20260826/run.json",
+      "number": 1,
+      "label": "Formal mixed baseline v2",
+      "cohort": "FORMAL_MIXED_FIXTURE",
+      "revisionIdentity": "stage21-formal-baseline-v2-20260826",
+      "revisionNote": "No separate named revision in frozen artifact; baselineConfigId is not a unique run ID."
+    },
+    {
+      "revision": null,
+      "baselineConfigId": "stage21-final-formal-v3-20260826",
+      "evaluationRunId": "evaluation_run:stage21-final-formal-v3-20260826",
+      "officialRoot": "python-apiops-agentlab/artifacts/stage21/formal-baseline-final-v3",
+      "runArtifact": "python-apiops-agentlab/artifacts/stage21/formal-baseline-final-v3/results/evaluation_run_stage21-final-formal-v3-20260826/run.json",
+      "completedAt": "2026-08-26T14:04:40.028300Z",
+      "datasetVersion": "v2",
+      "provider": null,
+      "contract": "V1 strict Task Success",
+      "result": {
+        "FAIL": 56,
+        "UNKNOWN": 48,
+        "PASS": 1
+      },
+      "passRate": 0.009523809523809525,
+      "outcomeAccuracy": 0.017543859649122806,
+      "splits": null,
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 105
+      },
+      "executionModes": {
+        "UNAVAILABLE": 105
+      },
+      "finalAcceptance": "NOT_RECORDED_AT_RUN_ROOT",
+      "resultArtifact": "python-apiops-agentlab/artifacts/stage21/formal-baseline-final-v3/results/evaluation_run_stage21-final-formal-v3-20260826/run.json",
+      "number": 2,
+      "label": "Formal mixed final v3",
+      "cohort": "FORMAL_MIXED_FIXTURE",
+      "revisionIdentity": "stage21-final-formal-v3-20260826",
+      "revisionNote": "No separate named revision in frozen artifact; baselineConfigId is not a unique run ID."
+    },
+    {
+      "revision": null,
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260826T165637Z",
+      "officialRoot": "artifacts/stage21/real-model-baseline",
+      "runArtifact": "artifacts/stage21/real-model-baseline/full-105/results/evaluation_run_stage21-real-model-full-105-20260826T165637Z/run.json",
+      "completedAt": "2026-08-26T17:01:33.159876Z",
+      "datasetVersion": "v2",
+      "provider": {
+        "model": "deepseek-v4-flash",
+        "provider": "DeepSeek"
+      },
+      "contract": "V1 strict Task Success",
+      "result": {
+        "FAIL": 69,
+        "UNKNOWN": 33,
+        "PASS": 3
+      },
+      "passRate": 0.02857142857142857,
+      "outcomeAccuracy": 0.041666666666666664,
+      "splits": {
+        "DEV": {
+          "FAIL": 64,
+          "UNKNOWN": 28,
+          "PASS": 3
+        },
+        "HELD_OUT": {
+          "FAIL": 5,
+          "UNKNOWN": 5
+        }
+      },
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 105
+      },
+      "executionModes": {
+        "REAL_MODEL": 105
+      },
+      "finalAcceptance": "NOT_RECORDED_AT_RUN_ROOT",
+      "resultArtifact": "artifacts/stage21/real-model-baseline/full-105/results/evaluation_run_stage21-real-model-full-105-20260826T165637Z/run.json",
+      "number": 3,
+      "label": "DeepSeek baseline",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-real-model-baseline-v1",
+      "revisionNote": "No separate named revision in frozen artifact; baselineConfigId is not a unique run ID.",
+      "splitSource": "artifacts/stage21/real-model-baseline/held-out/results/evaluation_run_stage21-real-model-full-105-20260826T165637Z/run.json"
+    },
+    {
+      "revision": null,
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260826T171200Z",
+      "officialRoot": "artifacts/stage21/real-model-baseline-final",
+      "runArtifact": "artifacts/stage21/real-model-baseline-final/full-105/results/evaluation_run_stage21-real-model-full-105-20260826T171200Z/run.json",
+      "completedAt": "2026-08-26T17:16:53.079520Z",
+      "datasetVersion": "v2",
+      "provider": {
+        "model": "deepseek-v4-flash",
+        "provider": "DeepSeek"
+      },
+      "contract": "V1 strict Task Success",
+      "result": {
+        "FAIL": 69,
+        "UNKNOWN": 33,
+        "PASS": 3
+      },
+      "passRate": 0.02857142857142857,
+      "outcomeAccuracy": 0.041666666666666664,
+      "splits": {
+        "DEV": {
+          "FAIL": 64,
+          "UNKNOWN": 28,
+          "PASS": 3
+        },
+        "HELD_OUT": {
+          "FAIL": 5,
+          "UNKNOWN": 5
+        }
+      },
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 105
+      },
+      "executionModes": {
+        "REAL_MODEL": 105
+      },
+      "finalAcceptance": "NOT_RECORDED_AT_RUN_ROOT",
+      "resultArtifact": "artifacts/stage21/real-model-baseline-final/full-105/results/evaluation_run_stage21-real-model-full-105-20260826T171200Z/run.json",
+      "number": 4,
+      "label": "DeepSeek baseline final",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-real-model-baseline-v1",
+      "revisionNote": "No separate named revision in frozen artifact; baselineConfigId is not a unique run ID.",
+      "splitSource": "artifacts/stage21/real-model-baseline-final/held-out/results/evaluation_run_stage21-real-model-full-105-20260826T171200Z/run.json"
+    },
+    {
+      "revision": null,
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260827T171024Z",
+      "officialRoot": "artifacts/stage21/real-model-baseline-repaired-20260827T170951Z",
+      "runArtifact": "artifacts/stage21/real-model-baseline-repaired-20260827T170951Z/full-105/results/evaluation_run_stage21-real-model-full-105-20260827T171024Z/run.json",
+      "completedAt": "2026-08-27T17:13:08.386267Z",
+      "datasetVersion": "v2",
+      "provider": {
+        "model": "deepseek-v4-flash",
+        "provider": "DeepSeek"
+      },
+      "contract": "V1 strict Task Success",
+      "result": {
+        "UNKNOWN": 71,
+        "FAIL": 32,
+        "PASS": 2
+      },
+      "passRate": 0.01904761904761905,
+      "outcomeAccuracy": 0.058823529411764705,
+      "splits": null,
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "FAILED": 59,
+        "SUCCESS": 46
+      },
+      "executionModes": {
+        "UNKNOWN": 59,
+        "REAL_MODEL": 46
+      },
+      "finalAcceptance": "NOT_RECORDED_AT_RUN_ROOT",
+      "resultArtifact": "artifacts/stage21/real-model-baseline-repaired-20260827T170951Z/full-105/results/evaluation_run_stage21-real-model-full-105-20260827T171024Z/run.json",
+      "number": 5,
+      "label": "DeepSeek repaired baseline",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-real-model-baseline-v1",
+      "revisionNote": "No separate named revision in frozen artifact; baselineConfigId is not a unique run ID."
+    },
+    {
+      "revision": null,
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260830T064628Z",
+      "officialRoot": "artifacts/stage21/formal-real-model-final",
+      "runArtifact": "artifacts/stage21/formal-real-model-final/full-105/results/evaluation_run_stage21-real-model-full-105-20260830T064628Z/run.json",
+      "completedAt": "2026-08-30T06:51:24.382087Z",
+      "datasetVersion": "v3",
+      "provider": {
+        "model": "deepseek-v4-flash",
+        "provider": "DeepSeek"
+      },
+      "contract": "V1 strict Task Success",
+      "result": {
+        "FAIL": 68,
+        "UNKNOWN": 35,
+        "PASS": 2
+      },
+      "passRate": 0.01904761904761905,
+      "outcomeAccuracy": 0.02857142857142857,
+      "splits": null,
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 98,
+        "FAILED": 7
+      },
+      "executionModes": {
+        "REAL_MODEL": 99,
+        "UNKNOWN": 6
+      },
+      "finalAcceptance": "NOT_RECORDED_AT_RUN_ROOT",
+      "resultArtifact": "artifacts/stage21/formal-real-model-final/full-105/results/evaluation_run_stage21-real-model-full-105-20260830T064628Z/run.json",
+      "number": 6,
+      "label": "Formal real-model final",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-real-model-baseline-v1",
+      "revisionNote": "No separate named revision in frozen artifact; baselineConfigId is not a unique run ID."
+    },
+    {
+      "revision": null,
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260830T164256Z",
+      "officialRoot": "artifacts/stage21/final-v2-formal105",
+      "runArtifact": "artifacts/stage21/final-v2-formal105/full-105/results/evaluation_run_stage21-real-model-full-105-20260830T164256Z/run.json",
+      "completedAt": "2026-08-30T16:48:06.137656Z",
+      "datasetVersion": "v3",
+      "provider": {
+        "model": "deepseek-v4-flash",
+        "provider": "DeepSeek"
+      },
+      "contract": "V2 outcome / stage21-outcome-v2-v1",
+      "result": {
+        "UNKNOWN": 67,
+        "FAIL": 27,
+        "PASS": 11
+      },
+      "passRate": 0.10476190476190476,
+      "outcomeAccuracy": 0.2894736842105263,
+      "splits": {
+        "DEV": {
+          "UNKNOWN": 59,
+          "FAIL": 26,
+          "PASS": 10
+        },
+        "HELD_OUT": {
+          "UNKNOWN": 8,
+          "PASS": 1,
+          "FAIL": 1
+        }
+      },
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 105
+      },
+      "executionModes": {
+        "REAL_MODEL": 105
+      },
+      "finalAcceptance": "PASS",
+      "resultArtifact": "artifacts/stage21/final-v2-formal105/outcome-v2.json",
+      "number": 7,
+      "label": "Final V2 Formal105",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-real-model-baseline-v1",
+      "revisionNote": "No separate named revision in frozen artifact; baselineConfigId is not a unique run ID."
+    },
+    {
+      "revision": null,
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260831T024951Z",
+      "officialRoot": "artifacts/stage21/outcome-first-rag-enhanced-105",
+      "runArtifact": "artifacts/stage21/outcome-first-rag-enhanced-105/full-105/results/evaluation_run_stage21-real-model-full-105-20260831T024951Z/run.json",
+      "completedAt": "2026-08-31T02:55:19.733396Z",
+      "datasetVersion": "v3",
+      "provider": {
+        "model": "deepseek-v4-flash",
+        "provider": "DeepSeek"
+      },
+      "contract": "V2 outcome / stage21-outcome-v2-v2",
+      "result": {
+        "FAIL": 26,
+        "UNKNOWN": 68,
+        "PASS": 11
+      },
+      "passRate": 0.10476190476190476,
+      "outcomeAccuracy": 0.2972972972972973,
+      "splits": {
+        "DEV": {
+          "FAIL": 25,
+          "UNKNOWN": 60,
+          "PASS": 10
+        },
+        "HELD_OUT": {
+          "UNKNOWN": 8,
+          "PASS": 1,
+          "FAIL": 1
+        }
+      },
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 102,
+        "FAILED": 3
+      },
+      "executionModes": {
+        "REAL_MODEL": 105
+      },
+      "finalAcceptance": "PASS",
+      "resultArtifact": "artifacts/stage21/outcome-first-rag-enhanced-105/outcome-v2.json",
+      "number": 8,
+      "label": "Outcome-first RAG enhanced",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-real-model-baseline-v1",
+      "revisionNote": "No separate named revision in frozen artifact; baselineConfigId is not a unique run ID."
+    },
+    {
+      "revision": null,
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260901T110644Z",
+      "officialRoot": "f105r",
+      "runArtifact": "f105r/full-105/results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/run.json",
+      "completedAt": "2026-09-01T11:08:15.563035Z",
+      "datasetVersion": "v3",
+      "provider": {
+        "model": "deepseek-v4-flash",
+        "provider": "DeepSeek"
+      },
+      "contract": "V2 outcome / stage21-outcome-v2-v2",
+      "result": {
+        "FAIL": 31,
+        "UNKNOWN": 62,
+        "PASS": 12
+      },
+      "passRate": 0.11428571428571428,
+      "outcomeAccuracy": 0.27906976744186046,
+      "splits": {
+        "DEV": {
+          "FAIL": 30,
+          "UNKNOWN": 54,
+          "PASS": 11
+        },
+        "HELD_OUT": {
+          "UNKNOWN": 8,
+          "PASS": 1,
+          "FAIL": 1
+        }
+      },
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 104,
+        "FAILED": 1
+      },
+      "executionModes": {
+        "REAL_MODEL": 104,
+        "UNKNOWN": 1
+      },
+      "finalAcceptance": "PASS",
+      "resultArtifact": "f105r/outcome-v2.json",
+      "number": 9,
+      "label": "Final-task4 Formal105",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-real-model-baseline-v1",
+      "revisionNote": "No separate named revision in frozen artifact; baselineConfigId is not a unique run ID."
+    },
+    {
+      "revision": null,
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260903T173457Z",
+      "officialRoot": "f105r/official-20260903T173410Z",
+      "runArtifact": "f105r/official-20260903T173410Z/full-105/results/run-4254b6d0a687d65fd33acbfb/run.json",
+      "completedAt": "2026-09-03T17:40:41.612381Z",
+      "datasetVersion": "v3",
+      "provider": {
+        "model": "qwen3.7-plus-2026-05-26",
+        "provider": "Qwen"
+      },
+      "contract": "V2 outcome / stage21-outcome-v2-v2",
+      "result": {
+        "FAIL": 33,
+        "UNKNOWN": 60,
+        "PASS": 12
+      },
+      "passRate": 0.11428571428571428,
+      "outcomeAccuracy": 0.26666666666666666,
+      "splits": {
+        "DEV": {
+          "FAIL": 31,
+          "UNKNOWN": 53,
+          "PASS": 11
+        },
+        "HELD_OUT": {
+          "FAIL": 2,
+          "UNKNOWN": 7,
+          "PASS": 1
+        }
+      },
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 104,
+        "FAILED": 1
+      },
+      "executionModes": {
+        "REAL_MODEL": 104,
+        "UNKNOWN": 1
+      },
+      "finalAcceptance": "FAIL",
+      "resultArtifact": "f105r/official-20260903T173410Z/outcome-v2.json",
+      "number": 10,
+      "label": "Qwen Formal105 baseline",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-real-model-baseline-v1",
+      "revisionNote": "No separate named revision in frozen artifact; baselineConfigId is not a unique run ID."
+    },
+    {
+      "revision": "stage21-formal105-accuracy-repair-v2",
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T072622Z",
+      "officialRoot": "f105r/official-accuracy-v2-20260904T072119Z",
+      "runArtifact": "f105r/official-accuracy-v2-20260904T072119Z/full-105/results/run-e3be1cc8334079c252f97806/run.json",
+      "completedAt": "2026-09-04T07:33:35.369316Z",
+      "datasetVersion": "v3",
+      "provider": {
+        "model": "qwen3.7-plus-2026-05-26",
+        "provider": "Qwen"
+      },
+      "contract": "V2 outcome / stage21-outcome-v2-v2",
+      "result": {
+        "FAIL": 30,
+        "UNKNOWN": 33,
+        "PASS": 42
+      },
+      "passRate": 0.4,
+      "outcomeAccuracy": 0.5833333333333334,
+      "splits": {
+        "DEV": {
+          "FAIL": 28,
+          "UNKNOWN": 30,
+          "PASS": 37
+        },
+        "HELD_OUT": {
+          "PASS": 5,
+          "FAIL": 2,
+          "UNKNOWN": 3
+        }
+      },
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 89,
+        "FAILED": 16
+      },
+      "executionModes": {
+        "REAL_MODEL": 89,
+        "UNKNOWN": 16
+      },
+      "finalAcceptance": "PASS_WITH_LIMITATIONS",
+      "resultArtifact": "f105r/official-accuracy-v2-20260904T072119Z/outcome-v2.json",
+      "number": 11,
+      "label": "Accuracy Repair v2",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-formal105-accuracy-repair-v2"
+    },
+    {
+      "revision": "stage21-formal105-accuracy-repair-v4",
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T145654Z",
+      "officialRoot": "f105r/v4o-20260904T145500Z",
+      "runArtifact": "f105r/v4o-20260904T145500Z/full-105/results/run-97539bc88f934d1bc45f3edd/run.json",
+      "completedAt": "2026-09-04T15:02:15.822550Z",
+      "datasetVersion": "v3",
+      "provider": {
+        "model": "qwen3.8-max",
+        "provider": "Qwen"
+      },
+      "contract": "V2 outcome / stage21-outcome-v2-v2",
+      "result": {
+        "FAIL": 25,
+        "PASS": 70,
+        "UNKNOWN": 10
+      },
+      "passRate": 0.6666666666666666,
+      "outcomeAccuracy": 0.7368421052631579,
+      "splits": {
+        "DEV": {
+          "FAIL": 25,
+          "PASS": 62,
+          "UNKNOWN": 8
+        },
+        "HELD_OUT": {
+          "PASS": 8,
+          "UNKNOWN": 2
+        }
+      },
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 103,
+        "FAILED": 2
+      },
+      "executionModes": {
+        "REAL_MODEL": 105
+      },
+      "finalAcceptance": "PASS_WITH_LIMITATIONS",
+      "resultArtifact": "f105r/v4o-20260904T145500Z/outcome-v2.json",
+      "number": 12,
+      "label": "Accuracy Repair v4",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-formal105-accuracy-repair-v4"
+    },
+    {
+      "revision": "stage21-formal105-final-closure-v5",
+      "baselineConfigId": "stage21-real-model-baseline-v1",
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260905T054023Z",
+      "officialRoot": "f105r/v5o-20260905T053300Z",
+      "runArtifact": "f105r/v5o-20260905T053300Z/full-105/results/run-32892b0b5903f34756209cc6/run.json",
+      "completedAt": "2026-09-05T05:48:24.071580Z",
+      "datasetVersion": "v3",
+      "provider": {
+        "model": "qwen3.8-max",
+        "provider": "Qwen"
+      },
+      "contract": "V2 outcome / stage21-outcome-v2-v2",
+      "result": {
+        "PASS": 95,
+        "FAIL": 9,
+        "UNKNOWN": 1
+      },
+      "passRate": 0.9047619047619048,
+      "outcomeAccuracy": 0.9134615384615384,
+      "splits": {
+        "DEV": {
+          "PASS": 86,
+          "FAIL": 8,
+          "UNKNOWN": 1
+        },
+        "HELD_OUT": {
+          "PASS": 9,
+          "FAIL": 1
+        }
+      },
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 105
+      },
+      "executionModes": {
+        "REAL_MODEL": 105
+      },
+      "finalAcceptance": "PASS_WITH_LIMITATIONS",
+      "resultArtifact": "f105r/v5o-20260905T053300Z/outcome-v2.json",
+      "number": 13,
+      "label": "Final Closure v5",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-formal105-final-closure-v5"
+    },
+    {
+      "revision": "stage21-diagnosis-contract-full105-v2",
+      "baselineConfigId": null,
+      "evaluationRunId": "evaluation_run:stage21-diagnosis-contract-full105-20260906T034346Z",
+      "officialRoot": "f105r/dc2-20260906T034303Z",
+      "runArtifact": "f105r/dc2-20260906T034303Z/raw/run-dbf490fc3bb353115a0ada40/run.json",
+      "completedAt": "2026-09-06T04:00:45.395137Z",
+      "datasetVersion": "stage21-diagnosis-contract-full105-v2",
+      "provider": {
+        "provider": "Qwen",
+        "model": "qwen3.8-max"
+      },
+      "contract": "diagnosis_contract / CODEX_REVIEW",
+      "result": {
+        "FAIL": 8,
+        "PASS": 94,
+        "UNKNOWN": 3
+      },
+      "passRate": 0.8952380952380953,
+      "outcomeAccuracy": 0.9215686274509803,
+      "splits": {
+        "DEV": {
+          "FAIL": 7,
+          "PASS": 85,
+          "UNKNOWN": 3
+        },
+        "HELD_OUT": {
+          "PASS": 9,
+          "FAIL": 1
+        }
+      },
+      "integrity": {
+        "selected": 105,
+        "executed": 105,
+        "persisted": 105,
+        "missing": 0,
+        "duplicates": 0
+      },
+      "payloadsMatch": true,
+      "runtimeStatus": {
+        "SUCCESS": 104,
+        "FAILED": 1
+      },
+      "executionModes": {
+        "REAL_MODEL": 105
+      },
+      "finalAcceptance": "PASS_WITH_LIMITATIONS",
+      "resultArtifact": "f105r/dc2-20260906T034303Z/evaluated/outcome-v2.json",
+      "number": 14,
+      "label": "Diagnosis Contract Full105 v2",
+      "cohort": "REAL_MODEL_FULL105",
+      "revisionIdentity": "stage21-diagnosis-contract-full105-v2"
+    }
+  ],
+  "audit": "docs/evidence/stage21-authority-cleanup/inventory.json",
+  "excludedPartialOrTargetedRuns": [
+    "49-task interrupted attempt (20260902T125355Z; prior deletion tombstone retained)",
+    "86-task diagnosis v1 interrupted attempt (20260906T023749Z)",
+    "8/13/18-task residual or live replays; 6-task closure; 2/10/33-task targeted/control runs",
+    "DEV95 and HELD_OUT10 projections/runs; smoke/pilot/provider acceptance",
+    "offline reprojection; projection estimate; preflight; live acceptance; contract matrix"
+  ],
+  "notAdditionalRuns": [
+    "formal105-run-final directory junction to f105r",
+    "diagnosis raw and evaluated views share one evaluationRunId",
+    "same-run held-out projections; summary and frontend snapshot copies"
+  ]
+}

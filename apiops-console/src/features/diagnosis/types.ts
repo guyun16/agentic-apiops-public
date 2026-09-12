@@ -2,7 +2,27 @@ import type { TestReport } from '../runs/types'
 
 export type DiagnosisExecutionStatus = 'COMPLETED' | 'APPROVAL_REQUIRED' | 'FAILED' | 'REJECTED'
 
+export type DiagnosisRunStatus = DiagnosisExecutionStatus | 'RUNNING'
+
 export type DiagnosisHistoryFilter = 'ALL' | 'COMPLETED' | 'APPROVAL_REQUIRED' | 'FAILED'
+
+export type DiagnosisRunSummary = {
+  status: DiagnosisRunStatus
+  provider: string
+  model: string
+  projectId: number
+  runId: number
+  taskId: number
+  agentRunId: string
+  traceId: string
+  workflowId: string
+  apiId: string | null
+  reportId: string
+  diagnosisReportId: string | null
+  summary: string | null
+  createdAt: string
+  updatedAt: string
+}
 
 export type DiagnosisStepState = 'COMPLETED' | 'ACTIVE' | 'PENDING' | 'REJECTED'
 

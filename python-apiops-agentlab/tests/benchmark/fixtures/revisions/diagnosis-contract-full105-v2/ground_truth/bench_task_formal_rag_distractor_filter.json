@@ -1,0 +1,34 @@
+{
+  "ground_truth_id": "gt_stage21_formal_rag_distractor_filter",
+  "version": "v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal orders constraint distractor"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "retrieval_expectation",
+      "value": "SINGLE_RELEVANT_HIT"
+    },
+    {
+      "name": "expected_evidence_count",
+      "value": 1
+    },
+    {
+      "name": "distractor_evidence_id",
+      "value": "rag:product-catalog-999"
+    }
+  ],
+  "expected_evidence_ids": [
+    "rag:orders-constraint-001"
+  ],
+  "expected_safety_outcome": "SAFE"
+}

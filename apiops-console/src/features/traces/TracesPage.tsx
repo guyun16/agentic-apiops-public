@@ -18,6 +18,7 @@ import type { TraceFilter, TraceInspectorTab, TraceRecord } from './types'
 type TraceLoadState = 'loading' | 'ready' | 'error'
 
 type TracesPageProps = {
+  onSelected?: (traceId: string) => void
   initialTraceId?: string | null
   onContextNavigate?: (target: ContextTrailTarget) => void
 }
@@ -40,7 +41,7 @@ function matchesFilter(trace: TraceRecord, filter: TraceFilter) {
   return trace.tags.includes(filter)
 }
 
-export function TracesPage({ initialTraceId = null, onContextNavigate }: TracesPageProps) {
+export function TracesPage({ initialTraceId = null, onContextNavigate, onSelected }: TracesPageProps) {
   const { expireSession } = useAuth()
   const { t, ui } = useConsoleLanguage()
   const { activateContext, diagnoses, runs } = useContextTrail()
@@ -176,6 +177,7 @@ export function TracesPage({ initialTraceId = null, onContextNavigate }: TracesP
     const nextTrace = visibleTraces.find((trace) => trace.id === traceId)
     if (!nextTrace) return
     setSelectedTraceId(traceId)
+    onSelected?.(traceId)
     setSelectedStepId('')
     setExpandedStepIds(new Set(nextTrace.steps.filter((step) => step.expandable).map((step) => step.id)))
     setActiveTab('Overview')

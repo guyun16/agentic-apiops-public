@@ -37,7 +37,7 @@ export function ResponseList({ expectedResponse, strategy }: ResponseListProps) 
 
           <div className="expected-response-reason">
             <strong>{ui('Why this response?')}</strong>
-            <p>{expectedResponse.why}</p>
+            <p>{ui(expectedResponse.why)}</p>
           </div>
 
           {expectedResponse.schema !== null && expectedResponse.schema !== undefined ? (

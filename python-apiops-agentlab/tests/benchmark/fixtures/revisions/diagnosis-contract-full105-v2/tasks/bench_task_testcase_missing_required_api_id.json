@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_testcase_missing_required_api_id",
+  "taskType": "TESTCASE_GENERATION",
+  "instruction": "Generate a testcase while preserving the real required apiId validation boundary; do not invent a replacement API identity.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "strategy",
+        "value": "MISSING_REQUIRED"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 1001
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "runnerFixture",
+        "ref": "java://runner-testcase-dsl/missing-required.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "candidateFixture",
+        "ref": "examples/invalid/testcase-missing-api-id.json"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "submit_unvalidated_dsl"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "valid_json",
+    "schema_valid",
+    "contract_accepted",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_testcase_missing_required_api_id",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "valid_json",
+      "schema_valid",
+      "contract_accepted",
+      "exact_match"
+    ]
+  }
+}

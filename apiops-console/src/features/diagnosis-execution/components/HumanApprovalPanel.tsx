@@ -83,8 +83,8 @@ export function HumanApprovalPanel({
       {approvalRequired && approval ? (
         <div className="diagnosis-approval-content">
           <div className="diagnosis-approval-field"><span>{ui('Tool')}</span><strong>{approval.toolName}</strong></div>
-          <div className="diagnosis-approval-field"><span>{ui('Risk')}</span><strong className="diagnosis-risk-badge">{approval.risk}</strong></div>
-          <div className="diagnosis-approval-field diagnosis-approval-reason"><span>{ui('Reason')}</span><p>{approval.reason}</p></div>
+          <div className="diagnosis-approval-field"><span>{ui('Risk')}</span><strong className="diagnosis-risk-badge">{ui(approval.risk)}</strong></div>
+          <div className="diagnosis-approval-field diagnosis-approval-reason"><span>{ui('Reason')}</span><p>{ui(approval.reason)}</p></div>
           <div className="diagnosis-approval-arguments">
             <div className="diagnosis-approval-subheading"><strong>{ui('Proposed Arguments')}</strong><span>{ui('Real workflow intent')}</span></div>
             {isEditing ? (
@@ -95,7 +95,7 @@ export function HumanApprovalPanel({
           </div>
           <div className="diagnosis-approval-scope">
             <div className="diagnosis-approval-subheading"><strong>{ui('Approval Scope')}</strong><span>{ui('Exact intent binding')}</span></div>
-            {Object.entries(approval.scope).map(([label, value]) => <div key={label}><span>{label}</span><code>{value}</code></div>)}
+            {Object.entries(approval.scope).map(([label, value]) => <div key={label}><span>{ui(label)}</span><code>{value}</code></div>)}
           </div>
           <div className="diagnosis-approval-warning">
             <ShieldAlert size={16} strokeWidth={1.8} />
@@ -113,7 +113,7 @@ export function HumanApprovalPanel({
       ) : (
         <div className="diagnosis-execution-status-content">
           <p>{ui(statusDescription(execution))}</p>
-          {execution?.failure ? <p className="diagnosis-execution-rejected">{execution.failure.code}: {execution.failure.message}</p> : null}
+          {execution?.failure ? <p className="diagnosis-execution-rejected">{execution.failure.code}: {ui(execution.failure.message)}</p> : null}
           {status === 'COMPLETED' ? (
             <div className="diagnosis-execution-status-actions">
               <button className="diagnosis-execution-primary-button" onClick={onViewResult} type="button"><CheckCircle2 size={16} strokeWidth={1.9} /> {ui('View Diagnosis Result')}</button>
@@ -121,7 +121,7 @@ export function HumanApprovalPanel({
           ) : null}
         </div>
       )}
-      {notice ? <div className="diagnosis-execution-notice">{notice}</div> : null}
+      {notice ? <div className="diagnosis-execution-notice">{ui(notice)}</div> : null}
     </section>
   )
 }

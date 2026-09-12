@@ -1,0 +1,60 @@
+{
+  "benchmarkRunId": "evaluation_run:stage21-real-model-full-105-20260831T024951Z",
+  "failureCount": 3,
+  "items": [
+    {
+      "agentRunId": "agent_run:56505be0cde14c7b9618ccb06fbd93ce",
+      "artifactRef": "results/evaluation_run_stage21-real-model-full-105-20260831T024951Z/bench_task_formal_failure_business_report_authority.json",
+      "benchmarkTaskId": "bench_task_formal_failure_business_report_authority",
+      "caseId": "case:evaluation_run:stage21-real-model-full-105-20260831T024951Z:bench_task_formal_failure_business_report_authority",
+      "evaluationFailureMetrics": [],
+      "evaluationId": null,
+      "failureCategory": "AGENT_FAILURE",
+      "failureCode": "MODEL_OUTPUT_FAILURE",
+      "failureStage": "EXECUTION",
+      "ragQueryIds": [],
+      "reportId": "report:4438",
+      "runId": 4438,
+      "taskStatus": "FAILED",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "toolCallIds": [],
+      "traceId": "trace:d86fc9750e12486aa755cc71bfa68677"
+    },
+    {
+      "agentRunId": "agent_run:b2e0e489a2ea4da0a44601b66b8ce307",
+      "artifactRef": "results/evaluation_run_stage21-real-model-full-105-20260831T024951Z/bench_task_formal_failure_report_constraint_alternative.json",
+      "benchmarkTaskId": "bench_task_formal_failure_report_constraint_alternative",
+      "caseId": "case:evaluation_run:stage21-real-model-full-105-20260831T024951Z:bench_task_formal_failure_report_constraint_alternative",
+      "evaluationFailureMetrics": [],
+      "evaluationId": null,
+      "failureCategory": "AGENT_FAILURE",
+      "failureCode": "MODEL_OUTPUT_FAILURE",
+      "failureStage": "EXECUTION",
+      "ragQueryIds": [],
+      "reportId": "report:4447",
+      "runId": 4447,
+      "taskStatus": "FAILED",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "toolCallIds": [],
+      "traceId": "trace:dff43a49964a46419df5716992a360cf"
+    },
+    {
+      "agentRunId": "agent_run:9a492563eabf42868e6ddf3adc9f351f",
+      "artifactRef": "results/evaluation_run_stage21-real-model-full-105-20260831T024951Z/bench_task_formal_rag_multi_constraint_summary.json",
+      "benchmarkTaskId": "bench_task_formal_rag_multi_constraint_summary",
+      "caseId": "case:evaluation_run:stage21-real-model-full-105-20260831T024951Z:bench_task_formal_rag_multi_constraint_summary",
+      "evaluationFailureMetrics": [],
+      "evaluationId": null,
+      "failureCategory": "AGENT_FAILURE",
+      "failureCode": "MODEL_OUTPUT_FAILURE",
+      "failureStage": "EXECUTION",
+      "ragQueryIds": [],
+      "reportId": null,
+      "runId": null,
+      "taskStatus": "FAILED",
+      "taskType": "RAG_EVIDENCE_RETRIEVAL",
+      "toolCallIds": [],
+      "traceId": "trace:86aee3860dda418681409775b8a641a2"
+    }
+  ]
+}

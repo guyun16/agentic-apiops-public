@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_formal_testcase_project_id_type",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "CONTRACT_REJECTION"
+    },
+    {
+      "name": "invalid_field",
+      "value": "projectId"
+    },
+    {
+      "name": "invalid_constraint",
+      "value": "INTEGER_REQUIRED"
+    },
+    {
+      "name": "contract_accepted",
+      "value": false
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "ground_truth_id": "gt_stage21_formal_rag_multi_report_index",
+  "version": "v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal report unique index pair"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "retrieval_expectation",
+      "value": "MULTI_HIT"
+    },
+    {
+      "name": "expected_evidence_count",
+      "value": 2
+    }
+  ],
+  "expected_evidence_ids": [
+    "report:701",
+    "rag:orders-unique-index"
+  ],
+  "expected_safety_outcome": "SAFE"
+}

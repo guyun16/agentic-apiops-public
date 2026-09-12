@@ -12,8 +12,8 @@ from jsonschema.validators import validator_for
 from pydantic import BaseModel, ConfigDict, StrictStr, ValidationError, computed_field
 
 from app.agents.testcase_generator import Candidate
-from app.schemas.testcase_dsl import TestCaseDSL
-from app.workflows.generation_context import GenerationContext
+from app.schemas.testcase_dsl import StatusCodeAssertion, TestCaseDSL
+from app.workflows.generation_context import GenerationContext, TestStrategy
 
 ValidationLayer = Literal["PARSE", "SCHEMA", "SEMANTIC"]
 
@@ -195,6 +195,42 @@ def _semantic_issues(
                 path=f"{request_path}/path",
                 layer="SEMANTIC",
                 message="Candidate request path does not match the target operation.",
+            )
+
+    documented_statuses = {
+        int(response.status_code)
+        for response in generation_context.documented_responses
+        if response.status_code.isdigit()
+    }
+    if documented_statuses:
+        observed_statuses = {
+            assertion.expected
+            for step in testcase.steps
+            for assertion in step.assertions
+            if isinstance(assertion, StatusCodeAssertion)
+        }
+        if not observed_statuses & documented_statuses:
+            yield ValidationIssue(
+                code="STRATEGY_STATUS_EXPECTATION_MISSING",
+                path="/steps",
+                layer="SEMANTIC",
+                message=(
+                    "Candidate must assert at least one status code documented for the "
+                    f"selected {generation_context.strategy.value} strategy."
+                ),
+            )
+        if (
+            generation_context.strategy is TestStrategy.BUSINESS_ERROR
+            and not any(status >= 400 for status in observed_statuses)
+        ):
+            yield ValidationIssue(
+                code="BUSINESS_ERROR_STATUS_EXPECTATION_MISSING",
+                path="/steps",
+                layer="SEMANTIC",
+                message=(
+                    "Business-error strategy requires an explicit non-success "
+                    "status assertion."
+                ),
             )
 
 

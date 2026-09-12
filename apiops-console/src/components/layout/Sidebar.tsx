@@ -8,6 +8,7 @@ import {
   ScanSearch,
   Settings,
   Stethoscope,
+  Trophy,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useConsoleLanguage } from '../../app/ConsoleLanguage'
@@ -33,6 +34,7 @@ const navigationItems: NavigationItem[] = [
   { label: 'Diagnosis', translationKey: 'nav.diagnosis', icon: ScanSearch },
   { label: 'Traces', translationKey: 'nav.traces', icon: GitBranch },
   { label: 'Evaluation', translationKey: 'nav.evaluation', icon: BarChart3 },
+  { label: 'Benchmark', translationKey: 'nav.benchmark', icon: Trophy },
   { label: 'Settings', translationKey: 'nav.settings', icon: Settings },
 ]
 

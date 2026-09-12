@@ -12,7 +12,6 @@ target/
 *.iws
 *.iml
 *.ipr
-
 ### Eclipse ###
 .apt_generated
 .classpath
@@ -22,7 +21,6 @@ target/
 .springBeans
 .sts4-cache
 **/bin/
-
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -32,20 +30,16 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-
 ### VS Code ###
 .vscode/
-
 ### Mac OS ###
 .DS_Store
 ### Java compilation output ###
 **/out/
 **/out-*/
 *.class
-
 ### IntelliJ IDEA local files ###
 .idea/
-
 ### Local runtime and secret files ###
 *.log
 *.tmp
@@ -54,10 +48,8 @@ build/
 .env.*
 !.env.example
 *.jtl
-
 ### Local test coverage ###
 coverage/
-
 ### Python AgentLab local artifacts ###
 /python-apiops-agentlab/.venv/
 /python-apiops-agentlab/.pytest_cache/
@@ -70,21 +62,13 @@ coverage/
 /python-apiops-agentlab/data/agentlab-runtime.sqlite3-shm
 /python-apiops-agentlab/data/agentlab-runtime.sqlite3-wal
 /python-apiops-agentlab/data/traces/
-
 ### APIOps Console frontend ###
 /apiops-console/node_modules/
 /apiops-console/dist/
 /apiops-console/*.tsbuildinfo
-
 ### Public release guardrails ###
-**/docs/
-/zh/
-**/artifacts/
 **/data/
 /f105r/
-/python-apiops-agentlab/app/benchmark/
-/python-apiops-agentlab/tests/benchmark/
-/apiops-console/src/features/benchmark/
 benchmark-results/
 benchmark-artifacts/
 venv/
@@ -95,3 +79,10 @@ __pycache__/
 **/.pytest_cache/
 .ruff_cache/
 **/.ruff_cache/
+# Reviewed public publication; other local experiment outputs stay private.
+/.local-run/
+/artifacts/*
+!/artifacts/benchmark/
+/python-apiops-agentlab/artifacts/
+*.sqlite3*
+*.diagnosis-locks/

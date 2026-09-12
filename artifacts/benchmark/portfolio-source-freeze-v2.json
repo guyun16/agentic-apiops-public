@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "apiops-bench-source-freeze/v2",
+  "sourceNormalization": "utf8-lf",
+  "purpose": "PORTFOLIO_PUBLICATION_ACCEPTANCE",
+  "benchmarkExecuted": false,
+  "modelCalled": false,
+  "previousFreezeSha256": "0f6eb8515a87429b9a1323ac6e4088cf3d9c0db59a1e8af01f4dc03f58c10b2e",
+  "sourceInventory": {
+    "artifacts/benchmark/portfolio-manifest.json": "00bb48c682b3855596d22be2b3a0a6adb63de3ac02f6a689d104360f984660d1",
+    "python-apiops-agentlab/app/services/benchmark_results.py": "597c817bf093ce4b8f3cf01b9c326043f8c200578f1befd4a987b4194498aa72",
+    "python-apiops-agentlab/tests/api/test_benchmark_results.py": "e9a7879e77ba9dba47225add2373484022bc7fd8e9c8f2eed7e6c41df5618b29",
+    "python-apiops-agentlab/scripts/freeze_benchmark_portfolio.py": "2d61a26437c2586cc49065e65e8ca059f59342e71f0ecb9efa8c2e0313e8a2e4",
+    "python-apiops-agentlab/tests/scripts/test_stage21_final_revision_freeze.py": "1d82229b506c8490aae418cc3a7cc1436de21d2edd85259a63d6436e15f6285b",
+    "apiops-console/src/features/benchmark/BenchmarkPage.tsx": "1662488f184d8316a3ee13deac9815c9e58ff96849d9ee45b2d6eeadfaa5c5f1",
+    "apiops-console/src/features/benchmark/finalResultAdapter.ts": "4296188c69db1adcc33bf6d53505dcc70f632463b661b8e39e8042a871fbf2fc",
+    "apiops-console/src/features/benchmark/final-result.snapshot.json": "3df39e37c7328ac3d2c33490f4b7ccf42bfb65e72e870f6a62504e9ba647dea0",
+    "apiops-console/scripts/verify-benchmark.ts": "6eaf470d3637e0ad1f4a2b9b488dbb9bf2fee742e5a8e96dee6a102d3562228f"
+  }
+}

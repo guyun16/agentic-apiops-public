@@ -1,0 +1,20 @@
+{
+  "ground_truth_id": "gt_stage21_formal_testcase_happy_create_order_contract",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "HAPPY_PATH"
+    },
+    {
+      "name": "contract_accepted",
+      "value": true
+    },
+    {
+      "name": "fixture_authority",
+      "value": "VALID_TESTCASE"
+    }
+  ]
+}

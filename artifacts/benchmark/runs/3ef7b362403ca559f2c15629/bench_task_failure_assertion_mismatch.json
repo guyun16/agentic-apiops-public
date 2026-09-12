@@ -1,0 +1,57 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:efcbce765e3441b4a72603a09dc6afe1",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_failure_assertion_mismatch",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260827T171024Z:bench_task_failure_assertion_mismatch",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 3.205,
+  "errorSummary": "BenchmarkTaskFailure: Java TestReport resource could not be resolved through the public boundary",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260827T171024Z",
+  "executionMode": "UNKNOWN",
+  "failureCategory": "CONTRACT_FAILURE",
+  "failureCode": "JAVA_REPORT_REFERENCE_UNRESOLVED",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://runner-testcase-dsl/e2e/stage8-demo-product-assertion-failed.json",
+    "examples/diagnosis-report-valid.json"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "NOT_APPLICABLE",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "FAILURE_DIAGNOSIS",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:a28e717ccf36499c9c0d464340d6f1eb"
+}

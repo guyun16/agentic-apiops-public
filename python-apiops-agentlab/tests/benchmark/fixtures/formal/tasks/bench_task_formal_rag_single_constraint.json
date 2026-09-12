@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_formal_rag_single_constraint",
+  "taskType": "RAG_EVIDENCE_RETRIEVAL",
+  "instruction": "Retrieve the one exact orders-constraint evidence identity and do not return an unrelated catalog chunk.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "authorityFixture",
+        "ref": "java://rag/project-41/query/formal-single-constraint"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "taskFixture",
+        "ref": "examples/openapi-metadata-valid.json"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "taskFocus",
+        "value": "single exact constraint evidence"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search"
+  ],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "parameter_accuracy",
+    "evidence_hit"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_formal_rag_single_constraint",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "parameter_accuracy",
+      "evidence_hit"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "formal orders constraint single"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

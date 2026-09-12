@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "stage21-final-revision-config/v1",
+  "revision": "stage21-formal105-final-closure-v5",
+  "parentOfficialRevision": "stage21-formal105-accuracy-repair-v4",
+  "provider": "Qwen",
+  "model": "qwen3.8-max",
+  "qwenBaseUrl": "https://your-provider.example/v1",
+  "qwenTimeoutSeconds": 60.0,
+  "taskCount": 105,
+  "splitCounts": {"DEV": 95, "HELD_OUT": 10},
+  "minimumPassCount": 90,
+  "knownLimitations": "docs/stage21-final-known-limitations.json"
+}

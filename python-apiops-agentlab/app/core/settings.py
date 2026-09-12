@@ -28,8 +28,11 @@ class AppSettings(BaseSettings):
     diagnosis_llm_provider: Literal["deepseek", "qwen"] = "deepseek"
     testcase_llm_provider: Literal["deepseek", "qwen"] = "deepseek"
     qwen_api_key: SecretStr | None = None
-    qwen_base_url: str = Field(default="https://your-provider.example/v1", min_length=1)
-    qwen_model: str = Field(default="qwen3.7-plus-2026-05-26", min_length=1)
+    qwen_base_url: str = Field(
+        default="https://your-provider.example/v1",
+        min_length=1,
+    )
+    qwen_model: str = Field(default="qwen3.8-max", min_length=1)
     qwen_timeout_seconds: float = Field(default=60.0, gt=0)
     memory_db_path: str = Field(default="data/historical-memory.sqlite3", min_length=1)
     runtime_db_path: str = Field(default="data/agentlab-runtime.sqlite3", min_length=1)

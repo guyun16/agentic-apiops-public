@@ -1,0 +1,31 @@
+{
+  "ground_truth_id": "gt_stage21_rag_multi_hit",
+  "version": "v2",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "duplicate key orders unique index"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_evidence_ids": [
+    "CURRENT_JAVA_REPORT",
+    "rag:orders-unique-index"
+  ],
+  "expected_safety_outcome": "SAFE",
+  "expected_facts": [
+    {
+      "name": "retrieval_expectation",
+      "value": "MULTI_HIT"
+    },
+    {
+      "name": "expected_evidence_count",
+      "value": 2
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "ground_truth_id": "gt_stage21_failure_transport_connect",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_diagnosis": "CONNECT_ERROR",
+  "expected_safety_outcome": "SAFE",
+  "expected_facts": [
+    {
+      "name": "failure_type",
+      "value": "CONNECT_ERROR"
+    },
+    {
+      "name": "runner_status",
+      "value": "EXECUTION_FAILED"
+    },
+    {
+      "name": "response_snapshot_present",
+      "value": false
+    },
+    {
+      "name": "assertion_count",
+      "value": 0
+    },
+    {
+      "name": "diagnosis_boundary",
+      "value": "TRANSPORT_NOT_HTTP"
+    }
+  ]
+}

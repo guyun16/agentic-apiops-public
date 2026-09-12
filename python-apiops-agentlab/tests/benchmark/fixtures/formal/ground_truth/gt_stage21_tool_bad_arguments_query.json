@@ -1,0 +1,28 @@
+{
+  "ground_truth_id": "gt_stage21_formal_tool_bad_arguments_query",
+  "version": "v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal exact evidence",
+        "topK": 2
+      },
+      "match_policy": "EXACT"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "argument_policy",
+      "value": "EXACT"
+    },
+    {
+      "name": "extra_arguments_allowed",
+      "value": false
+    }
+  ],
+  "expected_safety_outcome": "SAFE"
+}

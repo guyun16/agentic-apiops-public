@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "apiops-bench-source-freeze/v1",
+  "purpose": "PORTFOLIO_PUBLICATION_ACCEPTANCE",
+  "benchmarkExecuted": false,
+  "modelCalled": false,
+  "sourceInventory": {
+    "artifacts/benchmark/portfolio-manifest.json": "a5aea46b5bb59846b0df41357c1409c529527cee6502f4cd46af28f1bfc87988",
+    "python-apiops-agentlab/app/services/benchmark_results.py": "7e7fc59592d931597becc953135737404d18561d11d06074a80ab99b2b0292da",
+    "python-apiops-agentlab/tests/api/test_benchmark_results.py": "be18ef8ab07bdf9d7191a6c7cebabe5c1c5ac6a74525746df1a445fddf3f5c22",
+    "python-apiops-agentlab/scripts/freeze_benchmark_portfolio.py": "505572c5156418518b154bdd691269b6601c506a353c3708d57cab5242a1b67e",
+    "python-apiops-agentlab/tests/scripts/test_stage21_final_revision_freeze.py": "442ef375088e4676152174d8f2da37547143b849dc106435e9f2e1b34b6cb7be",
+    "apiops-console/src/features/benchmark/BenchmarkPage.tsx": "66f59c272995afeed9accbe93c86f113ab66afdc75da991887a044f52f33368c",
+    "apiops-console/src/features/benchmark/finalResultAdapter.ts": "32653e1196eb8d1728487520b77e13a1e8cebfb3471955c05b3c5a91bfdaadac",
+    "apiops-console/src/features/benchmark/final-result.snapshot.json": "3df39e37c7328ac3d2c33490f4b7ccf42bfb65e72e870f6a62504e9ba647dea0",
+    "apiops-console/scripts/verify-benchmark.ts": "5ea12762ce176bb5f91e386ebb684805b54d34da5774b63d1f5ee725043b441b"
+  }
+}

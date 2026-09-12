@@ -8,6 +8,7 @@ import pytest
 from app.agents.testcase_generator import (
     CandidateParseError,
     GenerationFailure,
+    IntentionalInvaliditySpec,
     TestCaseGenerator,
 )
 from app.clients.llm import LLMClient
@@ -28,6 +29,7 @@ from app.workflows.testcase_generation_graph import build_testcase_generation_gr
 
 
 def make_context(*, strategy: Strategy = Strategy.HAPPY_PATH) -> GenerationContext:
+    status_code = "409" if strategy is Strategy.BUSINESS_ERROR else "200"
     return GenerationContext(
         api_id="api-orders",
         api_doc_id="doc-orders-v1",
@@ -36,7 +38,7 @@ def make_context(*, strategy: Strategy = Strategy.HAPPY_PATH) -> GenerationConte
         path="/orders/{order_id}",
         base_url="https://example.test",
         strategy=strategy,
-        supporting_evidence=("responseSchemas[0].statusCode=200",),
+        supporting_evidence=(f"responseSchemas[0].statusCode={status_code}",),
         request_facts=(
             RequestFact(
                 source="parameters[0]",
@@ -50,7 +52,7 @@ def make_context(*, strategy: Strategy = Strategy.HAPPY_PATH) -> GenerationConte
         ),
         documented_responses=(
             DocumentedResponse(
-                status_code="200",
+                status_code=status_code,
                 description="Returns the order.",
                 media_type="application/json",
                 schema_={"type": "object"},
@@ -85,6 +87,7 @@ def candidate_json(
     method: str = "GET",
     path: str = "/orders/{order_id}",
     include_schema_version: bool = True,
+    expected_status: int = 200,
 ) -> str:
     payload: dict[str, object] = {
         "caseId": "case-get-order",
@@ -97,7 +100,7 @@ def candidate_json(
                 "stepId": "get-order",
                 "name": "Get the order",
                 "request": {"method": method, "path": path},
-                "assertions": [{"type": "STATUS_CODE", "expected": 200}],
+                "assertions": [{"type": "STATUS_CODE", "expected": expected_status}],
                 "extractors": [],
             }
         ],
@@ -366,7 +369,74 @@ def test_negative_validation_candidate_reaches_authoritative_rejection(
     assert all(issue.layer == "SCHEMA" for issue in validation.issues)
     assert len(llm.prompts) == 2
     assert "Keep the response JSON parseable" in llm.prompts[0]
-    assert "intended violation" in llm.prompts[1]
+    assert "ValidationIssue entries" in llm.prompts[1]
+
+
+def test_intentional_invalidity_policy_stops_before_repair() -> None:
+    payload = json.loads(candidate_json())
+    payload.pop("apiId")
+    raw = json.dumps(payload)
+    llm = SequenceFakeLLM([raw])
+    graph = build_testcase_generation_graph(
+        TestCaseGenerator(llm),
+        preserve_intentional_invalidity=True,
+        intentional_invalidity=IntentionalInvaliditySpec(
+            issue_code="SHARED_SCHEMA_REQUIRED",
+            path="/apiId",
+            preservation="MISSING",
+        ),
+    )
+
+    result = asyncio.run(graph.ainvoke(make_workflow_state(Strategy.MISSING_REQUIRED)))
+
+    assert result["phase"] is WorkflowPhase.FINISHED
+    assert result["route"] is WorkflowRoute.BLOCKED
+    assert (
+        result["generation_status"]
+        is TestCaseGenerationStatus.INTENTIONAL_INVALIDITY_PRESERVED
+    )
+    assert result["validation_result"].valid is False
+    assert result["candidate"].structured == payload
+    assert result["repair_attempts"] == 0
+    assert len(llm.prompts) == 1
+
+
+def test_intentional_invalidity_policy_repairs_valid_candidate_to_exact_violation() -> None:
+    valid = candidate_json()
+    invalid_payload = json.loads(candidate_json())
+    invalid_payload["steps"][0]["request"]["method"] = "CREATE"
+    llm = SequenceFakeLLM([valid, json.dumps(invalid_payload)])
+    spec = IntentionalInvaliditySpec(
+        issue_code="SHARED_SCHEMA_ENUM",
+        path="/steps/0/request/method",
+        preservation="VALUE",
+        invalid_value="CREATE",
+    )
+    graph = build_testcase_generation_graph(
+        TestCaseGenerator(llm),
+        preserve_intentional_invalidity=True,
+        intentional_invalidity=spec,
+    )
+
+    result = asyncio.run(graph.ainvoke(make_workflow_state(Strategy.BOUNDARY)))
+
+    assert result["phase"] is WorkflowPhase.FINISHED
+    assert result["generation_status"] is (
+        TestCaseGenerationStatus.INTENTIONAL_INVALIDITY_PRESERVED
+    )
+    assert result["candidate"].structured == invalid_payload
+    assert result["repair_attempts"] == 1
+    assert len(llm.prompts) == 2
+    assert '"invalid_value": "CREATE"' in llm.prompts[0]
+    assert '"path": "/steps/0/request/method"' in llm.prompts[1]
+
+
+def test_intentional_invalidity_policy_requires_trusted_specification() -> None:
+    with pytest.raises(ValueError, match="trusted specification"):
+        build_testcase_generation_graph(
+            TestCaseGenerator(SequenceFakeLLM([candidate_json()])),
+            preserve_intentional_invalidity=True,
+        )
 
 
 @pytest.mark.parametrize(
@@ -374,7 +444,10 @@ def test_negative_validation_candidate_reaches_authoritative_rejection(
     [Strategy.HAPPY_PATH, Strategy.BOUNDARY, Strategy.BUSINESS_ERROR],
 )
 def test_positive_and_business_outcome_dsl_remains_accepted(strategy: Strategy) -> None:
-    result, llm = run_workflow([candidate_json()], strategy=strategy)
+    result, llm = run_workflow(
+        [candidate_json(expected_status=409 if strategy is Strategy.BUSINESS_ERROR else 200)],
+        strategy=strategy,
+    )
 
     assert result["phase"] is WorkflowPhase.FINISHED
     assert result["generation_status"] is TestCaseGenerationStatus.ACCEPTED

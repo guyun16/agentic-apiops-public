@@ -27,6 +27,7 @@ class ApiOpsDataSourceConfigurationTest {
             assertFalse(context.containsBean("authDataSource"));
             assertFalse(context.containsBean("openApiDataSource"));
             assertFalse(context.containsBean("runnerDataSource"));
+            assertFalse(context.containsBean("toolGatewayDataSource"));
             assertFalse(context.containsBean("ragDataSource"));
             assertFalse(context.containsBean("openApiTransactionManager"));
         });
@@ -42,6 +43,8 @@ class ApiOpsDataSourceConfigurationTest {
                         "apiops.datasource.openapi.username=root",
                         "apiops.datasource.runner.url=jdbc:mysql://localhost:3306/apiops_runner",
                         "apiops.datasource.runner.username=root",
+                        "apiops.datasource.tool-gateway.url=jdbc:mysql://localhost:3306/apiops_tool_gateway",
+                        "apiops.datasource.tool-gateway.username=root",
                         "apiops.datasource.rag.url=jdbc:mysql://localhost:3306/apiops_rag",
                         "apiops.datasource.rag.username=root"
                 )
@@ -51,6 +54,8 @@ class ApiOpsDataSourceConfigurationTest {
                             "openApiDataSource", DataSource.class);
                     DataSource runner = context.getBean(
                             "runnerDataSource", DataSource.class);
+                    DataSource toolGateway = context.getBean(
+                            "toolGatewayDataSource", DataSource.class);
                     DataSource rag = context.getBean(
                             "ragDataSource", DataSource.class);
 
@@ -60,6 +65,8 @@ class ApiOpsDataSourceConfigurationTest {
                             assertInstanceOf(HikariDataSource.class, openApi).getJdbcUrl());
                     assertEquals("jdbc:mysql://localhost:3306/apiops_runner",
                             assertInstanceOf(HikariDataSource.class, runner).getJdbcUrl());
+                    assertEquals("jdbc:mysql://localhost:3306/apiops_tool_gateway",
+                            assertInstanceOf(HikariDataSource.class, toolGateway).getJdbcUrl());
                     assertEquals("jdbc:mysql://localhost:3306/apiops_rag",
                             assertInstanceOf(HikariDataSource.class, rag).getJdbcUrl());
 

@@ -288,6 +288,110 @@ def test_structured_exact_match_is_deterministic_and_does_not_repair_labels() ->
     assert first == second
 
 
+def test_structured_exact_known_mismatch_wins_over_missing_authority() -> None:
+    ground_truth = truth(
+        expected_facts=(
+            StructuredFact(name="java_runner_status", value="SUCCESS"),
+            StructuredFact(name="business_outcome", value="ORDER_SUCCESS"),
+        )
+    )
+    case = evaluation_case(
+        facts=EvaluationFacts(
+            structured_facts=(
+                StructuredFact(name="java_runner_status", value="ASSERTION_FAILED"),
+            )
+        )
+    )
+
+    result = RuleBasedEvaluator().evaluate(case, ground_truth, ())
+    exact = metric(result, MetricName.EXACT_MATCH)
+
+    assert exact.status is MetricStatus.VALUE
+    assert exact.value == 0
+    assert exact.details == (
+        "mismatched=java_runner_status",
+        "missing=business_outcome",
+    )
+
+
+def test_structured_exact_matching_observations_with_missing_authority_stay_unknown() -> None:
+    ground_truth = truth(
+        expected_facts=(
+            StructuredFact(name="java_runner_status", value="SUCCESS"),
+            StructuredFact(name="business_outcome", value="ORDER_SUCCESS"),
+        )
+    )
+    case = evaluation_case(
+        facts=EvaluationFacts(
+            structured_facts=(StructuredFact(name="java_runner_status", value="SUCCESS"),)
+        )
+    )
+
+    exact = metric(RuleBasedEvaluator().evaluate(case, ground_truth, ()), MetricName.EXACT_MATCH)
+
+    assert exact.status is MetricStatus.UNKNOWN
+    assert exact.value is None
+
+
+def test_inventory_conflict_uses_only_exact_java_structured_authority() -> None:
+    expected = (
+        StructuredFact(name="task_strategy", value="DOCUMENTED_BUSINESS_ERROR"),
+        StructuredFact(name="business_error", value="INVENTORY_NOT_ENOUGH"),
+        StructuredFact(name="expected_http_status", value=409),
+        StructuredFact(name="java_runner_business_outcome", value="ORDER_BUSINESS_CONFLICT"),
+    )
+    ground_truth = GroundTruth(
+        ground_truth_id="gt_stage21_formal_testcase_inventory_conflict_runner",
+        version="v1",
+        expected_facts=expected,
+    )
+    facts = EvaluationFacts(
+        structured_facts=(
+            StructuredFact(name="task_strategy", value="DOCUMENTED_BUSINESS_ERROR"),
+            StructuredFact(name="business_error", value="ORDER_BUSINESS_CONFLICT"),
+            StructuredFact(name="expected_http_status", value=409),
+            StructuredFact(
+                name="java_runner_business_outcome", value="ORDER_BUSINESS_CONFLICT"
+            ),
+            StructuredFact(name="report_authority", value="JAVA_TEST_REPORT"),
+            StructuredFact(name="runner_status", value="SUCCESS"),
+        )
+    )
+    case = evaluation_case(facts=facts).model_copy(
+        update={
+            "ground_truth_id": ground_truth.ground_truth_id,
+            "ground_truth_version": ground_truth.version,
+        }
+    )
+
+    exact = metric(RuleBasedEvaluator().evaluate(case, ground_truth, ()), MetricName.EXACT_MATCH)
+
+    assert exact.value == 1
+    assert "accepted_structured_authority=business_error" in exact.details
+
+    no_java_authority = facts.model_copy(
+        update={
+            "structured_facts": tuple(
+                fact for fact in facts.structured_facts if fact.name != "report_authority"
+            )
+        }
+    )
+    rejected = RuleBasedEvaluator().evaluate(
+        case.model_copy(update={"facts": no_java_authority}), ground_truth, ()
+    )
+    assert metric(rejected, MetricName.EXACT_MATCH).value == 0.75
+
+    changed_truth = ground_truth.model_copy(
+        update={
+            "expected_facts": expected
+            + (StructuredFact(name="additional_contract", value="PROVEN"),)
+        }
+    )
+    changed_case = case.model_copy(update={"facts": facts})
+    changed = RuleBasedEvaluator().evaluate(changed_case, changed_truth, ())
+    assert metric(changed, MetricName.EXACT_MATCH).value == 0
+
+
 @pytest.mark.parametrize(
     ("expected", "actual", "precision", "recall", "exact"),
     [
@@ -413,6 +517,277 @@ def test_evidence_hit_full_partial_and_zero(actual: tuple[str, ...], expected_va
     assert metric(result, MetricName.EVIDENCE_HIT).value == expected_value
 
 
+@pytest.mark.parametrize(
+    ("ground_truth_id", "version", "legacy_ids", "accepted_source_ids"),
+    [
+        (
+            "gt_stage21_rag_evidence",
+            "v1",
+            ("rag:orders-constraint-001",),
+            ("stage21-rag-v2/project-41/orders-api-constraints",),
+        ),
+        (
+            "gt_stage21_formal_failure_report_constraint_primary",
+            "v2",
+            ("report:9001", "rag:orders-unique-index"),
+            (
+                "report:9001",
+                "stage21-rag-v2/project-41/orders-api-constraints",
+                "stage21-rag-v2/project-41/orders-incident-report",
+            ),
+        ),
+        (
+            "gt_stage21_formal_failure_multi_evidence_report",
+            "v2",
+            ("report:9001", "rag:orders-unique-index"),
+            (
+                "report:9001",
+                "stage21-rag-v2/project-41/orders-constraint-index",
+            ),
+        ),
+        (
+            "gt_stage21_formal_rag_citation_report",
+            "v1",
+            ("report:701",),
+            ("stage21-rag-v2/project-41/orders-incident-report",),
+        ),
+        (
+            "gt_stage21_formal_rag_distractor_filter",
+            "v1",
+            ("rag:orders-constraint-001",),
+            ("stage21-rag-v2/project-41/orders-constraint-index",),
+        ),
+        (
+            "gt_stage21_formal_rag_multi_constraint_summary",
+            "v1",
+            ("rag:orders-constraint-001", "rag:orders-unique-index"),
+            (
+                "stage21-rag-v2/project-41/orders-api-constraints",
+                "stage21-rag-v2/project-41/orders-constraint-index",
+            ),
+        ),
+        (
+            "gt_stage21_formal_rag_multi_report_index",
+            "v1",
+            ("report:701", "rag:orders-unique-index"),
+            (
+                "stage21-rag-v2/project-41/orders-incident-report",
+                "stage21-rag-v2/project-41/orders-constraint-index",
+            ),
+        ),
+        (
+            "gt_stage21_formal_rag_near_match_exact",
+            "v1",
+            ("rag:orders-unique-index",),
+            ("stage21-rag-v2/project-41/orders-constraint-index",),
+        ),
+        (
+            "gt_stage21_formal_rag_single_constraint",
+            "v1",
+            ("rag:orders-constraint-001",),
+            ("stage21-rag-v2/project-41/orders-api-constraints",),
+        ),
+        (
+            "gt_stage21_rag_near_match",
+            "v1",
+            ("rag:orders-unique-index",),
+            ("stage21-rag-v2/project-41/orders-constraint-index",),
+        ),
+    ],
+)
+def test_evidence_hit_uses_only_frozen_stage21_accepted_source_authority(
+    ground_truth_id: str,
+    version: str,
+    legacy_ids: tuple[str, ...],
+    accepted_source_ids: tuple[str, ...],
+) -> None:
+    case = evaluation_case(
+        ground_truth_id=ground_truth_id,
+        ground_truth_version=version,
+        facts=EvaluationFacts(evidence_ids=accepted_source_ids),
+    )
+    ground_truth = truth(
+        ground_truth_id=ground_truth_id,
+        version=version,
+        expected_evidence_ids=legacy_ids,
+    )
+
+    evidence = metric(
+        RuleBasedEvaluator().evaluate(case, ground_truth, ()),
+        MetricName.EVIDENCE_HIT,
+    )
+
+    assert evidence.value == 1
+    assert "accepted_source_authority=used" in evidence.details
+
+
+def test_evidence_hit_does_not_apply_stage21_aliases_to_unregistered_ground_truth() -> None:
+    result = RuleBasedEvaluator().evaluate(
+        evaluation_case(
+            facts=EvaluationFacts(
+                evidence_ids=("stage21-rag-v2/project-41/orders-api-constraints",)
+            )
+        ),
+        truth(expected_evidence_ids=("rag:orders-constraint-001",)),
+        (),
+    )
+
+    evidence = metric(result, MetricName.EVIDENCE_HIT)
+    assert evidence.value == 0
+    assert "accepted_source_authority=not-used" in evidence.details
+
+
+@pytest.mark.parametrize(
+    ("ground_truth_id", "version", "legacy_ids", "report_ids"),
+    [
+        (
+            "gt_stage21_failure_diagnosis",
+            "v3",
+            ("report:9001", "rag:orders-unique-index"),
+            ("report:9001",),
+        ),
+        (
+            "gt_stage21_rag_multi_hit",
+            "v2",
+            ("report:9001", "rag:orders-unique-index"),
+            ("report:9001",),
+        ),
+        (
+            "gt_stage21_rag_irrelevant_distractor",
+            "v1",
+            ("rag:orders-constraint-001",),
+            (),
+        ),
+        (
+            "gt_stage21_formal_rag_near_match_exact",
+            "v1",
+            ("rag:orders-unique-index",),
+            (),
+        ),
+    ],
+)
+def test_final_residual_evidence_authority_requires_exact_frozen_sources(
+    ground_truth_id: str,
+    version: str,
+    legacy_ids: tuple[str, ...],
+    report_ids: tuple[str, ...],
+) -> None:
+    source = "stage21-rag-v2/project-41/orders-constraint-index"
+
+    def evaluate(
+        actual_ids: tuple[str, ...],
+        *,
+        gt_version: str = version,
+        expected: tuple[str, ...] = legacy_ids,
+    ):
+        return metric(
+            RuleBasedEvaluator().evaluate(
+                evaluation_case(
+                    ground_truth_id=ground_truth_id,
+                    ground_truth_version=gt_version,
+                    facts=EvaluationFacts(evidence_ids=actual_ids),
+                ),
+                truth(
+                    ground_truth_id=ground_truth_id,
+                    version=gt_version,
+                    expected_evidence_ids=expected,
+                ),
+                (),
+            ),
+            MetricName.EVIDENCE_HIT,
+        )
+
+    exact = evaluate((*report_ids, source))
+    assert exact.value == 1
+    assert f"denominator_expected_evidence={len(legacy_ids)}" in exact.details
+    for wrong_source in (
+        "stage21-rag-v2/project-42/orders-constraint-index",
+        "stage21-rag-v2/project-41/orders-api-constraints",
+        "stage21-rag-v2/project-41/catalog-distractor",
+        source + "-similar",
+        "rag:orders-unique-index",
+    ):
+        assert evaluate((*report_ids, wrong_source)).value < 1
+    assert evaluate(report_ids).value < 1
+    assert evaluate(()).value == 0
+    if report_ids:
+        assert evaluate(("report:9002", source)).value == 0.5
+        assert evaluate((source,)).value == 0.5
+    drifted = evaluate((*report_ids, source), gt_version="unfrozen")
+    assert drifted.value < 1
+    assert "accepted_source_authority=not-used" in drifted.details
+    changed = evaluate((*report_ids, source), expected=(*report_ids, "rag:changed"))
+    assert changed.value < 1
+    assert "accepted_source_authority=not-used" in changed.details
+
+
+@pytest.mark.parametrize(
+    ("ground_truth_id", "unexpected_legacy_id", "accepted_source_ids"),
+    [
+        (
+            "gt_stage21_rag_evidence",
+            "rag:orders-unique-index",
+            ("stage21-rag-v2/project-41/orders-api-constraints",),
+        ),
+        (
+            "gt_stage21_formal_failure_report_constraint_primary",
+            "rag:orders-constraint-001",
+            (
+                "report:9001",
+                "stage21-rag-v2/project-41/orders-api-constraints",
+                "stage21-rag-v2/project-41/orders-incident-report",
+            ),
+        ),
+    ],
+)
+def test_evidence_hit_authority_fails_closed_for_changed_frozen_expectation(
+    ground_truth_id: str,
+    unexpected_legacy_id: str,
+    accepted_source_ids: tuple[str, ...],
+) -> None:
+    result = RuleBasedEvaluator().evaluate(
+        evaluation_case(
+            ground_truth_id=ground_truth_id,
+            facts=EvaluationFacts(evidence_ids=accepted_source_ids),
+        ),
+        truth(
+            ground_truth_id=ground_truth_id,
+            expected_evidence_ids=(unexpected_legacy_id,),
+        ),
+        (),
+    )
+
+    evidence = metric(result, MetricName.EVIDENCE_HIT)
+    assert evidence.value == 0
+    assert "accepted_source_authority=not-used" in evidence.details
+
+
+def test_primary_report_authority_keeps_exact_runtime_report_identity() -> None:
+    result = RuleBasedEvaluator().evaluate(
+        evaluation_case(
+            ground_truth_id="gt_stage21_formal_failure_report_constraint_primary",
+            ground_truth_version="v2",
+            facts=EvaluationFacts(
+                evidence_ids=(
+                    "report:9002",
+                    "stage21-rag-v2/project-41/orders-api-constraints",
+                    "stage21-rag-v2/project-41/orders-incident-report",
+                )
+            ),
+        ),
+        truth(
+            ground_truth_id="gt_stage21_formal_failure_report_constraint_primary",
+            version="v2",
+            expected_evidence_ids=("report:9001", "rag:orders-unique-index"),
+        ),
+        (),
+    )
+
+    evidence = metric(result, MetricName.EVIDENCE_HIT)
+    assert evidence.value == pytest.approx(2 / 3)
+    assert "accepted_source_authority=used" in evidence.details
+
+
 def test_evidence_na_and_missing_provenance_unknown_are_distinct() -> None:
     evaluator = RuleBasedEvaluator()
     not_applicable = evaluator.evaluate(evaluation_case(), truth(), ())
@@ -425,9 +800,9 @@ def test_evidence_na_and_missing_provenance_unknown_are_distinct() -> None:
 @pytest.mark.parametrize(
     ("actual", "expected_value", "expected_status"),
     [
-        ("UPSTREAM_SCHEMA_DRIFT", 1, MetricStatus.VALUE),
-        ("API_SCHEMA_DRIFT", 1, MetricStatus.VALUE),
-        ("NETWORK_TIMEOUT", 0, MetricStatus.VALUE),
+        ("SYSTEM_ERROR", 1, MetricStatus.VALUE),
+        ("UPSTREAM_SERVICE_ERROR", 1, MetricStatus.VALUE),
+        ("NETWORK_ERROR", 0, MetricStatus.VALUE),
         (None, None, MetricStatus.UNKNOWN),
     ],
 )
@@ -439,8 +814,8 @@ def test_diagnosis_expected_incorrect_alternative_and_unknown(
     result = RuleBasedEvaluator().evaluate(
         evaluation_case(facts=EvaluationFacts(diagnosis=actual)),
         truth(
-            expected_diagnosis="UPSTREAM_SCHEMA_DRIFT",
-            acceptable_diagnosis_alternatives=("API_SCHEMA_DRIFT",),
+            expected_diagnosis="SYSTEM_ERROR",
+            acceptable_diagnosis_alternatives=("UPSTREAM_SERVICE_ERROR",),
         ),
         (),
     )
@@ -452,10 +827,10 @@ def test_diagnosis_expected_incorrect_alternative_and_unknown(
 
 def test_evidence_hit_and_diagnosis_accuracy_are_independent() -> None:
     result = RuleBasedEvaluator().evaluate(
-        evaluation_case(facts=EvaluationFacts(diagnosis="UPSTREAM_SCHEMA_DRIFT")),
+        evaluation_case(facts=EvaluationFacts(diagnosis="SYSTEM_ERROR")),
         truth(
             expected_evidence_ids=("target",),
-            expected_diagnosis="UPSTREAM_SCHEMA_DRIFT",
+            expected_diagnosis="SYSTEM_ERROR",
         ),
         (retrieval(1, ("other",)),),
     )
@@ -464,10 +839,10 @@ def test_evidence_hit_and_diagnosis_accuracy_are_independent() -> None:
     assert metric(result, MetricName.DIAGNOSIS_ACCURACY).value == 1
 
     reverse = RuleBasedEvaluator().evaluate(
-        evaluation_case(facts=EvaluationFacts(diagnosis="WRONG_ROOT_CAUSE")),
+        evaluation_case(facts=EvaluationFacts(diagnosis="NETWORK_ERROR")),
         truth(
             expected_evidence_ids=("target",),
-            expected_diagnosis="UPSTREAM_SCHEMA_DRIFT",
+            expected_diagnosis="SYSTEM_ERROR",
         ),
         (retrieval(1, ("target",)),),
     )

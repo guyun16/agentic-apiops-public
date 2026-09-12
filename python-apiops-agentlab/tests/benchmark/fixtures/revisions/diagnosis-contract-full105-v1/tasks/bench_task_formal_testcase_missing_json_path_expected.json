@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_formal_testcase_missing_json_path_expected",
+  "taskType": "TESTCASE_GENERATION",
+  "instruction": "Identify the missing expected value in the JSON_PATH assertion fixture; do not silently turn an invalid testcase into a valid one.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "strategy",
+        "value": "MISSING_REQUIRED"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "authorityFixture",
+        "ref": "java://runner-testcase-dsl/missing-required-json-path.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "taskFixture",
+        "ref": "examples/invalid/testcase-json-path-equals-missing-expected.json"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "taskFocus",
+        "value": "JSON path assertion expected value"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "submit_unvalidated_dsl"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "valid_json",
+    "schema_valid",
+    "contract_accepted",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_formal_testcase_missing_json_path_expected",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "valid_json",
+      "schema_valid",
+      "contract_accepted",
+      "exact_match"
+    ]
+  },
+  "expectedToolCalls": []
+}

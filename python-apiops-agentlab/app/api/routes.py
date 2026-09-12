@@ -23,6 +23,7 @@ from app.clients.java_apiops import (
     JavaApiOpsTransportError,
 )
 from app.core.errors import ApplicationError
+from app.core.http_tls import client_tls_context
 from app.core.logging import configure_logging, correlation_log_extra
 from app.core.settings import AppSettings, get_settings
 from app.memory import MemoryRetriever, MemoryWritePolicy, SQLiteMemoryStore
@@ -31,12 +32,19 @@ from app.schemas.diagnosis_api import (
     DiagnosisMemoryWriteRequest,
     DiagnosisMemoryWriteResponse,
     DiagnosisResumeRequest,
+    DiagnosisRunSummary,
     DiagnosisStartRequest,
 )
 from app.schemas.testcase_dsl import TestCaseDSL
 from app.schemas.testcase_generation_api import (
     TestCaseGenerationRequest,
     TestCaseGenerationResponse,
+)
+from app.services.benchmark_results import (
+    BenchmarkArtifactStore,
+    BenchmarkResultDetail,
+    BenchmarkResultSummary,
+    BenchmarkTaskResultView,
 )
 from app.services.diagnosis import DiagnosisExecutionService
 from app.services.diagnosis_repository import SQLiteDiagnosisRunRepository
@@ -47,7 +55,12 @@ from app.services.runtime_evaluation import (
     runtime_evaluation_store,
 )
 from app.services.testcase_generation import TestCaseGenerationService
-from app.tracing import TraceRecord
+from app.tracing import (
+    TraceRecord,
+    normalize_trace_project_id,
+    query_persisted_trace_records,
+    resolve_trace_project_id,
+)
 
 logger = logging.getLogger("app.api")
 router = APIRouter()
@@ -63,6 +76,7 @@ _diagnosis_service = DiagnosisExecutionService(
     checkpoint_db_path=_application_settings.runtime_db_path,
 )
 _testcase_generation_service = TestCaseGenerationService()
+_benchmark_results_store = BenchmarkArtifactStore()
 
 
 class HealthResponse(BaseModel):
@@ -85,6 +99,50 @@ class TestCaseValidationResponse(BaseModel):
 @router.get("/health", response_model=HealthResponse)
 async def health() -> HealthResponse:
     return HealthResponse(status="ok", service="python-apiops-agentlab")
+
+
+@router.get(
+    "/api/v1/benchmark/results",
+    response_model=list[BenchmarkResultSummary],
+)
+async def list_benchmark_results() -> list[BenchmarkResultSummary]:
+    """List completed Benchmark runs already present in the artifact store."""
+
+    return _benchmark_results_store.list()
+
+
+@router.get(
+    "/api/v1/benchmark/results/{evaluation_run_id}/tasks",
+    response_model=list[BenchmarkTaskResultView],
+)
+async def benchmark_result_tasks(evaluation_run_id: str) -> list[BenchmarkTaskResultView]:
+    """Read task envelopes and persisted EvaluationResult facts for one run."""
+
+    tasks = _benchmark_results_store.tasks(evaluation_run_id)
+    if tasks is None:
+        raise ApplicationError(
+            "BENCHMARK_RESULT_NOT_FOUND",
+            "Benchmark result was not found.",
+            404,
+        )
+    return tasks
+
+
+@router.get(
+    "/api/v1/benchmark/results/{evaluation_run_id}",
+    response_model=BenchmarkResultDetail,
+)
+async def benchmark_result(evaluation_run_id: str) -> BenchmarkResultDetail:
+    """Read one Benchmark result without executing or recomputing the run."""
+
+    result = _benchmark_results_store.get(evaluation_run_id)
+    if result is None:
+        raise ApplicationError(
+            "BENCHMARK_RESULT_NOT_FOUND",
+            "Benchmark result was not found.",
+            404,
+        )
+    return result
 
 
 @router.post(
@@ -216,6 +274,7 @@ async def runtime_evaluation_run(
 )
 async def list_traces(
     project_id: int = Query(..., alias="projectId", ge=1),
+    agent_run_id: str | None = Query(default=None, alias="agentRunId", min_length=1),
     authorization: Annotated[str | None, Header(alias="Authorization")] = None,
     settings: AppSettings = Depends(get_settings),
 ) -> list[TraceRecord]:
@@ -226,7 +285,20 @@ async def list_traces(
         authorization=authorization,
         settings=settings,
     )
-    return list(runtime_evaluation_store.list_trace_records(project_id=project_id))
+    if settings.trace_sink == "jsonl":
+        return list(
+            _query_persisted_trace_records(
+                settings=settings,
+                project_id=project_id,
+                agent_run_id=agent_run_id,
+            )
+        )
+    records = runtime_evaluation_store.list_trace_records(project_id=project_id)
+    return [
+        record
+        for record in records
+        if agent_run_id is None or record.agent_run_id == agent_run_id
+    ]
 
 
 @router.get(
@@ -241,6 +313,25 @@ async def get_trace(
     """Return one observed correlation after authorizing its owning project."""
 
     _bearer_token(authorization)
+    if settings.trace_sink == "jsonl":
+        records = _query_persisted_trace_records(settings=settings, trace_id=trace_id)
+        project_id = resolve_trace_project_id(records)
+        if project_id is None:
+            raise ApplicationError("TRACE_NOT_FOUND", "Trace was not found.", 404)
+        await _authorize_runtime_project(
+            project_id=project_id,
+            authorization=authorization,
+            settings=settings,
+        )
+        return [
+            record
+            for record in records
+            if record.trace_id == trace_id
+            and (
+                record.project_id is None
+                or normalize_trace_project_id(record.project_id) == project_id
+            )
+        ]
     project_id = runtime_evaluation_store.get_trace_project_id(trace_id)
     if project_id is None:
         raise ApplicationError("TRACE_NOT_FOUND", "Trace was not found.", 404)
@@ -255,6 +346,30 @@ async def get_trace(
     return list(records)
 
 
+def _query_persisted_trace_records(
+    *,
+    settings: AppSettings,
+    trace_id: str | None = None,
+    agent_run_id: str | None = None,
+    project_id: int | None = None,
+) -> tuple[TraceRecord, ...]:
+    """Map local trace storage failures to one stable HTTP boundary error."""
+
+    try:
+        return query_persisted_trace_records(
+            trace_id=trace_id,
+            agent_run_id=agent_run_id,
+            project_id=project_id,
+            settings=settings,
+        )
+    except (OSError, ValueError) as exc:
+        raise ApplicationError(
+            "TRACE_HISTORY_UNAVAILABLE",
+            "Trace history is unavailable.",
+            503,
+        ) from exc
+
+
 async def _authorize_runtime_project(
     *,
     project_id: int,
@@ -266,7 +381,7 @@ async def _authorize_runtime_project(
     token = _bearer_token(authorization)
     trace_id = correlation_log_extra()["trace_id"]
     try:
-        async with httpx.AsyncClient(trust_env=False) as http_client:
+        async with httpx.AsyncClient(trust_env=False, verify=client_tls_context()) as http_client:
             client = JavaApiOpsClient(
                 http_client,
                 base_url=settings.java_apiops_base_url,
@@ -364,6 +479,25 @@ async def start_diagnosis(
         trace_id=trace_id,
         settings=settings,
     )
+
+
+@router.get(
+    "/api/v1/diagnosis/runs",
+    response_model=list[DiagnosisRunSummary],
+)
+async def list_diagnosis_runs(
+    project_id: int = Query(..., alias="projectId", ge=1),
+    authorization: Annotated[str | None, Header(alias="Authorization")] = None,
+    settings: AppSettings = Depends(get_settings),
+) -> list[DiagnosisRunSummary]:
+    """List SQLite-backed Diagnosis history after Java authorizes the project."""
+
+    await _authorize_runtime_project(
+        project_id=project_id,
+        authorization=authorization,
+        settings=settings,
+    )
+    return list(_diagnosis_service.list(project_id=project_id))
 
 
 @router.get(

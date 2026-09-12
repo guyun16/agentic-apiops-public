@@ -1,0 +1,57 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:d643554e27ac4f0085d3c28e24e2efdf",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_failure_insufficient_missing",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260827T171024Z:bench_task_failure_insufficient_missing",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 22.321,
+  "errorSummary": "BenchmarkTaskFailure: required Java execution path failed: Java API Ops request returned HTTP 403",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260827T171024Z",
+  "executionMode": "UNKNOWN",
+  "failureCategory": "INFRASTRUCTURE_FAILURE",
+  "failureCode": "JAVA_REQUIRED_PATH_FAILED",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://test-report/project-42/run-702/report-702",
+    "python-apiops-agentlab/tests/benchmark/fixtures/support/diagnosis-insufficient-missing.json"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTION_FAILED",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "FAILURE_DIAGNOSIS",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:faae4584daf54cc48b7fb4762ac23e35"
+}

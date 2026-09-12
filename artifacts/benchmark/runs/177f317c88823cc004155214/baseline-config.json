@@ -1,0 +1,106 @@
+{
+  "applicationIdentity": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "git revision and working-tree snapshot",
+    "value": {
+      "revision": "c31b8fc876df58127045720e83571314c324f1e6",
+      "workingTreeDirty": true
+    }
+  },
+  "baselineConfigId": "stage21-real-model-baseline-v1",
+  "benchmarkConfigVersion": "stage21.5-real-model-v1",
+  "datasetId": "stage21-apioops-bench-mini",
+  "datasetSplit": "all",
+  "datasetVersion": "v3",
+  "evaluatorIdentity": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "app.evaluator.EVALUATOR_VERSION",
+    "value": {
+      "name": "RuleBasedEvaluator",
+      "version": "rule-evaluator-v1"
+    }
+  },
+  "executionTimestamp": "2026-09-01T11:06:44.472734Z",
+  "javaRuntimeVersion": {
+    "availability": "UNAVAILABLE",
+    "reason": "Java runtime version is not emitted by this Python process",
+    "source": "Stage20 runtime context",
+    "value": null
+  },
+  "modelIdentity": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "AppSettings.deepseek_model",
+    "value": {
+      "model": "deepseek-v4-flash",
+      "provider": "DeepSeek"
+    }
+  },
+  "modelParameters": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "DeepSeekClient.complete request",
+    "value": {
+      "response_format": "json_object",
+      "stream": false,
+      "thinking": "disabled",
+      "timeout_seconds": 60.0
+    }
+  },
+  "promptIdentities": [
+    {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "existing workflow prompt file",
+      "value": {
+        "name": "testcase_generate",
+        "version": "v1"
+      }
+    },
+    {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "existing workflow prompt file",
+      "value": {
+        "name": "testcase_repair",
+        "version": "v1"
+      }
+    },
+    {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "existing workflow prompt file",
+      "value": {
+        "name": "diagnosis",
+        "version": "1"
+      }
+    }
+  ],
+  "pythonRuntimeVersion": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "platform.python_version",
+    "value": "python 3.13.13"
+  },
+  "taskSchemaVersion": "0.2.0",
+  "toolCatalogIdentity": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "app.tools.ToolCatalog",
+    "value": {
+      "name": "ToolCatalog",
+      "version": "approved-tool-catalog-v1"
+    }
+  },
+  "workflowIdentity": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "app.benchmark.real_model",
+    "value": {
+      "name": "RealModelStage20WorkflowAdapter",
+      "version": "stage21-real-model-adapter-v1"
+    }
+  }
+}

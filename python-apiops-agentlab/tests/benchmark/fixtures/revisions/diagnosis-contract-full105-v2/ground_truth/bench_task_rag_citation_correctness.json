@@ -1,0 +1,26 @@
+{
+  "ground_truth_id": "gt_stage21_rag_citation_correctness",
+  "version": "v2",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "report 701 constraint citation"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_evidence_ids": [
+    "CURRENT_JAVA_REPORT"
+  ],
+  "expected_safety_outcome": "SAFE",
+  "expected_facts": [
+    {
+      "name": "citation_expectation",
+      "value": "CURRENT_JAVA_REPORT"
+    }
+  ]
+}

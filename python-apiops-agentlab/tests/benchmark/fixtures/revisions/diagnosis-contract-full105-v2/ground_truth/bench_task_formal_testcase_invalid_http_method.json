@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_formal_testcase_invalid_http_method",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "CONTRACT_REJECTION"
+    },
+    {
+      "name": "invalid_field",
+      "value": "request.method"
+    },
+    {
+      "name": "invalid_value",
+      "value": "CREATE"
+    },
+    {
+      "name": "contract_accepted",
+      "value": false
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:ff821f3cfcca489fa79abda4e5754de2",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_e2e_generation_runner_success",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260827T171024Z:bench_task_e2e_generation_runner_success",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 81.789,
+  "errorSummary": "BenchmarkTaskFailure: required Java execution path failed: Java API Ops request returned HTTP 403",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260827T171024Z",
+  "executionMode": "UNKNOWN",
+  "failureCategory": "INFRASTRUCTURE_FAILURE",
+  "failureCode": "JAVA_REQUIRED_PATH_FAILED",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:strategy",
+    "literal:projectId",
+    "java://runner-testcase-dsl/e2e/create-order-success.json",
+    "examples/testcase-valid.json"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTION_FAILED",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "E2E_APIOPS",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:b0fa262fd8be48ebaae5678af721bca1"
+}

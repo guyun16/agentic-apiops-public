@@ -177,6 +177,72 @@ async def test_zero_hit_success_returns_empty_evidence_list() -> None:
 
     assert result.rag_query_id == "ragq_123"
     assert result.evidence == []
+    assert result.result_truncated is False
+
+
+@pytest.mark.anyio
+async def test_java_result_limiter_marker_is_mapped_as_strict_gateway_metadata() -> None:
+    data = rag_data(
+        [
+            evidence_payload(
+                project_id=41,
+                document_id="doc-1",
+                chunk_id="chunk-1",
+                score=0.91,
+            )
+        ]
+    )
+    data["_resultTruncated"] = True
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json=tool_result(data=data))
+
+    result = await retrieve(handler)
+
+    assert result.rag_query_id == "ragq_123"
+    assert [item.chunk_id for item in result.evidence] == ["chunk-1"]
+    assert result.result_truncated is True
+
+
+@pytest.mark.anyio
+@pytest.mark.parametrize(
+    ("extra_field", "extra_value"),
+    (
+        ("_resultTruncated", "true"),
+        ("unrecognizedGatewayMetadata", True),
+    ),
+)
+async def test_gateway_metadata_does_not_relax_rag_result_validation(
+    extra_field: str,
+    extra_value: object,
+) -> None:
+    data = rag_data([])
+    data[extra_field] = extra_value
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json=tool_result(data=data))
+
+    with pytest.raises(EvidenceResponseContractError):
+        await retrieve(handler)
+
+
+@pytest.mark.anyio
+async def test_nested_limiter_marker_or_string_sentinel_remains_contract_invalid() -> None:
+    malformed = evidence_payload(
+        project_id=41,
+        document_id="doc-1",
+        chunk_id="chunk-1",
+        score=0.91,
+    )
+    malformed["_resultTruncated"] = True
+    data = rag_data([malformed, "[TRUNCATED]"])
+    data["_resultTruncated"] = True
+
+    async def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json=tool_result(data=data))
+
+    with pytest.raises(EvidenceResponseContractError):
+        await retrieve(handler)
 
 
 @pytest.mark.anyio

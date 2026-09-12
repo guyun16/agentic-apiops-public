@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_rag_near_match",
+  "taskType": "RAG_EVIDENCE_RETRIEVAL",
+  "instruction": "Choose the exact unique-index evidence over a near-match chunk with a similar title.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "testReport",
+        "ref": "java://rag/project-41/query/near-match-v1"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "retrievalContext",
+        "ref": "examples/openapi-metadata-valid.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "benchmarkEvidence",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/evidence-catalog.json"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search"
+  ],
+  "forbiddenActions": [
+    "near_match_as_exact",
+    "sql.write",
+    "redis.delete"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "parameter_accuracy",
+    "evidence_hit"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_rag_near_match",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "parameter_accuracy",
+      "evidence_hit"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "orders unique index exact"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

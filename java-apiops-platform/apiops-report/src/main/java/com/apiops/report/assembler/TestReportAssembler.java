@@ -2,6 +2,7 @@ package com.apiops.report.assembler;
 
 import com.apiops.report.vo.TestReportVO;
 import com.apiops.runner.assertion.AssertionResult;
+import com.apiops.runner.http.HttpExchangeSnapshot;
 import com.apiops.runner.persistence.ExecutionFactRepository.CaseExecutionFacts;
 import com.apiops.runner.persistence.ExecutionFactRepository.RunExecutionFacts;
 import com.apiops.runner.persistence.ExecutionFactRepository.StepExecutionFacts;
@@ -74,7 +75,17 @@ public final class TestReportAssembler {
                 facts.failureType(),
                 facts.responseStatusCode(),
                 facts.durationMs(),
-                assertionResults(facts.assertionResultsJson()));
+                assertionResults(facts.assertionResultsJson()), exchange(facts.httpExchangeJson()));
+    }
+
+    private HttpExchangeSnapshot exchange(String json) {
+        if (json == null || json.isBlank()) return null;
+        try {
+            return objectMapper.readValue(json, HttpExchangeSnapshot.class);
+        } catch (JsonProcessingException exception) {
+            // A damaged optional snapshot must not hide existing execution facts.
+            return null;
+        }
     }
 
     private List<AssertionResult> assertionResults(String json) {

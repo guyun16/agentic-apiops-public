@@ -1,0 +1,14 @@
+{
+    "ground_truth_id": "gt_stage21_testcase_happy",
+    "version": "v1",
+    "expected_facts": [
+        {
+            "name": "task_strategy",
+            "value": "HAPPY_PATH"
+        },
+        {
+            "name": "java_runner_executable",
+            "value": false
+        }
+    ]
+}

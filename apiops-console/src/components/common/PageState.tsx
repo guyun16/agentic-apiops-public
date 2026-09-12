@@ -1,3 +1,4 @@
+import { useConsoleLanguage } from '../../app/ConsoleLanguage'
 import { AlertTriangle, FileLock2, FolderOpen, LoaderCircle, type LucideIcon } from 'lucide-react'
 
 export type PageStateKind = 'loading' | 'forbidden' | 'error' | 'empty'
@@ -20,22 +21,23 @@ const icons: Record<PageStateKind, LucideIcon> = {
 }
 
 export function PageState({ actionLabel, description, kind, onAction, projectLabel, projectName, title }: PageStateProps) {
+  const { ui } = useConsoleLanguage()
   const Icon = icons[kind]
 
   return (
     <section className={`page-state page-state-${kind}`} aria-live={kind === 'loading' ? 'polite' : 'assertive'}>
       <div className="page-state-icon" aria-hidden="true"><Icon size={22} strokeWidth={1.8} /></div>
-      <h1>{title}</h1>
-      <p>{description}</p>
+      <h1>{ui(title)}</h1>
+      <p>{ui(description)}</p>
       {projectName ? (
         <div className="page-state-project">
-          <span>{projectLabel ?? 'Project'}</span>
+          <span>{ui(projectLabel ?? 'Project')}</span>
           <strong>{projectName}</strong>
         </div>
       ) : null}
       {actionLabel && onAction ? (
         <button className="panel-action page-state-action" onClick={onAction} type="button">
-          {actionLabel}
+          {ui(actionLabel)}
         </button>
       ) : null}
     </section>

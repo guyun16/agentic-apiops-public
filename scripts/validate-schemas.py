@@ -35,6 +35,10 @@ VALID_CASES = [
         "shared-schemas/diagnosis-report-schema.json",
         "examples/diagnosis-report-valid.json",
     ),
+    (
+        "shared-schemas/evaluation-task-schema.json",
+        "examples/evaluation-task-valid.json",
+    ),
 ]
 
 

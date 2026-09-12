@@ -16,19 +16,25 @@ import {
   defaultStrategy,
   strategyOptions,
 } from './mock-data'
-import type {
-  ApiDocument,
-  ApiMetadataDetail,
-  ApiMetadataResponseSchema,
-  ApiMetadataSummary,
-  ExpectedResponse,
-  GenerationStatus,
-  GenerateTestCaseResponse,
-  OpenApiImportResponse,
-  StrategyAvailability,
-  StrategyId,
-  TestCaseAgentRuntime,
+import {
+  runnerRequestForEditor,
+  singleRunnerSubmission,
+  type ApiDocument,
+  type ApiMetadataDetail,
+  type ApiMetadataResponseSchema,
+  type ApiMetadataSummary,
+  type ExpectedResponse,
+  type GenerationStatus,
+  type GenerateTestCaseResponse,
+  type OpenApiImportResponse,
+  type RunnerBatchSubmission,
+  type RunnerSubmissionIdentity,
+  type StrategyAvailability,
+  type StrategyId,
+  type TestCaseAgentRuntime,
 } from './types'
+import { fetchExactRun } from '../runs/run-api'
+import { readStudioDraft, readStudioSelection, studioDraftKey, writeStudioDraft, writeStudioSelection } from './studioDrafts'
 
 type EndpointLoadState = 'loading' | 'ready' | 'error'
 type MetadataDetailLoadState = 'idle' | EndpointLoadState
@@ -37,6 +43,8 @@ type ApiStudioContextTarget = Extract<ContextTrailTarget, { type: 'endpoint' | '
 type ApiStudioPageProps = {
   contextTarget: ApiStudioContextTarget | null
   onContextNavigate: (target: ContextTrailTarget) => void
+  onViewRun: (runId: number) => void
+  onEndpointSelected?: (apiId: string, apiDocId: string) => void
 }
 
 function isAbortError(error: unknown) {
@@ -282,11 +290,11 @@ function MetadataDetailState({
   return null
 }
 
-export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPageProps) {
-  const { expireSession } = useAuth()
+export function ApiStudioPage({ contextTarget, onContextNavigate, onViewRun, onEndpointSelected }: ApiStudioPageProps) {
+  const { expireSession, currentUser } = useAuth()
   const { ui } = useConsoleLanguage()
   const { currentProject, refreshProjects } = useProject()
-  const { activateContext, recordEndpoint, recordFinalizedTestCase } = useContextTrail()
+  const { activateContext, recordEndpoint, recordFinalizedTestCase, recordRun } = useContextTrail()
   const [documents, setDocuments] = useState<ApiDocument[]>([])
   const [documentsState, setDocumentsState] = useState<EndpointLoadState>('loading')
   const [documentsError, setDocumentsError] = useState<ApiError | null>(null)
@@ -305,15 +313,29 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
   const [selectedAgentRuntime, setSelectedAgentRuntime] = useState<TestCaseAgentRuntime>(defaultAgentRuntime)
   const [generatedByRuntime, setGeneratedByRuntime] = useState<TestCaseAgentRuntime | null>(null)
   const [generatedDsl, setGeneratedDsl] = useState('')
+  const [validatedDsl, setValidatedDsl] = useState<string | null>(null)
+  const [validationMessage, setValidationMessage] = useState<string | null>(null)
+  const [validatedTestCase, setValidatedTestCase] = useState<Record<string, unknown> | null>(null)
   const [generationStatus, setGenerationStatus] = useState<GenerationStatus | null>(null)
   const [generationError, setGenerationError] = useState<string | null>(null)
   const [repairAttempts, setRepairAttempts] = useState(0)
+  const [runnerSubmission, setRunnerSubmission] = useState<RunnerSubmissionIdentity | null>(null)
+  const [runnerError, setRunnerError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const generationController = useRef<AbortController | null>(null)
   const generationRequestId = useRef(0)
+  const submissionController = useRef<AbortController | null>(null)
+  const [draftStorageFailed, setDraftStorageFailed] = useState(false)
   const importedDocumentRef = useRef<OpenApiImportResponse | null>(null)
   const isGenerating = generationStatus === 'GENERATING'
 
   const projectId = currentProject?.projectId ?? null
+  const draftKey = currentUser && projectId && selectedApiDocId && selectedApiId
+    ? studioDraftKey(currentUser.id, projectId, {
+      apiDocId: selectedApiDocId, apiId: selectedApiId, strategy: selectedStrategy, runtime: selectedAgentRuntime,
+    }) : null
+  const currentDraftKey = useRef(draftKey)
+  currentDraftKey.current = draftKey
   const strategyAvailability = useMemo(
     () => getStrategyAvailability(apiDetailState === 'ready' ? apiDetail : null),
     [apiDetail, apiDetailState],
@@ -326,14 +348,22 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
   )
 
   const clearGenerationResult = useCallback(() => {
+    submissionController.current?.abort()
+    submissionController.current = null
     generationController.current?.abort()
     generationController.current = null
     generationRequestId.current += 1
     setGeneratedDsl('')
+    setValidatedDsl(null)
+    setValidationMessage(null)
+    setValidatedTestCase(null)
     setGeneratedByRuntime(null)
     setGenerationStatus(null)
     setGenerationError(null)
     setRepairAttempts(0)
+    setRunnerSubmission(null)
+    setRunnerError(null)
+    setIsSubmitting(false)
   }, [])
 
   const fetchApiSummaries = useCallback(async (nextProjectId: string, signal: AbortSignal) => {
@@ -354,19 +384,44 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
 
   useEffect(() => {
     importedDocumentRef.current = null
+    const saved = currentUser && projectId ? readStudioSelection(currentUser.id, projectId) : null
     setDocuments([])
-    setSelectedApiDocId(null)
+    setSelectedApiDocId(saved?.apiDocId ?? null)
     setApiSummaries([])
-    setSelectedApiId(null)
-  }, [projectId])
+    setSelectedApiId(saved?.apiId ?? null)
+    setSelectedStrategy(saved?.strategy ?? defaultStrategy)
+    setSelectedAgentRuntime(saved?.runtime ?? defaultAgentRuntime)
+  }, [projectId, currentUser?.id])
 
   useEffect(() => {
     clearGenerationResult()
-  }, [clearGenerationResult, projectId, selectedApiDocId, selectedApiId])
+    const draft = draftKey ? readStudioDraft(draftKey) : null
+    if (draft !== null) {
+      setGeneratedDsl(draft)
+      setValidationMessage('Draft restored. Validate it with Java before running.')
+    }
+  }, [clearGenerationResult, draftKey])
+
+  useEffect(() => {
+    if (!currentUser || !projectId || !selectedApiDocId || !selectedApiId
+      || apiDetailState !== 'ready' || apiDetail?.apiId !== selectedApiId || apiDetail?.apiDocId !== selectedApiDocId) return
+    writeStudioSelection(currentUser.id, projectId, {
+      apiDocId: selectedApiDocId, apiId: selectedApiId, strategy: selectedStrategy, runtime: selectedAgentRuntime,
+    })
+    onEndpointSelected?.(selectedApiId, selectedApiDocId)
+  }, [currentUser?.id, projectId, selectedApiDocId, selectedApiId, selectedStrategy, selectedAgentRuntime, apiDetail, apiDetailState, onEndpointSelected])
 
   useEffect(() => () => {
     generationController.current?.abort()
+    submissionController.current?.abort()
   }, [])
+
+  useEffect(() => {
+    if (!draftStorageFailed) return
+    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = '' }
+    window.addEventListener('beforeunload', warn)
+    return () => window.removeEventListener('beforeunload', warn)
+  }, [draftStorageFailed])
 
   useEffect(() => {
     let cancelled = false
@@ -445,6 +500,7 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
   }, [expireSession, fetchApiSummaries, projectId, refreshProjects, apiSummariesReload])
 
   useEffect(() => {
+    if (apiSummariesState !== 'ready') return
     if (!selectedApiDocId) {
       setSelectedApiId(null)
       return
@@ -454,7 +510,7 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
     setSelectedApiId((currentId) => scopedSummaries.some((summary) => summary.apiId === currentId)
       ? currentId
       : scopedSummaries[0]?.apiId ?? null)
-  }, [apiSummaries, selectedApiDocId])
+  }, [apiSummaries, apiSummariesState, selectedApiDocId])
 
   useEffect(() => {
     if (!contextTarget || apiSummariesState !== 'ready') return
@@ -534,16 +590,31 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
           ? 'PYTHON_AGENTLAB'
           : 'JAVA_AGENT'
         setSelectedAgentRuntime(targetRuntime)
-        setGeneratedDsl(contextTarget.dsl)
-        setGeneratedByRuntime(targetRuntime)
-        setGenerationStatus('ACCEPTED')
-        setGenerationError(null)
-        setRepairAttempts(0)
+        try {
+          const candidate = JSON.parse(contextTarget.dsl) as unknown
+          if (!isRecord(candidate)) throw new Error('TestCase must be an object')
+          if (currentUser && projectId) {
+            const key = studioDraftKey(currentUser.id, projectId, {
+              apiDocId: apiDetail.apiDocId, apiId: apiDetail.apiId,
+              strategy: targetStrategy && strategyAvailability[targetStrategy.id]?.applicable ? targetStrategy.id : selectedStrategy,
+              runtime: targetRuntime,
+            })
+            setDraftStorageFailed(!writeStudioDraft(key, contextTarget.dsl))
+          }
+          setGeneratedDsl(contextTarget.dsl)
+          setValidatedTestCase(null)
+          setValidatedDsl(null)
+          setValidationMessage('Validate this restored TestCase before running it.')
+          setGeneratedByRuntime(targetRuntime)
+          setGenerationStatus(null)
+          setGenerationError(null)
+          setRepairAttempts(0)
+        } catch {
+          clearGenerationResult()
+        }
       } else {
         clearGenerationResult()
       }
-    } else {
-      clearGenerationResult()
     }
 
     activateContext(contextTarget)
@@ -592,19 +663,18 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
   const selectStrategy = (strategy: StrategyId) => {
     if (!strategyAvailability[strategy]?.applicable) return
     setSelectedStrategy(strategy)
-    clearGenerationResult()
   }
 
   const selectAgentRuntime = (runtime: TestCaseAgentRuntime) => {
     if (runtime === selectedAgentRuntime) return
     setSelectedAgentRuntime(runtime)
-    clearGenerationResult()
   }
 
   const generateTestCase = async () => {
     const strategy = selectedStrategy
     if (
       isGenerating
+      || isSubmitting
       || !projectId
       || !selectedApiId
       || apiDetailState !== 'ready'
@@ -621,8 +691,13 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
     setGenerationStatus('GENERATING')
     setGenerationError(null)
     setGeneratedDsl('')
+    setValidatedDsl(null)
+    setValidationMessage(null)
+    setValidatedTestCase(null)
     setGeneratedByRuntime(null)
     setRepairAttempts(0)
+    setRunnerSubmission(null)
+    setRunnerError(null)
 
     try {
       const path = `/api/v1/projects/${encodeURIComponent(projectId)}/openapi/apis/${encodeURIComponent(selectedApiId)}/testcases:generate`
@@ -639,6 +714,9 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
       if (controller.signal.aborted || requestId !== generationRequestId.current) return
 
       setGeneratedDsl(JSON.stringify(response.candidate, null, 2))
+      if (draftKey) setDraftStorageFailed(!writeStudioDraft(draftKey, JSON.stringify(response.candidate, null, 2)))
+      setValidatedDsl(JSON.stringify(response.candidate, null, 2))
+      setValidatedTestCase(response.candidate)
       setGeneratedByRuntime(selectedAgentRuntime)
       setRepairAttempts(Math.max(0, (response.modelCalls ?? []).length - 1))
       setGenerationStatus('ACCEPTED')
@@ -680,6 +758,123 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
       if (apiError.status === 403) void refreshProjects()
     } finally {
       if (generationController.current === controller) generationController.current = null
+    }
+  }
+
+  const editDsl = (value: string) => {
+    if (draftKey) setDraftStorageFailed(!writeStudioDraft(draftKey, value))
+    generationController.current?.abort()
+    generationRequestId.current += 1
+    setGeneratedDsl(value)
+    setValidatedDsl(null)
+    setValidatedTestCase(null)
+    setGenerationStatus(null)
+    setGenerationError(null)
+    setValidationMessage('Changes require Java validation before execution.')
+    setRunnerSubmission(null)
+    setRunnerError(null)
+  }
+
+  const validateDsl = async () => {
+    if (!projectId || !selectedApiId || isSubmitting || isGenerating) return
+    generationController.current?.abort()
+    const controller = new AbortController()
+    generationController.current = controller
+    const requestId = ++generationRequestId.current
+    const snapshot = generatedDsl
+    setValidatedTestCase(null)
+    setValidatedDsl(null)
+    setGenerationStatus('VALIDATING')
+    setValidationMessage(null)
+    try {
+      const candidate = JSON.parse(snapshot) as unknown
+      if (!isRecord(candidate)) throw new Error('TestCase must be a JSON object')
+      const response = await apiFetch<{ valid: boolean; errors: { path: string; code: string; message: string }[] }>(
+        `/api/v1/projects/${encodeURIComponent(projectId)}/openapi/apis/${encodeURIComponent(selectedApiId)}/testcases:validate`,
+        { body: JSON.stringify(candidate), method: 'POST', signal: controller.signal },
+      )
+      if (controller.signal.aborted || requestId !== generationRequestId.current) return
+      if (!response.valid) {
+        setGenerationStatus('REJECTED')
+        setValidationMessage(response.errors.map((error) => `${error.path}: ${error.message}`).join('\n') || 'Java validation rejected this TestCase.')
+        return
+      }
+      setValidatedTestCase(candidate)
+      setValidatedDsl(snapshot)
+      setGenerationStatus('ACCEPTED')
+      setValidationMessage('Current TestCase passed Java validation.')
+      if (typeof candidate.caseId === 'string' && apiDetail) {
+        recordFinalizedTestCase({
+          apiDocId: apiDetail.apiDocId, apiId: apiDetail.apiId,
+          id: candidate.caseId, name: String(candidate.name ?? candidate.caseId),
+          dsl: snapshot, generator: generatedByRuntime ?? selectedAgentRuntime,
+          strategy: String(candidate.strategy ?? selectedStrategy ?? ''), status: 'ACCEPTED',
+        })
+      }
+    } catch (error: unknown) {
+      if (controller.signal.aborted || requestId !== generationRequestId.current) return
+      setGenerationStatus('REJECTED')
+      setValidationMessage(error instanceof Error ? error.message : 'Unable to validate TestCase')
+      if (error instanceof ApiError && error.status === 401) expireSession()
+      if (error instanceof ApiError && error.status === 403) void refreshProjects()
+    } finally {
+      if (generationController.current === controller) generationController.current = null
+    }
+  }
+
+  const runTest = async () => {
+    const request = runnerRequestForEditor(generationStatus, validatedTestCase, generatedDsl, validatedDsl)
+    if (!projectId || !request || isSubmitting || submissionController.current || validatedDsl !== generatedDsl) return
+
+    const controller = new AbortController()
+    submissionController.current = controller
+    const isCurrent = () => !controller.signal.aborted && currentDraftKey.current === draftKey
+
+    setIsSubmitting(true)
+    setRunnerSubmission(null)
+    setRunnerError(null)
+    try {
+      const response = await apiFetch<RunnerBatchSubmission>(
+        `/api/v1/projects/${encodeURIComponent(projectId)}/test-batches`,
+        { body: JSON.stringify(request), method: 'POST', signal: controller.signal },
+      )
+      if (!isCurrent()) return
+      const identity = singleRunnerSubmission(response)
+      setRunnerSubmission(identity)
+
+      try {
+        const run = await fetchExactRun(projectId, identity.runId, controller.signal)
+        if (!isCurrent()) return
+        recordRun({
+          apiId: run.apiId,
+          caseId: run.caseId,
+          createdAt: run.createdAt,
+          name: run.testCaseName,
+          runId: run.runId,
+          status: run.status,
+        })
+        activateContext({
+          type: 'run',
+          id: String(run.runId),
+          runId: run.runId,
+          caseId: run.caseId,
+          apiId: run.apiId,
+        })
+      } catch (error: unknown) {
+        if (!isCurrent()) return
+        const apiError = apiErrorFor(error, 'Unable to read submitted Run')
+        if (apiError.status === 401) expireSession()
+        if (apiError.status === 403) void refreshProjects()
+      }
+    } catch (error: unknown) {
+      if (!isCurrent()) return
+      const apiError = apiErrorFor(error, 'Unable to submit TestCase to Java Runner')
+      setRunnerError(apiError.message)
+      if (apiError.status === 401) expireSession()
+      if (apiError.status === 403) void refreshProjects()
+    } finally {
+      if (submissionController.current === controller) submissionController.current = null
+      if (isCurrent()) setIsSubmitting(false)
     }
   }
 
@@ -728,6 +923,7 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
           <TestCaseGeneratorPanel
             canGenerate={Boolean(
               projectId
+              && !isSubmitting
               && selectedApiId
               && apiDetailState === 'ready'
               && apiDetail
@@ -743,11 +939,23 @@ export function ApiStudioPage({ contextTarget, onContextNavigate }: ApiStudioPag
             strategyAvailability={strategyAvailability}
           />
           <GeneratedDslPanel
+            draftStorageFailed={draftStorageFailed}
+            canRun={validatedDsl === generatedDsl && Boolean(runnerRequestForEditor(generationStatus, validatedTestCase, generatedDsl, validatedDsl))}
+            isValidating={generationStatus === 'VALIDATING'}
+            isGenerating={isGenerating}
+            onEdit={editDsl}
+            onValidate={() => { void validateDsl() }}
+            validationMessage={validationMessage}
             dsl={generatedDsl}
             generatedBy={agentRuntimeOptions.find((option) => option.id === generatedByRuntime)?.generatedBy ?? ''}
             generationError={generationError}
             generationStatus={generationStatus}
+            isSubmitting={isSubmitting}
+            onRun={() => { void runTest() }}
+            onViewRun={onViewRun}
             repairAttempts={repairAttempts}
+            runnerError={runnerError}
+            runnerSubmission={runnerSubmission}
           />
         </section>
         <ContextTrail compact onNavigate={onContextNavigate} />

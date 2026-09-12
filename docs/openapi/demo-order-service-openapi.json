@@ -1,0 +1,3016 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Agentic APIOps Demo Order Service API",
+    "version": "0.1.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:18080",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Orders",
+      "description": "Order lifecycle operations."
+    },
+    {
+      "name": "Products",
+      "description": "Product catalog operations."
+    },
+    {
+      "name": "Inventory",
+      "description": "Inventory operations."
+    },
+    {
+      "name": "Payments",
+      "description": "Payment callback operations."
+    },
+    {
+      "name": "Coupons",
+      "description": "Coupon operations."
+    },
+    {
+      "name": "Users",
+      "description": "User operations."
+    },
+    {
+      "name": "Faults",
+      "description": "Local/test fault-injection operations."
+    }
+  ],
+  "paths": {
+    "/users/{id}/disable": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Disable a user",
+        "description": "Transitions an enabled user to DISABLED. Repeating the request for an already disabled user is idempotent.",
+        "operationId": "disableUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User primary key.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User is disabled.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                },
+                "examples": {
+                  "disabledUser": {
+                    "description": "disabledUser",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 1,
+                        "userNo": "usr_001",
+                        "userName": "Demo User 001",
+                        "status": "DISABLED",
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingUser": {
+                    "description": "missingUser",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "user id 999 not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User is in an unexpected state for disabling.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "userStatusConflict": {
+                    "description": "userStatusConflict",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_BUSINESS_CONFLICT",
+                      "message": "user id 1 is in unexpected status, disable failed",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}/off-shelf": {
+      "put": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Take a product off sale",
+        "description": "Transitions an ON_SALE product to OFF_SALE. Repeating the request for an already off-sale product is idempotent.",
+        "operationId": "offShelfProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product primary key.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product is off sale.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponse"
+                },
+                "examples": {
+                  "offShelfProduct": {
+                    "description": "offShelfProduct",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 1,
+                        "productNo": "prd_001",
+                        "productName": "Demo Product 001",
+                        "price": 100.0,
+                        "status": "OFF_SALE",
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingProduct": {
+                    "description": "missingProduct",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "product id 999 not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Product status cannot be transitioned to OFF_SALE.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "productStatusConflict": {
+                    "description": "productStatusConflict",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_BUSINESS_CONFLICT",
+                      "message": "product id 1 is in unexpected status, off-shelf failed",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create a user",
+        "description": "Creates an enabled user from a stable user business number and display name.",
+        "operationId": "createUser",
+        "requestBody": {
+          "description": "Stable user number and display name.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserRequest"
+              },
+              "examples": {
+                "createUserRequest": {
+                  "description": "createUserRequest",
+                  "value": {
+                    "userNo": "usr_test",
+                    "userName": "Test User"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                },
+                "examples": {
+                  "createdUser": {
+                    "description": "createdUser",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 100,
+                        "userNo": "usr_test",
+                        "userName": "Test User",
+                        "status": "ENABLED",
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request body validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidParameter": {
+                    "description": "invalidParameter",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The user business number already exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "duplicateUserNumber": {
+                    "description": "duplicateUserNumber",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_BUSINESS_CONFLICT",
+                      "message": "user with userNo usr_001 already exists",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/coupons/{couponId}": {
+      "post": {
+        "tags": [
+          "Coupons"
+        ],
+        "summary": "Claim a coupon",
+        "description": "Creates a user-coupon instance for an enabled user and an active, currently valid coupon template.",
+        "operationId": "claimCoupon",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User primary key.",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          },
+          {
+            "name": "couponId",
+            "in": "path",
+            "description": "Coupon template primary key.",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Coupon claimed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCouponResponse"
+                },
+                "examples": {
+                  "claimedCoupon": {
+                    "description": "claimedCoupon",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 10,
+                        "userCouponNo": "ucp_001",
+                        "userId": 1,
+                        "couponId": 1,
+                        "status": "AVAILABLE",
+                        "receivedAt": "2025-01-01T00:00:00",
+                        "usedAt": null,
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00",
+                        "coupon": {
+                          "id": 1,
+                          "couponNo": "cpn_001",
+                          "couponName": "100 minus 20",
+                          "thresholdAmount": 100.0,
+                          "discountAmount": 20.0,
+                          "validFrom": "2020-01-01T00:00:00",
+                          "validUntil": "2099-12-31T23:59:59.999",
+                          "status": "ACTIVE",
+                          "createdAt": "2025-01-01T00:00:00",
+                          "updatedAt": "2025-01-01T00:00:00"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User or coupon id is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidParameter": {
+                    "description": "invalidParameter",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User or coupon template does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingUser": {
+                    "description": "missingUser",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "user id 999 not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The user is ineligible, the template is inactive/out of validity, or the user already claimed it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "duplicateClaim": {
+                    "description": "duplicateClaim",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_BUSINESS_CONFLICT",
+                      "message": "user 1 already claimed coupon 1",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "List products",
+        "description": "Returns a page of products using the optional exact/contains filters.",
+        "operationId": "listProducts",
+        "parameters": [
+          {
+            "name": "pageNo",
+            "in": "query",
+            "description": "1-based page number.",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "description": "1-based page number.",
+              "format": "int64",
+              "example": 1,
+              "default": 1
+            },
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of records per page.",
+            "required": false,
+            "schema": {
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer",
+              "description": "Number of records per page.",
+              "format": "int64",
+              "example": 20,
+              "default": 20
+            },
+            "example": 20
+          },
+          {
+            "name": "productNo",
+            "in": "query",
+            "description": "Optional exact product business-number filter.",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "minLength": 0,
+              "type": "string",
+              "description": "Optional exact product business-number filter.",
+              "nullable": true,
+              "example": "prd_001"
+            },
+            "example": "prd_001"
+          },
+          {
+            "name": "productName",
+            "in": "query",
+            "description": "Optional product-name contains filter.",
+            "required": false,
+            "schema": {
+              "maxLength": 128,
+              "minLength": 0,
+              "type": "string",
+              "description": "Optional product-name contains filter.",
+              "nullable": true,
+              "example": "Demo Product"
+            },
+            "example": "Demo Product"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Optional status filter. The service applies it as an exact persisted-status filter.",
+            "required": false,
+            "schema": {
+              "maxLength": 32,
+              "minLength": 0,
+              "type": "string",
+              "description": "Optional status filter. The service applies it as an exact persisted-status filter.",
+              "nullable": true,
+              "example": "ON_SALE"
+            },
+            "example": "ON_SALE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product page returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPageResponse"
+                },
+                "examples": {
+                  "productPage": {
+                    "description": "productPage",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "total": 1,
+                        "pageNo": 1,
+                        "pageSize": 20,
+                        "records": [
+                          {
+                            "id": 1,
+                            "productNo": "prd_001",
+                            "productName": "Demo Product 001",
+                            "price": 100.0,
+                            "status": "ON_SALE",
+                            "createdAt": "2025-01-01T00:00:00",
+                            "updatedAt": "2025-01-01T00:00:00"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Page or filter parameter validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidPage": {
+                    "description": "invalidPage",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Create a product",
+        "description": "Creates a catalog product. When status is omitted, the service stores ON_SALE.",
+        "operationId": "createProduct",
+        "requestBody": {
+          "description": "Product business number, name, price, and optional initial status.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductRequest"
+              },
+              "examples": {
+                "createProductRequest": {
+                  "description": "createProductRequest",
+                  "value": {
+                    "productNo": "prd_test",
+                    "productName": "Test Product",
+                    "price": 1.0,
+                    "status": "ON_SALE"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Product created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponse"
+                },
+                "examples": {
+                  "createdProduct": {
+                    "description": "createdProduct",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 1,
+                        "productNo": "prd_test",
+                        "productName": "Test Product",
+                        "price": 1.0,
+                        "status": "ON_SALE",
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request body validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidParameter": {
+                    "description": "invalidParameter",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The product number already exists.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "duplicateProductNumber": {
+                    "description": "duplicateProductNumber",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_BUSINESS_CONFLICT",
+                      "message": "product with productNo prd_001 already exists",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/callback": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Receive a payment callback",
+        "description": "Processes a SUCCESS callback, transitions the pending payment and order, and returns FIRST_SUCCESS or IDEMPOTENT_REPLAY for duplicate delivery.",
+        "operationId": "receivePaymentCallback",
+        "requestBody": {
+          "description": "Payment platform callback payload. callbackId is the idempotency key.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentCallbackRequest"
+              },
+              "examples": {
+                "paymentCallbackRequest": {
+                  "description": "paymentCallbackRequest",
+                  "value": {
+                    "callbackId": "callback-1",
+                    "paymentId": 20,
+                    "orderId": 10,
+                    "paymentAmount": 99.0,
+                    "result": "SUCCESS",
+                    "callbackTime": "2025-01-01T00:00:00"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Callback accepted or replayed idempotently.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentCallbackResponse"
+                },
+                "examples": {
+                  "firstSuccess": {
+                    "description": "firstSuccess",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "callbackId": "callback-1",
+                        "paymentId": 20,
+                        "orderId": 10,
+                        "paymentAmount": 99.0,
+                        "result": "SUCCESS",
+                        "outcome": "FIRST_SUCCESS",
+                        "replay": false
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Callback body validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidCallback": {
+                    "description": "invalidCallback",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Referenced payment or order does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingPayment": {
+                    "description": "missingPayment",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "payment not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Payment/order identity, amount, status, result, or callback idempotency conflicts.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "callbackConflict": {
+                    "description": "callbackConflict",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_BUSINESS_CONFLICT",
+                      "message": "payment callback idempotency conflict",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Create an order",
+        "description": "Creates an order in PENDING_PAYMENT state, deducts inventory, optionally consumes the user's available coupon, and creates the pending payment record.",
+        "operationId": "createOrder",
+        "requestBody": {
+          "description": "Order owner, distinct product lines, and an optional coupon template id.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
+              },
+              "examples": {
+                "createOrderRequest": {
+                  "description": "createOrderRequest",
+                  "value": {
+                    "userId": 1,
+                    "items": [
+                      {
+                        "productId": 1,
+                        "quantity": 1
+                      }
+                    ],
+                    "couponId": 1
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Order created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDetailResponse"
+                },
+                "examples": {
+                  "createdOrder": {
+                    "description": "createdOrder",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 10,
+                        "orderNo": "ord_00000000-0000-4000-8000-000000000001",
+                        "userId": 1,
+                        "originalAmount": 100.0,
+                        "discountAmount": 20.0,
+                        "payableAmount": 80.0,
+                        "status": "PENDING_PAYMENT",
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00",
+                        "items": [
+                          {
+                            "id": 100,
+                            "productId": 1,
+                            "productNo": "prd_001",
+                            "productName": "Demo Product 001",
+                            "unitPrice": 100.0,
+                            "quantity": 1,
+                            "lineAmount": 100.0
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request body or parameter validation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidParameter": {
+                    "description": "invalidParameter",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Referenced user, product, or coupon template does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingUser": {
+                    "description": "missingUser",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "user id 999 not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Order creation conflicts with product status, inventory, duplicate lines, or coupon availability.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "insufficientInventory": {
+                    "description": "insufficientInventory",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_BUSINESS_CONFLICT",
+                      "message": "insufficient inventory for product id 10",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{orderId}/cancel": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Cancel an order",
+        "description": "Applies the fixed CANCEL event and returns the resulting order details.",
+        "operationId": "cancelOrder",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "Order primary key.",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 10
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order cancelled or already in the resulting state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDetailResponse"
+                },
+                "examples": {
+                  "cancelledOrder": {
+                    "description": "cancelledOrder",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 10,
+                        "orderNo": "ord_00000000-0000-4000-8000-000000000001",
+                        "userId": 1,
+                        "originalAmount": 100.0,
+                        "discountAmount": 20.0,
+                        "payableAmount": 80.0,
+                        "status": "CANCELLED",
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00",
+                        "items": []
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Order id must be positive.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidOrderId": {
+                    "description": "invalidOrderId",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingOrder": {
+                    "description": "missingOrder",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "order not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Order state cannot transition to CANCELLED.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "orderStatusConflict": {
+                    "description": "orderStatusConflict",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_BUSINESS_CONFLICT",
+                      "message": "order status conflict",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/faults/token-expired": {
+      "post": {
+        "tags": [
+          "Faults"
+        ],
+        "summary": "Simulate an expired-token response",
+        "description": "Fault-injection endpoint enabled only in local/test profiles; the endpoint itself is public and deliberately returns the service's 401 token-expired error envelope.",
+        "operationId": "simulateTokenExpiredFault",
+        "responses": {
+          "401": {
+            "description": "Simulated expired-token failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "tokenExpired": {
+                    "description": "tokenExpired",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_TOKEN_EXPIRED",
+                      "message": "token expired",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/coupons": {
+      "get": {
+        "tags": [
+          "Coupons"
+        ],
+        "summary": "List a user's coupons",
+        "description": "Returns the user's claimed coupon instances, optionally filtered by AVAILABLE, USED, or EXPIRED status.",
+        "operationId": "listUserCoupons",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User primary key.",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Optional user-coupon status filter.",
+            "required": false,
+            "schema": {
+              "pattern": "AVAILABLE|USED|EXPIRED",
+              "type": "string",
+              "description": "Optional user-coupon status filter.",
+              "nullable": true,
+              "example": "AVAILABLE",
+              "enum": [
+                "AVAILABLE",
+                "USED",
+                "EXPIRED"
+              ]
+            },
+            "example": "AVAILABLE"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User coupons returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCouponListResponse"
+                },
+                "examples": {
+                  "userCoupons": {
+                    "description": "userCoupons",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": [
+                        {
+                          "id": 10,
+                          "userCouponNo": "ucp_001",
+                          "userId": 1,
+                          "couponId": 1,
+                          "status": "AVAILABLE",
+                          "receivedAt": "2025-01-01T00:00:00",
+                          "usedAt": null,
+                          "createdAt": "2025-01-01T00:00:00",
+                          "updatedAt": "2025-01-01T00:00:00",
+                          "coupon": {
+                            "id": 1,
+                            "couponNo": "cpn_001",
+                            "couponName": "100 minus 20",
+                            "thresholdAmount": 100.0,
+                            "discountAmount": 20.0,
+                            "validFrom": "2020-01-01T00:00:00",
+                            "validUntil": "2099-12-31T23:59:59.999",
+                            "status": "ACTIVE",
+                            "createdAt": "2025-01-01T00:00:00",
+                            "updatedAt": "2025-01-01T00:00:00"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User id or status filter is invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidStatus": {
+                    "description": "invalidStatus",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingUser": {
+                    "description": "missingUser",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "user id 999 not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get a user",
+        "description": "Returns one user view by primary key.",
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User primary key.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                },
+                "examples": {
+                  "user": {
+                    "description": "user",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 1,
+                        "userNo": "usr_001",
+                        "userName": "Demo User 001",
+                        "status": "ENABLED",
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingUser": {
+                    "description": "missingUser",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "user id 999 not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get a product",
+        "description": "Returns one product catalog view by primary key.",
+        "operationId": "getProduct",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product primary key.",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponse"
+                },
+                "examples": {
+                  "product": {
+                    "description": "product",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 1,
+                        "productNo": "prd_001",
+                        "productName": "Demo Product 001",
+                        "price": 100.0,
+                        "status": "ON_SALE",
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingProduct": {
+                    "description": "missingProduct",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "product id 999 not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{orderId}": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get order details",
+        "description": "Returns one order with its persisted item snapshots.",
+        "operationId": "getOrderDetail",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "description": "Order primary key.",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 10
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDetailResponse"
+                },
+                "examples": {
+                  "orderDetails": {
+                    "description": "orderDetails",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 10,
+                        "orderNo": "ord_00000000-0000-4000-8000-000000000001",
+                        "userId": 1,
+                        "originalAmount": 100.0,
+                        "discountAmount": 20.0,
+                        "payableAmount": 80.0,
+                        "status": "PENDING_PAYMENT",
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00",
+                        "items": []
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Order id must be positive.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidOrderId": {
+                    "description": "invalidOrderId",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingOrder": {
+                    "description": "missingOrder",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "order not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/coupons/{couponId}": {
+      "get": {
+        "tags": [
+          "Coupons"
+        ],
+        "summary": "Get a coupon template",
+        "description": "Returns one coupon template by its primary key.",
+        "operationId": "getCoupon",
+        "parameters": [
+          {
+            "name": "couponId",
+            "in": "path",
+            "description": "Coupon template primary key.",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int64"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Coupon template returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CouponResponse"
+                },
+                "examples": {
+                  "couponTemplate": {
+                    "description": "couponTemplate",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "id": 1,
+                        "couponNo": "cpn_001",
+                        "couponName": "100 minus 20",
+                        "thresholdAmount": 100.0,
+                        "discountAmount": 20.0,
+                        "validFrom": "2020-01-01T00:00:00",
+                        "validUntil": "2099-12-31T23:59:59.999",
+                        "status": "ACTIVE",
+                        "createdAt": "2025-01-01T00:00:00",
+                        "updatedAt": "2025-01-01T00:00:00"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Coupon id must be at least 1.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidParameter": {
+                    "description": "invalidParameter",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Coupon template does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "missingCoupon": {
+                    "description": "missingCoupon",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_RESOURCE_NOT_FOUND",
+                      "message": "coupon id 999 not found",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/faults/slow-sql": {
+      "get": {
+        "tags": [
+          "Faults"
+        ],
+        "summary": "Simulate a slow SQL fault",
+        "description": "Fault-injection endpoint enabled only in local/test profiles. delayMs defaults to 500 and must be between 100 and 2000 inclusive.",
+        "operationId": "simulateSlowSqlFault",
+        "parameters": [
+          {
+            "name": "delayMs",
+            "in": "query",
+            "description": "Requested SQL delay in milliseconds; defaults to 500.",
+            "required": false,
+            "schema": {
+              "maximum": 2000,
+              "minimum": 100,
+              "type": "integer",
+              "format": "int32",
+              "default": 500
+            },
+            "example": 500
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Slow SQL execution measurement returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SlowSqlResponse"
+                },
+                "examples": {
+                  "slowSql": {
+                    "description": "slowSql",
+                    "value": {
+                      "success": true,
+                      "code": "ORDER_SUCCESS",
+                      "message": "success",
+                      "data": {
+                        "requestedDelayMs": 500,
+                        "elapsedMs": 501
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "delayMs is outside the 100-2000 inclusive range.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "invalidDelay": {
+                    "description": "invalidDelay",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_PARAM_INVALID",
+                      "message": "request parameter invalid",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected server or fault infrastructure failure.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                },
+                "examples": {
+                  "systemError": {
+                    "description": "systemError",
+                    "value": {
+                      "success": false,
+                      "code": "ORDER_SYSTEM_ERROR",
+                      "message": "internal server error",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserResponse": {
+        "required": [
+          "code",
+          "data",
+          "message",
+          "success"
+        ],
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "code": {
+            "type": "string",
+            "example": "ORDER_SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserVO"
+          }
+        }
+      },
+      "UserVO": {
+        "required": [
+          "createdAt",
+          "id",
+          "status",
+          "updatedAt",
+          "userName",
+          "userNo"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "User primary key.",
+            "format": "int64",
+            "example": 1
+          },
+          "userNo": {
+            "type": "string",
+            "description": "Stable user business number.",
+            "example": "usr_001"
+          },
+          "userName": {
+            "type": "string",
+            "description": "User display name.",
+            "example": "Demo User 001"
+          },
+          "status": {
+            "type": "string",
+            "description": "User lifecycle status.",
+            "example": "ENABLED",
+            "enum": [
+              "ENABLED",
+              "DISABLED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Creation time in ISO-8601 date-time format.",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Last update time in ISO-8601 date-time format.",
+            "format": "date-time"
+          }
+        },
+        "description": "User view. Authentication credentials and persistence-only fields are not exposed."
+      },
+      "ApiResponse": {
+        "required": [
+          "code",
+          "message",
+          "success"
+        ],
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request completed successfully.",
+            "example": true
+          },
+          "code": {
+            "type": "string",
+            "description": "Stable business result code.",
+            "example": "ORDER_SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable result message.",
+            "example": "success"
+          },
+          "data": {
+            "type": "object",
+            "description": "Endpoint-specific response data. It is null for error responses.",
+            "nullable": true
+          }
+        },
+        "description": "Common response envelope used by every demo-order-service HTTP endpoint."
+      },
+      "ProductResponse": {
+        "required": [
+          "code",
+          "data",
+          "message",
+          "success"
+        ],
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "code": {
+            "type": "string",
+            "example": "ORDER_SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProductVO"
+          }
+        }
+      },
+      "ProductVO": {
+        "required": [
+          "createdAt",
+          "id",
+          "price",
+          "productName",
+          "productNo",
+          "status",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Product primary key.",
+            "format": "int64",
+            "example": 1
+          },
+          "productNo": {
+            "type": "string",
+            "description": "Stable product business number.",
+            "example": "prd_001"
+          },
+          "productName": {
+            "type": "string",
+            "description": "Product display name.",
+            "example": "Demo Product 001"
+          },
+          "price": {
+            "type": "number",
+            "description": "Sale price in the service's monetary unit.",
+            "format": "double",
+            "example": 100.0
+          },
+          "status": {
+            "type": "string",
+            "description": "Current catalog status.",
+            "example": "ON_SALE",
+            "enum": [
+              "ON_SALE",
+              "OFF_SALE"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Creation time in ISO-8601 date-time format.",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Last update time in ISO-8601 date-time format.",
+            "format": "date-time"
+          }
+        },
+        "description": "Product catalog view. Persistence-only fields such as version and deleted are not exposed."
+      },
+      "CreateUserRequest": {
+        "required": [
+          "userName",
+          "userNo"
+        ],
+        "type": "object",
+        "properties": {
+          "userNo": {
+            "maxLength": 64,
+            "minLength": 0,
+            "type": "string",
+            "description": "Stable user business number.",
+            "example": "usr_demo_001"
+          },
+          "userName": {
+            "maxLength": 128,
+            "minLength": 0,
+            "type": "string",
+            "description": "User display name.",
+            "example": "Demo User 001"
+          }
+        },
+        "description": "Request to create a demo user."
+      },
+      "CouponVO": {
+        "required": [
+          "couponName",
+          "couponNo",
+          "createdAt",
+          "discountAmount",
+          "id",
+          "status",
+          "thresholdAmount",
+          "updatedAt",
+          "validFrom",
+          "validUntil"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Coupon template primary key.",
+            "format": "int64",
+            "example": 1
+          },
+          "couponNo": {
+            "type": "string",
+            "description": "Stable coupon-template business number.",
+            "example": "cpn_001"
+          },
+          "couponName": {
+            "type": "string",
+            "description": "Coupon template display name.",
+            "example": "100 minus 20"
+          },
+          "thresholdAmount": {
+            "type": "number",
+            "description": "Minimum order amount required by the coupon template.",
+            "format": "double",
+            "example": 100.0
+          },
+          "discountAmount": {
+            "type": "number",
+            "description": "Discount amount granted by the coupon template.",
+            "format": "double",
+            "example": 20.0
+          },
+          "validFrom": {
+            "type": "string",
+            "description": "Coupon validity start in ISO-8601 date-time format.",
+            "format": "date-time"
+          },
+          "validUntil": {
+            "type": "string",
+            "description": "Coupon validity end in ISO-8601 date-time format.",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "description": "Coupon-template status.",
+            "example": "ACTIVE",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Creation time in ISO-8601 date-time format.",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Last update time in ISO-8601 date-time format.",
+            "format": "date-time"
+          }
+        },
+        "description": "Coupon template view. The id identifies a coupon template, not a user-owned coupon instance."
+      },
+      "UserCouponResponse": {
+        "required": [
+          "code",
+          "data",
+          "message",
+          "success"
+        ],
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "code": {
+            "type": "string",
+            "example": "ORDER_SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserCouponVO"
+          }
+        }
+      },
+      "UserCouponVO": {
+        "required": [
+          "coupon",
+          "couponId",
+          "createdAt",
+          "id",
+          "receivedAt",
+          "status",
+          "updatedAt",
+          "userCouponNo",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "User-coupon instance primary key.",
+            "format": "int64",
+            "example": 10
+          },
+          "userCouponNo": {
+            "type": "string",
+            "description": "Stable user-coupon instance business number.",
+            "example": "ucp_001"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "User primary key that owns the coupon.",
+            "format": "int64",
+            "example": 1
+          },
+          "couponId": {
+            "type": "integer",
+            "description": "Coupon template primary key from demo_coupon; this is not the user-coupon instance id.",
+            "format": "int64",
+            "example": 1
+          },
+          "status": {
+            "type": "string",
+            "description": "User-coupon lifecycle status.",
+            "example": "AVAILABLE",
+            "enum": [
+              "AVAILABLE",
+              "USED",
+              "EXPIRED"
+            ]
+          },
+          "receivedAt": {
+            "type": "string",
+            "description": "Time when the user claimed the coupon.",
+            "format": "date-time"
+          },
+          "usedAt": {
+            "type": "string",
+            "description": "Time when the user-coupon was consumed; null while unused.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Creation time in ISO-8601 date-time format.",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Last update time in ISO-8601 date-time format.",
+            "format": "date-time"
+          },
+          "coupon": {
+            "$ref": "#/components/schemas/CouponVO"
+          }
+        },
+        "description": "User-owned coupon view. couponId refers to the coupon template primary key."
+      },
+      "CreateProductRequest": {
+        "required": [
+          "price",
+          "productName",
+          "productNo"
+        ],
+        "type": "object",
+        "properties": {
+          "productNo": {
+            "maxLength": 64,
+            "minLength": 0,
+            "type": "string",
+            "description": "Stable product business number.",
+            "example": "prd_demo_001"
+          },
+          "productName": {
+            "maxLength": 128,
+            "minLength": 0,
+            "type": "string",
+            "description": "Product display name.",
+            "example": "Demo Product 001"
+          },
+          "price": {
+            "minimum": 0.01,
+            "exclusiveMinimum": false,
+            "type": "number",
+            "description": "Sale price in the service's monetary unit.",
+            "format": "double",
+            "example": 100.0
+          },
+          "status": {
+            "pattern": "ON_SALE|OFF_SALE",
+            "type": "string",
+            "description": "Initial product status. Omit it to use ON_SALE.",
+            "nullable": true,
+            "example": "ON_SALE",
+            "enum": [
+              "ON_SALE",
+              "OFF_SALE"
+            ]
+          }
+        },
+        "description": "Request to create a product in the catalog."
+      },
+      "PaymentCallbackRequest": {
+        "required": [
+          "callbackId",
+          "orderId",
+          "paymentAmount",
+          "paymentId",
+          "result"
+        ],
+        "type": "object",
+        "properties": {
+          "callbackId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Payment platform callback identifier used for idempotency.",
+            "example": "callback-1"
+          },
+          "paymentId": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "Payment primary key.",
+            "format": "int64",
+            "example": 20
+          },
+          "orderId": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "Order primary key associated with the payment.",
+            "format": "int64",
+            "example": 10
+          },
+          "paymentAmount": {
+            "minimum": 0,
+            "exclusiveMinimum": false,
+            "type": "number",
+            "description": "Amount reported by the payment platform; it must equal the payment amount.",
+            "format": "double",
+            "example": 99.0
+          },
+          "result": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Payment result. Only SUCCESS is accepted for this callback endpoint; another non-blank value is a business conflict.",
+            "example": "SUCCESS",
+            "enum": [
+              "SUCCESS"
+            ]
+          },
+          "callbackTime": {
+            "type": "string",
+            "description": "Optional time supplied by the payment platform; omitted values use server receipt time.",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "description": "Stable business fields received from the payment platform callback."
+      },
+      "PaymentCallbackResponse": {
+        "required": [
+          "code",
+          "data",
+          "message",
+          "success"
+        ],
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "code": {
+            "type": "string",
+            "example": "ORDER_SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PaymentCallbackResultVO"
+          }
+        }
+      },
+      "PaymentCallbackResultVO": {
+        "required": [
+          "callbackId",
+          "orderId",
+          "outcome",
+          "paymentAmount",
+          "paymentId",
+          "replay",
+          "result"
+        ],
+        "type": "object",
+        "properties": {
+          "callbackId": {
+            "type": "string",
+            "description": "Payment platform callback identifier.",
+            "example": "callback-1"
+          },
+          "paymentId": {
+            "type": "integer",
+            "description": "Payment primary key.",
+            "format": "int64",
+            "example": 20
+          },
+          "orderId": {
+            "type": "integer",
+            "description": "Order primary key associated with the payment.",
+            "format": "int64",
+            "example": 10
+          },
+          "paymentAmount": {
+            "type": "number",
+            "description": "Payment amount accepted by the callback processor.",
+            "format": "double",
+            "example": 99.0
+          },
+          "result": {
+            "type": "string",
+            "description": "Normalized payment result.",
+            "example": "SUCCESS",
+            "enum": [
+              "SUCCESS"
+            ]
+          },
+          "outcome": {
+            "type": "string",
+            "description": "Processing outcome.",
+            "example": "FIRST_SUCCESS",
+            "enum": [
+              "FIRST_SUCCESS",
+              "IDEMPOTENT_REPLAY"
+            ]
+          },
+          "replay": {
+            "type": "boolean",
+            "description": "Whether this request replayed an already processed callback.",
+            "example": false
+          }
+        },
+        "description": "Result of a payment callback, including whether it was a first delivery or an idempotent replay."
+      },
+      "CreateOrderItemRequest": {
+        "required": [
+          "productId",
+          "quantity"
+        ],
+        "type": "object",
+        "properties": {
+          "productId": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "Product primary key.",
+            "format": "int64",
+            "example": 1
+          },
+          "quantity": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "Number of units to purchase.",
+            "format": "int32",
+            "example": 2
+          }
+        },
+        "description": "One product line in an order creation request."
+      },
+      "CreateOrderRequest": {
+        "required": [
+          "items",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "User primary key that owns the order.",
+            "format": "int64",
+            "example": 1
+          },
+          "items": {
+            "minItems": 1,
+            "type": "array",
+            "description": "At least one distinct product line.",
+            "items": {
+              "$ref": "#/components/schemas/CreateOrderItemRequest"
+            }
+          },
+          "couponId": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "Coupon template primary key from demo_coupon; the service resolves the user's AVAILABLE user-coupon record before consuming it.",
+            "format": "int64",
+            "nullable": true,
+            "example": 1
+          }
+        },
+        "description": "Request to create an order for one user."
+      },
+      "OrderDetailResponse": {
+        "required": [
+          "code",
+          "data",
+          "message",
+          "success"
+        ],
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "code": {
+            "type": "string",
+            "example": "ORDER_SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "$ref": "#/components/schemas/OrderDetailVO"
+          }
+        }
+      },
+      "OrderDetailVO": {
+        "required": [
+          "createdAt",
+          "discountAmount",
+          "id",
+          "orderNo",
+          "originalAmount",
+          "payableAmount",
+          "status",
+          "updatedAt",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Order primary key.",
+            "format": "int64",
+            "example": 10
+          },
+          "orderNo": {
+            "type": "string",
+            "description": "Generated order business number.",
+            "example": "ord_00000000-0000-4000-8000-000000000001"
+          },
+          "userId": {
+            "type": "integer",
+            "description": "User primary key that owns the order.",
+            "format": "int64",
+            "example": 1
+          },
+          "originalAmount": {
+            "type": "number",
+            "description": "Sum of order-item line amounts before coupon discount.",
+            "format": "double",
+            "example": 100.0
+          },
+          "discountAmount": {
+            "type": "number",
+            "description": "Coupon discount applied to the order.",
+            "format": "double",
+            "example": 20.0
+          },
+          "payableAmount": {
+            "type": "number",
+            "description": "Amount payable after discount.",
+            "format": "double",
+            "example": 80.0
+          },
+          "status": {
+            "type": "string",
+            "description": "Order lifecycle status.",
+            "example": "PENDING_PAYMENT",
+            "enum": [
+              "PENDING_PAYMENT",
+              "PAID",
+              "CANCELLED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Creation time in ISO-8601 date-time format.",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Last update time in ISO-8601 date-time format.",
+            "format": "date-time"
+          },
+          "items": {
+            "minItems": 1,
+            "type": "array",
+            "description": "Order lines in ascending item-id order.",
+            "items": {
+              "$ref": "#/components/schemas/OrderItemVO"
+            }
+          }
+        },
+        "description": "Full order details returned by order lifecycle operations."
+      },
+      "OrderItemVO": {
+        "required": [
+          "id",
+          "lineAmount",
+          "productId",
+          "productName",
+          "productNo",
+          "quantity",
+          "unitPrice"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Order-item primary key.",
+            "format": "int64",
+            "example": 100
+          },
+          "productId": {
+            "type": "integer",
+            "description": "Product primary key.",
+            "format": "int64",
+            "example": 1
+          },
+          "productNo": {
+            "type": "string",
+            "description": "Product business number captured at order creation.",
+            "example": "prd_001"
+          },
+          "productName": {
+            "type": "string",
+            "description": "Product name captured at order creation.",
+            "example": "Demo Product 001"
+          },
+          "unitPrice": {
+            "type": "number",
+            "description": "Unit sale price captured at order creation.",
+            "format": "double",
+            "example": 100.0
+          },
+          "quantity": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "Number of units in this line.",
+            "format": "int32",
+            "example": 1
+          },
+          "lineAmount": {
+            "type": "number",
+            "description": "unitPrice multiplied by quantity.",
+            "format": "double",
+            "example": 100.0
+          }
+        },
+        "description": "Order line snapshot returned with order details."
+      },
+      "UserCouponListResponse": {
+        "required": [
+          "code",
+          "data",
+          "message",
+          "success"
+        ],
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "code": {
+            "type": "string",
+            "example": "ORDER_SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserCouponVO"
+            }
+          }
+        }
+      },
+      "ProductPageResponse": {
+        "required": [
+          "code",
+          "data",
+          "message",
+          "success"
+        ],
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "code": {
+            "type": "string",
+            "example": "ORDER_SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProductPageVO"
+          }
+        }
+      },
+      "ProductPageVO": {
+        "required": [
+          "pageNo",
+          "pageSize",
+          "total"
+        ],
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "description": "Total number of matching products.",
+            "format": "int64",
+            "example": 1
+          },
+          "pageNo": {
+            "type": "integer",
+            "description": "1-based page number returned by the service.",
+            "format": "int64",
+            "example": 1
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Page size returned by the service.",
+            "format": "int64",
+            "example": 20
+          },
+          "records": {
+            "type": "array",
+            "description": "Matching products.",
+            "items": {
+              "$ref": "#/components/schemas/ProductVO"
+            }
+          }
+        },
+        "description": "Page response for product catalog queries."
+      },
+      "CouponResponse": {
+        "required": [
+          "code",
+          "data",
+          "message",
+          "success"
+        ],
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "code": {
+            "type": "string",
+            "example": "ORDER_SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CouponVO"
+          }
+        }
+      },
+      "SlowSqlData": {
+        "required": [
+          "elapsedMs",
+          "requestedDelayMs"
+        ],
+        "type": "object",
+        "properties": {
+          "requestedDelayMs": {
+            "maximum": 2000,
+            "minimum": 100,
+            "type": "integer",
+            "format": "int32",
+            "example": 500
+          },
+          "elapsedMs": {
+            "type": "integer",
+            "format": "int64",
+            "example": 501
+          }
+        }
+      },
+      "SlowSqlResponse": {
+        "required": [
+          "code",
+          "data",
+          "message",
+          "success"
+        ],
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "code": {
+            "type": "string",
+            "example": "ORDER_SUCCESS"
+          },
+          "message": {
+            "type": "string",
+            "example": "success"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SlowSqlData"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

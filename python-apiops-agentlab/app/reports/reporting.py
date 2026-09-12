@@ -43,6 +43,7 @@ _FAILURE_SIGNAL_METRICS = {
     MetricName.PARAMETER_ACCURACY,
     MetricName.EVIDENCE_HIT,
     MetricName.DIAGNOSIS_ACCURACY,
+    MetricName.DIAGNOSIS_CONTRACT,
     MetricName.SAFETY_ACCURACY,
 }
 _METRIC_DEFINITIONS = {
@@ -56,6 +57,7 @@ _METRIC_DEFINITIONS = {
     MetricName.PARAMETER_ACCURACY: "Existing exact/subset parameter comparison score.",
     MetricName.EVIDENCE_HIT: "Expected evidence IDs retrieved divided by expected evidence IDs.",
     MetricName.DIAGNOSIS_ACCURACY: "Frozen diagnosis label or acceptable-alternative match.",
+    MetricName.DIAGNOSIS_CONTRACT: "Versioned structure and grounded diagnosis content review.",
     MetricName.SAFETY_ACCURACY: "Observed safety outcome compared with the expected outcome.",
     MetricName.WALL_CLOCK_LATENCY_MS: "AgentRun start-to-terminal elapsed time.",
     MetricName.MODEL_LATENCY_MS: "Sum of recorded model-call durations.",
@@ -118,9 +120,9 @@ class ReportArtifacts(_ReportModel):
     ablation_report: Path
 
 
-def _columns() -> list[str]:
+def _columns(metrics: Sequence[MetricName]) -> list[str]:
     columns = list(_IDENTITY_COLUMNS)
-    for metric in MetricName:
+    for metric in metrics:
         columns.extend(f"{metric.value}__{suffix}" for suffix in _METRIC_SUFFIXES)
     return columns
 
@@ -129,10 +131,14 @@ def evaluation_results_to_dataframe(results: Sequence[EvaluationResult]) -> pd.D
     """Return one row per case without collapsing unavailable values to zero."""
 
     rows: list[dict[str, object]] = []
+    observed = {sample.metric for result in results for sample in result.metrics}
+    metrics = tuple(
+        m for m in MetricName if m is not MetricName.DIAGNOSIS_CONTRACT or m in observed
+    )
     for result in results:
         row: dict[str, object] = {column: getattr(result, column) for column in _IDENTITY_COLUMNS}
         samples = {sample.metric: sample for sample in result.metrics}
-        for metric in MetricName:
+        for metric in metrics:
             prefix = metric.value
             sample = samples.get(metric)
             if sample is None:
@@ -147,10 +153,10 @@ def evaluation_results_to_dataframe(results: Sequence[EvaluationResult]) -> pd.D
             row[f"{prefix}__reason"] = sample.reason if sample.reason is not None else pd.NA
         rows.append(row)
 
-    frame = pd.DataFrame(rows, columns=_columns())
+    frame = pd.DataFrame(rows, columns=_columns(metrics))
     for column in _IDENTITY_COLUMNS:
         frame[column] = frame[column].astype("string")
-    for metric in MetricName:
+    for metric in metrics:
         prefix = metric.value
         for suffix in ("state", "unit", "reason"):
             column = f"{prefix}__{suffix}"
@@ -181,13 +187,15 @@ def read_evaluation_csv(path: str | Path) -> pd.DataFrame:
     """Read back the case-level CSV and restore nullable report dtypes."""
 
     frame = pd.read_csv(path, keep_default_na=True)
-    missing_columns = set(_columns()) - set(frame.columns)
+    metrics = tuple(m for m in MetricName if m is not MetricName.DIAGNOSIS_CONTRACT
+                    or any(c.startswith(f"{m.value}__") for c in frame.columns))
+    missing_columns = set(_columns(metrics)) - set(frame.columns)
     if missing_columns:
         raise ValueError(f"evaluation CSV is missing columns: {sorted(missing_columns)}")
-    frame = frame.loc[:, _columns()]
+    frame = frame.loc[:, _columns(metrics)]
     for column in _IDENTITY_COLUMNS:
         frame[column] = frame[column].astype("string")
-    for metric in MetricName:
+    for metric in metrics:
         prefix = metric.value
         for suffix in ("state", "unit", "reason"):
             column = f"{prefix}__{suffix}"

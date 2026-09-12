@@ -60,7 +60,12 @@ class RootCauseHypothesis(_DiagnosisModel):
 
 
 class DiagnosisReport(_DiagnosisModel):
-    """Typed inference result without execution-fact or citation lookup semantics."""
+    """Typed semantic inference result, separate from Java execution facts.
+
+    The wire contract keeps the historic ``failureType`` name.  Within Python
+    that value is the Agent's semantic diagnosis; the observed runner failure
+    remains available only from the authoritative ``TestReport``.
+    """
 
     schema_version: Literal["0.1.0"] = Field(alias="schemaVersion")
     report_id: NonEmptyString = Field(alias="reportId")
@@ -74,3 +79,9 @@ class DiagnosisReport(_DiagnosisModel):
     limitations: list[NonEmptyString]
     recommended_checks: list[NonEmptyString] = Field(alias="recommendedChecks")
     trace_id: NonEmptyString = Field(alias="traceId")
+
+    @property
+    def semantic_diagnosis(self) -> FailureType:
+        """Return the Agent-authored class without implying a Java observation."""
+
+        return self.failure_type

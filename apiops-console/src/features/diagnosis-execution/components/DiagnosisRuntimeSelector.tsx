@@ -22,6 +22,7 @@ export function DiagnosisRuntimeSelector({ execution, onChange, runtime }: Diagn
       </header>
       <div className="diagnosis-runtime-options" role="radiogroup" aria-label={ui('Select Runtime')}>
         <button
+          disabled
           aria-pressed={runtime === 'JAVA_PLATFORM'}
           className={`diagnosis-runtime-option${runtime === 'JAVA_PLATFORM' ? ' is-selected' : ''}`}
           onClick={() => onChange('JAVA_PLATFORM')}
@@ -30,7 +31,7 @@ export function DiagnosisRuntimeSelector({ execution, onChange, runtime }: Diagn
           <span className="diagnosis-runtime-icon"><Code2 size={21} strokeWidth={1.7} /></span>
           <span className="diagnosis-runtime-copy">
             <strong>{ui('Java Platform')}</strong>
-            <small>Spring AI Diagnosis Agent</small>
+            <small>{ui('Spring AI Diagnosis Agent')}</small>
             <small className="diagnosis-runtime-unavailable">{ui('Browser execution not wired')}</small>
           </span>
           <span className="diagnosis-runtime-unwired">{ui('Not wired')}</span>

@@ -8,7 +8,7 @@ from copy import deepcopy
 from enum import StrEnum
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, StrictBool, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 
 from app.schemas.openapi_metadata import OpenApiMetadataDetail
 from app.schemas.testcase_dsl import JsonValue
@@ -63,6 +63,32 @@ class DocumentedResponse(BaseModel):
     schema_: dict[StrictStr, JsonValue] | None = None
 
 
+class BusinessBoundarySelector(BaseModel):
+    """An exact request-item selector from a documented business rule."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
+
+    path: StrictStr
+    value: StrictInt | StrictStr
+
+
+class BusinessBoundary(BaseModel):
+    """A documented integer rejection edge, distinct from JSON Schema validity."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True, populate_by_name=True)
+
+    name: StrictStr
+    request_path: StrictStr = Field(alias="requestPath")
+    selector: BusinessBoundarySelector
+    limit: StrictInt
+    operator: Literal["GT"]
+    status_code: StrictInt = Field(alias="statusCode", ge=400, le=599)
+
+    @property
+    def boundary_value(self) -> int:
+        return self.limit + 1
+
+
 class GenerationContext(BaseModel):
     """Minimal, strategy-oriented context; it is not a copy of API metadata."""
 
@@ -78,6 +104,7 @@ class GenerationContext(BaseModel):
     supporting_evidence: tuple[StrictStr, ...]
     request_facts: tuple[RequestFact, ...] = ()
     documented_responses: tuple[DocumentedResponse, ...] = ()
+    business_boundaries: tuple[dict[StrictStr, JsonValue], ...] = ()
 
 
 _BOUNDARY_KEYS = frozenset(
@@ -161,7 +188,64 @@ def _boundary_evidence(metadata: OpenApiMetadataDetail) -> tuple[str, ...]:
         evidence.extend(
             _schema_boundary_paths(request_schema.schema_, f"requestSchemas[{index}].schema")
         )
+    evidence.extend(
+        f"{source}: {boundary.name} rejection boundary={boundary.boundary_value}"
+        for source, boundary in documented_business_boundaries(metadata)
+    )
     return tuple(evidence)
+
+
+def _schema_at_request_path(schema: dict[str, JsonValue], path: str) -> object:
+    current: object = schema
+    for token in path.split("."):
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*(?:\[\])?", token):
+            return None
+        if not isinstance(current, dict) or not isinstance(current.get("properties"), dict):
+            return None
+        current = current["properties"].get(token.removesuffix("[]"))
+        if token.endswith("[]"):
+            if not isinstance(current, dict) or current.get("type") != "array":
+                return None
+            current = current.get("items")
+    return current
+
+
+def documented_business_boundaries(
+    metadata: OpenApiMetadataDetail,
+) -> tuple[tuple[str, BusinessBoundary], ...]:
+    """Read exact structured metadata; never infer a business rule from prose or GT."""
+
+    result: list[tuple[str, BusinessBoundary]] = []
+    statuses = {response.status_code for response in metadata.response_schemas}
+    for index, request in enumerate(metadata.request_schemas):
+        schema = request.schema_
+        if not isinstance(schema, dict) or "x-business-boundaries" not in schema:
+            continue
+        rules = schema["x-business-boundaries"]
+        if not isinstance(rules, list):
+            raise ValueError("x-business-boundaries must be a list of documented rules")
+        for rule_index, rule in enumerate(rules):
+            boundary = BusinessBoundary.model_validate(rule)
+            target = _schema_at_request_path(schema, boundary.request_path)
+            selector = _schema_at_request_path(schema, boundary.selector.path)
+            if (
+                not isinstance(target, dict)
+                or target.get("type") != "integer"
+                or not isinstance(selector, dict)
+                or boundary.request_path.rpartition(".")[0]
+                != boundary.selector.path.rpartition(".")[0]
+                or str(boundary.status_code) not in statuses
+            ):
+                raise ValueError(
+                    "business boundary must bind a request field and documented response"
+                )
+            selector_type = "integer" if isinstance(boundary.selector.value, int) else "string"
+            if selector.get("type") != selector_type:
+                raise ValueError("business boundary selector must match its request schema type")
+            result.append(
+                (f"requestSchemas[{index}].schema.x-business-boundaries[{rule_index}]", boundary)
+            )
+    return tuple(result)
 
 
 def _response_evidence(
@@ -241,7 +325,17 @@ def _request_facts(
     for index, parameter in enumerate(metadata.parameters):
         source = f"parameters[{index}]"
         boundary = _schema_boundary_paths(parameter.schema_, f"{source}.schema")
-        if parameter.required or strategy is TestStrategy.BOUNDARY and boundary:
+        # A documented example is part of the operation contract for a happy
+        # path even when the parameter itself is optional.  Dropping it here
+        # leaves the generator unable to satisfy a task such as ``limit=10``
+        # without guessing from prose outside the metadata authority.
+        if (
+            parameter.required
+            or strategy is TestStrategy.BOUNDARY
+            and boundary
+            or strategy is TestStrategy.HAPPY_PATH
+            and parameter.example is not None
+        ):
             facts.append(
                 RequestFact(
                     source=source,
@@ -282,6 +376,11 @@ def _documented_responses(
         include = (
             (strategy is TestStrategy.HAPPY_PATH and is_success)
             or (strategy is TestStrategy.BUSINESS_ERROR and not is_success)
+            # A boundary can be either a valid edge or the first value that
+            # crosses into a documented business rejection.  Retain both
+            # response sides so the task's trusted intent can select between
+            # them without guessing a status that metadata did not expose.
+            or strategy is TestStrategy.BOUNDARY
             or (strategy is TestStrategy.AUTH_FAILURE and status_code in {401, 403})
             or strategy is TestStrategy.IDEMPOTENCY
         )
@@ -325,16 +424,30 @@ def build_generation_context(
         supporting_evidence=assessment.supporting_evidence,
         request_facts=_request_facts(metadata, assessment.strategy),
         documented_responses=_documented_responses(metadata, assessment.strategy),
+        business_boundaries=(
+            tuple(
+                {
+                    **boundary.model_dump(mode="json", by_alias=True),
+                    "source": source,
+                    "boundaryValue": boundary.boundary_value,
+                }
+                for source, boundary in documented_business_boundaries(metadata)
+            )
+            if assessment.strategy is TestStrategy.BOUNDARY
+            else ()
+        ),
     )
 
 
 __all__ = [
     "DocumentedResponse",
+    "BusinessBoundary",
     "GenerationContext",
     "RequestFact",
     "StrategyApplicability",
     "TestStrategy",
     "assess_strategy",
     "build_generation_context",
+    "documented_business_boundaries",
     "strategy_applicability",
 ]

@@ -4,6 +4,9 @@ import com.apiops.common.enums.FailureType;
 import com.apiops.runner.assertion.AssertionResult;
 import com.apiops.runner.execution.StepResult;
 import com.apiops.runner.http.HttpResponseSnapshot;
+import com.apiops.runner.http.HttpExchangeCapture;
+import com.apiops.runner.http.HttpRequestBuilder;
+import com.apiops.runner.dsl.RequestSpec;
 import com.apiops.runner.dsl.AssertionType;
 import com.apiops.runner.state.RunStatus;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -81,8 +84,16 @@ class ExecutionFactRepositoryMySqlIntegrationTest {
             assertEquals(dispatchFailedAt, failedFacts.finishedAt());
             assertFalse(repository.tryClaimBatch(
                     projectId, dispatchFailedBatch, dispatchFailedAt.plusSeconds(1)));
-            assertEquals(RunStatus.PENDING, repository.findRun(projectId,
-                    dispatchFailed.members().getFirst().runId()).orElseThrow().status());
+            var failedRun = repository.findRun(projectId,
+                    dispatchFailed.members().getFirst().runId()).orElseThrow();
+            assertEquals(RunStatus.EXECUTION_FAILED, failedRun.status());
+            assertEquals(FailureType.SYSTEM_ERROR, failedRun.failureType());
+            assertEquals(dispatchFailedAt, failedRun.finishedAt());
+            assertNull(failedRun.startedAt());
+            assertFalse(repository.completeBatch(projectId, dispatchFailedBatch,
+                    RunStatus.CANCELLED, dispatchFailedAt.plusSeconds(2)));
+            assertEquals(RunStatus.EXECUTION_FAILED, repository.findRun(projectId,
+                    failedRun.runId()).orElseThrow().status());
 
             UUID batchId = UUID.randomUUID();
             ExecutionFactRepository.PreparedBatch prepared = repository.prepareBatch(
@@ -114,6 +125,57 @@ class ExecutionFactRepositoryMySqlIntegrationTest {
             assertFalse(repository.requestBatchCancel(projectId, batchId));
             assertEquals(RunStatus.CANCELLED,
                     repository.findBatch(projectId, batchId).orElseThrow().status());
+            for (var member : prepared.members()) {
+                var cancelled = repository.findRun(projectId, member.runId()).orElseThrow();
+                assertEquals(RunStatus.CANCELLED, cancelled.status());
+                assertEquals(FailureType.NONE, cancelled.failureType());
+            }
+        } finally {
+            cleanup(dataSource, projectId);
+        }
+    }
+
+    @Test
+    void closingFailedBatchRollsBackTogetherAndPreservesStartedAndUnrelatedRuns() throws Exception {
+        DataSource dataSource = testDataSource();
+        executeSchema(dataSource);
+        var repository = new JdbcExecutionFactRepository(dataSource, MAPPER);
+        long projectId = projectId();
+        UUID batchId = UUID.randomUUID();
+        Instant now = Instant.parse("2026-09-09T01:00:00Z");
+        try {
+            var batch = repository.prepareBatch(batchId, projectId, 7L,
+                    List.of(prepared("pending"), prepared("running"), prepared("finished")));
+            long pending = batch.members().get(0).runId();
+            long running = batch.members().get(1).runId();
+            long finished = batch.members().get(2).runId();
+            long unrelated = repository.prepareRun(projectId, "unrelated", "api", "unrelated", "{}");
+            assertTrue(repository.tryClaim(projectId, running, now));
+            assertTrue(repository.tryClaim(projectId, finished, now));
+            assertTrue(repository.completeRun(finished, RunStatus.SUCCESS, FailureType.NONE, now));
+            assertFalse(repository.completeBatch(projectId + 1, batchId, RunStatus.EXECUTION_FAILED, now));
+            try (var connection = dataSource.getConnection(); var statement = connection.createStatement()) {
+                statement.execute("""
+                        CREATE TRIGGER reject_batch_member_close BEFORE UPDATE ON test_run
+                        FOR EACH ROW
+                        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'forced member update failure'
+                        """);
+            }
+            try {
+                assertThrows(RuntimeException.class,
+                        () -> repository.completeBatch(projectId, batchId, RunStatus.EXECUTION_FAILED, now));
+                assertEquals(RunStatus.PENDING, repository.findBatch(projectId, batchId).orElseThrow().status());
+                assertEquals(RunStatus.PENDING, repository.findRun(projectId, pending).orElseThrow().status());
+            } finally {
+                try (var connection = dataSource.getConnection(); var statement = connection.createStatement()) {
+                    statement.execute("DROP TRIGGER IF EXISTS reject_batch_member_close");
+                }
+            }
+            assertTrue(repository.completeBatch(projectId, batchId, RunStatus.EXECUTION_FAILED, now));
+            assertEquals(RunStatus.EXECUTION_FAILED, repository.findRun(projectId, pending).orElseThrow().status());
+            assertEquals(RunStatus.RUNNING, repository.findRun(projectId, running).orElseThrow().status());
+            assertEquals(RunStatus.SUCCESS, repository.findRun(projectId, finished).orElseThrow().status());
+            assertEquals(RunStatus.PENDING, repository.findRun(projectId, unrelated).orElseThrow().status());
         } finally {
             cleanup(dataSource, projectId);
         }
@@ -179,6 +241,11 @@ class ExecutionFactRepositoryMySqlIntegrationTest {
                         "{}");
             }
             assertEquals(100, repository.findRecentRunSummaries(limitProjectId).size());
+            assertEquals("case-limit-0", repository
+                    .findLatestRunSummary(limitProjectId, "case-limit-0")
+                    .orElseThrow()
+                    .caseId());
+            assertTrue(repository.findLatestRunSummary(limitProjectId, "case-absent").isEmpty());
             assertTrue(repository.findRecentRunSummaries(projectId + 3).isEmpty());
         } finally {
             cleanup(dataSource, projectId);
@@ -221,6 +288,12 @@ class ExecutionFactRepositoryMySqlIntegrationTest {
             assertTrue(repository.tryClaim(projectId, successRunId, startedAt));
             assertFalse(repository.tryClaim(projectId, successRunId, startedAt.plusMillis(1)));
 
+            var snapshotSpec = new RequestSpec("GET", "/orders", null, null,
+                    Map.of("Authorization", "Bearer secret"), null);
+            var safeExchange = HttpExchangeCapture.capture(
+                    new HttpRequestBuilder().build("http://localhost", snapshotSpec), snapshotSpec,
+                    new HttpResponseSnapshot(200, Map.of("Content-Type", List.of("application/json")),
+                            "{\"token\":\"secret\",\"count\":3}", 12L));
             StepResult successResult = new StepResult(
                             RunStatus.SUCCESS,
                             FailureType.NONE,
@@ -242,7 +315,7 @@ class ExecutionFactRepositoryMySqlIntegrationTest {
                                             "Authorization", List.of("Bearer secret"),
                                             "Set-Cookie", List.of("session=secret")),
                                     "{\"token\":\"secret\"}",
-                                    12L));
+                                    12L), safeExchange);
             repository.saveExecutionOutcome(new ExecutionFactRepository.RunExecutionOutcome(
                     projectId,
                     successRunId,
@@ -311,6 +384,10 @@ class ExecutionFactRepositoryMySqlIntegrationTest {
             assertEquals(FailureType.NONE, successStep.failureType());
             assertEquals(200, successStep.responseStatusCode());
             assertEquals(12L, successStep.durationMs());
+            assertEquals(MAPPER.readTree(MAPPER.writeValueAsString(safeExchange)),
+                    MAPPER.readTree(successStep.httpExchangeJson()));
+            assertFalse(successStep.httpExchangeJson().contains("secret"));
+            assertTrue(repository.findRun(projectId + 1, successRunId).isEmpty());
             JsonNode assertionJson = MAPPER.readTree(successStep.assertionResultsJson());
             assertEquals("STATUS_CODE", assertionJson.get(0).get("type").asText());
             assertEquals(200, assertionJson.get(0).get("actual").asInt());

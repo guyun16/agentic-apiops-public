@@ -181,7 +181,7 @@ export function ExecutionEvidence({ execution, projectId, run, runtime, testRepo
             <div className="diagnosis-execution-evidence-list">
               {buildExecutionStepDisplayProjection(report.cases).cases.map(({ items, sourceCase: testCase }) => (
                 <article className={`diagnosis-execution-evidence-card ${testCase.status === 'SUCCESS' ? 'is-success' : 'is-danger'}`} key={testCase.caseId}>
-                  <div className="diagnosis-execution-evidence-card-title"><Database size={17} strokeWidth={1.8} /><strong>{testCase.caseId}</strong><span>{testCase.status}</span></div>
+                  <div className="diagnosis-execution-evidence-card-title"><Database size={17} strokeWidth={1.8} /><strong>{testCase.caseId}</strong><span>{ui(testCase.status)}</span></div>
                   <p>{ui('Failure Type')}: {testCase.failureType} · {testCase.steps.length} {ui('steps')}</p>
                   {items.map((item) => {
                     const failedAssertionGroups = buildExecutionAssertionDisplayGroups(item).filter((group) => !group.representativeAssertion.passed)
@@ -232,7 +232,7 @@ export function ExecutionEvidence({ execution, projectId, run, runtime, testRepo
           <div className="diagnosis-execution-identity-list">
             {identity.map(({ Icon, label, value }) => (
               <div key={label}>
-                <span><Icon size={14} strokeWidth={1.8} />{label}</span>
+                <span><Icon size={14} strokeWidth={1.8} />{ui(label)}</span>
                 <code title={value}>{value}</code>
                 <button aria-label={`${ui('Copy')} ${label}`} disabled={value === '—' || value === 'not created'} onClick={() => copyValue(value)} type="button"><Clipboard size={14} strokeWidth={1.8} /></button>
               </div>

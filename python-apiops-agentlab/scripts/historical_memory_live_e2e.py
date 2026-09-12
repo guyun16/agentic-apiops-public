@@ -321,6 +321,7 @@ def _controlled_environment(
             "DEEPSEEK_API_KEY": "controlled-not-secret",
             "DEEPSEEK_MODEL": MODEL,
             "MEMORY_DB_PATH": str(database_path),
+            "RUNTIME_DB_PATH": str(database_path.with_name("runtime-1.sqlite3")),
             "PYTHONUTF8": "1",
         }
     )
@@ -503,6 +504,9 @@ def run_controlled() -> dict[str, object]:
             )
 
             port_two = _free_port()
+            # Recall shared memory in a fresh diagnosis, without reusing the
+            # completed run cached by the first worker's runtime repository.
+            environment["RUNTIME_DB_PATH"] = str(temp_path / "runtime-2.sqlite3")
             process_two = _launch_python(
                 project=project,
                 port=port_two,
@@ -685,9 +689,7 @@ def _real_configuration() -> dict[str, object]:
         "apiKey": api_key,
         "projectId": project_id,
         "runId": run_id,
-        "deepseekBaseUrl": os.environ.get(
-            "DEEPSEEK_BASE_URL", "https://api.deepseek.com"
-        ).strip(),
+        "deepseekBaseUrl": os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com").strip(),
         "deepseekModel": os.environ.get("DEEPSEEK_MODEL", "deepseek-v4-flash").strip(),
     }
 
@@ -877,8 +879,7 @@ def run_real() -> dict[str, object]:
                 _require(write.get("stored") is True, "real accepted memory was not stored")
                 memory_id = write.get("memoryId")
                 _require(
-                    isinstance(memory_id, str)
-                    and re.fullmatch(r"memory_[0-9a-f]{64}", memory_id),
+                    isinstance(memory_id, str) and re.fullmatch(r"memory_[0-9a-f]{64}", memory_id),
                     "real memoryId is invalid",
                 )
                 written_rows = _memory_snapshot(memory_db_path)

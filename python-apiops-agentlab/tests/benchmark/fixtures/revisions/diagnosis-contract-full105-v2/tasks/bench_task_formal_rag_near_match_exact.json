@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_formal_rag_near_match_exact",
+  "taskType": "RAG_EVIDENCE_RETRIEVAL",
+  "instruction": "Return the exact unique-index evidence and reject the abbreviated near-match summary as the citation.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "authorityFixture",
+        "ref": "java://rag/project-41/query/formal-near-match"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "taskFixture",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/evidence-catalog.json"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "taskFocus",
+        "value": "exact evidence over near match"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search"
+  ],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "parameter_accuracy",
+    "evidence_hit"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_formal_rag_near_match_exact",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "parameter_accuracy",
+      "evidence_hit"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "formal exact unique index near match"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 import { CheckCircle2, CircleAlert, Crosshair, ExternalLink, FileWarning, ShieldCheck } from 'lucide-react'
 import { useConsoleLanguage } from '../../../app/ConsoleLanguage'
+import { ReportExportButtons } from '../../../shared/reports/ReportExportButtons'
+import { diagnosisReportExport } from '../../../shared/reports/reportExport'
 import { formatTimestamp } from '../../runs/presentation'
 import type { DiagnosisExecutionResponse } from '../types'
 
@@ -31,7 +33,7 @@ export function DiagnosisReport({ execution, onOpenDiagnosisStudio, onOpenSource
     <article className="diagnosis-report panel">
       <header className="diagnosis-report-header">
         <div className="diagnosis-report-title">
-          <span className="diagnosis-report-kicker">UNIFIED RESULT VIEW</span>
+          <span className="diagnosis-report-kicker">{ui('UNIFIED RESULT VIEW')}</span>
           <div className="diagnosis-report-heading-row">
             <div>
               <h1>{ui('Diagnosis')}</h1>
@@ -50,6 +52,7 @@ export function DiagnosisReport({ execution, onOpenDiagnosisStudio, onOpenSource
         </div>
 
         <div className="diagnosis-report-actions" aria-label={ui('Diagnosis result actions')}>
+          <ReportExportButtons document={diagnosisReportExport(execution)} />
           <button className="panel-action" disabled={!onOpenSourceRun} onClick={onOpenSourceRun} type="button">
             <ExternalLink size={14} strokeWidth={1.8} />
             {ui('Open Source Run')}
@@ -81,7 +84,7 @@ export function DiagnosisReport({ execution, onOpenDiagnosisStudio, onOpenSource
         <section className="diagnosis-report-unavailable" role="status">
           <FileWarning size={18} strokeWidth={1.8} />
           <div>
-            <strong>DiagnosisReport is not available for this execution.</strong>
+            <strong>{ui('DiagnosisReport is not available for this execution.')}</strong>
             <p>{ui('The execution is readable, but Python AgentLab did not return a structured DiagnosisReport.')}</p>
           </div>
         </section>

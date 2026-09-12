@@ -1,0 +1,86 @@
+[
+  {
+    "evaluationRunId": "evaluation_run:stage21-formal-v2-20260826",
+    "source": "python-apiops-agentlab/artifacts/stage21/formal-baseline/results/evaluation_run_stage21-formal-v2-20260826/run.json",
+    "sha256": "ff3d90cf632da070ab6f2ff5909ecb5744eb0b80c54a4a50617d00128d72c48f",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-final-formal-v3-20260826",
+    "source": "python-apiops-agentlab/artifacts/stage21/formal-baseline-final-v3/results/evaluation_run_stage21-final-formal-v3-20260826/run.json",
+    "sha256": "236eb4080832db3f7fd64940fe591389b24d825f29da6514d28464348b619306",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260826T165637Z",
+    "source": "artifacts/stage21/real-model-baseline/full-105/results/evaluation_run_stage21-real-model-full-105-20260826T165637Z/run.json",
+    "sha256": "18fd31f818dcf84d4ccfe61f1202130dcbb14d1c1f6ef8de32f27b7b6ad637b6",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260826T171200Z",
+    "source": "artifacts/stage21/real-model-baseline-final/full-105/results/evaluation_run_stage21-real-model-full-105-20260826T171200Z/run.json",
+    "sha256": "aa662164627d713622e181c81c645be992850669c2f860277fc7b6eee034b85e",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260827T171024Z",
+    "source": "artifacts/stage21/real-model-baseline-repaired-20260827T170951Z/full-105/results/evaluation_run_stage21-real-model-full-105-20260827T171024Z/run.json",
+    "sha256": "6a284bcda9c9dcbca837c8d0a78f88205757aef2f86fe367e4433b09aa0a572c",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260830T064628Z",
+    "source": "artifacts/stage21/formal-real-model-final/full-105/results/evaluation_run_stage21-real-model-full-105-20260830T064628Z/run.json",
+    "sha256": "f04473c934958be481e470ff5c8bb352266b41295b5f70e69c22f2073ee3734e",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260830T164256Z",
+    "source": "artifacts/stage21/final-v2-formal105/full-105/results/evaluation_run_stage21-real-model-full-105-20260830T164256Z/run.json",
+    "sha256": "bea6e3923653a6867085438c701c4d874177f8e5ac8bbe13eb960861d53484a6",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260831T024951Z",
+    "source": "artifacts/stage21/outcome-first-rag-enhanced-105/full-105/results/evaluation_run_stage21-real-model-full-105-20260831T024951Z/run.json",
+    "sha256": "bb7e390f3538c646ac33eeb0b6c5af9b558374e1970790c3ed807a2450747d43",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260901T110644Z",
+    "source": "f105r/full-105/results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/run.json",
+    "sha256": "a95e8a8e3b7cdefc1d74060345ee75a6c8bd31f4a47bed7b374c306ac35cab02",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260903T173457Z",
+    "source": "f105r/official-20260903T173410Z/full-105/results/run-4254b6d0a687d65fd33acbfb/run.json",
+    "sha256": "75aec31706f7f7c2079e571f4311e47303fa33717d00393a08c651789ac0c33e",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T072622Z",
+    "source": "f105r/official-accuracy-v2-20260904T072119Z/full-105/results/run-e3be1cc8334079c252f97806/run.json",
+    "sha256": "019f4266a4fbd17a2a82d71d4e78f3f42a3ed9e8ef8622189245af6833dff147",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T145654Z",
+    "source": "f105r/v4o-20260904T145500Z/full-105/results/run-97539bc88f934d1bc45f3edd/run.json",
+    "sha256": "0a65d4143906d4593075a5c3a5e82965d75957de8d46223de5397012958c9d54",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260905T054023Z",
+    "source": "f105r/v5o-20260905T053300Z/full-105/results/run-32892b0b5903f34756209cc6/run.json",
+    "sha256": "8061960394d5519d7873c17d952b0593c7a300fea9d1ba3a291c55519b645365",
+    "taskCount": 105
+  },
+  {
+    "evaluationRunId": "evaluation_run:stage21-diagnosis-contract-full105-20260906T034346Z",
+    "source": "f105r/dc2-20260906T034303Z/evaluated/run.json",
+    "sha256": "fbb5778c25615bcc6a710c76d0aa882d47016ba2db9c47436da4848bb06e009d",
+    "taskCount": 105
+  }
+]

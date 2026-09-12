@@ -83,6 +83,53 @@ def test_python_owned_correlation_ids_are_explicit() -> None:
     assert "raw_prompt" not in call.model_dump(mode="json")
 
 
+def test_model_call_structured_identity_is_optional_but_typed() -> None:
+    call = ModelCall(
+        trace_id="trace-1",
+        agent_run_id="run-1",
+        agent_step_id="step-generate-1",
+        model_call_id="model-call-1",
+        model_identity=ModelIdentity(provider="qwen", model="qwen3.7-plus-2026-05-26"),
+        prompt=PromptIdentity(name="diagnosis", version="v1"),
+        model_input=digest_payload("bounded prompt"),
+        structured_output_mode="JSON_SCHEMA",
+        schema_name="diagnosis_report_v1",
+        schema_digest="a" * 64,
+        status=TraceStatus.RUNNING,
+    )
+
+    assert call.structured_output_mode == "JSON_SCHEMA"
+    assert call.schema_name == "diagnosis_report_v1"
+    assert call.schema_digest == "a" * 64
+
+    with pytest.raises(ValidationError):
+        ModelCall(
+            trace_id="trace-1",
+            agent_run_id="run-1",
+            agent_step_id="step-generate-1",
+            model_call_id="model-call-1",
+            model_identity=ModelIdentity(provider="qwen", model="qwen"),
+            prompt=PromptIdentity(name="diagnosis", version="v1"),
+            model_input=digest_payload("bounded prompt"),
+            structured_output_mode="JSON_SCHEMA",
+            status=TraceStatus.RUNNING,
+        )
+
+    with pytest.raises(ValidationError):
+        ModelCall(
+            trace_id="trace-1",
+            agent_run_id="run-1",
+            agent_step_id="step-generate-1",
+            model_call_id="model-call-1",
+            model_identity=ModelIdentity(provider="qwen", model="qwen"),
+            prompt=PromptIdentity(name="diagnosis", version="v1"),
+            model_input=digest_payload("bounded prompt"),
+            structured_output_mode="JSON_OBJECT",
+            schema_name="wrong-for-object",
+            status=TraceStatus.RUNNING,
+        )
+
+
 def test_java_tool_call_id_is_only_an_external_reference() -> None:
     without_java_id = ToolResultRecord(
         trace_id="trace-1",

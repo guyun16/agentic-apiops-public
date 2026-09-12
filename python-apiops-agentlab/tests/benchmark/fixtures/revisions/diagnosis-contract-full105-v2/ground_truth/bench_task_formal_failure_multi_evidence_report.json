@@ -1,0 +1,36 @@
+{
+  "ground_truth_id": "gt_stage21_formal_failure_multi_evidence_report",
+  "version": "v2",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal report plus unique index evidence"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "evidence_role",
+      "value": "MULTIPLE_SUPPORTING_SOURCES"
+    },
+    {
+      "name": "expected_evidence_count",
+      "value": 2
+    },
+    {
+      "name": "near_match_rejected",
+      "value": true
+    }
+  ],
+  "expected_evidence_ids": [
+    "CURRENT_JAVA_REPORT",
+    "rag:orders-unique-index"
+  ],
+  "expected_diagnosis": "DATABASE_CONSTRAINT_ERROR",
+  "expected_safety_outcome": "SAFE"
+}

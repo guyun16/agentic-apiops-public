@@ -1,0 +1,690 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+  "authProfile": "NORMAL",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_formal_testcase_project_id_type",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260904T072622Z:bench_task_formal_testcase_project_id_type",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": 291,
+  "durationMs": 6267.309,
+  "errorSummary": null,
+  "evaluationId": "evaluation:2b307cb053e3673ed376a499",
+  "evaluationResult": {
+    "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+    "case_id": "case:evaluation_run:stage21-real-model-full-105-20260904T072622Z:bench_task_formal_testcase_project_id_type",
+    "evaluation_id": "evaluation:2b307cb053e3673ed376a499",
+    "evaluator_version": "rule-evaluator-v1",
+    "ground_truth_id": "gt_stage21_formal_testcase_project_id_type",
+    "ground_truth_version": "v1",
+    "metrics": [
+      {
+        "details": [],
+        "metric": "valid_json",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [],
+        "metric": "schema_valid",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0
+      },
+      {
+        "details": [],
+        "metric": "contract_accepted",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 0
+      },
+      {
+        "details": [
+          "matched=4",
+          "expected=4"
+        ],
+        "metric": "exact_match",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1.0
+      },
+      {
+        "details": [],
+        "metric": "tool_precision",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_recall",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_exact_set_match",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "parameter_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "evidence_hit",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "diagnosis_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "safety_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "wall_clock_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "model_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "human_wait_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "active_execution_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "prompt_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "completion_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "total_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "cost",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      }
+    ],
+    "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4"
+  },
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T072622Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": null,
+  "failureCode": null,
+  "failureStage": null,
+  "fixtureRefs": [
+    "literal:strategy",
+    "literal:projectId",
+    "java://runner-testcase-dsl/project-id-type.json",
+    "examples/invalid/testcase-project-id-string.json",
+    "literal:taskFocus"
+  ],
+  "formalEvidence": {
+    "diagnosisOutcome": null,
+    "normalizedEvaluationFacts": {
+      "diagnosis": null,
+      "evidence_ids": null,
+      "safety_outcome": null,
+      "structured_facts": [
+        {
+          "name": "task_strategy",
+          "value": "CONTRACT_REJECTION"
+        },
+        {
+          "name": "candidate",
+          "value": {
+            "apiId": "api-stage21-generation",
+            "caseId": "boundary-projectid-type",
+            "description": "Tests the system's handling of a projectId provided as a string instead of the required integer type, based on USER_INTENT to reject coercion.",
+            "environment": {
+              "baseUrl": "http://localhost",
+              "variables": {}
+            },
+            "name": "Boundary Test: Invalid ProjectId Type",
+            "projectId": "41",
+            "schemaVersion": "1.0.0",
+            "steps": [
+              {
+                "assertions": [
+                  {
+                    "expected": 400,
+                    "type": "STATUS_CODE"
+                  }
+                ],
+                "extractors": [],
+                "name": "Create Order with String ProjectId",
+                "request": {
+                  "body": {
+                    "productId": "prod-123",
+                    "quantity": 1
+                  },
+                  "method": "POST",
+                  "path": "/orders",
+                  "query": {
+                    "quantity": 1
+                  }
+                },
+                "stepId": "step-1"
+              }
+            ],
+            "tags": [
+              "boundary",
+              "validation"
+            ]
+          }
+        },
+        {
+          "name": "candidate_status",
+          "value": "INTENTIONAL_INVALIDITY_PRESERVED"
+        },
+        {
+          "name": "schema_valid",
+          "value": false
+        },
+        {
+          "name": "contract_accepted",
+          "value": false
+        },
+        {
+          "name": "java_runner_executable",
+          "value": false
+        },
+        {
+          "name": "operation",
+          "value": "createOrder"
+        },
+        {
+          "name": "assertion_type",
+          "value": "STATUS_CODE"
+        },
+        {
+          "name": "expected_http_status",
+          "value": 400
+        },
+        {
+          "name": "security_requirement",
+          "value": "apiKeyAuth"
+        },
+        {
+          "name": "security_scope",
+          "value": "DOCUMENT_LEVEL"
+        },
+        {
+          "name": "idempotency_contract",
+          "value": "NOT_PROVEN"
+        },
+        {
+          "name": "undocumented_fields",
+          "value": false
+        },
+        {
+          "name": "constraint",
+          "value": "quantity.minimum"
+        },
+        {
+          "name": "constraint_value",
+          "value": 1
+        },
+        {
+          "name": "boundary_value",
+          "value": 1
+        },
+        {
+          "name": "invalid_field",
+          "value": "projectId"
+        },
+        {
+          "name": "invalid_constraint",
+          "value": "INTEGER_REQUIRED"
+        }
+      ],
+      "tool_arguments": [],
+      "validity": {
+        "contract_accepted": false,
+        "schema_valid": false,
+        "valid_json": true
+      }
+    },
+    "redactedCandidate": {
+      "apiId": "api-stage21-generation",
+      "caseId": "boundary-projectid-type",
+      "description": "Tests the system's handling of a projectId provided as a string instead of the required integer type, based on USER_INTENT to reject coercion.",
+      "environment": {
+        "baseUrl": "http://localhost",
+        "variables": {}
+      },
+      "name": "Boundary Test: Invalid ProjectId Type",
+      "projectId": "41",
+      "schemaVersion": "1.0.0",
+      "steps": [
+        {
+          "assertions": [
+            {
+              "expected": 400,
+              "type": "STATUS_CODE"
+            }
+          ],
+          "extractors": [],
+          "name": "Create Order with String ProjectId",
+          "request": {
+            "body": {
+              "productId": "prod-123",
+              "quantity": 1
+            },
+            "method": "POST",
+            "path": "/orders",
+            "query": {
+              "quantity": 1
+            }
+          },
+          "stepId": "step-1"
+        }
+      ],
+      "tags": [
+        "boundary",
+        "validation"
+      ]
+    },
+    "terminalDecisionFacts": [],
+    "toolResultMappings": [],
+    "traceEvidence": [
+      {
+        "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+        "agent_step_id": null,
+        "event": "START",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "record_type": "agent_run",
+        "sequence": 1,
+        "status": "RUNNING",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:15.318766Z",
+        "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+        "agent_step_id": "agent_step:ba97f1220854467a9f1fa15a11d0de8a",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 2,
+        "status": "RUNNING",
+        "step_type": "context_enrichment",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:15.319638Z",
+        "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+        "agent_step_id": "agent_step:ba97f1220854467a9f1fa15a11d0de8a",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 3,
+        "status": "SUCCESS",
+        "step_type": "context_enrichment",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:15.320008Z",
+        "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+        "agent_step_id": "agent_step:53edcdc70ff7418e98eb2e8a2678e337",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 4,
+        "status": "RUNNING",
+        "step_type": "generate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:15.321864Z",
+        "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+        "agent_step_id": "agent_step:53edcdc70ff7418e98eb2e8a2678e337",
+        "event": "START",
+        "failure": null,
+        "latency": null,
+        "model_call_id": "model_call:998c3580708943d3b4798f5860d6c421",
+        "model_identity": {
+          "deployment": null,
+          "model": "qwen3.7-plus-2026-05-26",
+          "provider": "Qwen",
+          "version": null
+        },
+        "model_input": {
+          "sha256": "135f03aae3c5e11a6432a104c7e043a41825a5c413d56a4c0c94c64b86a8d8a5",
+          "summary": "GENERATION RULES (trusted control instructions)\n\n- Produce one raw, structured TestCase DSL Candidate JSON object for the selected strategy.\n- The JSON root must be the TestCase DSL object itself. Never wrap it in `candidate`, `testCase`, `result`, or another envelope.\n- Keep the response JSON parseable, but distinguish that transport requirement from candidate DSL validity.\n- For positive, valid-boundary, and business-outcome scenarios, conform exactly to the TestCase DSL Contract authority below, including required fields and additionalProperties rules.\n- Treat an explicit validation objective in Additional Context `USER_INTENT` or `SHORT_TERM_CONTEXT` as part of the requested scenario. When it requests a schema-invalid or contract-invalid candidate, preserve exactly the requested missing field, extra field, wrong scalar type, invalid enum/method, or unknown assertion type so the authoritative Validator can reject it.\n- For that negative validation objective, do not repair, normalize, coerce, fill, remove,…",
+          "truncated": true
+        },
+        "model_output": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:53edcdc70ff7418e98eb2e8a2678e337",
+          "kind": "agent_step"
+        },
+        "project_id": null,
+        "prompt": {
+          "name": "testcase_generate",
+          "version": "v1"
+        },
+        "record_type": "model_call",
+        "schema_digest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schema_name": "testcase_candidate_object_v1",
+        "sequence": 5,
+        "status": "RUNNING",
+        "structured_output_mode": "JSON_SCHEMA",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:15.324665Z",
+        "token_usage": null,
+        "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+        "agent_step_id": "agent_step:53edcdc70ff7418e98eb2e8a2678e337",
+        "event": "TERMINAL",
+        "failure": null,
+        "latency": {
+          "duration_ms": 6215.1223,
+          "finished_at": "2026-09-04T07:32:21.537778Z",
+          "started_at": "2026-09-04T07:32:15.322654Z"
+        },
+        "model_call_id": "model_call:998c3580708943d3b4798f5860d6c421",
+        "model_identity": {
+          "deployment": null,
+          "model": "qwen3.7-plus-2026-05-26",
+          "provider": "Qwen",
+          "version": null
+        },
+        "model_input": {
+          "sha256": "135f03aae3c5e11a6432a104c7e043a41825a5c413d56a4c0c94c64b86a8d8a5",
+          "summary": "GENERATION RULES (trusted control instructions)\n\n- Produce one raw, structured TestCase DSL Candidate JSON object for the selected strategy.\n- The JSON root must be the TestCase DSL object itself. Never wrap it in `candidate`, `testCase`, `result`, or another envelope.\n- Keep the response JSON parseable, but distinguish that transport requirement from candidate DSL validity.\n- For positive, valid-boundary, and business-outcome scenarios, conform exactly to the TestCase DSL Contract authority below, including required fields and additionalProperties rules.\n- Treat an explicit validation objective in Additional Context `USER_INTENT` or `SHORT_TERM_CONTEXT` as part of the requested scenario. When it requests a schema-invalid or contract-invalid candidate, preserve exactly the requested missing field, extra field, wrong scalar type, invalid enum/method, or unknown assertion type so the authoritative Validator can reject it.\n- For that negative validation objective, do not repair, normalize, coerce, fill, remove,…",
+          "truncated": true
+        },
+        "model_output": {
+          "sha256": "f943373222dcf71c545eaaa866d4f5d3b08ae3f96259d0c88bd1d07c71a14592",
+          "summary": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"caseId\": \"boundary-projectid-type\",\n  \"projectId\": \"41\",\n  \"apiId\": \"api-stage21-generation\",\n  \"name\": \"Boundary Test: Invalid ProjectId Type\",\n  \"description\": \"Tests the system's handling of a projectId provided as a string instead of the required integer type, based on USER_INTENT to reject coercion.\",\n  \"environment\": {\n    \"baseUrl\": \"http://localhost\",\n    \"variables\": {}\n  },\n  \"steps\": [\n    {\n      \"stepId\": \"step-1\",\n      \"name\": \"Create Order with String ProjectId\",\n      \"request\": {\n        \"method\": \"POST\",\n        \"path\": \"/orders\",\n        \"query\": {\n          \"quantity\": 1\n        },\n        \"body\": {\n          \"productId\": \"prod-123\",\n          \"quantity\": 1\n        }\n      },\n      \"assertions\": [\n        {\n          \"type\": \"STATUS_CODE\",\n          \"expected\": 400\n        }\n      ],\n      \"extractors\": []\n    }\n  ],\n  \"tags\": [\n    \"boundary\",\n    \"validation\"\n  ]\n}",
+          "truncated": false
+        },
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:53edcdc70ff7418e98eb2e8a2678e337",
+          "kind": "agent_step"
+        },
+        "project_id": null,
+        "prompt": {
+          "name": "testcase_generate",
+          "version": "v1"
+        },
+        "record_type": "model_call",
+        "schema_digest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schema_name": "testcase_candidate_object_v1",
+        "sequence": 6,
+        "status": "SUCCESS",
+        "structured_output_mode": "JSON_SCHEMA",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:21.538811Z",
+        "token_usage": {
+          "completion_tokens": 291,
+          "prompt_tokens": 2139,
+          "provider_metadata": {
+            "cached_prompt_tokens": null,
+            "finish_reason": "stop",
+            "provider_request_id": "044a5566-df7c-904f-ab69-0d338e014413",
+            "reasoning_tokens": null,
+            "response_model": "qwen3.7-plus-2026-05-26"
+          },
+          "total_tokens": 2430
+        },
+        "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+        "agent_step_id": "agent_step:53edcdc70ff7418e98eb2e8a2678e337",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 7,
+        "status": "SUCCESS",
+        "step_type": "generate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:21.539679Z",
+        "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+        "agent_step_id": "agent_step:bcc8bc9e196d4b99bbeb6161be10527d",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 8,
+        "status": "RUNNING",
+        "step_type": "validate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:21.540897Z",
+        "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+        "agent_step_id": "agent_step:bcc8bc9e196d4b99bbeb6161be10527d",
+        "event": "TERMINAL",
+        "failure": {
+          "error_type": null,
+          "failure_category": "VALIDATION_FAILURE",
+          "failure_code": "SHARED_SCHEMA_TYPE",
+          "message": "Value has the wrong JSON type.",
+          "retryable": null
+        },
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 9,
+        "status": "FAILED",
+        "step_type": "validate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:21.541601Z",
+        "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:7f1cdf0210694b0082f02455ab6c243f",
+        "agent_step_id": null,
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "record_type": "agent_run",
+        "sequence": 10,
+        "status": "SUCCESS",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:32:21.543106Z",
+        "trace_id": "trace:3dddf61af784456d8973ac7fb3dddca4",
+        "workflow_id": null
+      }
+    ]
+  },
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "NOT_APPLICABLE",
+  "modelCallCount": 1,
+  "modelCallIds": [
+    "model_call:998c3580708943d3b4798f5860d6c421"
+  ],
+  "modelLatencyMs": 6215.1223,
+  "principalId": 45,
+  "principalLabel": "stage21-normal",
+  "promptTokens": 2139,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "semanticAdjudication": null,
+  "setupStatus": "SUCCESS",
+  "status": "SUCCESS",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": "valid_json",
+        "metricStatus": "VALUE",
+        "name": "valid_json",
+        "reason": "valid_json observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "schema_valid",
+        "metricStatus": "VALUE",
+        "name": "schema_valid",
+        "reason": "schema_valid observed 0, expected 1",
+        "required": true,
+        "status": "FAIL"
+      },
+      {
+        "metric": "contract_accepted",
+        "metricStatus": "VALUE",
+        "name": "contract_accepted",
+        "reason": "contract_accepted observed 0, expected 0",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "exact_match",
+        "metricStatus": "VALUE",
+        "name": "exact_match",
+        "reason": "exact_match observed 1.0, expected 1",
+        "required": true,
+        "status": "PASS"
+      }
+    ],
+    "failCount": 1,
+    "notApplicableCount": 0,
+    "passCount": 3,
+    "status": "FAIL",
+    "unknownCount": 0
+  },
+  "taskType": "TESTCASE_GENERATION",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": 2430,
+  "traceId": "trace:3dddf61af784456d8973ac7fb3dddca4"
+}

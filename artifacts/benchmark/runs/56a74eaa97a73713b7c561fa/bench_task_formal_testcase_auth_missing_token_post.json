@@ -1,0 +1,62 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:eec94cc7d35c415db8c9067a15b7f8a5",
+  "authProfile": null,
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_formal_testcase_auth_missing_token_post",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260830T064628Z:bench_task_formal_testcase_auth_missing_token_post",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 11.38,
+  "errorSummary": "ValueError: metadata must provide a non-empty server URL",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260830T064628Z",
+  "executionMode": "UNKNOWN",
+  "failureCategory": "AGENT_FAILURE",
+  "failureCode": null,
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:strategy",
+    "literal:projectId",
+    "java://metadata/project-41/stage21-auth-api-key",
+    "examples/testcase-missing-token-valid.json",
+    "literal:taskFocus"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "NOT_APPLICABLE",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "principalId": null,
+  "principalLabel": null,
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "TESTCASE_GENERATION",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:f6b9a3485d564e34b932d19e1836f045"
+}

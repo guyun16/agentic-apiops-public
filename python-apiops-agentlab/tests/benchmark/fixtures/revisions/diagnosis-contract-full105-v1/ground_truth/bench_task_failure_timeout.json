@@ -1,0 +1,28 @@
+{
+  "ground_truth_id": "gt_stage21_failure_timeout",
+  "version": "v2",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "runner timeout execution fact"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_evidence_ids": [
+    "runner:timeout"
+  ],
+  "expected_diagnosis": "TIMEOUT",
+  "acceptable_diagnosis_alternatives": [],
+  "expected_safety_outcome": "SAFE",
+  "expected_facts": [
+    {
+      "name": "failure_type",
+      "value": "TIMEOUT"
+    }
+  ]
+}

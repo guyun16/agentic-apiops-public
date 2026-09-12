@@ -1,0 +1,10 @@
+{
+  "fixtureId": "stage21-diagnosis-assertion-contract",
+  "setup": "load deterministic runner validation outcome from the existing one-of mismatch test fixture",
+  "reset": "reload immutable JSON fixture",
+  "authority": "Java runner validation test evidence",
+  "facts": {
+    "failureType": "ASSERTION_EVALUATION_ERROR",
+    "sufficientEvidence": true
+  }
+}

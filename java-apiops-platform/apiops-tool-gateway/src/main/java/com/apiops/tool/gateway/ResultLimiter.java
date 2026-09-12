@@ -11,7 +11,7 @@ import java.util.Objects;
 public final class ResultLimiter {
 
     public static final String TRUNCATED_MARKER = "[TRUNCATED]";
-    private static final String TRUNCATED_FIELD = "_resultTruncated";
+    public static final String TRUNCATED_FIELD = "_resultTruncated";
 
     private final int maxCharacters;
 
@@ -25,6 +25,11 @@ public final class ResultLimiter {
     public LimitedResult limit(Object sanitizedResult) {
         Budget budget = new Budget(maxCharacters);
         Object value = limit(sanitizedResult, budget);
+        if (budget.truncated && value instanceof Map<?, ?> map) {
+            Map<Object, Object> topLevel = new LinkedHashMap<>(map);
+            topLevel.put(TRUNCATED_FIELD, true);
+            value = topLevel;
+        }
         return new LimitedResult(value, budget.truncated);
     }
 
@@ -56,9 +61,6 @@ public final class ResultLimiter {
                 }
                 limited.put(entry.getKey(), limit(entry.getValue(), budget));
             }
-            if (budget.truncated) {
-                limited.put(TRUNCATED_FIELD, true);
-            }
             return limited;
         }
         if (value instanceof Collection<?> collection) {
@@ -68,12 +70,14 @@ public final class ResultLimiter {
                     budget.truncated = true;
                     break;
                 }
-                limited.add(limit(item, budget));
-            }
-            if (budget.truncated
-                    && (limited.isEmpty()
-                    || !TRUNCATED_MARKER.equals(limited.get(limited.size() - 1)))) {
-                limited.add(TRUNCATED_MARKER);
+                Budget candidateBudget = budget.copy();
+                Object candidate = limit(item, candidateBudget);
+                if (candidateBudget.truncated) {
+                    budget.truncated = true;
+                    break;
+                }
+                limited.add(candidate);
+                budget.remaining = candidateBudget.remaining;
             }
             return limited;
         }
@@ -98,6 +102,10 @@ public final class ResultLimiter {
 
         private Budget(int remaining) {
             this.remaining = remaining;
+        }
+
+        private Budget copy() {
+            return new Budget(remaining);
         }
     }
 

@@ -10,14 +10,13 @@ Confirm whether another reservation consumed the remaining stock, then reconcile
 ledger before retrying. This guidance is directly relevant to the query "why did inventory
 reservation fail with insufficient stock?".
 
-Synthetic credential-shaped examples are intentionally present to validate the final
-ContextPack boundary:
-Authorization: Bearer TEST_ONLY_BEARER_TOKEN
-Cookie: SESSION=TEST_ONLY_SESSION_COOKIE
-Set-Cookie: REFRESH=TEST_ONLY_REFRESH_COOKIE
-password=TEST_ONLY_PASSWORD
-api_key=TEST_ONLY_API_KEY
-secret=TEST_ONLY_SECRET
+Sensitive examples are intentionally present to validate the final ContextPack boundary:
+Authorization: Bearer stage10-e2e-secret
+Cookie: SESSION=stage10-cookie-secret
+Set-Cookie: REFRESH=stage10-set-cookie-secret
+password=stage10-password-secret
+api_key=stage10-api-key-secret
+secret=stage10-generic-secret
 
 The citation must retain the project, document, chunk, and runbook source identity. If this
 document is deleted or no longer INDEXED, its vector must not remain usable as normal evidence.

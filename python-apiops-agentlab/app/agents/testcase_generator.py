@@ -6,12 +6,14 @@ import json
 from collections.abc import Sequence
 from json import JSONDecodeError
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 from pydantic import BaseModel, ConfigDict, StrictStr, ValidationError
 
-from app.clients.llm import LLMClient
+from app.clients.llm import LLMClient, complete_with_structured_output
+from app.clients.qwen_structured_output import TESTCASE_CANDIDATE_OUTPUT_SPEC
 from app.rag.context import ContextPack
+from app.schemas.testcase_dsl import JsonValue
 from app.workflows.generation_context import GenerationContext
 
 if TYPE_CHECKING:
@@ -53,6 +55,23 @@ class Candidate(BaseModel):
 # Keep the terminology from the stage outline available without introducing a
 # second candidate representation.
 StructuredCandidate = Candidate
+
+
+class IntentionalInvaliditySpec(BaseModel):
+    """Trusted input-side validation objective derived without expected-side data."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, strict=True)
+
+    issue_code: StrictStr
+    path: StrictStr
+    preservation: Literal["MISSING", "VALUE"]
+    invalid_value: JsonValue = None
+
+
+def _intentional_invalidity_payload(spec: IntentionalInvaliditySpec | None) -> str:
+    if spec is None:
+        return "none"
+    return json.dumps(spec.model_dump(mode="json"), ensure_ascii=False, sort_keys=True)
 
 
 def _additional_context_payload(context_pack: ContextPack) -> list[dict[str, object]]:
@@ -118,6 +137,7 @@ def render_generation_prompt(
     *,
     project_id: int,
     context_pack: ContextPack | None = None,
+    intentional_invalidity: IntentionalInvaliditySpec | None = None,
 ) -> str:
     """Render the versioned prompt from the already-prepared context."""
 
@@ -131,6 +151,10 @@ def render_generation_prompt(
         .replace("{{PROJECT_ID}}", str(project_id))
         .replace("{{TESTCASE_DSL_SCHEMA}}", _TESTCASE_SCHEMA)
         .replace("{{GENERATION_CONTEXT}}", context_json)
+        .replace(
+            "{{INTENTIONAL_INVALIDITY_CONTRACT}}",
+            _intentional_invalidity_payload(intentional_invalidity),
+        )
     )
     return _append_additional_context(prompt, context_pack)
 
@@ -142,6 +166,7 @@ def render_repair_prompt(
     *,
     project_id: int,
     context_pack: ContextPack | None = None,
+    intentional_invalidity: IntentionalInvaliditySpec | None = None,
 ) -> str:
     """Render the repair-specific prompt with deterministic issue guidance."""
 
@@ -164,6 +189,9 @@ def render_repair_prompt(
             ensure_ascii=False,
             sort_keys=True,
         ),
+        INTENTIONAL_INVALIDITY_CONTRACT=_intentional_invalidity_payload(
+            intentional_invalidity
+        ),
     )
     return _append_additional_context(prompt, context_pack)
 
@@ -182,6 +210,7 @@ class TestCaseGenerator:
         *,
         project_id: int,
         context_pack: ContextPack | None = None,
+        intentional_invalidity: IntentionalInvaliditySpec | None = None,
     ) -> Candidate:
         """Generate one candidate from context without metadata re-querying."""
 
@@ -189,6 +218,7 @@ class TestCaseGenerator:
             context,
             project_id=project_id,
             context_pack=context_pack,
+            intentional_invalidity=intentional_invalidity,
         )
         return await self._complete_candidate(
             prompt,
@@ -204,6 +234,7 @@ class TestCaseGenerator:
         *,
         project_id: int,
         context_pack: ContextPack | None = None,
+        intentional_invalidity: IntentionalInvaliditySpec | None = None,
     ) -> Candidate:
         """Request one issue-directed repair and return another Candidate."""
 
@@ -213,6 +244,7 @@ class TestCaseGenerator:
             issues,
             project_id=project_id,
             context_pack=context_pack,
+            intentional_invalidity=intentional_invalidity,
         )
         return await self._complete_candidate(
             prompt,
@@ -228,7 +260,13 @@ class TestCaseGenerator:
         parse_failure: str,
     ) -> Candidate:
         try:
-            raw_output = await self._llm.complete(prompt)
+            provider = getattr(self._llm, "provider", "")
+            raw_output = await complete_with_structured_output(
+                self._llm,
+                prompt,
+                output_spec=TESTCASE_CANDIDATE_OUTPUT_SPEC,
+                native_required=isinstance(provider, str) and provider.casefold() == "qwen",
+            )
         except Exception as exc:
             raise GenerationFailure(call_failure) from exc
 
@@ -253,6 +291,7 @@ __all__ = [
     "Candidate",
     "CandidateParseError",
     "GenerationFailure",
+    "IntentionalInvaliditySpec",
     "StructuredCandidate",
     "TestCaseGenerator",
     "render_generation_prompt",

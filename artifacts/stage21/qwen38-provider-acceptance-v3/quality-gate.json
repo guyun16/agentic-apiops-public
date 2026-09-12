@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "providerModelIdentity": true,
+    "requestProvenance": true,
+    "schemaIdentity": true,
+    "structuredOutputCompatibility": true,
+    "zeroFallback": true,
+    "zeroMismatch": true,
+    "zeroUnproven": true
+  },
+  "fallbackCount": 0,
+  "formal105Status": "NOT_RUN",
+  "mismatchCount": 0,
+  "overall": "PASS",
+  "providerCallCount": 11,
+  "schemaVersion": "stage21-qwen38-provider-quality-gate/v1",
+  "unprovenCount": 0
+}

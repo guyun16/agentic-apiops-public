@@ -37,7 +37,7 @@ export type ContextTrailRun = {
   apiId: string
   name: string
   status: string
-  createdAt: string
+  createdAt: string | null
   diagnosisIds: string[]
 }
 

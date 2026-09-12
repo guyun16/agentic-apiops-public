@@ -1,0 +1,63 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:b2e0e489a2ea4da0a44601b66b8ce307",
+  "authProfile": null,
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_formal_failure_report_constraint_alternative",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260831T024951Z:bench_task_formal_failure_report_constraint_alternative",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": 302,
+  "durationMs": 3212.072,
+  "errorSummary": "BenchmarkTaskFailure: Diagnosis model response was not JSON",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260831T024951Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": "AGENT_FAILURE",
+  "failureCode": "MODEL_OUTPUT_FAILURE",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://test-report/project-41/stage21-initial/constraint-alternative",
+    "examples/diagnosis-report-valid.json",
+    "literal:taskFocus"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTED",
+  "modelCallCount": 1,
+  "modelCallIds": [
+    "model_call:8c9f8f093b84456dbbb3b6a3ea9f0872"
+  ],
+  "modelLatencyMs": 3165.7035,
+  "principalId": null,
+  "principalLabel": null,
+  "promptTokens": 1414,
+  "ragQueryIds": [],
+  "reportId": "report:4447",
+  "runId": 4447,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "FAILURE_DIAGNOSIS",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": 1716,
+  "traceId": "trace:dff43a49964a46419df5716992a360cf"
+}

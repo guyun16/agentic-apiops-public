@@ -192,6 +192,11 @@ async def test_new_service_recovers_pending_approval_and_resumes_checkpoint(
         return report
 
     monkeypatch.setattr(service_b, "_fetch_report", fetch_b)
+    recovered_history = service_b.list(project_id=41)
+    assert len(recovered_history) == 1
+    assert recovered_history[0].agent_run_id == pending.agent_run_id
+    assert recovered_history[0].status == "APPROVAL_REQUIRED"
+
     recovered = await service_b.get(
         agent_run_id=pending.agent_run_id,
         token="java-token-restart",
@@ -205,6 +210,18 @@ async def test_new_service_recovers_pending_approval_and_resumes_checkpoint(
     assert recovered.approval_request is not None
     assert recovered.approval_request.arguments == pending.approval_request.arguments
     assert recovered.approval_request.risk == pending.approval_request.risk
+    assert recovered.steps == pending.steps
+    assert recovered.context == pending.context
+    assert {step.id for step in recovered.steps} >= {
+        "java-test-report",
+        "context-pack",
+        "diagnosis-llm",
+        "hitl-approval",
+    }
+    assert recovered.context.evidence_items > 0
+    assert recovered.context.context_characters > 0
+    assert recovered.context.model_calls == 1
+    assert recovered.context.unavailable_fields == ()
 
     resumed = await service_b.resume(
         agent_run_id=pending.agent_run_id,
@@ -227,4 +244,43 @@ async def test_new_service_recovers_pending_approval_and_resumes_checkpoint(
         ("service-b", "java-token-restart"),
         ("service-b", "java-token-restart"),
     ]
+    completed_history = service_b.list(project_id=41)
+    assert completed_history[0].status == "COMPLETED"
+    assert completed_history[0].summary == resumed.report.summary
     repository_b.close()
+
+    repository_c = SQLiteDiagnosisRunRepository(database_path)
+    service_c = DiagnosisExecutionService(
+        settings_b,
+        run_repository=repository_c,
+        checkpoint_db_path=repository_c.database_path,
+    )
+
+    async def fetch_c(**kwargs: object) -> RunnerTestReport:
+        fetches.append(("service-c", kwargs["token"]))  # type: ignore[arg-type]
+        return report
+
+    monkeypatch.setattr(service_c, "_fetch_report", fetch_c)
+    completed = await service_c.get(
+        agent_run_id=pending.agent_run_id,
+        token="java-token-second-restart",
+        settings=settings_b,
+    )
+
+    assert completed.status == "COMPLETED"
+    assert completed.report == resumed.report
+    assert completed.steps == resumed.steps
+    assert completed.context == resumed.context
+    assert {step.id for step in completed.steps} >= {
+        "java-test-report",
+        "context-pack",
+        "diagnosis-llm",
+        "hitl-approval",
+        "java-tool-gateway",
+        "diagnosis-report",
+    }
+    assert completed.context.model_calls == 2
+    assert completed.context.tool_calls == 1
+    assert completed.context.unavailable_fields == ()
+    assert fetches[-1] == ("service-c", "java-token-second-restart")
+    repository_c.close()

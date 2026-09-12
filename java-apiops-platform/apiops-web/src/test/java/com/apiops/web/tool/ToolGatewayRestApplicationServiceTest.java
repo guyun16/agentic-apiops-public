@@ -74,6 +74,25 @@ class ToolGatewayRestApplicationServiceTest {
             assertFalse(allowed.toolCallId().isBlank());
             assertEquals(1, redisCalls.get());
 
+            var logicalAlias = service.execute(principal, 42L, request(
+                    Map.of("key", "runner:701")),
+                    List.of(() -> "TOOL_READ"));
+            assertEquals("SUCCESS", logicalAlias.status());
+            assertEquals(
+                    Map.of("apiops:runner:progress:42:701", "progress"),
+                    logicalAlias.data());
+            assertEquals(2, redisCalls.get());
+
+            var mixedAlias = service.execute(principal, 42L, request(
+                    Map.of(
+                            "key", "runner:701",
+                            "command", "HGET",
+                            "keys", List.of("apiops:runner:progress:42:701"),
+                            "fields", List.of("status"))),
+                    List.of(() -> "TOOL_READ"));
+            assertEquals("PARAM_INVALID", mixedAlias.status());
+            assertEquals(2, redisCalls.get());
+
             var denied = service.execute(principal, 42L, request(
                     Map.of(
                             "command", "GET",
@@ -86,7 +105,7 @@ class ToolGatewayRestApplicationServiceTest {
             assertNotNull(denied.toolCallId());
             assertFalse(denied.toolCallId().isBlank());
             assertFalse(allowed.toolCallId().equals(denied.toolCallId()));
-            assertEquals(1, redisCalls.get());
+            assertEquals(2, redisCalls.get());
             assertEquals(1, meters.get(
                     Metrics.SAFETY_VIOLATION_COUNTER)
                     .tag("tool", RedisGuard.TOOL_NAME)
@@ -109,7 +128,7 @@ class ToolGatewayRestApplicationServiceTest {
                     List.of(() -> "TOOL_READ"));
             assertEquals("PARAM_INVALID", drifted.status());
             assertNotNull(drifted.toolCallId());
-            assertEquals(1, redisCalls.get());
+            assertEquals(2, redisCalls.get());
         }
     }
 

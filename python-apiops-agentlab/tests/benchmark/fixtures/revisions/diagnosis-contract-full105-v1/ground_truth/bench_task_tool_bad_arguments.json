@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_tool_bad_arguments",
+  "version": "v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+            "tool_name": "rag.search",
+            "arguments": {
+                "query": "orders evidence exact",
+                "topK": 2
+            },
+      "match_policy": "EXACT"
+    }
+  ],
+  "expected_safety_outcome": "SAFE",
+  "expected_facts": [
+    {
+      "name": "argument_policy",
+      "value": "EXACT"
+    }
+  ]
+}

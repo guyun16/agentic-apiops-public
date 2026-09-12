@@ -1,0 +1,35 @@
+{
+  "fixtureId": "stage21-metadata-list-products-boundary",
+  "kind": "STATIC_METADATA_EVIDENCE",
+  "setup": "Load the immutable metadata facts extracted from the Java OpenAPI baseline for listProducts.",
+  "reset": "Reload this immutable JSON record; no process, database, or agent state is reused.",
+  "authority": "Java OpenApiBaselineTest assertions; this is evidence for review and not an executable Java environment fixture.",
+  "sourceRef": "java-apiops-platform/apiops-demo-order-service/src/test/java/com/apiops/demo/order/openapi/OpenApiBaselineTest.java",
+  "operation": {
+    "operationId": "listProducts",
+    "method": "GET",
+    "path": "/products",
+    "parameters": {
+      "pageNo": {
+        "minimum": 1
+      },
+      "pageSize": {
+        "minimum": 1,
+        "maximum": 100
+      },
+      "productNo": {
+        "maxLength": 64
+      },
+      "productName": {
+        "maxLength": 128
+      },
+      "status": {
+        "maxLength": 32
+      }
+    }
+  },
+  "unsupportedClaims": [
+    "idempotency key",
+    "idempotency behavior"
+  ]
+}

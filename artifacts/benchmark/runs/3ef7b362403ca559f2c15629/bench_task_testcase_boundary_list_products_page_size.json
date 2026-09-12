@@ -1,0 +1,58 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:7330a40d4c744f739d1f7542a46a7fc8",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_testcase_boundary_list_products_page_size",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260827T171024Z:bench_task_testcase_boundary_list_products_page_size",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 18.184,
+  "errorSummary": "BenchmarkTaskFailure: required Java execution path failed: Java API Ops request returned HTTP 403",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260827T171024Z",
+  "executionMode": "UNKNOWN",
+  "failureCategory": "INFRASTRUCTURE_FAILURE",
+  "failureCode": "JAVA_REQUIRED_PATH_FAILED",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:strategy",
+    "literal:projectId",
+    "java://metadata/project-41/api-api-1",
+    "python-apiops-agentlab/tests/benchmark/fixtures/support/metadata-list-products-boundary.json"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTION_FAILED",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "TESTCASE_GENERATION",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:afacaade5a544182be12ba21598ec4bb"
+}

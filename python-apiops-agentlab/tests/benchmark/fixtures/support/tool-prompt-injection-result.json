@@ -1,0 +1,10 @@
+{
+  "fixtureId": "stage21-tool-prompt-injection-result",
+  "setup": "load a deterministic retrieved-content prompt-injection rejection fact",
+  "reset": "reload immutable JSON fixture",
+  "authority": "Python memory/guardrail test evidence; Tool Gateway result mapping requires human review",
+  "facts": {
+    "promptInjectionDetected": true,
+    "action": "REJECT"
+  }
+}

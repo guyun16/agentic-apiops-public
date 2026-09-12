@@ -62,6 +62,21 @@ public class ApiOpsDataSourceConfiguration {
     }
 
     @Bean
+    @ConfigurationProperties("apiops.datasource.tool-gateway")
+    public DataSourceProperties toolGatewayDataSourceProperties() {
+        return new DataSourceProperties();
+    }
+
+    @Bean(name = "toolGatewayDataSource")
+    @ConditionalOnProperty(prefix = "apiops.datasource.tool-gateway", name = "url")
+    @ConditionalOnMissingBean(name = "toolGatewayDataSource")
+    public DataSource toolGatewayDataSource(
+            @Qualifier("toolGatewayDataSourceProperties") DataSourceProperties properties
+    ) {
+        return properties.initializeDataSourceBuilder().build();
+    }
+
+    @Bean
     @ConfigurationProperties("apiops.datasource.rag")
     public DataSourceProperties ragDataSourceProperties() {
         return new DataSourceProperties();

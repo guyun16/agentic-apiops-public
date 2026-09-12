@@ -844,6 +844,57 @@ class ToolGatewayTest {
         assertTrue(String.valueOf(limited.value()).contains(ResultLimiter.TRUNCATED_MARKER));
     }
 
+    @Test
+    void resultLimiterKeepsStructuredCollectionItemsAtomicAndMarksOnlyTopLevel() {
+        Map<String, Object> first = new LinkedHashMap<>();
+        first.put("id", "one");
+        first.put("value", "ok");
+        Map<String, Object> second = new LinkedHashMap<>();
+        second.put("id", "two");
+        second.put("value", "x".repeat(50));
+        Map<String, Object> ragResult = new LinkedHashMap<>();
+        ragResult.put("ragQueryId", "q");
+        ragResult.put("results", List.of(first, second));
+
+        ResultLimiter.LimitedResult limited = new ResultLimiter(10).limit(ragResult);
+
+        assertTrue(limited.truncated());
+        Map<?, ?> data = (Map<?, ?>) limited.value();
+        assertEquals("q", data.get("ragQueryId"));
+        assertEquals(List.of(first), data.get("results"));
+        assertEquals(true, data.get(ResultLimiter.TRUNCATED_FIELD));
+        assertFalse(first.containsKey(ResultLimiter.TRUNCATED_FIELD));
+        assertFalse(data.get("results").toString().contains(ResultLimiter.TRUNCATED_MARKER));
+    }
+
+    @Test
+    void applicationOwnedExecutionTimeoutIsAppliedWithoutRemovingTheDeadline() {
+        Duration configuredTimeout = Duration.ofSeconds(2);
+        ProjectAuthorizationService authorization =
+                new ProjectAuthorizationService(viewerMembership());
+        ToolRegistry registry = new ToolRegistry(authorization);
+        registry.register(readableDefinition());
+
+        try (ToolGateway gateway = new ToolGateway(
+                new ToolAuth(registry, authorization),
+                ResourceGuard.allowAll(),
+                new Audit(),
+                null,
+                configuredTimeout)) {
+            assertEquals(configuredTimeout, gateway.executionTimeout());
+
+            ToolResult<Object> result = gateway.execute(
+                    context("configured-timeout"),
+                    intent("ok"),
+                    (trusted, modelIntent) -> {
+                        Thread.sleep(1_100);
+                        return "ok";
+                    });
+
+            assertEquals(ToolStatus.SUCCESS, result.getStatus());
+        }
+    }
+
     private static ToolResult<Object> execute(
             ToolGateway gateway,
             String agentRunId,

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_formal_testcase_unknown_assertion_type",
+  "taskType": "TESTCASE_GENERATION",
+  "instruction": "Reject the testcase containing the unsupported BODY_CONTAINS assertion instead of inventing validator behavior.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "strategy",
+        "value": "BOUNDARY"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "authorityFixture",
+        "ref": "java://runner-testcase-dsl/unknown-assertion.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "taskFixture",
+        "ref": "examples/invalid/testcase-unknown-assertion.json"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "taskFocus",
+        "value": "unknown assertion type"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "submit_unvalidated_dsl"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "valid_json",
+    "schema_valid",
+    "contract_accepted",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_formal_testcase_unknown_assertion_type",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "valid_json",
+      "schema_valid",
+      "contract_accepted",
+      "exact_match"
+    ]
+  },
+  "expectedToolCalls": []
+}

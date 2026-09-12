@@ -145,6 +145,7 @@ class ProviderUsageMetadata(_TraceModel):
 
     provider_request_id: NonEmptyString | None = None
     finish_reason: NonEmptyString | None = None
+    response_model: NonEmptyString | None = None
     cached_prompt_tokens: NonNegativeInt | None = None
     reasoning_tokens: NonNegativeInt | None = None
 
@@ -312,6 +313,23 @@ class ModelCall(TraceRecordBase):
     model_output: PayloadDigest | None = None
     token_usage: TokenUsage | None = None
     latency: Latency | None = None
+    structured_output_mode: Literal["JSON_OBJECT", "JSON_SCHEMA"] | None = None
+    schema_name: NonEmptyString | None = None
+    schema_digest: StrictStr | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+    )
+
+    @model_validator(mode="after")
+    def validate_structured_output_identity(self) -> ModelCall:
+        if self.structured_output_mode == "JSON_SCHEMA":
+            if self.schema_name is None or self.schema_digest is None:
+                raise ValueError("JSON_SCHEMA model calls require schema identity")
+        if self.structured_output_mode == "JSON_OBJECT" and (
+            self.schema_name is not None or self.schema_digest is not None
+        ):
+            raise ValueError("JSON_OBJECT model calls must not carry schema identity")
+        return self
 
     @model_validator(mode="after")
     def validate_lifecycle(self) -> ModelCall:

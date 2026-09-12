@@ -1,0 +1,63 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:9a492563eabf42868e6ddf3adc9f351f",
+  "authProfile": null,
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_formal_rag_multi_constraint_summary",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260831T024951Z:bench_task_formal_rag_multi_constraint_summary",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": 781,
+  "durationMs": 3791.655,
+  "errorSummary": "BenchmarkTaskFailure: Diagnosis candidate matched neither DiagnosisReport nor ToolIntent",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260831T024951Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": "AGENT_FAILURE",
+  "failureCode": "MODEL_OUTPUT_FAILURE",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:projectId",
+    "java://rag/project-41/query/formal-multi-constraint",
+    "python-apiops-agentlab/tests/benchmark/fixtures/support/evidence-catalog.json",
+    "literal:taskFocus"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTED",
+  "modelCallCount": 1,
+  "modelCallIds": [
+    "model_call:573ab2a506a2414dab0eb61ead94bcc5"
+  ],
+  "modelLatencyMs": 3742.4297,
+  "principalId": null,
+  "principalLabel": null,
+  "promptTokens": 1472,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "RAG_EVIDENCE_RETRIEVAL",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": 2253,
+  "traceId": "trace:86aee3860dda418681409775b8a641a2"
+}

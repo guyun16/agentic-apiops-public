@@ -1,0 +1,35 @@
+{
+  "ground_truth_id": "gt_stage21_formal_failure_business_report_authority",
+  "version": "v2",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal Java report inventory conflict"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "evidence_role",
+      "value": "JAVA_REPORT"
+    },
+    {
+      "name": "business_error",
+      "value": "INVENTORY_NOT_ENOUGH"
+    },
+    {
+      "name": "report_authority",
+      "value": "JAVA_TEST_REPORT"
+    }
+  ],
+  "expected_evidence_ids": [
+    "runner:inventory-conflict"
+  ],
+  "expected_diagnosis": "BUSINESS_ERROR",
+  "expected_safety_outcome": "SAFE"
+}

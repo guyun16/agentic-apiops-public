@@ -42,6 +42,87 @@ import static org.mockito.Mockito.when;
 
 class AsyncBatchHttpApplicationServiceTest {
 
+    @Test
+    void cancelResolvesBatchOnServerAndControlsReportBatchScope() throws Exception {
+        var repository = mock(ExecutionFactRepository.class);
+        var producer = mock(BatchExecutionProducer.class);
+        var coordinator = mock(BatchExecutionCoordinator.class);
+        var batchId = UUID.randomUUID();
+        String snapshot = JsonMapper.builder().build().writeValueAsString(testCase(101L, "one"));
+        when(repository.findExecutionInput(301L)).thenReturn(Optional.of(
+                new ExecutionFactRepository.RunExecutionInput(101L, 201L, 301L, "one", "api", snapshot)));
+        when(repository.findRun(101L, 301L)).thenReturn(Optional.of(
+                new ExecutionFactRepository.RunExecutionFacts(101L, 201L, 301L, "one", "api", "one",
+                        RunStatus.RUNNING, com.apiops.common.enums.FailureType.NONE, null, null, List.of())));
+        when(repository.findBatchIdForRun(101L, 301L)).thenReturn(Optional.of(batchId));
+        when(repository.findBatch(101L, batchId)).thenReturn(Optional.of(new BatchExecutionFacts(
+                batchId, 101L, 7L, RunStatus.RUNNING, false, null, null,
+                List.of(new BatchMember(201L, 301L), new BatchMember(202L, 302L)))));
+        when(repository.requestBatchCancel(101L, batchId)).thenReturn(true);
+        var service = service(ProjectRole.EDITOR, repository, producer, coordinator);
+        assertEquals(2, service.controls(101L, 301L).batchSize());
+        assertEquals(true, service.controls(101L, 301L).canCancel());
+        assertEquals(BatchCancelResult.REQUESTED, service.cancelRun(101L, 301L));
+        verify(coordinator).requestCancel(batchId);
+    }
+
+    @Test
+    void rerunCopiesSnapshotWithOnlyDirectSourceAndDoesNotUpdateHistory() throws Exception {
+        var repository = mock(ExecutionFactRepository.class);
+        var producer = mock(BatchExecutionProducer.class);
+        var mapper = JsonMapper.builder().build();
+        var base = testCase(101L, "original");
+        var original = new TestCase(base.schemaVersion(), base.caseId(), base.projectId(), base.apiId(),
+                base.name(), base.environment(), base.description(), List.of("smoke", "apiops:rerun-of:99"), base.steps());
+        String snapshot = mapper.writeValueAsString(original);
+        when(repository.findExecutionInput(301L)).thenReturn(Optional.of(
+                new ExecutionFactRepository.RunExecutionInput(101L, 201L, 301L, "original", "api", snapshot)));
+        when(repository.findRun(101L, 301L)).thenReturn(Optional.of(
+                new ExecutionFactRepository.RunExecutionFacts(101L, 201L, 301L, "original", "api", "original",
+                        RunStatus.SUCCESS, com.apiops.common.enums.FailureType.NONE, null, null, List.of())));
+        when(repository.prepareBatch(any(), eq(101L), eq(7L), anyList())).thenAnswer(call -> {
+            List<ExecutionFactRepository.PreparedRun> copies = call.getArgument(3);
+            TestCase copy = mapper.readValue(copies.getFirst().testCaseDslJson(), TestCase.class);
+            assertEquals(original.steps(), copy.steps());
+            assertEquals(original.environment(), copy.environment());
+            assertEquals(List.of("smoke", "apiops:rerun-of:301"), copy.tags());
+            return new PreparedBatch(call.getArgument(0), 101L, List.of(new BatchMember(202L, 302L)));
+        });
+        var result = service(ProjectRole.EDITOR, repository, producer).rerun(101L, 301L);
+        assertEquals(List.of(302L), result.runIds());
+        assertEquals(snapshot, repository.findExecutionInput(301L).orElseThrow().testCaseDslJson());
+        verify(repository, never()).completeRun(any(Long.class), any(), any(), any());
+        verify(producer).publish(any());
+    }
+
+    @Test
+    void runControlsRejectCrossProjectInputsAndRunsWithoutBatch() throws Exception {
+        var repository = mock(ExecutionFactRepository.class);
+        var producer = mock(BatchExecutionProducer.class);
+        var service = service(ProjectRole.EDITOR, repository, producer);
+        String snapshot = JsonMapper.builder().build().writeValueAsString(testCase(102L, "other"));
+        when(repository.findExecutionInput(301L)).thenReturn(Optional.of(
+                new ExecutionFactRepository.RunExecutionInput(102L, 201L, 301L, "other", "api", snapshot)));
+        assertThrows(com.apiops.common.exception.BusinessException.class, () -> service.rerun(101L, 301L));
+        assertThrows(com.apiops.common.exception.BusinessException.class, () -> service.cancelRun(101L, 301L));
+        assertThrows(com.apiops.common.exception.BusinessException.class, () -> service.controls(101L, 301L));
+        when(repository.findExecutionInput(301L)).thenReturn(Optional.of(
+                new ExecutionFactRepository.RunExecutionInput(101L, 201L, 301L, "local", "api", snapshot)));
+        assertThrows(com.apiops.common.exception.BusinessException.class, () -> service.cancelRun(101L, 301L));
+        verifyNoInteractions(producer);
+        verify(repository, never()).requestBatchCancel(any(Long.class), any());
+    }
+
+    @Test
+    void viewersCannotUseRunMutations() {
+        var repository = mock(ExecutionFactRepository.class);
+        var producer = mock(BatchExecutionProducer.class);
+        var service = service(ProjectRole.VIEWER, repository, producer);
+        assertThrows(AccessDeniedException.class, () -> service.rerun(101L, 301L));
+        assertThrows(AccessDeniedException.class, () -> service.cancelRun(101L, 301L));
+        verifyNoInteractions(repository, producer);
+    }
+
     @AfterEach
     void clearSecurity() {
         SecurityContextHolder.clearContext();

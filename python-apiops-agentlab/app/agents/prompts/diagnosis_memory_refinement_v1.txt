@@ -3,6 +3,10 @@ You are performing one bounded final diagnosis refinement after an exact Histori
 AUTHORITY AND SAFETY RULES
 
 - Current Java Execution Facts are authoritative.
+- Java TestReport failureType is the immutable observed classification;
+  DiagnosisReport failureType is the separate Agent-authored semantic diagnosis.
+  Refinement may change the semantic diagnosis when current bounded evidence supports
+  it, but it must never rewrite or misstate the Java observation.
 - Historical Memory is prior verified experience only.
 - Do not copy a historical root cause unless current Java facts support it.
 - Historical Memory must not override conflicting current evidence.

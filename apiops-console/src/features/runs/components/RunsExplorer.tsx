@@ -6,6 +6,10 @@ import { isDiagnosableStatus, type RunFilter, type RunStatus, type RunSummary } 
 import { RunStatusBadge } from './RunStatusBadge'
 
 type RunsExplorerProps = {
+  hasMore: boolean
+  loadingMore: boolean
+  pageError: string | null
+  onLoadMore: () => void
   allRuns: RunSummary[]
   runs: RunSummary[]
   totalRuns: number
@@ -78,6 +82,10 @@ function groupRuns(runs: RunSummary[]) {
 }
 
 export function RunsExplorer({
+  hasMore,
+  loadingMore,
+  pageError,
+  onLoadMore,
   allRuns,
   filter,
   onDiagnose,
@@ -124,6 +132,13 @@ export function RunsExplorer({
       </div>
 
       <div className="runs-list" aria-label={ui('Runs list')}>
+        <div className="run-inline-state">
+          <span>{language === 'zh-CN' ? `已加载 ${totalRuns} 条；搜索与筛选作用于已加载记录。` : `${totalRuns} loaded; search and filters apply to loaded runs.`}</span>
+          {hasMore && <button type="button" className="panel-action" disabled={loadingMore} onClick={onLoadMore}>
+            {loadingMore ? (language === 'zh-CN' ? '加载中…' : 'Loading…') : (language === 'zh-CN' ? '加载更早的运行' : 'Load older runs')}
+          </button>}
+          {pageError && <span role="alert">{pageError}</span>}
+        </div>
         {groupedRuns.length > 0 ? (
           groupedRuns.map((period) => {
             const periodKey = `period-${period.key}`

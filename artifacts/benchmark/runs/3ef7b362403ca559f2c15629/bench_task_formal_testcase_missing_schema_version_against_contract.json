@@ -1,0 +1,59 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:c18c6119303144a796febbb82a3b6469",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_formal_testcase_missing_schema_version_against_contract",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260827T171024Z:bench_task_formal_testcase_missing_schema_version_against_contract",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 3.687,
+  "errorSummary": "BenchmarkTaskFailure: generation metadata could not be resolved from the declared Java resource",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260827T171024Z",
+  "executionMode": "UNKNOWN",
+  "failureCategory": "CONTRACT_FAILURE",
+  "failureCode": "GENERATION_METADATA_REFERENCE_UNRESOLVED",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:strategy",
+    "literal:projectId",
+    "java://runner-testcase-dsl/missing-required-schema-formal.json",
+    "examples/invalid/testcase-missing-schema-version.json",
+    "literal:taskFocus"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "NOT_APPLICABLE",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "TESTCASE_GENERATION",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:2b6630e319034cc39522799c6e63be4e"
+}

@@ -1,6 +1,7 @@
 package com.apiops.web;
 
 import com.apiops.auth.jwt.JwtTokenService;
+import com.apiops.tool.gateway.ToolGateway;
 import com.apiops.web.system.application.SystemQueryService;
 import com.apiops.web.system.domain.SystemInfo;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Clock;
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,5 +54,12 @@ class SpringBeanAssemblyTest {
         SystemInfo second = service.query();
 
         assertNotSame(first, second);
+    }
+
+    @Test
+    void shouldApplyToolGatewayDeadlineBelowThePythonTransportBoundary() {
+        ToolGateway gateway = applicationContext.getBean(ToolGateway.class);
+
+        assertEquals(Duration.ofSeconds(4), gateway.executionTimeout());
     }
 }

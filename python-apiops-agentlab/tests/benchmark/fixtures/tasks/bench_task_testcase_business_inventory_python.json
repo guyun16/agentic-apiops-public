@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_testcase_business_inventory_python",
+  "taskType": "TESTCASE_GENERATION",
+  "instruction": "Generate a testcase for the documented insufficient-inventory business error, using the existing Python testcase fixture as the scenario reference and the current Java metadata as the request and response contract authority.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "strategy",
+        "value": "BUSINESS_ERROR"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "apiMetadata",
+        "ref": "java://metadata/project-41/formal-final-acceptance"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "candidateFixture",
+        "ref": "examples/testcase-insufficient-stock-valid.json"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "submit_unvalidated_dsl"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "valid_json",
+    "schema_valid",
+    "contract_accepted",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_testcase_business_inventory_python",
+    "version": "v2"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "valid_json",
+      "schema_valid",
+      "contract_accepted",
+      "exact_match"
+    ]
+  }
+}

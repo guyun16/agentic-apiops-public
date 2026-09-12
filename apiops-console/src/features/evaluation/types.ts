@@ -66,6 +66,54 @@ export type RuntimeRunSummary = {
   finishedAt: string | null
 }
 
+export type EvaluationMetricResult = {
+  metric: string
+  status: RuntimeMetricStatus
+  value: number | null
+  unit: string | null
+  reason: string | null
+  details: string[]
+}
+
+export type EvaluationResult = {
+  evaluation_id: string
+  case_id: string
+  trace_id: string
+  agent_run_id: string
+  ground_truth_id: string
+  ground_truth_version: string
+  evaluator_version: string
+  metrics: EvaluationMetricResult[]
+}
+
+export type JudgeResult = {
+  judge_result_id: string
+  judge_case_id: string
+  trace_id: string
+  agent_run_id: string
+  dimension: string
+  score: number
+  reason: string
+  configuration: {
+    rubric: {
+      rubric_id: string
+      version: string
+      dimension: string
+      criteria: string[]
+    }
+    prompt: {
+      name: string
+      version: string
+    }
+    model_identity: {
+      provider: string
+      model: string
+      deployment: string | null
+      version: string | null
+    }
+  }
+}
+
 export type RuntimeRunDetail = RuntimeRunSummary & {
   metrics: Record<string, RuntimeMetric>
   toolCounts: RuntimeToolCounts
@@ -75,6 +123,8 @@ export type RuntimeRunDetail = RuntimeRunSummary & {
   traceRecordCount: number
   failureCode: string | null
   failureMessage: string | null
+  evaluationResult: EvaluationResult | null
+  judgeResults: JudgeResult[]
 }
 
 export type RuntimeEvaluationSummary = {
@@ -88,4 +138,4 @@ export type RuntimeEvaluationSummary = {
 
 export type EvaluationRunFilter = 'ALL' | RuntimeRunStatus
 
-export type EvaluationTab = 'Overview' | 'Validation' | 'Tool Execution' | 'Latency' | 'Token & Cost'
+export type EvaluationTab = 'Overview' | 'Deterministic' | 'LLM Judge' | 'Runtime Facts' | 'Cost & Latency'

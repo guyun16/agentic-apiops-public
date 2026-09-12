@@ -3,6 +3,7 @@ package com.apiops.report.vo;
 import com.apiops.common.enums.FailureType;
 import com.apiops.runner.assertion.AssertionResult;
 import com.apiops.runner.state.RunStatus;
+import com.apiops.runner.http.HttpExchangeSnapshot;
 
 import java.time.Instant;
 import java.util.List;
@@ -92,8 +93,13 @@ public record TestReportVO(
             FailureType failureType,
             Integer responseStatusCode,
             Long durationMs,
-            List<AssertionResult> assertionResults
+            List<AssertionResult> assertionResults,
+            HttpExchangeSnapshot httpExchange
     ) {
+        public StepReport(String stepId, RunStatus status, FailureType failureType,
+                          Integer responseStatusCode, Long durationMs, List<AssertionResult> assertionResults) {
+            this(stepId, status, failureType, responseStatusCode, durationMs, assertionResults, null);
+        }
         public StepReport {
             Objects.requireNonNull(stepId, "stepId must not be null");
             Objects.requireNonNull(status, "status must not be null");

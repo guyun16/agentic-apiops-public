@@ -1,0 +1,647 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:13764459c3ce449695bf3764df238f93",
+  "authProfile": "NORMAL",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_testcase_auth_missing_token",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260904T145654Z:bench_task_testcase_auth_missing_token",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": 233,
+  "durationMs": 3471.095,
+  "errorSummary": null,
+  "evaluationId": "evaluation:0185101015a730e94e7f9c21",
+  "evaluationResult": {
+    "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+    "case_id": "case:evaluation_run:stage21-real-model-full-105-20260904T145654Z:bench_task_testcase_auth_missing_token",
+    "evaluation_id": "evaluation:0185101015a730e94e7f9c21",
+    "evaluator_version": "rule-evaluator-v1",
+    "ground_truth_id": "gt_stage21_testcase_auth_missing_token",
+    "ground_truth_version": "v1",
+    "metrics": [
+      {
+        "details": [],
+        "metric": "valid_json",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [],
+        "metric": "schema_valid",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [],
+        "metric": "contract_accepted",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [
+          "matched=4",
+          "expected=4"
+        ],
+        "metric": "exact_match",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1.0
+      },
+      {
+        "details": [],
+        "metric": "tool_precision",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_recall",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_exact_set_match",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "parameter_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "evidence_hit",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "diagnosis_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "safety_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "wall_clock_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "model_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "human_wait_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "active_execution_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "prompt_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "completion_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "total_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "cost",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      }
+    ],
+    "trace_id": "trace:c198990882e6404dac722899257106cf"
+  },
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T145654Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": null,
+  "failureCode": null,
+  "failureStage": null,
+  "fixtureRefs": [
+    "literal:strategy",
+    "examples/openapi-metadata-valid.json"
+  ],
+  "formalEvidence": {
+    "diagnosisOutcome": null,
+    "normalizedEvaluationFacts": {
+      "diagnosis": null,
+      "evidence_ids": null,
+      "safety_outcome": null,
+      "structured_facts": [
+        {
+          "name": "task_strategy",
+          "value": "AUTH_FAILURE"
+        },
+        {
+          "name": "candidate",
+          "value": {
+            "apiId": "api-1",
+            "caseId": "auth-failure-getOrders-001",
+            "description": "Verify that requesting GET /orders without the required apiKeyAuth credential results in a documented authentication failure response.",
+            "environment": {
+              "baseUrl": "https://api.example",
+              "variables": {}
+            },
+            "name": "AUTH_FAILURE: GET /orders without apiKeyAuth credential",
+            "projectId": 41,
+            "schemaVersion": "1.0.0",
+            "steps": [
+              {
+                "assertions": [
+                  {
+                    "expected": 401,
+                    "type": "STATUS_CODE"
+                  }
+                ],
+                "extractors": [],
+                "name": "Request GET /orders without apiKeyAuth",
+                "request": {
+                  "method": "GET",
+                  "path": "/orders"
+                },
+                "stepId": "step-auth-failure-001"
+              }
+            ]
+          }
+        },
+        {
+          "name": "candidate_status",
+          "value": "ACCEPTED"
+        },
+        {
+          "name": "schema_valid",
+          "value": true
+        },
+        {
+          "name": "contract_accepted",
+          "value": true
+        },
+        {
+          "name": "fixture_authority",
+          "value": "VALID_TESTCASE"
+        },
+        {
+          "name": "java_runner_executable",
+          "value": false
+        },
+        {
+          "name": "operation",
+          "value": "getOrders"
+        },
+        {
+          "name": "assertion_type",
+          "value": "STATUS_CODE"
+        },
+        {
+          "name": "expected_http_status",
+          "value": 401
+        },
+        {
+          "name": "security_requirement",
+          "value": "apiKeyAuth"
+        },
+        {
+          "name": "security_scope",
+          "value": "DOCUMENT_LEVEL"
+        },
+        {
+          "name": "idempotency_contract",
+          "value": "NOT_PROVEN"
+        },
+        {
+          "name": "operation_http_status",
+          "value": "UNSPECIFIED_BY_METADATA"
+        },
+        {
+          "name": "undocumented_fields",
+          "value": false
+        }
+      ],
+      "tool_arguments": [],
+      "validity": {
+        "contract_accepted": true,
+        "schema_valid": true,
+        "valid_json": true
+      }
+    },
+    "redactedCandidate": {
+      "apiId": "api-1",
+      "caseId": "auth-failure-getOrders-001",
+      "description": "Verify that requesting GET /orders without the required apiKeyAuth credential results in a documented authentication failure response.",
+      "environment": {
+        "baseUrl": "https://api.example",
+        "variables": {}
+      },
+      "name": "AUTH_FAILURE: GET /orders without apiKeyAuth credential",
+      "projectId": 41,
+      "schemaVersion": "1.0.0",
+      "steps": [
+        {
+          "assertions": [
+            {
+              "expected": 401,
+              "type": "STATUS_CODE"
+            }
+          ],
+          "extractors": [],
+          "name": "Request GET /orders without apiKeyAuth",
+          "request": {
+            "method": "GET",
+            "path": "/orders"
+          },
+          "stepId": "step-auth-failure-001"
+        }
+      ]
+    },
+    "terminalDecisionFacts": [],
+    "toolResultMappings": [],
+    "traceEvidence": [
+      {
+        "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+        "agent_step_id": null,
+        "event": "START",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "record_type": "agent_run",
+        "sequence": 1,
+        "status": "RUNNING",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:57:53.486999Z",
+        "trace_id": "trace:c198990882e6404dac722899257106cf",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+        "agent_step_id": "agent_step:6455ba2bcf304901bfebe92b4a459c1b",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:13764459c3ce449695bf3764df238f93",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 2,
+        "status": "RUNNING",
+        "step_type": "context_enrichment",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:57:53.487847Z",
+        "trace_id": "trace:c198990882e6404dac722899257106cf",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+        "agent_step_id": "agent_step:6455ba2bcf304901bfebe92b4a459c1b",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:13764459c3ce449695bf3764df238f93",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 3,
+        "status": "SUCCESS",
+        "step_type": "context_enrichment",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:57:53.488155Z",
+        "trace_id": "trace:c198990882e6404dac722899257106cf",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+        "agent_step_id": "agent_step:aeda5c15011a40e98a5edd28edbf737d",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:13764459c3ce449695bf3764df238f93",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 4,
+        "status": "RUNNING",
+        "step_type": "generate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:57:53.489025Z",
+        "trace_id": "trace:c198990882e6404dac722899257106cf",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+        "agent_step_id": "agent_step:aeda5c15011a40e98a5edd28edbf737d",
+        "event": "START",
+        "failure": null,
+        "latency": null,
+        "model_call_id": "model_call:d7f0ba51b05645ef9a51d4f3691d1269",
+        "model_identity": {
+          "deployment": null,
+          "model": "qwen3.8-max",
+          "provider": "Qwen",
+          "version": null
+        },
+        "model_input": {
+          "sha256": "7330a53e6985594ca8455e114a9feaef55af186bf0bef5019a71d964b0588df5",
+          "summary": "GENERATION RULES (trusted control instructions)\n\n- Produce one raw, structured TestCase DSL Candidate JSON object for the selected strategy.\n- The JSON root must be the TestCase DSL object itself. Never wrap it in `candidate`, `testCase`, `result`, or another envelope.\n- Keep the response JSON parseable, but distinguish that transport requirement from candidate DSL validity.\n- For positive, valid-boundary, and business-outcome scenarios, conform exactly to the TestCase DSL Contract authority below, including required fields and additionalProperties rules.\n- When the trusted Intentional Invalidity Contract below is not `none`, preserve exactly its JSON pointer and either keep that field missing or emit its exact invalid value. This typed contract is derived from the declared input-side fixture, not from expected-side data. It takes precedence only for that one validation objective.\n- Treat an explicit validation objective in Additional Context `USER_INTENT` or `SHORT_TERM_CONTEXT` as supporting scenario conte…",
+          "truncated": true
+        },
+        "model_output": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:aeda5c15011a40e98a5edd28edbf737d",
+          "kind": "agent_step"
+        },
+        "project_id": null,
+        "prompt": {
+          "name": "testcase_generate",
+          "version": "v1"
+        },
+        "record_type": "model_call",
+        "schema_digest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schema_name": "testcase_candidate_object_v1",
+        "sequence": 5,
+        "status": "RUNNING",
+        "structured_output_mode": "JSON_SCHEMA",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:57:53.490325Z",
+        "token_usage": null,
+        "trace_id": "trace:c198990882e6404dac722899257106cf",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+        "agent_step_id": "agent_step:aeda5c15011a40e98a5edd28edbf737d",
+        "event": "TERMINAL",
+        "failure": null,
+        "latency": {
+          "duration_ms": 3435.7746,
+          "finished_at": "2026-09-04T14:57:56.925097Z",
+          "started_at": "2026-09-04T14:57:53.489324Z"
+        },
+        "model_call_id": "model_call:d7f0ba51b05645ef9a51d4f3691d1269",
+        "model_identity": {
+          "deployment": null,
+          "model": "qwen3.8-max",
+          "provider": "Qwen",
+          "version": null
+        },
+        "model_input": {
+          "sha256": "7330a53e6985594ca8455e114a9feaef55af186bf0bef5019a71d964b0588df5",
+          "summary": "GENERATION RULES (trusted control instructions)\n\n- Produce one raw, structured TestCase DSL Candidate JSON object for the selected strategy.\n- The JSON root must be the TestCase DSL object itself. Never wrap it in `candidate`, `testCase`, `result`, or another envelope.\n- Keep the response JSON parseable, but distinguish that transport requirement from candidate DSL validity.\n- For positive, valid-boundary, and business-outcome scenarios, conform exactly to the TestCase DSL Contract authority below, including required fields and additionalProperties rules.\n- When the trusted Intentional Invalidity Contract below is not `none`, preserve exactly its JSON pointer and either keep that field missing or emit its exact invalid value. This typed contract is derived from the declared input-side fixture, not from expected-side data. It takes precedence only for that one validation objective.\n- Treat an explicit validation objective in Additional Context `USER_INTENT` or `SHORT_TERM_CONTEXT` as supporting scenario conte…",
+          "truncated": true
+        },
+        "model_output": {
+          "sha256": "3d2626727cadc616550ff92edc46c2d117afe53f40da29f544327d1c8d7303fa",
+          "summary": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"caseId\": \"auth-failure-getOrders-001\",\n  \"projectId\": 41,\n  \"apiId\": \"api-1\",\n  \"name\": \"AUTH_FAILURE: GET /orders without apiKeyAuth credential\",\n  \"description\": \"Verify that requesting GET /orders without the required apiKeyAuth credential results in a documented authentication failure response.\",\n  \"environment\": {\n    \"baseUrl\": \"https://api.example\",\n    \"variables\": {}\n  },\n  \"steps\": [\n    {\n      \"stepId\": \"step-auth-failure-001\",\n      \"name\": \"Request GET /orders without apiKeyAuth\",\n      \"request\": {\n        \"method\": \"GET\",\n        \"path\": \"/orders\"\n      },\n      \"assertions\": [\n        {\n          \"type\": \"STATUS_CODE\",\n          \"expected\": 401\n        }\n      ],\n      \"extractors\": []\n    }\n  ]\n}",
+          "truncated": false
+        },
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:aeda5c15011a40e98a5edd28edbf737d",
+          "kind": "agent_step"
+        },
+        "project_id": null,
+        "prompt": {
+          "name": "testcase_generate",
+          "version": "v1"
+        },
+        "record_type": "model_call",
+        "schema_digest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schema_name": "testcase_candidate_object_v1",
+        "sequence": 6,
+        "status": "SUCCESS",
+        "structured_output_mode": "JSON_SCHEMA",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:57:56.926268Z",
+        "token_usage": {
+          "completion_tokens": 233,
+          "prompt_tokens": 2275,
+          "provider_metadata": {
+            "cached_prompt_tokens": null,
+            "finish_reason": "stop",
+            "provider_request_id": "95dd19ad-8e39-90d6-823d-8c0593c1774b",
+            "reasoning_tokens": null,
+            "response_model": "qwen3.8-max"
+          },
+          "total_tokens": 2508
+        },
+        "trace_id": "trace:c198990882e6404dac722899257106cf",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+        "agent_step_id": "agent_step:aeda5c15011a40e98a5edd28edbf737d",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:13764459c3ce449695bf3764df238f93",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 7,
+        "status": "SUCCESS",
+        "step_type": "generate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:57:56.927112Z",
+        "trace_id": "trace:c198990882e6404dac722899257106cf",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+        "agent_step_id": "agent_step:eb7e91b229404405aa7ab13331604292",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:13764459c3ce449695bf3764df238f93",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 8,
+        "status": "RUNNING",
+        "step_type": "validate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:57:56.928183Z",
+        "trace_id": "trace:c198990882e6404dac722899257106cf",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+        "agent_step_id": "agent_step:eb7e91b229404405aa7ab13331604292",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:13764459c3ce449695bf3764df238f93",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 9,
+        "status": "SUCCESS",
+        "step_type": "validate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:57:56.928864Z",
+        "trace_id": "trace:c198990882e6404dac722899257106cf",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:13764459c3ce449695bf3764df238f93",
+        "agent_step_id": null,
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "record_type": "agent_run",
+        "sequence": 10,
+        "status": "SUCCESS",
+        "thread_id": null,
+        "timestamp": "2026-09-04T14:57:56.930516Z",
+        "trace_id": "trace:c198990882e6404dac722899257106cf",
+        "workflow_id": null
+      }
+    ]
+  },
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "NOT_APPLICABLE",
+  "modelCallCount": 1,
+  "modelCallIds": [
+    "model_call:d7f0ba51b05645ef9a51d4f3691d1269"
+  ],
+  "modelLatencyMs": 3435.7746,
+  "principalId": 45,
+  "principalLabel": "stage21-normal",
+  "promptTokens": 2275,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "semanticAdjudication": null,
+  "setupStatus": "SUCCESS",
+  "status": "SUCCESS",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": "valid_json",
+        "metricStatus": "VALUE",
+        "name": "valid_json",
+        "reason": "valid_json observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "schema_valid",
+        "metricStatus": "VALUE",
+        "name": "schema_valid",
+        "reason": "schema_valid observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "contract_accepted",
+        "metricStatus": "VALUE",
+        "name": "contract_accepted",
+        "reason": "contract_accepted observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "exact_match",
+        "metricStatus": "VALUE",
+        "name": "exact_match",
+        "reason": "exact_match observed 1.0, expected 1",
+        "required": true,
+        "status": "PASS"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 4,
+    "status": "PASS",
+    "unknownCount": 0
+  },
+  "taskType": "TESTCASE_GENERATION",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": 2508,
+  "traceId": "trace:c198990882e6404dac722899257106cf"
+}

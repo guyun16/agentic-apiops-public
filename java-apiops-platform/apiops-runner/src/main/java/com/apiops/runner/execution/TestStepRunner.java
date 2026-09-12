@@ -11,6 +11,7 @@ import com.apiops.runner.dsl.TestStep;
 import com.apiops.runner.http.HttpRequestBuildException;
 import com.apiops.runner.http.HttpRequestBuilder;
 import com.apiops.runner.http.HttpResponseSnapshot;
+import com.apiops.runner.http.HttpExchangeCapture;
 import com.apiops.runner.http.HttpTransport;
 import com.apiops.runner.http.HttpTransportException;
 import com.apiops.runner.state.RunStatus;
@@ -55,7 +56,8 @@ public final class TestStepRunner {
             RunStatus status = exception.failureType() == FailureType.TIMEOUT
                     ? RunStatus.TIMEOUT
                     : RunStatus.EXECUTION_FAILED;
-            return new StepResult(status, exception.failureType(), List.of(), null);
+            return new StepResult(status, exception.failureType(), List.of(), null,
+                    HttpExchangeCapture.capture(request, step.request(), null));
         }
 
         AssertionContext context = contextMapper.map(snapshot);
@@ -67,9 +69,10 @@ public final class TestStepRunner {
                     passed ? RunStatus.SUCCESS : RunStatus.ASSERTION_FAILED,
                     passed ? FailureType.NONE : FailureType.ASSERTION_MISMATCH,
                     assertionResults,
-                    snapshot);
+                    snapshot, HttpExchangeCapture.capture(request, step.request(), snapshot));
         } catch (AssertionEvaluationException | AssertionEvaluatorRegistryException exception) {
-            return failedExecution(FailureType.ASSERTION_EVALUATION_ERROR, snapshot);
+            return new StepResult(RunStatus.EXECUTION_FAILED, FailureType.ASSERTION_EVALUATION_ERROR,
+                    List.of(), snapshot, HttpExchangeCapture.capture(request, step.request(), snapshot));
         }
     }
 

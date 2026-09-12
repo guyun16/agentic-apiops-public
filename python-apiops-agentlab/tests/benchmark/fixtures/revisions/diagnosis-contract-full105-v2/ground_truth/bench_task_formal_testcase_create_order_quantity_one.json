@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_formal_testcase_create_order_quantity_one",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "BOUNDARY"
+    },
+    {
+      "name": "constraint",
+      "value": "quantity.minimum"
+    },
+    {
+      "name": "constraint_value",
+      "value": 1
+    },
+    {
+      "name": "fixture_authority",
+      "value": "VALID_TESTCASE"
+    }
+  ]
+}

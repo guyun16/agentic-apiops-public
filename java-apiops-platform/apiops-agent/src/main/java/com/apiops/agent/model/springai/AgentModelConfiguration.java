@@ -27,6 +27,7 @@ import com.apiops.tool.gateway.ResourceGuard;
 import com.apiops.tool.gateway.ToolAuth;
 import com.apiops.tool.gateway.ToolGateway;
 import com.apiops.tool.gateway.ToolRegistry;
+import com.apiops.tool.gateway.audit.ToolAuditRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.ai.chat.model.ChatModel;
@@ -36,9 +37,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.core.env.Environment;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 
 @Configuration(proxyBeanMethods = false)
 public class AgentModelConfiguration {
@@ -71,8 +74,9 @@ public class AgentModelConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(Audit.class)
-    public Audit toolAudit() {
-        return new Audit();
+    public Audit toolAudit(ObjectProvider<ToolAuditRepository> repositoryProvider) {
+        ToolAuditRepository repository = repositoryProvider.getIfAvailable();
+        return repository == null ? new Audit() : new Audit(repository::save);
     }
 
     @Bean
@@ -83,16 +87,22 @@ public class AgentModelConfiguration {
             ProjectAuthorizationService authorization,
             Audit audit,
             ObjectProvider<MeterRegistry> meterRegistryProvider,
-            ObjectProvider<ResourceGuard> resourceGuardProvider) {
+            ObjectProvider<ResourceGuard> resourceGuardProvider,
+            Environment environment) {
         ResourceGuard configuredGuard = resourceGuardProvider.getIfAvailable(ResourceGuard::allowAll);
         ResourceGuard projectScopedGuard = ResourceGuard.allOf(
                 configuredGuard,
                 ResourceGuard.projectReadable(authorization));
+        Duration executionTimeout = environment.getProperty(
+                "apiops.tool.gateway.execution-timeout",
+                Duration.class,
+                Duration.ofSeconds(4));
         return new ToolGateway(
                 toolAuth,
                 projectScopedGuard,
                 audit,
-                meterRegistryProvider.getIfAvailable());
+                meterRegistryProvider.getIfAvailable(),
+                executionTimeout);
     }
 
     @Bean

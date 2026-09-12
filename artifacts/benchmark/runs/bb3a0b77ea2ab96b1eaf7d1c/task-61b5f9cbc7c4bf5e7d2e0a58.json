@@ -1,0 +1,745 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+  "authProfile": "NORMAL",
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_golden_testcase_happy",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260904T072622Z:bench_task_golden_testcase_happy",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": 591,
+  "durationMs": 11069.354,
+  "errorSummary": null,
+  "evaluationId": "evaluation:3ab671934ea3927f15d4f648",
+  "evaluationResult": {
+    "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+    "case_id": "case:evaluation_run:stage21-real-model-full-105-20260904T072622Z:bench_task_golden_testcase_happy",
+    "evaluation_id": "evaluation:3ab671934ea3927f15d4f648",
+    "evaluator_version": "rule-evaluator-v1",
+    "ground_truth_id": "gt_stage21_testcase_happy",
+    "ground_truth_version": "v1",
+    "metrics": [
+      {
+        "details": [],
+        "metric": "valid_json",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [],
+        "metric": "schema_valid",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [],
+        "metric": "contract_accepted",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1
+      },
+      {
+        "details": [
+          "matched=2",
+          "expected=2"
+        ],
+        "metric": "exact_match",
+        "reason": null,
+        "status": "VALUE",
+        "unit": null,
+        "value": 1.0
+      },
+      {
+        "details": [],
+        "metric": "tool_precision",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_recall",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_exact_set_match",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "parameter_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "evidence_hit",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "diagnosis_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "safety_accuracy",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "wall_clock_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "model_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "tool_latency_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "human_wait_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "active_execution_ms",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "prompt_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "completion_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "total_tokens",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      },
+      {
+        "details": [],
+        "metric": "cost",
+        "reason": "metric excluded by EvaluationCase applicability",
+        "status": "NOT_APPLICABLE",
+        "unit": null,
+        "value": null
+      }
+    ],
+    "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce"
+  },
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T072622Z",
+  "executionMode": "REAL_MODEL",
+  "failureCategory": null,
+  "failureCode": null,
+  "failureStage": null,
+  "fixtureRefs": [
+    "literal:strategy",
+    "literal:projectId",
+    "java://metadata/project-41/api-api-1",
+    "examples/testcase-valid.json"
+  ],
+  "formalEvidence": {
+    "diagnosisOutcome": null,
+    "normalizedEvaluationFacts": {
+      "diagnosis": null,
+      "evidence_ids": null,
+      "safety_outcome": null,
+      "structured_facts": [
+        {
+          "name": "task_strategy",
+          "value": "HAPPY_PATH"
+        },
+        {
+          "name": "candidate",
+          "value": {
+            "apiId": "api-api-1",
+            "caseId": "tc_happy_path_create_order_001",
+            "description": "Creates a new order for a user with a valid coupon and verifies the successful creation response.",
+            "environment": {
+              "baseUrl": "http://127.0.0.1:18080",
+              "variables": {}
+            },
+            "name": "Happy Path: Create Order with Coupon",
+            "projectId": 41,
+            "schemaVersion": "1.0.0",
+            "steps": [
+              {
+                "assertions": [
+                  {
+                    "expected": 200,
+                    "type": "STATUS_CODE"
+                  },
+                  {
+                    "expected": true,
+                    "expression": "$.success",
+                    "operator": "EQUALS",
+                    "type": "JSON_PATH"
+                  },
+                  {
+                    "expected": "ORDER_SUCCESS",
+                    "expression": "$.code",
+                    "operator": "EQUALS",
+                    "type": "JSON_PATH"
+                  },
+                  {
+                    "expected": "PENDING_PAYMENT",
+                    "expression": "$.data.status",
+                    "operator": "EQUALS",
+                    "type": "JSON_PATH"
+                  },
+                  {
+                    "expression": "$.data.id",
+                    "operator": "EXISTS",
+                    "type": "JSON_PATH"
+                  },
+                  {
+                    "expression": "$.data.orderNo",
+                    "operator": "EXISTS",
+                    "type": "JSON_PATH"
+                  },
+                  {
+                    "expression": "$.data.items[0].productName",
+                    "operator": "EXISTS",
+                    "type": "JSON_PATH"
+                  },
+                  {
+                    "maxMs": 5000,
+                    "type": "RESPONSE_TIME"
+                  }
+                ],
+                "extractors": [],
+                "name": "Create Order",
+                "request": {
+                  "body": {
+                    "couponId": 1,
+                    "items": [
+                      {
+                        "productId": 1,
+                        "quantity": 2
+                      }
+                    ],
+                    "userId": 1
+                  },
+                  "headers": {
+                    "Content-Type": "application/json"
+                  },
+                  "method": "POST",
+                  "path": "/orders"
+                },
+                "stepId": "step_1_create_order"
+              }
+            ],
+            "tags": [
+              "happy-path",
+              "order-creation"
+            ]
+          }
+        },
+        {
+          "name": "candidate_status",
+          "value": "ACCEPTED"
+        },
+        {
+          "name": "schema_valid",
+          "value": true
+        },
+        {
+          "name": "contract_accepted",
+          "value": true
+        },
+        {
+          "name": "java_runner_executable",
+          "value": false
+        },
+        {
+          "name": "metadata_authority",
+          "value": "JAVA_OPENAPI_BASELINE"
+        },
+        {
+          "name": "operation",
+          "value": "createOrder"
+        },
+        {
+          "name": "expected_http_status",
+          "value": 200
+        },
+        {
+          "name": "response_code",
+          "value": "ORDER_SUCCESS"
+        },
+        {
+          "name": "idempotency_contract",
+          "value": "NOT_PROVEN"
+        },
+        {
+          "name": "undocumented_fields",
+          "value": false
+        }
+      ],
+      "tool_arguments": [],
+      "validity": {
+        "contract_accepted": true,
+        "schema_valid": true,
+        "valid_json": true
+      }
+    },
+    "redactedCandidate": {
+      "apiId": "api-api-1",
+      "caseId": "tc_happy_path_create_order_001",
+      "description": "Creates a new order for a user with a valid coupon and verifies the successful creation response.",
+      "environment": {
+        "baseUrl": "http://127.0.0.1:18080",
+        "variables": {}
+      },
+      "name": "Happy Path: Create Order with Coupon",
+      "projectId": 41,
+      "schemaVersion": "1.0.0",
+      "steps": [
+        {
+          "assertions": [
+            {
+              "expected": 200,
+              "type": "STATUS_CODE"
+            },
+            {
+              "expected": true,
+              "expression": "$.success",
+              "operator": "EQUALS",
+              "type": "JSON_PATH"
+            },
+            {
+              "expected": "ORDER_SUCCESS",
+              "expression": "$.code",
+              "operator": "EQUALS",
+              "type": "JSON_PATH"
+            },
+            {
+              "expected": "PENDING_PAYMENT",
+              "expression": "$.data.status",
+              "operator": "EQUALS",
+              "type": "JSON_PATH"
+            },
+            {
+              "expression": "$.data.id",
+              "operator": "EXISTS",
+              "type": "JSON_PATH"
+            },
+            {
+              "expression": "$.data.orderNo",
+              "operator": "EXISTS",
+              "type": "JSON_PATH"
+            },
+            {
+              "expression": "$.data.items[0].productName",
+              "operator": "EXISTS",
+              "type": "JSON_PATH"
+            },
+            {
+              "maxMs": 5000,
+              "type": "RESPONSE_TIME"
+            }
+          ],
+          "extractors": [],
+          "name": "Create Order",
+          "request": {
+            "body": {
+              "couponId": 1,
+              "items": [
+                {
+                  "productId": 1,
+                  "quantity": 2
+                }
+              ],
+              "userId": 1
+            },
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "method": "POST",
+            "path": "/orders"
+          },
+          "stepId": "step_1_create_order"
+        }
+      ],
+      "tags": [
+        "happy-path",
+        "order-creation"
+      ]
+    },
+    "terminalDecisionFacts": [],
+    "toolResultMappings": [],
+    "traceEvidence": [
+      {
+        "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+        "agent_step_id": null,
+        "event": "START",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "record_type": "agent_run",
+        "sequence": 1,
+        "status": "RUNNING",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:26:59.914711Z",
+        "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+        "agent_step_id": "agent_step:6541890ce11f4cac851647824c9ceb7a",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 2,
+        "status": "RUNNING",
+        "step_type": "context_enrichment",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:26:59.916202Z",
+        "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+        "agent_step_id": "agent_step:6541890ce11f4cac851647824c9ceb7a",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 3,
+        "status": "SUCCESS",
+        "step_type": "context_enrichment",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:26:59.916788Z",
+        "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+        "agent_step_id": "agent_step:1809572c38914cf18c828a53d0238047",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 4,
+        "status": "RUNNING",
+        "step_type": "generate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:26:59.920162Z",
+        "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+        "agent_step_id": "agent_step:1809572c38914cf18c828a53d0238047",
+        "event": "START",
+        "failure": null,
+        "latency": null,
+        "model_call_id": "model_call:271fbe5bca344b688c754a8b6916df42",
+        "model_identity": {
+          "deployment": null,
+          "model": "qwen3.7-plus-2026-05-26",
+          "provider": "Qwen",
+          "version": null
+        },
+        "model_input": {
+          "sha256": "ae216f4dd864ea8d6a3882cab5f92cee32b1fa43823e82f9fef50ce95a07a04b",
+          "summary": "GENERATION RULES (trusted control instructions)\n\n- Produce one raw, structured TestCase DSL Candidate JSON object for the selected strategy.\n- The JSON root must be the TestCase DSL object itself. Never wrap it in `candidate`, `testCase`, `result`, or another envelope.\n- Keep the response JSON parseable, but distinguish that transport requirement from candidate DSL validity.\n- For positive, valid-boundary, and business-outcome scenarios, conform exactly to the TestCase DSL Contract authority below, including required fields and additionalProperties rules.\n- Treat an explicit validation objective in Additional Context `USER_INTENT` or `SHORT_TERM_CONTEXT` as part of the requested scenario. When it requests a schema-invalid or contract-invalid candidate, preserve exactly the requested missing field, extra field, wrong scalar type, invalid enum/method, or unknown assertion type so the authoritative Validator can reject it.\n- For that negative validation objective, do not repair, normalize, coerce, fill, remove,…",
+          "truncated": true
+        },
+        "model_output": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:1809572c38914cf18c828a53d0238047",
+          "kind": "agent_step"
+        },
+        "project_id": null,
+        "prompt": {
+          "name": "testcase_generate",
+          "version": "v1"
+        },
+        "record_type": "model_call",
+        "schema_digest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schema_name": "testcase_candidate_object_v1",
+        "sequence": 5,
+        "status": "RUNNING",
+        "structured_output_mode": "JSON_SCHEMA",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:26:59.928308Z",
+        "token_usage": null,
+        "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+        "agent_step_id": "agent_step:1809572c38914cf18c828a53d0238047",
+        "event": "TERMINAL",
+        "failure": null,
+        "latency": {
+          "duration_ms": 10969.2859,
+          "finished_at": "2026-09-04T07:27:10.890590Z",
+          "started_at": "2026-09-04T07:26:59.921305Z"
+        },
+        "model_call_id": "model_call:271fbe5bca344b688c754a8b6916df42",
+        "model_identity": {
+          "deployment": null,
+          "model": "qwen3.7-plus-2026-05-26",
+          "provider": "Qwen",
+          "version": null
+        },
+        "model_input": {
+          "sha256": "ae216f4dd864ea8d6a3882cab5f92cee32b1fa43823e82f9fef50ce95a07a04b",
+          "summary": "GENERATION RULES (trusted control instructions)\n\n- Produce one raw, structured TestCase DSL Candidate JSON object for the selected strategy.\n- The JSON root must be the TestCase DSL object itself. Never wrap it in `candidate`, `testCase`, `result`, or another envelope.\n- Keep the response JSON parseable, but distinguish that transport requirement from candidate DSL validity.\n- For positive, valid-boundary, and business-outcome scenarios, conform exactly to the TestCase DSL Contract authority below, including required fields and additionalProperties rules.\n- Treat an explicit validation objective in Additional Context `USER_INTENT` or `SHORT_TERM_CONTEXT` as part of the requested scenario. When it requests a schema-invalid or contract-invalid candidate, preserve exactly the requested missing field, extra field, wrong scalar type, invalid enum/method, or unknown assertion type so the authoritative Validator can reject it.\n- For that negative validation objective, do not repair, normalize, coerce, fill, remove,…",
+          "truncated": true
+        },
+        "model_output": {
+          "sha256": "ff4332dcf0d45c58cdce67def65b9ad1a443bb43bbf9cf6ec2002424b64f7c46",
+          "summary": "{\n  \"schemaVersion\": \"1.0.0\",\n  \"caseId\": \"tc_happy_path_create_order_001\",\n  \"projectId\": 41,\n  \"apiId\": \"api-api-1\",\n  \"name\": \"Happy Path: Create Order with Coupon\",\n  \"description\": \"Creates a new order for a user with a valid coupon and verifies the successful creation response.\",\n  \"environment\": {\n    \"baseUrl\": \"http://127.0.0.1:18080\",\n    \"variables\": {}\n  },\n  \"tags\": [\n    \"happy-path\",\n    \"order-creation\"\n  ],\n  \"steps\": [\n    {\n      \"stepId\": \"step_1_create_order\",\n      \"name\": \"Create Order\",\n      \"request\": {\n        \"method\": \"POST\",\n        \"path\": \"/orders\",\n        \"headers\": {\n          \"Content-Type\": \"application/json\"\n        },\n        \"body\": {\n          \"userId\": 1,\n          \"couponId\": 1,\n          \"items\": [\n            {\n              \"productId\": 1,\n              \"quantity\": 2\n            }\n          ]\n        }\n      },\n      \"extractors\": [],\n      \"assertions\": [\n        {\n          \"type\": \"STATUS_CODE\",\n          \"expected\": 200\n        },\n        {\n          \"type\": …",
+          "truncated": true
+        },
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_step:1809572c38914cf18c828a53d0238047",
+          "kind": "agent_step"
+        },
+        "project_id": null,
+        "prompt": {
+          "name": "testcase_generate",
+          "version": "v1"
+        },
+        "record_type": "model_call",
+        "schema_digest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schema_name": "testcase_candidate_object_v1",
+        "sequence": 6,
+        "status": "SUCCESS",
+        "structured_output_mode": "JSON_SCHEMA",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:10.893591Z",
+        "token_usage": {
+          "completion_tokens": 591,
+          "prompt_tokens": 3091,
+          "provider_metadata": {
+            "cached_prompt_tokens": null,
+            "finish_reason": "stop",
+            "provider_request_id": "46b44ce2-f222-9eff-9433-8363fbd1f3e1",
+            "reasoning_tokens": null,
+            "response_model": "qwen3.7-plus-2026-05-26"
+          },
+          "total_tokens": 3682
+        },
+        "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+        "agent_step_id": "agent_step:1809572c38914cf18c828a53d0238047",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 7,
+        "status": "SUCCESS",
+        "step_type": "generate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:10.895845Z",
+        "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+        "agent_step_id": "agent_step:4e565657fb9f487bb28e4934f6b13202",
+        "event": "START",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 8,
+        "status": "RUNNING",
+        "step_type": "validate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:10.898509Z",
+        "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+        "agent_step_id": "agent_step:4e565657fb9f487bb28e4934f6b13202",
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": {
+          "authority": "PYTHON",
+          "identity": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+          "kind": "agent_run"
+        },
+        "project_id": 41,
+        "record_type": "agent_step",
+        "sequence": 9,
+        "status": "SUCCESS",
+        "step_type": "validate",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:10.904404Z",
+        "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce",
+        "workflow_id": null
+      },
+      {
+        "agent_run_id": "agent_run:b8b0f537c8754e41923f100d5e8fc5b2",
+        "agent_step_id": null,
+        "event": "TERMINAL",
+        "failure": null,
+        "parent_identity": null,
+        "project_id": 41,
+        "record_type": "agent_run",
+        "sequence": 10,
+        "status": "SUCCESS",
+        "thread_id": null,
+        "timestamp": "2026-09-04T07:27:10.907259Z",
+        "trace_id": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce",
+        "workflow_id": null
+      }
+    ]
+  },
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "EXECUTED",
+  "modelCallCount": 1,
+  "modelCallIds": [
+    "model_call:271fbe5bca344b688c754a8b6916df42"
+  ],
+  "modelLatencyMs": 10969.2859,
+  "principalId": 45,
+  "principalLabel": "stage21-normal",
+  "promptTokens": 3091,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "semanticAdjudication": null,
+  "setupStatus": "SUCCESS",
+  "status": "SUCCESS",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": "valid_json",
+        "metricStatus": "VALUE",
+        "name": "valid_json",
+        "reason": "valid_json observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "schema_valid",
+        "metricStatus": "VALUE",
+        "name": "schema_valid",
+        "reason": "schema_valid observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "contract_accepted",
+        "metricStatus": "VALUE",
+        "name": "contract_accepted",
+        "reason": "contract_accepted observed 1, expected 1",
+        "required": true,
+        "status": "PASS"
+      },
+      {
+        "metric": "exact_match",
+        "metricStatus": "VALUE",
+        "name": "exact_match",
+        "reason": "exact_match observed 1.0, expected 1",
+        "required": true,
+        "status": "PASS"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 4,
+    "status": "PASS",
+    "unknownCount": 0
+  },
+  "taskType": "TESTCASE_GENERATION",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": 3682,
+  "traceId": "trace:8ea3b21dbc0b47c98664a15ceed4d4ce"
+}

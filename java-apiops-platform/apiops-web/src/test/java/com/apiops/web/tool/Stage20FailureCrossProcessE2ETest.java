@@ -50,7 +50,8 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 @SpringBootTest(
         classes = ApiOpsWebApplication.class,
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = "apiops.tool.gateway.execution-timeout=1s")
 @ActiveProfiles("test")
 @Import({
         Stage17RagToolGatewayIntegrationTest.Stage17TestConfiguration.class,
@@ -128,7 +129,7 @@ class Stage20FailureCrossProcessE2ETest {
         assertEquals(FORBIDDEN_PROJECT_ID, event.projectId());
         assertEquals("rag.search", event.toolName());
         assertEquals(AuditStatus.DENIED, event.status());
-        System.out.println("STAGE20_TOOL_SAFETY_CORRELATION " + result);
+        System.out.println("STAGE21_TOOL_SAFETY_CORRELATION " + result);
     }
 
     @Test

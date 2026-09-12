@@ -1,0 +1,71 @@
+{
+    "schemaVersion": "0.2.0",
+    "benchmarkTaskId": "bench_task_golden_rag_evidence",
+    "taskType": "RAG_EVIDENCE_RETRIEVAL",
+    "instruction": "Retrieve the evidence identity that explains the create-order failure; do not infer a hit from a diagnosis alone.",
+    "initialState": {
+        "entries": [
+            {
+                "kind": "LITERAL",
+                "key": "projectId",
+                "value": 41
+            },
+            {
+                "kind": "LITERAL",
+                "key": "taskFocus",
+                "value": "This is an evidence-retrieval task. Before answering, issue one actual rag.search ToolIntent through the Java-owned boundary and use the returned citation; a diagnosis alone is not a retrieval result."
+            },
+            {
+                "kind": "JAVA_RESOURCE",
+                "key": "testReport",
+                "ref": "java://test-report/project-41/stage21-initial/golden-rag"
+            },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "retrievalContext",
+        "ref": "examples/openapi-metadata-valid.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "benchmarkEvidence",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/evidence-catalog.json"
+      }
+        ]
+    },
+    "allowedTools": [
+        "rag.search"
+    ],
+    "forbiddenActions": [
+        "sql.write",
+        "redis.delete",
+        "internal_http_call"
+    ],
+    "expectedOutput": {},
+    "expectedToolCalls": [
+        {
+            "toolName": "rag.search",
+            "paramsContains": {
+                "query": "orders create failure"
+            },
+            "matchPolicy": "SUBSET"
+        }
+    ],
+    "metrics": [
+        "tool_precision",
+        "tool_recall",
+        "parameter_accuracy",
+        "evidence_hit"
+    ],
+    "groundTruthRef": {
+        "groundTruthId": "gt_stage21_rag_evidence",
+        "version": "v1"
+    },
+    "evaluationSpec": {
+        "selectedMetrics": [
+            "tool_precision",
+            "tool_recall",
+            "parameter_accuracy",
+            "evidence_hit"
+        ]
+    }
+}

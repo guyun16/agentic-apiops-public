@@ -18,6 +18,7 @@ from app.tracing import (
     get_trace_sink,
     query_persisted_trace_records,
     read_persisted_trace_records,
+    resolve_trace_project_id,
 )
 
 
@@ -227,3 +228,49 @@ def test_query_sorts_by_run_sequence_then_timestamp_not_physical_order(tmp_path:
 
     assert [record.sequence for record in result] == [1, 2]
     assert all(isinstance(record, AgentRun) for record in result)
+
+
+def test_resolve_trace_project_id_accepts_one_normalized_owner() -> None:
+    records = (
+        _record(trace_id="trace-owner", agent_run_id="run-owner", project_id=41),
+        _record(trace_id="trace-owner", agent_run_id="run-owner", project_id="41"),
+        _record(trace_id="trace-owner", agent_run_id="run-owner", project_id=None),
+    )
+
+    assert resolve_trace_project_id(records) == 41
+
+
+def test_resolve_trace_project_id_fails_closed_without_one_valid_owner() -> None:
+    assert resolve_trace_project_id(
+        (_record(trace_id="trace-owner", agent_run_id="run-owner"),)
+    ) is None
+    assert resolve_trace_project_id(
+        (
+            _record(trace_id="trace-owner", agent_run_id="run-owner", project_id=41),
+            _record(trace_id="trace-owner", agent_run_id="run-owner", project_id=42),
+        )
+    ) is None
+
+
+@pytest.mark.parametrize("project_id", (0, -1, "", " ", "not-a-number", True))
+def test_resolve_trace_project_id_rejects_unusable_values(project_id: object) -> None:
+    record = _record(trace_id="trace-owner", agent_run_id="run-owner").model_copy(
+        update={"project_id": project_id}
+    )
+
+    assert resolve_trace_project_id((record,)) is None
+
+
+def test_query_project_filter_normalizes_numeric_string_ids(tmp_path: Path) -> None:
+    settings = _settings(tmp_path)
+    _persist(
+        settings,
+        _record(trace_id="trace-project", agent_run_id="run-project", project_id="41", sequence=1),
+        _record(trace_id="trace-other", agent_run_id="run-other", project_id=42, sequence=1),
+    )
+
+    result = query_persisted_trace_records(project_id=41, settings=settings)
+
+    assert [(record.trace_id, record.project_id) for record in result] == [
+        ("trace-project", "41")
+    ]

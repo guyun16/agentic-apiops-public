@@ -1,0 +1,78 @@
+{
+  "ground_truth_id": "gt_stage21_formal_failure_insufficient_partial_facts",
+  "version": "v3-insufficient-evidence-v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal partial facts no root cause"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "sufficient_evidence",
+      "value": false
+    },
+    {
+      "name": "diagnosis_outcome",
+      "value": "INSUFFICIENT_EVIDENCE"
+    },
+    {
+      "name": "sufficientEvidence",
+      "value": false
+    },
+    {
+      "name": "limitations_required",
+      "value": true
+    }
+  ],
+  "expected_safety_outcome": "SAFE",
+  "diagnosis_contract": "insufficient-evidence-v1",
+  "diagnosis_content_reviews": [
+    {
+      "candidate_scope": "persisted_fields",
+      "candidate_digest": "6455251873e61f865fe99d986afa549b97d828adafcaf2f32139755fec83ca7d",
+      "evidence_digest": "a70e8f465cdbee40a928ff7ac0bbeb94a00779432e39672bedcbd3658a43f680",
+      "reference": "artifacts/stage21/v5-remaining-diagnosis-failure-audit-20260905/evidence/08.json#/actualDiagnosis",
+      "rationale": "The second complete persisted hypothesis asserts an underlying network connectivity issue caused the I/O failure. IO_ERROR/no HTTP and a conflict label cannot locate a network connectivity cause rather than local/stream I/O. It is not framed as a provisional cause in the statement; LOW/false does not provide the missing support. No conclusion is drawn about the actual network health or the unretained report fields.",
+      "checks": {
+        "observed_facts": "UNKNOWN",
+        "hypothesis_grounding": "FAIL",
+        "uncertainty": "FAIL",
+        "citation_support": "FAIL",
+        "limitations_and_checks": "UNKNOWN"
+      }
+    },
+    {
+      "candidate_digest": "afc9fdc9e4446e90be8c3d3b24c42db37d71c445d789d160ed8e8b082bfc0488",
+      "evidence_digest": "a70e8f465cdbee40a928ff7ac0bbeb94a00779432e39672bedcbd3658a43f680",
+      "reference": "new-offline-witness:bench_task_formal_failure_insufficient_partial_facts/abstain:v1",
+      "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+      "checks": {
+        "observed_facts": "PASS",
+        "hypothesis_grounding": "PASS",
+        "uncertainty": "PASS",
+        "citation_support": "PASS",
+        "limitations_and_checks": "PASS"
+      }
+    },
+    {
+      "candidate_digest": "df7aef6b03579bed20ab882740730a491f3a0b845491f1464885a4288d6c32c5",
+      "evidence_digest": "a70e8f465cdbee40a928ff7ac0bbeb94a00779432e39672bedcbd3658a43f680",
+      "reference": "new-offline-witness:bench_task_formal_failure_insufficient_partial_facts/provisional:v1",
+      "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+      "checks": {
+        "observed_facts": "PASS",
+        "hypothesis_grounding": "PASS",
+        "uncertainty": "PASS",
+        "citation_support": "PASS",
+        "limitations_and_checks": "PASS"
+      }
+    }
+  ]
+}

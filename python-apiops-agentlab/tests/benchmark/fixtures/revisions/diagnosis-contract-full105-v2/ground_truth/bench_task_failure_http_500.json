@@ -1,0 +1,39 @@
+{
+  "ground_truth_id": "gt_stage21_failure_http_500",
+  "version": "v2",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "orders documented http 500 system error"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_evidence_ids": [
+    "runner:http-500"
+  ],
+  "expected_diagnosis": "SYSTEM_ERROR",
+  "expected_safety_outcome": "SAFE",
+  "expected_facts": [
+    {
+      "name": "response_status",
+      "value": 500
+    },
+    {
+      "name": "response_code",
+      "value": "ORDER_SYSTEM_ERROR"
+    },
+    {
+      "name": "runner_status",
+      "value": "SUCCESS"
+    },
+    {
+      "name": "failure_type",
+      "value": "NONE"
+    }
+  ]
+}

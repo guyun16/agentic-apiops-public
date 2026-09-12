@@ -1,0 +1,226 @@
+{
+  "baselineConfigId": "stage21-real-model-baseline-v1",
+  "baselineReportArtifact": "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/baseline-report.md",
+  "baselineRunArtifact": "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/baseline-run.json",
+  "benchmarkRunId": "evaluation_run:stage21-real-model-full-105-20260901T110644Z",
+  "collateralDamageArtifact": "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/collateral-damage.json",
+  "configuration": {
+    "applicationIdentity": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "git revision and working-tree snapshot",
+      "value": {
+        "revision": "c31b8fc876df58127045720e83571314c324f1e6",
+        "workingTreeDirty": true
+      }
+    },
+    "baselineConfigId": "stage21-real-model-baseline-v1",
+    "benchmarkConfigVersion": "stage21.5-real-model-v1",
+    "datasetId": "stage21-apioops-bench-mini",
+    "datasetSplit": "all",
+    "datasetVersion": "v3",
+    "evaluatorIdentity": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "app.evaluator.EVALUATOR_VERSION",
+      "value": {
+        "name": "RuleBasedEvaluator",
+        "version": "rule-evaluator-v1"
+      }
+    },
+    "executionTimestamp": "2026-09-01T11:06:44.472734Z",
+    "javaRuntimeVersion": {
+      "availability": "UNAVAILABLE",
+      "reason": "Java runtime version is not emitted by this Python process",
+      "source": "Stage20 runtime context",
+      "value": null
+    },
+    "modelIdentity": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "AppSettings.deepseek_model",
+      "value": {
+        "model": "deepseek-v4-flash",
+        "provider": "DeepSeek"
+      }
+    },
+    "modelParameters": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "DeepSeekClient.complete request",
+      "value": {
+        "response_format": "json_object",
+        "stream": false,
+        "thinking": "disabled",
+        "timeout_seconds": 60.0
+      }
+    },
+    "promptIdentities": [
+      {
+        "availability": "AVAILABLE",
+        "reason": null,
+        "source": "existing workflow prompt file",
+        "value": {
+          "name": "testcase_generate",
+          "version": "v1"
+        }
+      },
+      {
+        "availability": "AVAILABLE",
+        "reason": null,
+        "source": "existing workflow prompt file",
+        "value": {
+          "name": "testcase_repair",
+          "version": "v1"
+        }
+      },
+      {
+        "availability": "AVAILABLE",
+        "reason": null,
+        "source": "existing workflow prompt file",
+        "value": {
+          "name": "diagnosis",
+          "version": "1"
+        }
+      }
+    ],
+    "pythonRuntimeVersion": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "platform.python_version",
+      "value": "python 3.13.13"
+    },
+    "taskSchemaVersion": "0.2.0",
+    "toolCatalogIdentity": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "app.tools.ToolCatalog",
+      "value": {
+        "name": "ToolCatalog",
+        "version": "approved-tool-catalog-v1"
+      }
+    },
+    "workflowIdentity": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "app.benchmark.real_model",
+      "value": {
+        "name": "RealModelStage20WorkflowAdapter",
+        "version": "stage21-real-model-adapter-v1"
+      }
+    }
+  },
+  "configurationDigest": "5db2db29d580c5d32c85fb6d13e7d71be8693f43a8b4205293ef980ee618cced",
+  "evaluationCsvArtifact": "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/evaluation_result.csv",
+  "executedTaskCount": 105,
+  "failureInventoryArtifact": "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/failure-inventory.json",
+  "runArtifact": "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/run.json",
+  "selectedTaskCount": 105,
+  "taskResultArtifacts": [
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_golden_e2e_apiops.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_golden_failure_diagnosis.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_golden_rag_evidence.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_golden_testcase_happy.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_golden_tool_safety.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_testcase_happy_create_order_runner.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_testcase_missing_required_api_id.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_testcase_missing_required_schema.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_testcase_boundary_quantity_zero.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_testcase_boundary_inventory_limit.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_testcase_auth_missing_token.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_testcase_business_inventory_python.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_testcase_business_inventory_runner.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_testcase_boundary_list_products_page_size.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_failure_assertion_mismatch.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_failure_assertion_contract_mismatch.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_failure_http_500.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_failure_business_inventory.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_failure_timeout.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_failure_evidence_root_report.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_failure_transport_connect.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_failure_insufficient_missing.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_failure_insufficient_conflicting.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_tool_allowed_rag_read.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_tool_forbidden_unknown.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_tool_bad_arguments.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_tool_approval_required.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_tool_human_reject.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_tool_java_deny.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_tool_prompt_injection_result.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_tool_no_bypass.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_rag_multi_hit.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_rag_zero_hit.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_rag_wrong_project.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_rag_irrelevant_distractor.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_rag_citation_correctness.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_rag_near_match.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_e2e_generation_runner_success.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_e2e_generation_business_failure.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_e2e_diagnosis_tool_guarded.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_e2e_generation_diagnosis_guarded.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_assertion_contract.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_assertion_evidence_root.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_assertion_json_path.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_assertion_status.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_business_acceptable_alt.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_business_report_authority.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_http500_diagnosis_boundary.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_http500_payload.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_http500_transport_distinction.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_insufficient_conflicting.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_insufficient_heldout_conflict.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_insufficient_heldout_missing.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_insufficient_missing_auth.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_insufficient_missing_headers.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_insufficient_partial_facts.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_inventory_business.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_inventory_duplicate_key.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_multi_evidence_report.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_report_constraint_alternative.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_report_constraint_primary.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_timeout_deadline.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_timeout_partial_report.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_transport_connect.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_failure_transport_dns.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_rag_citation_report.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_rag_distractor_filter.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_rag_multi_constraint_summary.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_rag_multi_report_index.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_rag_near_match_exact.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_rag_single_constraint.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_rag_wrong_project_isolation.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_rag_zero_hit_authorized.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_auth_missing_token.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_auth_missing_token_post.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_boundary_inventory_zero.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_business_inventory_expected.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_create_order_quantity_one.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_extra_agent_field.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_get_orders_limit.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_happy_create_order_contract.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_happy_get_orders_metadata.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_invalid_http_method.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_invalid_quantity_zero.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_inventory_conflict_metadata.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_inventory_conflict_runner.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_list_products_page_size_one.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_missing_api_id_against_contract.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_missing_json_path_expected.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_missing_schema_version_against_contract.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_missing_status_expected.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_project_id_type.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_testcase_unknown_assertion_type.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_allowed_rag_subset.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_allowed_redis_exact.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_approval_redis.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_bad_arguments_query.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_cross_project_request.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_deny_no_alternate_path.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_forbidden_filesystem.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_forbidden_shell.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_human_reject_rag.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_java_deny_project.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_no_bypass_database.json",
+    "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_formal_tool_prompt_injection.json"
+  ]
+}

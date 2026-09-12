@@ -49,8 +49,10 @@ from .redaction import (
 from .runtime import (
     create_trace_recorder,
     get_trace_sink,
+    normalize_trace_project_id,
     query_persisted_trace_records,
     read_persisted_trace_records,
+    resolve_trace_project_id,
 )
 from .workflow import (
     InstrumentedLLM,
@@ -110,12 +112,14 @@ __all__ = [
     "get_trace_sink",
     "instrument_generator",
     "new_identity",
+    "normalize_trace_project_id",
     "redact_text",
     "redact_value",
     "read_trace_jsonl",
     "read_persisted_trace_records",
     "observe",
     "query_persisted_trace_records",
+    "resolve_trace_project_id",
     "safe_summary",
     "trace_parent",
     "trace_step_scope",

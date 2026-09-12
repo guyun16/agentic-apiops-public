@@ -1,0 +1,266 @@
+{
+  "schemaVersion": "stage21-report-runtime-recipe/v1",
+  "recipes": [
+    {
+      "benchmarkTaskId": "bench_task_failure_assertion_mismatch",
+      "sourceReference": "java://runner-testcase-dsl/e2e/stage8-demo-product-assertion-failed.json",
+      "recipeKind": "ASSERTION_MISMATCH",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21_failure_assertion_mismatch",
+        "projectId": 1001,
+        "apiId": "listProducts",
+        "name": "Stage 21 assertion mismatch report recipe",
+        "environment": {
+          "baseUrl": "http://127.0.0.1:18080",
+          "variables": {}
+        },
+        "tags": ["stage21", "runtime-recipe", "assertion-mismatch"],
+        "steps": [
+          {
+            "stepId": "stage21-assertion-mismatch",
+            "name": "List products with a mismatched status assertion",
+            "request": {
+              "method": "GET",
+              "path": "/products",
+              "query": {
+                "pageNo": 1,
+                "pageSize": 1
+              }
+            },
+            "assertions": [
+              {
+                "type": "STATUS_CODE",
+                "expected": 201
+              }
+            ],
+            "extractors": []
+          }
+        ]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_assertion_contract_mismatch",
+      "sourceReference": "java://runner-testcase-dsl/one-of-mismatch.json",
+      "recipeKind": "ASSERTION_EVALUATION_ERROR",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21_failure_assertion_contract_mismatch",
+        "projectId": 1001,
+        "apiId": "listProducts",
+        "name": "Stage 21 assertion evaluator error report recipe",
+        "environment": {
+          "baseUrl": "http://127.0.0.1:18080",
+          "variables": {}
+        },
+        "tags": ["stage21", "runtime-recipe", "assertion-contract"],
+        "steps": [
+          {
+            "stepId": "stage21-assertion-evaluator-error",
+            "name": "Evaluate a deliberately invalid JSONPath expression",
+            "request": {
+              "method": "GET",
+              "path": "/products",
+              "query": {
+                "pageNo": 1,
+                "pageSize": 1
+              }
+            },
+            "assertions": [
+              {
+                "type": "JSON_PATH",
+                "expression": "$[",
+                "operator": "EXISTS"
+              }
+            ],
+            "extractors": []
+          }
+        ]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_http_500",
+      "sourceReference": "java://runner-testcase-dsl/e2e/stage8-demo-http-500-success.json",
+      "recipeKind": "HTTP_500_RESPONSE",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21_failure_http_500",
+        "projectId": 1001,
+        "apiId": "simulateSlowSqlFault",
+        "name": "Stage 21 HTTP 500 response report recipe",
+        "environment": {
+          "baseUrl": "http://127.0.0.1:18081",
+          "variables": {}
+        },
+        "tags": ["stage21", "runtime-recipe", "http-500"],
+        "steps": [
+          {
+            "stepId": "stage21-http-500",
+            "name": "Invoke the HTTP 500 fault endpoint",
+            "request": {
+              "method": "GET",
+              "path": "/api/faults/slow-sql",
+              "query": {
+                "delayMs": 100
+              }
+            },
+            "assertions": [
+              {
+                "type": "STATUS_CODE",
+                "expected": 500
+              },
+              {
+                "type": "JSON_PATH",
+                "expression": "$.code",
+                "operator": "EQUALS",
+                "expected": "ORDER_SYSTEM_ERROR"
+              }
+            ],
+            "extractors": []
+          }
+        ]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_business_inventory",
+      "sourceReference": "java://runner-testcase-dsl/e2e/create-order-insufficient-inventory.json",
+      "recipeKind": "BUSINESS_INVENTORY_CONFLICT",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21_failure_business_inventory",
+        "projectId": 1001,
+        "apiId": "api_create_order",
+        "name": "Stage 21 insufficient inventory report recipe",
+        "environment": {
+          "baseUrl": "http://localhost:8080",
+          "variables": {}
+        },
+        "tags": ["stage21", "runtime-recipe", "business-conflict"],
+        "steps": [
+          {
+            "stepId": "stage21-insufficient-inventory",
+            "name": "Create an order exceeding available inventory",
+            "request": {
+              "method": "POST",
+              "path": "/orders",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "userId": 1,
+                "items": [
+                  {
+                    "productId": 2,
+                    "quantity": 3
+                  }
+                ]
+              }
+            },
+            "assertions": [
+              {
+                "type": "STATUS_CODE",
+                "expected": 409
+              },
+              {
+                "type": "HEADER",
+                "name": "Content-Type",
+                "operator": "EQUALS",
+                "expected": "application/json"
+              },
+              {
+                "type": "JSON_PATH",
+                "expression": "$.code",
+                "operator": "EQUALS",
+                "expected": "ORDER_BUSINESS_CONFLICT"
+              },
+              {
+                "type": "JSON_PATH",
+                "expression": "$.data",
+                "operator": "EXISTS"
+              },
+              {
+                "type": "RESPONSE_TIME",
+                "maxMs": 1000
+              }
+            ],
+            "extractors": []
+          }
+        ]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_timeout",
+      "sourceReference": "java://runner-unit/TestStepRunnerTest/timeout",
+      "recipeKind": "TIMEOUT",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21_failure_timeout",
+        "projectId": 1001,
+        "apiId": "stage21-timeout-target",
+        "name": "Stage 21 Runner timeout report recipe",
+        "environment": {
+          "baseUrl": "http://127.0.0.1:18082",
+          "variables": {}
+        },
+        "tags": ["stage21", "runtime-recipe", "timeout"],
+        "steps": [
+          {
+            "stepId": "stage21-timeout",
+            "name": "Call the deterministic timeout target",
+            "request": {
+              "method": "GET",
+              "path": "/timeout"
+            },
+            "assertions": [
+              {
+                "type": "STATUS_CODE",
+                "expected": 200
+              }
+            ],
+            "extractors": []
+          }
+        ]
+      }
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_transport_connect",
+      "sourceReference": "java://runner-testcase-dsl/e2e/stage8-connect-failure.json",
+      "recipeKind": "TRANSPORT_CONNECT_FAILURE",
+      "readbackDeadlineSeconds": 60,
+      "testCase": {
+        "schemaVersion": "1.0.0",
+        "caseId": "stage21_failure_transport_connect",
+        "projectId": 1001,
+        "apiId": "listProducts",
+        "name": "Stage 21 unreachable target report recipe",
+        "environment": {
+          "baseUrl": "http://127.0.0.1:1",
+          "variables": {}
+        },
+        "tags": ["stage21", "runtime-recipe", "connect-failure"],
+        "steps": [
+          {
+            "stepId": "stage21-connect-failure",
+            "name": "Call an unreachable local target",
+            "request": {
+              "method": "GET",
+              "path": "/products"
+            },
+            "assertions": [
+              {
+                "type": "STATUS_CODE",
+                "expected": 200
+              }
+            ],
+            "extractors": []
+          }
+        ]
+      }
+    }
+  ]
+}

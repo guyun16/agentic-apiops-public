@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { ApiError, apiFetch, clearAccessToken, getAccessToken, saveAccessToken } from '../lib/api-client'
+import { clearStudioDrafts } from '../features/api-studio/studioDrafts'
 
 export type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated' | 'expired'
 
@@ -59,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const signOut = useCallback(() => {
+    clearStudioDrafts()
     clearAccessToken()
     setCurrentUser(null)
     setStatus('unauthenticated')

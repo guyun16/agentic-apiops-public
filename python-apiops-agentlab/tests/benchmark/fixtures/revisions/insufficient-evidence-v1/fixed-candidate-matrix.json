@@ -1,0 +1,2822 @@
+{
+  "version": "insufficient-evidence-fixed-candidates-v1",
+  "scope": "Authored full candidates and explicit evaluation-only content references; no model generation or text classifier.",
+  "scenarios": [
+    {
+      "name": "io-no-http",
+      "report": {
+        "projectId": 41,
+        "taskId": 1,
+        "runId": 901,
+        "reportId": "report:901",
+        "status": "EXECUTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "IO_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "EXECUTION_FAILED",
+            "failureType": "IO_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "EXECUTION_FAILED",
+                "failureType": "IO_ERROR",
+                "responseStatusCode": null,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "supportingContext": [
+        {
+          "source_type": "API_METADATA",
+          "source_id": "docs:cache",
+          "content": "A cache tuning guide for another operation; no facts about this execution."
+        }
+      ],
+      "evidence": [
+        {
+          "itemId": "docs:cache",
+          "sourceType": "API_METADATA",
+          "content": "A cache tuning guide for another operation; no facts about this execution.",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "report:901",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"offline-case\",\"failureType\":\"IO_ERROR\",\"relevantSteps\":[{\"durationMs\":null,\"failedAssertions\":[],\"failureType\":\"IO_ERROR\",\"responseAssertions\":[],\"responseStatusCode\":null,\"status\":\"EXECUTION_FAILED\",\"stepId\":\"offline-step\"}],\"status\":\"EXECUTION_FAILED\"}],\"reportId\":\"report:901\",\"runId\":901,\"status\":\"EXECUTION_FAILED\",\"summary\":{\"failedAssertions\":0,\"failureType\":\"IO_ERROR\",\"passedAssertions\":0,\"totalAssertions\":0,\"totalCases\":1,\"totalSteps\":1},\"taskId\":1}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:901",
+              "project_id": 41,
+              "run_id": 901
+            }
+          ],
+          "truncated": false
+        }
+      ],
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "6119177425b0e68b4bdbd014f69315170f2633a2d52808650a2cd852f8e0d112",
+            "evidence_digest": "9d9f76164b6f0d3ecc12b0830b97caccea17923b632c3a5ca07cf7aebd8b9390",
+            "reference": "fixed-reference:io-no-http/abstain:v1",
+            "rationale": "Observed facts are preserved; abstention/provisional wording is explicit, supported at the stated level, and limitations/checks address the actual missing discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "32f20e190b8ccbe079aff6421dba828ab3c8b5c79e766b9ee01979f1ac4b25a0",
+            "evidence_digest": "9d9f76164b6f0d3ecc12b0830b97caccea17923b632c3a5ca07cf7aebd8b9390",
+            "reference": "fixed-reference:io-no-http/provisional:v1",
+            "rationale": "Observed facts are preserved; abstention/provisional wording is explicit, supported at the stated level, and limitations/checks address the actual missing discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "unsupported-specific",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "The production database connection pool is exhausted and caused this failure.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "c3d6b6c61ae928560753ab758eccad0c857627a3f19611d52f511ccbedd2e56b",
+            "evidence_digest": "9d9f76164b6f0d3ecc12b0830b97caccea17923b632c3a5ca07cf7aebd8b9390",
+            "reference": "fixed-reference:io-no-http/unsupported-specific:v1",
+            "rationale": "No provided record describes a database or pool; a specific established cause is asserted without evidence.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "FAIL",
+              "uncertainty": "FAIL",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "high-insufficient",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "HIGH",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "af997d254fda5dc9fe704dbb04b78b67a394a3a7dd02e1f704bf754603c8469e",
+            "evidence_digest": "9d9f76164b6f0d3ecc12b0830b97caccea17923b632c3a5ca07cf7aebd8b9390",
+            "reference": "fixed-reference:io-no-http/high-insufficient:v1",
+            "rationale": "HIGH contradicts sufficientEvidence=false.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "FAIL",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "invented-citation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "fabricated:missing"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "364f3ce8ba24b2c1923848735bc52f73d51da2f43eb4ba1e8aa4bd0ab72e2b67",
+            "evidence_digest": "9d9f76164b6f0d3ecc12b0830b97caccea17923b632c3a5ca07cf7aebd8b9390",
+            "reference": "fixed-reference:io-no-http/invented-citation:v1",
+            "rationale": "The cited item does not exist in the input.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "irrelevant-citation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "docs:cache"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "1e88fa2d0806483967df8fd0ef63da377d1153b593a25c0773c4610640f6f5b9",
+            "evidence_digest": "9d9f76164b6f0d3ecc12b0830b97caccea17923b632c3a5ca07cf7aebd8b9390",
+            "reference": "fixed-reference:io-no-http/irrelevant-citation:v1",
+            "rationale": "The existing cache document contains no execution observation supporting this claim; ID existence does not establish citation support.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "unreviewed",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "UNKNOWN",
+          "expectedValidatorAccepted": true,
+          "contentReview": null
+        },
+        {
+          "name": "missing-output",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": null
+        },
+        {
+          "name": "blank-checks",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              " "
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "f9fb2e44be5aaebb76697dd768b1cbe95c9ff4719b3b0b6da5e2060d76824385",
+            "evidence_digest": "9d9f76164b6f0d3ecc12b0830b97caccea17923b632c3a5ca07cf7aebd8b9390",
+            "reference": "fixed-reference:io-no-http/blank-checks:v1",
+            "rationale": "Whitespace is not a recommended check.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "FAIL"
+            }
+          }
+        },
+        {
+          "name": "truncated-export",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ]
+          },
+          "expectedOutcome": "UNKNOWN",
+          "expectedValidatorAccepted": false,
+          "contentReview": null,
+          "completeOriginal": false
+        },
+        {
+          "name": "erased-observation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "The execution succeeded without any failure.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "9efc8a99142b40b1c64431fab2a19b5c38745365eeff6eef4ee7653dbeffe6ab",
+            "evidence_digest": "9d9f76164b6f0d3ecc12b0830b97caccea17923b632c3a5ca07cf7aebd8b9390",
+            "reference": "fixed-reference:io-no-http/erased-observation:v1",
+            "rationale": "The Java report records execution/assertion failure; empty hypotheses do not erase that observed failure.",
+            "checks": {
+              "observed_facts": "FAIL",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "irrelevant-checks",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Change the UI theme color."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "2110fbb098e464df9dbd829d2b22a36bb4c3070dd64a8fa220fcc860e0dc9c81",
+            "evidence_digest": "9d9f76164b6f0d3ecc12b0830b97caccea17923b632c3a5ca07cf7aebd8b9390",
+            "reference": "fixed-reference:io-no-http/irrelevant-checks:v1",
+            "rationale": "A nonempty UI theme recommendation cannot resolve any missing execution or response discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "FAIL"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "actual-conflict",
+      "report": {
+        "projectId": 41,
+        "taskId": 1,
+        "runId": 901,
+        "reportId": "report:901",
+        "status": "ASSERTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "HTTP_STATUS_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "ASSERTION_FAILED",
+            "failureType": "HTTP_STATUS_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "ASSERTION_FAILED",
+                "failureType": "HTTP_STATUS_ERROR",
+                "responseStatusCode": 500,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "supportingContext": [
+        {
+          "source_type": "API_METADATA",
+          "source_id": "docs:cache",
+          "content": "A cache tuning guide for another operation; no facts about this execution."
+        },
+        {
+          "source_type": "SHORT_TERM_CONTEXT",
+          "source_id": "gateway:r-17",
+          "content": "{\"requestId\": \"r-17\", \"timestamp\": \"2026-09-05T00:00:00Z\", \"upstreamStarted\": true, \"failure\": \"connection reset by upstream\"}"
+        },
+        {
+          "source_type": "SHORT_TERM_CONTEXT",
+          "source_id": "service:r-17",
+          "content": "{\"requestId\": \"r-17\", \"timestamp\": \"2026-09-05T00:00:00Z\", \"upstreamStarted\": false, \"failure\": \"local validation rejected before upstream call\"}"
+        }
+      ],
+      "evidence": [
+        {
+          "itemId": "docs:cache",
+          "sourceType": "API_METADATA",
+          "content": "A cache tuning guide for another operation; no facts about this execution.",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "report:901",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"offline-case\",\"failureType\":\"HTTP_STATUS_ERROR\",\"relevantSteps\":[{\"durationMs\":null,\"failedAssertions\":[],\"failureType\":\"HTTP_STATUS_ERROR\",\"responseAssertions\":[],\"responseStatusCode\":500,\"status\":\"ASSERTION_FAILED\",\"stepId\":\"offline-step\"}],\"status\":\"ASSERTION_FAILED\"}],\"reportId\":\"report:901\",\"runId\":901,\"status\":\"ASSERTION_FAILED\",\"summary\":{\"failedAssertions\":0,\"failureType\":\"HTTP_STATUS_ERROR\",\"passedAssertions\":0,\"totalAssertions\":0,\"totalCases\":1,\"totalSteps\":1},\"taskId\":1}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:901",
+              "project_id": 41,
+              "run_id": 901
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "itemId": "gateway:r-17",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "{\"requestId\": \"r-17\", \"timestamp\": \"2026-09-05T00:00:00Z\", \"upstreamStarted\": true, \"failure\": \"connection reset by upstream\"}",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "service:r-17",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "{\"requestId\": \"r-17\", \"timestamp\": \"2026-09-05T00:00:00Z\", \"upstreamStarted\": false, \"failure\": \"local validation rejected before upstream call\"}",
+          "provenance": [],
+          "truncated": false
+        }
+      ],
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ],
+            "recommendedChecks": [
+              "Correlate r-17 timestamps and spans to distinguish upstream reset from local rejection."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "9a4ffdedbb140c42fa997c11f530858a0acea8010ffc10468424e125533beb8d",
+            "evidence_digest": "79e92eb1deb32661dbfb7579c03d68f30d89bf741e92cdb1f38dfda9571c5e6e",
+            "reference": "fixed-reference:actual-conflict/abstain:v1",
+            "rationale": "Observed facts are preserved; abstention/provisional wording is explicit, supported at the stated level, and limitations/checks address the actual missing discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional request-handling mechanism may explain HTTP500; conflicting records do not establish whether upstream communication or local handling failed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  },
+                  {
+                    "itemId": "gateway:r-17"
+                  },
+                  {
+                    "itemId": "service:r-17"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ],
+            "recommendedChecks": [
+              "Correlate r-17 timestamps and spans to distinguish upstream reset from local rejection."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "854f899a6f7c96d3d5bbcc5130b65365d911ab4edbececf57bfe71125874ff95",
+            "evidence_digest": "79e92eb1deb32661dbfb7579c03d68f30d89bf741e92cdb1f38dfda9571c5e6e",
+            "reference": "fixed-reference:actual-conflict/provisional:v1",
+            "rationale": "Observed facts are preserved; abstention/provisional wording is explicit, supported at the stated level, and limitations/checks address the actual missing discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "unsupported-specific",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "The production database connection pool is exhausted and caused this failure.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  },
+                  {
+                    "itemId": "gateway:r-17"
+                  },
+                  {
+                    "itemId": "service:r-17"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ],
+            "recommendedChecks": [
+              "Correlate r-17 timestamps and spans to distinguish upstream reset from local rejection."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "0c9bfb0ca43025d4fec0b971b14188cd4a7f59d32d450b3d4099d95eba3144ab",
+            "evidence_digest": "79e92eb1deb32661dbfb7579c03d68f30d89bf741e92cdb1f38dfda9571c5e6e",
+            "reference": "fixed-reference:actual-conflict/unsupported-specific:v1",
+            "rationale": "No provided record describes a database or pool; a specific established cause is asserted without evidence.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "FAIL",
+              "uncertainty": "FAIL",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "high-insufficient",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional request-handling mechanism may explain HTTP500; conflicting records do not establish whether upstream communication or local handling failed.",
+                "confidence": "HIGH",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  },
+                  {
+                    "itemId": "gateway:r-17"
+                  },
+                  {
+                    "itemId": "service:r-17"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ],
+            "recommendedChecks": [
+              "Correlate r-17 timestamps and spans to distinguish upstream reset from local rejection."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "5a1246b9361e03fd5263cd8af26f32115ef2545ad5b807b5010d41a2268e66e4",
+            "evidence_digest": "79e92eb1deb32661dbfb7579c03d68f30d89bf741e92cdb1f38dfda9571c5e6e",
+            "reference": "fixed-reference:actual-conflict/high-insufficient:v1",
+            "rationale": "HIGH contradicts sufficientEvidence=false.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "FAIL",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "invented-citation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional request-handling mechanism may explain HTTP500; conflicting records do not establish whether upstream communication or local handling failed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "fabricated:missing"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ],
+            "recommendedChecks": [
+              "Correlate r-17 timestamps and spans to distinguish upstream reset from local rejection."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "7861f82ecf6bdcd3612b6f8d73a2ee0e11339b9a6de32bf592fad5029660d1db",
+            "evidence_digest": "79e92eb1deb32661dbfb7579c03d68f30d89bf741e92cdb1f38dfda9571c5e6e",
+            "reference": "fixed-reference:actual-conflict/invented-citation:v1",
+            "rationale": "The cited item does not exist in the input.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "irrelevant-citation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional request-handling mechanism may explain HTTP500; conflicting records do not establish whether upstream communication or local handling failed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "docs:cache"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ],
+            "recommendedChecks": [
+              "Correlate r-17 timestamps and spans to distinguish upstream reset from local rejection."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "902ec1b5172cec54c11409ea2670f5f259c18d3c92e3943dee52fdbf4491d70e",
+            "evidence_digest": "79e92eb1deb32661dbfb7579c03d68f30d89bf741e92cdb1f38dfda9571c5e6e",
+            "reference": "fixed-reference:actual-conflict/irrelevant-citation:v1",
+            "rationale": "The existing cache document contains no execution observation supporting this claim; ID existence does not establish citation support.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "unreviewed",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional request-handling mechanism may explain HTTP500; conflicting records do not establish whether upstream communication or local handling failed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  },
+                  {
+                    "itemId": "gateway:r-17"
+                  },
+                  {
+                    "itemId": "service:r-17"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ],
+            "recommendedChecks": [
+              "Correlate r-17 timestamps and spans to distinguish upstream reset from local rejection."
+            ]
+          },
+          "expectedOutcome": "UNKNOWN",
+          "expectedValidatorAccepted": true,
+          "contentReview": null
+        },
+        {
+          "name": "missing-output",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional request-handling mechanism may explain HTTP500; conflicting records do not establish whether upstream communication or local handling failed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  },
+                  {
+                    "itemId": "gateway:r-17"
+                  },
+                  {
+                    "itemId": "service:r-17"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": null
+        },
+        {
+          "name": "blank-checks",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional request-handling mechanism may explain HTTP500; conflicting records do not establish whether upstream communication or local handling failed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  },
+                  {
+                    "itemId": "gateway:r-17"
+                  },
+                  {
+                    "itemId": "service:r-17"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ],
+            "recommendedChecks": [
+              " "
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "a3dd028e6880b8e01d96ac75e6d1d154393bf1cd85bb178b3978953f52c10b03",
+            "evidence_digest": "79e92eb1deb32661dbfb7579c03d68f30d89bf741e92cdb1f38dfda9571c5e6e",
+            "reference": "fixed-reference:actual-conflict/blank-checks:v1",
+            "rationale": "Whitespace is not a recommended check.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "FAIL"
+            }
+          }
+        },
+        {
+          "name": "truncated-export",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional request-handling mechanism may explain HTTP500; conflicting records do not establish whether upstream communication or local handling failed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  },
+                  {
+                    "itemId": "gateway:r-17"
+                  },
+                  {
+                    "itemId": "service:r-17"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ]
+          },
+          "expectedOutcome": "UNKNOWN",
+          "expectedValidatorAccepted": false,
+          "contentReview": null,
+          "completeOriginal": false
+        },
+        {
+          "name": "erased-observation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "The execution succeeded without any failure.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ],
+            "recommendedChecks": [
+              "Correlate r-17 timestamps and spans to distinguish upstream reset from local rejection."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "c86d7de68802fee94385cc908d36c282aa9682a83cdd2daf5cb83f77c8288a08",
+            "evidence_digest": "79e92eb1deb32661dbfb7579c03d68f30d89bf741e92cdb1f38dfda9571c5e6e",
+            "reference": "fixed-reference:actual-conflict/erased-observation:v1",
+            "rationale": "The Java report records execution/assertion failure; empty hypotheses do not erase that observed failure.",
+            "checks": {
+              "observed_facts": "FAIL",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "irrelevant-checks",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed. Two records for request r-17 disagree about whether upstream execution began.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The gateway and service records conflict on the same request, so neither specific cause is established."
+            ],
+            "recommendedChecks": [
+              "Change the UI theme color."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "c7f3cba5eebf294e6fcd46eabcaf240d0caec6fdaca63929b4a0421d235ca36b",
+            "evidence_digest": "79e92eb1deb32661dbfb7579c03d68f30d89bf741e92cdb1f38dfda9571c5e6e",
+            "reference": "fixed-reference:actual-conflict/irrelevant-checks:v1",
+            "rationale": "A nonempty UI theme recommendation cannot resolve any missing execution or response discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "FAIL"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "sparse-unknown",
+      "report": {
+        "projectId": 41,
+        "taskId": 1,
+        "runId": 901,
+        "reportId": "report:901",
+        "status": "EXECUTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "UNKNOWN"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "EXECUTION_FAILED",
+            "failureType": "UNKNOWN",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "EXECUTION_FAILED",
+                "failureType": "UNKNOWN",
+                "responseStatusCode": null,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "supportingContext": [
+        {
+          "source_type": "API_METADATA",
+          "source_id": "docs:cache",
+          "content": "A cache tuning guide for another operation; no facts about this execution."
+        }
+      ],
+      "evidence": [
+        {
+          "itemId": "docs:cache",
+          "sourceType": "API_METADATA",
+          "content": "A cache tuning guide for another operation; no facts about this execution.",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "report:901",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"offline-case\",\"failureType\":\"UNKNOWN\",\"relevantSteps\":[{\"durationMs\":null,\"failedAssertions\":[],\"failureType\":\"UNKNOWN\",\"responseAssertions\":[],\"responseStatusCode\":null,\"status\":\"EXECUTION_FAILED\",\"stepId\":\"offline-step\"}],\"status\":\"EXECUTION_FAILED\"}],\"reportId\":\"report:901\",\"runId\":901,\"status\":\"EXECUTION_FAILED\",\"summary\":{\"failedAssertions\":0,\"failureType\":\"UNKNOWN\",\"passedAssertions\":0,\"totalAssertions\":0,\"totalCases\":1,\"totalSteps\":1},\"taskId\":1}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:901",
+              "project_id": 41,
+              "run_id": 901
+            }
+          ],
+          "truncated": false
+        }
+      ],
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ],
+            "recommendedChecks": [
+              "Obtain an authorized terminal execution report with exception or response details."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "743de1e0de982cf0c48f1bc788a66262ed99112743f6f7ce2985e7f6995afb15",
+            "evidence_digest": "0ada39bd8c358d79fc32ae0caa38d69236bda3aefddebcea8ee19cd24b8b8415",
+            "reference": "fixed-reference:sparse-unknown/abstain:v1",
+            "rationale": "Observed facts are preserved; abstention/provisional wording is explicit, supported at the stated level, and limitations/checks address the actual missing discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional transport failure may have prevented completion.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ],
+            "recommendedChecks": [
+              "Obtain an authorized terminal execution report with exception or response details."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "a5ce1434e83b741d84e04c2aa0a7501e2e7e5ace2dc4ac7828a9f4f9df058b5f",
+            "evidence_digest": "0ada39bd8c358d79fc32ae0caa38d69236bda3aefddebcea8ee19cd24b8b8415",
+            "reference": "fixed-reference:sparse-unknown/provisional:v1",
+            "rationale": "UNKNOWN with no mechanism evidence cannot support a transport mechanism, even when marked provisional/LOW.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "FAIL",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "unsupported-specific",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "The production database connection pool is exhausted and caused this failure.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ],
+            "recommendedChecks": [
+              "Obtain an authorized terminal execution report with exception or response details."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "5d58fb1f262ab05c9c7969336c22a4c67e69d8a0ece3c6e3605424685f6d8f08",
+            "evidence_digest": "0ada39bd8c358d79fc32ae0caa38d69236bda3aefddebcea8ee19cd24b8b8415",
+            "reference": "fixed-reference:sparse-unknown/unsupported-specific:v1",
+            "rationale": "No provided record describes a database or pool; a specific established cause is asserted without evidence.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "FAIL",
+              "uncertainty": "FAIL",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "high-insufficient",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional transport failure may have prevented completion.",
+                "confidence": "HIGH",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ],
+            "recommendedChecks": [
+              "Obtain an authorized terminal execution report with exception or response details."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "c828d6e843adef2abe692536d6d0d3423c9fda3d3cb8434cdfd7b444c300fe1e",
+            "evidence_digest": "0ada39bd8c358d79fc32ae0caa38d69236bda3aefddebcea8ee19cd24b8b8415",
+            "reference": "fixed-reference:sparse-unknown/high-insufficient:v1",
+            "rationale": "HIGH contradicts sufficientEvidence=false. The UNKNOWN report also provides no support for the proposed transport mechanism.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "FAIL",
+              "uncertainty": "FAIL",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "invented-citation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional transport failure may have prevented completion.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "fabricated:missing"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ],
+            "recommendedChecks": [
+              "Obtain an authorized terminal execution report with exception or response details."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "32c553187e2ca569b04e62e258f99050274a51ea544540e67a6ce91aece8b3e3",
+            "evidence_digest": "0ada39bd8c358d79fc32ae0caa38d69236bda3aefddebcea8ee19cd24b8b8415",
+            "reference": "fixed-reference:sparse-unknown/invented-citation:v1",
+            "rationale": "The cited item does not exist in the input. The UNKNOWN report also provides no support for the proposed transport mechanism.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "FAIL",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "irrelevant-citation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional transport failure may have prevented completion.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "docs:cache"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ],
+            "recommendedChecks": [
+              "Obtain an authorized terminal execution report with exception or response details."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "437f679d31e53e8ff698e8eb212dcf2971a447445c9f58c5d9adc29b3d3e487a",
+            "evidence_digest": "0ada39bd8c358d79fc32ae0caa38d69236bda3aefddebcea8ee19cd24b8b8415",
+            "reference": "fixed-reference:sparse-unknown/irrelevant-citation:v1",
+            "rationale": "The existing cache document contains no execution observation supporting this claim; ID existence does not establish citation support. The UNKNOWN report also provides no support for the proposed transport mechanism.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "FAIL",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "unreviewed",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional transport failure may have prevented completion.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ],
+            "recommendedChecks": [
+              "Obtain an authorized terminal execution report with exception or response details."
+            ]
+          },
+          "expectedOutcome": "UNKNOWN",
+          "expectedValidatorAccepted": true,
+          "contentReview": null
+        },
+        {
+          "name": "missing-output",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional transport failure may have prevented completion.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": null
+        },
+        {
+          "name": "blank-checks",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional transport failure may have prevented completion.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ],
+            "recommendedChecks": [
+              " "
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "61662e1d62d3f5597eaceefa2d673c9cd797fb25a1127da838a21afae8226360",
+            "evidence_digest": "0ada39bd8c358d79fc32ae0caa38d69236bda3aefddebcea8ee19cd24b8b8415",
+            "reference": "fixed-reference:sparse-unknown/blank-checks:v1",
+            "rationale": "Whitespace is not a recommended check. The UNKNOWN report also provides no support for the proposed transport mechanism.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "FAIL",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "FAIL"
+            }
+          }
+        },
+        {
+          "name": "truncated-export",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional transport failure may have prevented completion.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ]
+          },
+          "expectedOutcome": "UNKNOWN",
+          "expectedValidatorAccepted": false,
+          "contentReview": null,
+          "completeOriginal": false
+        },
+        {
+          "name": "erased-observation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The execution succeeded without any failure.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ],
+            "recommendedChecks": [
+              "Obtain an authorized terminal execution report with exception or response details."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "5fa989838fc6ae9dcb2a7c34ab35b25e6671164a8a70467da2ac0f5ff9da4550",
+            "evidence_digest": "0ada39bd8c358d79fc32ae0caa38d69236bda3aefddebcea8ee19cd24b8b8415",
+            "reference": "fixed-reference:sparse-unknown/erased-observation:v1",
+            "rationale": "The Java report records execution/assertion failure; empty hypotheses do not erase that observed failure.",
+            "checks": {
+              "observed_facts": "FAIL",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "irrelevant-checks",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "UNKNOWN",
+            "summary": "The report has UNKNOWN failure type and no captured response or mechanism detail.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The available report cannot support a causal mechanism hypothesis."
+            ],
+            "recommendedChecks": [
+              "Change the UI theme color."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "9b37bd616e92884c714979f4a217117b6de5308f318a178e08b2d1e5b8d92acf",
+            "evidence_digest": "0ada39bd8c358d79fc32ae0caa38d69236bda3aefddebcea8ee19cd24b8b8415",
+            "reference": "fixed-reference:sparse-unknown/irrelevant-checks:v1",
+            "rationale": "A nonempty UI theme recommendation cannot resolve any missing execution or response discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "FAIL"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "http401-no-auth",
+      "report": {
+        "projectId": 41,
+        "taskId": 1,
+        "runId": 901,
+        "reportId": "report:901",
+        "status": "ASSERTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "HTTP_STATUS_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "ASSERTION_FAILED",
+            "failureType": "HTTP_STATUS_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "ASSERTION_FAILED",
+                "failureType": "HTTP_STATUS_ERROR",
+                "responseStatusCode": 401,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "supportingContext": [
+        {
+          "source_type": "API_METADATA",
+          "source_id": "docs:cache",
+          "content": "A cache tuning guide for another operation; no facts about this execution."
+        }
+      ],
+      "evidence": [
+        {
+          "itemId": "docs:cache",
+          "sourceType": "API_METADATA",
+          "content": "A cache tuning guide for another operation; no facts about this execution.",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "report:901",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"offline-case\",\"failureType\":\"HTTP_STATUS_ERROR\",\"relevantSteps\":[{\"durationMs\":null,\"failedAssertions\":[],\"failureType\":\"HTTP_STATUS_ERROR\",\"responseAssertions\":[],\"responseStatusCode\":401,\"status\":\"ASSERTION_FAILED\",\"stepId\":\"offline-step\"}],\"status\":\"ASSERTION_FAILED\"}],\"reportId\":\"report:901\",\"runId\":901,\"status\":\"ASSERTION_FAILED\",\"summary\":{\"failedAssertions\":0,\"failureType\":\"HTTP_STATUS_ERROR\",\"passedAssertions\":0,\"totalAssertions\":0,\"totalCases\":1,\"totalSteps\":1},\"taskId\":1}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:901",
+              "project_id": 41,
+              "run_id": 901
+            }
+          ],
+          "truncated": false
+        }
+      ],
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Obtain a redacted request authentication-presence record and the authorized authentication decision reason."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "ab6f5ba13e8b8aad37a38b9181ac6e6bc7a407197e0265f780b7c11e314029d8",
+            "evidence_digest": "7d3bdf458632056453c3bf1bf5afde56fd746e1b1ae36ef906f74bd3cb51025f",
+            "reference": "fixed-reference:http401-no-auth/abstain:v1",
+            "rationale": "Observed facts are preserved; abstention/provisional wording is explicit, supported at the stated level, and limitations/checks address the actual missing discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional authentication-related mechanism may explain HTTP401; no specific credential failure is established.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Obtain a redacted request authentication-presence record and the authorized authentication decision reason."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "04e6b4331066559bc10a5eab8210d0c29092be321c87b0d207e58396039bad2b",
+            "evidence_digest": "7d3bdf458632056453c3bf1bf5afde56fd746e1b1ae36ef906f74bd3cb51025f",
+            "reference": "fixed-reference:http401-no-auth/provisional:v1",
+            "rationale": "Observed facts are preserved; abstention/provisional wording is explicit, supported at the stated level, and limitations/checks address the actual missing discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "unsupported-specific",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "The production database connection pool is exhausted and caused this failure.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Obtain a redacted request authentication-presence record and the authorized authentication decision reason."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "e2e261d6e138f0482f64a8a6dba605457ec999a1fa943572074e98be1849410c",
+            "evidence_digest": "7d3bdf458632056453c3bf1bf5afde56fd746e1b1ae36ef906f74bd3cb51025f",
+            "reference": "fixed-reference:http401-no-auth/unsupported-specific:v1",
+            "rationale": "No provided record describes a database or pool; a specific established cause is asserted without evidence.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "FAIL",
+              "uncertainty": "FAIL",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "high-insufficient",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional authentication-related mechanism may explain HTTP401; no specific credential failure is established.",
+                "confidence": "HIGH",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Obtain a redacted request authentication-presence record and the authorized authentication decision reason."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "9fd80037ea6934d7f4b3f0c5826e08ae4a10d34e243453a981d5ab4d5dc53593",
+            "evidence_digest": "7d3bdf458632056453c3bf1bf5afde56fd746e1b1ae36ef906f74bd3cb51025f",
+            "reference": "fixed-reference:http401-no-auth/high-insufficient:v1",
+            "rationale": "HIGH contradicts sufficientEvidence=false.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "FAIL",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "invented-citation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional authentication-related mechanism may explain HTTP401; no specific credential failure is established.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "fabricated:missing"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Obtain a redacted request authentication-presence record and the authorized authentication decision reason."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "e7119066e10052424d345b62f4d83f8c9807b9710029f1f27e4b611b1702233f",
+            "evidence_digest": "7d3bdf458632056453c3bf1bf5afde56fd746e1b1ae36ef906f74bd3cb51025f",
+            "reference": "fixed-reference:http401-no-auth/invented-citation:v1",
+            "rationale": "The cited item does not exist in the input.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "irrelevant-citation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional authentication-related mechanism may explain HTTP401; no specific credential failure is established.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "docs:cache"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Obtain a redacted request authentication-presence record and the authorized authentication decision reason."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "4112a1c1ed828c940d6ec8ab9d8018be883e1aa94440ba2d3001bb45998d07d7",
+            "evidence_digest": "7d3bdf458632056453c3bf1bf5afde56fd746e1b1ae36ef906f74bd3cb51025f",
+            "reference": "fixed-reference:http401-no-auth/irrelevant-citation:v1",
+            "rationale": "The existing cache document contains no execution observation supporting this claim; ID existence does not establish citation support.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "unreviewed",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional authentication-related mechanism may explain HTTP401; no specific credential failure is established.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Obtain a redacted request authentication-presence record and the authorized authentication decision reason."
+            ]
+          },
+          "expectedOutcome": "UNKNOWN",
+          "expectedValidatorAccepted": true,
+          "contentReview": null
+        },
+        {
+          "name": "missing-output",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional authentication-related mechanism may explain HTTP401; no specific credential failure is established.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": null
+        },
+        {
+          "name": "blank-checks",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional authentication-related mechanism may explain HTTP401; no specific credential failure is established.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              " "
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "cc360891e3e64416e00e27c849857e18175c047e035828e95f08705299f5e9e9",
+            "evidence_digest": "7d3bdf458632056453c3bf1bf5afde56fd746e1b1ae36ef906f74bd3cb51025f",
+            "reference": "fixed-reference:http401-no-auth/blank-checks:v1",
+            "rationale": "Whitespace is not a recommended check.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "FAIL"
+            }
+          }
+        },
+        {
+          "name": "truncated-export",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional authentication-related mechanism may explain HTTP401; no specific credential failure is established.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ]
+          },
+          "expectedOutcome": "UNKNOWN",
+          "expectedValidatorAccepted": false,
+          "contentReview": null,
+          "completeOriginal": false
+        },
+        {
+          "name": "erased-observation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "The execution succeeded without any failure.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Obtain a redacted request authentication-presence record and the authorized authentication decision reason."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "c31b5d7ced86ea742a9d9b424fa8e38476bb1a50f19ad35dcd9118c83166a95b",
+            "evidence_digest": "7d3bdf458632056453c3bf1bf5afde56fd746e1b1ae36ef906f74bd3cb51025f",
+            "reference": "fixed-reference:http401-no-auth/erased-observation:v1",
+            "rationale": "The Java report records execution/assertion failure; empty hypotheses do not erase that observed failure.",
+            "checks": {
+              "observed_facts": "FAIL",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "irrelevant-checks",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Change the UI theme color."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "a118e181116d5bf9999a16395a5a95f1fe660486c7a30c021611db02b12d9291",
+            "evidence_digest": "7d3bdf458632056453c3bf1bf5afde56fd746e1b1ae36ef906f74bd3cb51025f",
+            "reference": "fixed-reference:http401-no-auth/irrelevant-checks:v1",
+            "rationale": "A nonempty UI theme recommendation cannot resolve any missing execution or response discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "FAIL"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "http500-no-body",
+      "report": {
+        "projectId": 41,
+        "taskId": 1,
+        "runId": 901,
+        "reportId": "report:901",
+        "status": "ASSERTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "HTTP_STATUS_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "ASSERTION_FAILED",
+            "failureType": "HTTP_STATUS_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "ASSERTION_FAILED",
+                "failureType": "HTTP_STATUS_ERROR",
+                "responseStatusCode": 500,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "supportingContext": [
+        {
+          "source_type": "API_METADATA",
+          "source_id": "docs:cache",
+          "content": "A cache tuning guide for another operation; no facts about this execution."
+        }
+      ],
+      "evidence": [
+        {
+          "itemId": "docs:cache",
+          "sourceType": "API_METADATA",
+          "content": "A cache tuning guide for another operation; no facts about this execution.",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "report:901",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"offline-case\",\"failureType\":\"HTTP_STATUS_ERROR\",\"relevantSteps\":[{\"durationMs\":null,\"failedAssertions\":[],\"failureType\":\"HTTP_STATUS_ERROR\",\"responseAssertions\":[],\"responseStatusCode\":500,\"status\":\"ASSERTION_FAILED\",\"stepId\":\"offline-step\"}],\"status\":\"ASSERTION_FAILED\"}],\"reportId\":\"report:901\",\"runId\":901,\"status\":\"ASSERTION_FAILED\",\"summary\":{\"failedAssertions\":0,\"failureType\":\"HTTP_STATUS_ERROR\",\"passedAssertions\":0,\"totalAssertions\":0,\"totalCases\":1,\"totalSteps\":1},\"taskId\":1}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:901",
+              "project_id": 41,
+              "run_id": 901
+            }
+          ],
+          "truncated": false
+        }
+      ],
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Obtain the authorized response error detail and correlated service exception record."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "7e01a79b2980e41af82ffdbca515d6859bad0074a267cd70137ace1df43c478f",
+            "evidence_digest": "85d85f66bfd8abbebc30f82ce332cb9dd790de2d60a0559b96c70a88ed9f578e",
+            "reference": "fixed-reference:http500-no-body/abstain:v1",
+            "rationale": "Observed facts are preserved; abstention/provisional wording is explicit, supported at the stated level, and limitations/checks address the actual missing discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional server error mechanism may explain HTTP500; the internal defect is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Obtain the authorized response error detail and correlated service exception record."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "e93179485ef47f43dac25f21635986813b4a919672adc75119f226b0fd2c6a16",
+            "evidence_digest": "85d85f66bfd8abbebc30f82ce332cb9dd790de2d60a0559b96c70a88ed9f578e",
+            "reference": "fixed-reference:http500-no-body/provisional:v1",
+            "rationale": "Observed facts are preserved; abstention/provisional wording is explicit, supported at the stated level, and limitations/checks address the actual missing discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "unsupported-specific",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "The production database connection pool is exhausted and caused this failure.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Obtain the authorized response error detail and correlated service exception record."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "ac27fcaf73778250c82e7333b86f18b67c7babcbd16d37a624371f5063a20b52",
+            "evidence_digest": "85d85f66bfd8abbebc30f82ce332cb9dd790de2d60a0559b96c70a88ed9f578e",
+            "reference": "fixed-reference:http500-no-body/unsupported-specific:v1",
+            "rationale": "No provided record describes a database or pool; a specific established cause is asserted without evidence.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "FAIL",
+              "uncertainty": "FAIL",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "high-insufficient",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional server error mechanism may explain HTTP500; the internal defect is unconfirmed.",
+                "confidence": "HIGH",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Obtain the authorized response error detail and correlated service exception record."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "a400b717a5e8e36064cb0346324c32521027f1d188d6c675273ad0adb8b2d2f0",
+            "evidence_digest": "85d85f66bfd8abbebc30f82ce332cb9dd790de2d60a0559b96c70a88ed9f578e",
+            "reference": "fixed-reference:http500-no-body/high-insufficient:v1",
+            "rationale": "HIGH contradicts sufficientEvidence=false.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "FAIL",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "invented-citation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional server error mechanism may explain HTTP500; the internal defect is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "fabricated:missing"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Obtain the authorized response error detail and correlated service exception record."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "0f1d51389ec77280dfdb4f052a93fb410a07ec2752236e97918266d54363cdc0",
+            "evidence_digest": "85d85f66bfd8abbebc30f82ce332cb9dd790de2d60a0559b96c70a88ed9f578e",
+            "reference": "fixed-reference:http500-no-body/invented-citation:v1",
+            "rationale": "The cited item does not exist in the input.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "irrelevant-citation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional server error mechanism may explain HTTP500; the internal defect is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "docs:cache"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Obtain the authorized response error detail and correlated service exception record."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "ade42a316a41edbbf2b52e51857c84d3b82c064d299e74fa99b68ffb295dfd60",
+            "evidence_digest": "85d85f66bfd8abbebc30f82ce332cb9dd790de2d60a0559b96c70a88ed9f578e",
+            "reference": "fixed-reference:http500-no-body/irrelevant-citation:v1",
+            "rationale": "The existing cache document contains no execution observation supporting this claim; ID existence does not establish citation support.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "FAIL",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "unreviewed",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional server error mechanism may explain HTTP500; the internal defect is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Obtain the authorized response error detail and correlated service exception record."
+            ]
+          },
+          "expectedOutcome": "UNKNOWN",
+          "expectedValidatorAccepted": true,
+          "contentReview": null
+        },
+        {
+          "name": "missing-output",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional server error mechanism may explain HTTP500; the internal defect is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": null
+        },
+        {
+          "name": "blank-checks",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional server error mechanism may explain HTTP500; the internal defect is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              " "
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": false,
+          "contentReview": {
+            "candidate_digest": "89f1bb2f8ddb0e7a8136ce579ca3897b0b792147d2f5779500503b1327795d63",
+            "evidence_digest": "85d85f66bfd8abbebc30f82ce332cb9dd790de2d60a0559b96c70a88ed9f578e",
+            "reference": "fixed-reference:http500-no-body/blank-checks:v1",
+            "rationale": "Whitespace is not a recommended check.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "FAIL"
+            }
+          }
+        },
+        {
+          "name": "truncated-export",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional server error mechanism may explain HTTP500; the internal defect is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:901"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ]
+          },
+          "expectedOutcome": "UNKNOWN",
+          "expectedValidatorAccepted": false,
+          "contentReview": null,
+          "completeOriginal": false
+        },
+        {
+          "name": "erased-observation",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "The execution succeeded without any failure.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Obtain the authorized response error detail and correlated service exception record."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "ee4ef53762ccd369fa36dd397c1123d028f16196ec91b28b99003b54688a0b43",
+            "evidence_digest": "85d85f66bfd8abbebc30f82ce332cb9dd790de2d60a0559b96c70a88ed9f578e",
+            "reference": "fixed-reference:http500-no-body/erased-observation:v1",
+            "rationale": "The Java report records execution/assertion failure; empty hypotheses do not erase that observed failure.",
+            "checks": {
+              "observed_facts": "FAIL",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "irrelevant-checks",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 901,
+            "reportId": "report:901",
+            "agentRunId": "agent:offline-matrix",
+            "traceId": "trace:offline-matrix",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Change the UI theme color."
+            ]
+          },
+          "expectedOutcome": "FAIL",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "5be46912e4d9b7cada73a568927a24aa75441f549e7b9d7c0f4f7b90b8f1a7dd",
+            "evidence_digest": "85d85f66bfd8abbebc30f82ce332cb9dd790de2d60a0559b96c70a88ed9f578e",
+            "reference": "fixed-reference:http500-no-body/irrelevant-checks:v1",
+            "rationale": "A nonempty UI theme recommendation cannot resolve any missing execution or response discriminator.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "FAIL"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

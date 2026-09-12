@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 from enum import StrEnum
-from typing import Annotated, TypeAlias
+from typing import Annotated, Literal, TypeAlias, get_args
 
 from pydantic import (
     BaseModel,
@@ -18,6 +18,7 @@ from pydantic import (
     model_validator,
 )
 
+from app.schemas.diagnosis_report import FailureType
 from app.schemas.testcase_dsl import JsonValue
 
 NonEmptyString = Annotated[StrictStr, Field(min_length=1)]
@@ -54,6 +55,7 @@ class MetricName(StrEnum):
     PARAMETER_ACCURACY = "parameter_accuracy"
     EVIDENCE_HIT = "evidence_hit"
     DIAGNOSIS_ACCURACY = "diagnosis_accuracy"
+    DIAGNOSIS_CONTRACT = "diagnosis_contract"
     SAFETY_ACCURACY = "safety_accuracy"
     WALL_CLOCK_LATENCY_MS = "wall_clock_latency_ms"
     MODEL_LATENCY_MS = "model_latency_ms"
@@ -117,6 +119,38 @@ class StructuredFact(_EvaluationModel):
     value: JsonValue
 
 
+class DiagnosisContentReview(_EvaluationModel):
+    """Evaluation-owned review of one exact candidate and its exact evidence.
+
+    These reference verdicts are never model-visible and never inferred from
+    confidence, array length, keywords, or a candidate-authored self assessment.
+    """
+
+    candidate_digest: Annotated[StrictStr, Field(pattern=r"^[a-f0-9]{64}$")]
+    candidate_scope: Literal["complete", "persisted_fields"] = "complete"
+    evidence_digest: Annotated[StrictStr, Field(pattern=r"^[a-f0-9]{64}$")]
+    reference: NonEmptyString
+    rationale: NonEmptyString
+    checks: dict[
+        Literal[
+            "observed_facts", "hypothesis_grounding", "uncertainty",
+            "citation_support", "limitations_and_checks",
+        ],
+        Literal["PASS", "FAIL", "UNKNOWN"],
+    ]
+
+    @model_validator(mode="after")
+    def all_dimensions_required(self) -> DiagnosisContentReview:
+        if set(self.checks) != {
+            "observed_facts", "hypothesis_grounding", "uncertainty",
+            "citation_support", "limitations_and_checks",
+        }:
+            raise ValueError("content review requires every diagnosis contract dimension")
+        if self.candidate_scope == "persisted_fields" and set(self.checks.values()) == {"PASS"}:
+            raise ValueError("partial output content review cannot establish full-report PASS")
+        return self
+
+
 class GroundTruth(_EvaluationModel):
     """Versioned evaluation input owned outside the evaluated Agent run."""
 
@@ -129,9 +163,26 @@ class GroundTruth(_EvaluationModel):
     acceptable_diagnosis_alternatives: tuple[NonEmptyString, ...] = ()
     expected_safety_outcome: SafetyOutcome | None = None
     expected_facts: tuple[StructuredFact, ...] = ()
+    diagnosis_contract: Literal["insufficient-evidence-v1"] | None = None
+    diagnosis_content_reviews: tuple[DiagnosisContentReview, ...] = ()
 
     @model_validator(mode="after")
     def expectations_must_be_unambiguous(self) -> GroundTruth:
+        if self.diagnosis_content_reviews and self.diagnosis_contract is None:
+            raise ValueError("diagnosis content reviews require a versioned contract")
+        review_keys = [
+            (review.candidate_scope, review.candidate_digest, review.evidence_digest)
+            for review in self.diagnosis_content_reviews
+        ]
+        if len(review_keys) != len(set(review_keys)):
+            raise ValueError("conflicting or duplicate diagnosis content reviews")
+        if self.diagnosis_contract and any(
+            fact.name in {"rootCauseHypotheses", "root_cause_hypotheses"}
+            for fact in self.expected_facts
+        ):
+            raise ValueError(
+                "insufficient-evidence contract cannot also require literal hypotheses"
+            )
         if len(self.expected_tools) != len(set(self.expected_tools)):
             raise ValueError("expected_tools must be unique")
         argument_tools = [item.tool_name for item in self.expected_tool_arguments]
@@ -151,6 +202,17 @@ class GroundTruth(_EvaluationModel):
         diagnoses = self.acceptable_diagnosis_alternatives
         if len(diagnoses) != len(set(diagnoses)):
             raise ValueError("acceptable diagnosis alternatives must be unique")
+        supported_diagnoses = frozenset(get_args(FailureType))
+        unreachable_diagnoses = {
+            item
+            for item in (self.expected_diagnosis, *diagnoses)
+            if item is not None and item not in supported_diagnoses
+        }
+        if unreachable_diagnoses:
+            raise ValueError(
+                "diagnosis expectations are not expressible by DiagnosisReport.failureType: "
+                + ", ".join(sorted(unreachable_diagnoses))
+            )
         fact_names = [fact.name for fact in self.expected_facts]
         if len(fact_names) != len(set(fact_names)):
             raise ValueError("expected_facts names must be unique")

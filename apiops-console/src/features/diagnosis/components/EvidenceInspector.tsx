@@ -128,7 +128,7 @@ export function EvidenceInspector({ execution }: EvidenceInspectorProps) {
             <div className="diagnosis-identity-list">
               {identity.map(({ Icon, label, value }) => (
                 <div className="diagnosis-identity-row" key={label}>
-                  <span><Icon size={14} strokeWidth={1.8} />{label}</span>
+                  <span><Icon size={14} strokeWidth={1.8} />{ui(label)}</span>
                   <code title={value}>{value}</code>
                   <button aria-label={`${ui('Copy')} ${label}`} onClick={() => copyValue(value)} type="button"><Clipboard size={13} strokeWidth={1.8} /></button>
                 </div>
@@ -161,7 +161,7 @@ export function EvidenceInspector({ execution }: EvidenceInspectorProps) {
                   <article className="diagnosis-evidence-card" key={testCase.caseId}>
                     <div className="diagnosis-evidence-card-heading">
                       <div><span className="diagnosis-subheading">{ui('Case')}</span><strong>{testCase.caseId}</strong></div>
-                      <span className={`diagnosis-fail-label diagnosis-fail-label-${statusClass(testCase.status)}`}>{testCase.status}</span>
+                      <span className={`diagnosis-fail-label diagnosis-fail-label-${statusClass(testCase.status)}`}>{ui(testCase.status)}</span>
                     </div>
                     <div className="diagnosis-evidence-values">
                       <div><span>{ui('Failure Type')}</span><code>{testCase.failureType}</code></div>
@@ -191,7 +191,7 @@ export function EvidenceInspector({ execution }: EvidenceInspectorProps) {
                 {execution.toolCallId ? (
                   <div className="diagnosis-tool-row"><span className="diagnosis-tool-name"><Search size={14} strokeWidth={1.8} />toolCallId</span><code>{execution.toolCallId}</code></div>
                 ) : null}
-                {!execution.toolIntentId && !execution.toolCallId ? <p className="diagnosis-empty-state">NOT_REQUESTED</p> : null}
+                {!execution.toolIntentId && !execution.toolCallId ? <p className="diagnosis-empty-state">{ui('NOT_REQUESTED')}</p> : null}
               </div>
             </section>
 

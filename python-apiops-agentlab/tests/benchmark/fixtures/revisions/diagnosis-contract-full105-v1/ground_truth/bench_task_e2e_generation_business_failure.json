@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_e2e_generation_business_failure",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "java_runner_status",
+      "value": "SUCCESS"
+    },
+    {
+      "name": "contract_accepted",
+      "value": true
+    },
+    {
+      "name": "business_outcome",
+      "value": "ORDER_BUSINESS_CONFLICT"
+    },
+    {
+      "name": "expected_http_status",
+      "value": 409
+    }
+  ]
+}

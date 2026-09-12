@@ -1,0 +1,17 @@
+{
+  "fixtureId": "stage21-diagnosis-insufficient-conflicting",
+  "setup": "load a report context containing two unresolved plausible root causes",
+  "reset": "reload immutable JSON fixture",
+  "authority": "Stage 19 diagnosis contract fixture; real Stage 20 report mapping requires human review",
+  "facts": {
+    "sufficientEvidence": false,
+    "rootCauseHypotheses": [],
+    "limitations": [
+      "Available evidence supports multiple plausible root causes."
+    ],
+    "recommendedChecks": [
+      "Obtain an additional authorized discriminating evidence item."
+    ],
+    "conflictType": "MULTIPLE_PLAUSIBLE_ROOTS"
+  }
+}

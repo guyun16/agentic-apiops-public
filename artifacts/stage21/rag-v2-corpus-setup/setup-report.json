@@ -1,0 +1,92 @@
+{
+  "ingestedDocuments" : [ {
+    "projectId" : 41,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-41/orders-api-constraints",
+    "documentId" : "doc_0a3785ba15944abd92659a02aa76489c"
+  }, {
+    "projectId" : 41,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-41/orders-incident-report",
+    "documentId" : "doc_c6d0a1b06ffe42418b2d9e677c81e293"
+  }, {
+    "projectId" : 41,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-41/orders-constraint-index",
+    "documentId" : "doc_dcc887c5455c450ea2de3abc99c0c593"
+  }, {
+    "projectId" : 41,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-41/catalog-distractor",
+    "documentId" : "doc_9cd5387eab1543b3881c46475dae7162"
+  }, {
+    "projectId" : 41,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-41/payment-near-match",
+    "documentId" : "doc_8b5ea5fb3f764ba2b2ac96f95354d570"
+  }, {
+    "projectId" : 41,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-41/api-contract-and-testcase-runbook",
+    "documentId" : "doc_9076c25603d34aa795ea37b25b8400f7"
+  }, {
+    "projectId" : 41,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-41/runner-reliability-runbook",
+    "documentId" : "doc_f5d24fa0e5d04aeba268fa84304b639e"
+  }, {
+    "projectId" : 41,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-41/data-integrity-constraints",
+    "documentId" : "doc_a205883838ac4edaa87e45b71a120b6c"
+  }, {
+    "projectId" : 42,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-42/inventory-service-runbook",
+    "documentId" : "doc_de879ecd3bb547208ae7f9ab1ba0489a"
+  }, {
+    "projectId" : 42,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-42/payments-incident-report",
+    "documentId" : "doc_b37a5acb51454c408aa9a876087d44ba"
+  }, {
+    "projectId" : 42,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-42/protected-service-notes",
+    "documentId" : "doc_f4b80feb45854e379e79c64897b1225c"
+  }, {
+    "projectId" : 42,
+    "qdrantPoints" : 2,
+    "chunks" : 2,
+    "sourceKey" : "stage21-rag-v2/project-42/tool-gateway-and-rag-operations",
+    "documentId" : "doc_7baf72c74c5c477ab06288771c380fe6"
+  }, {
+    "projectId" : 42,
+    "qdrantPoints" : 1,
+    "chunks" : 1,
+    "sourceKey" : "stage21-rag-v2/project-42/inventory-security-and-evidence-runbook",
+    "documentId" : "doc_c88b53d887c040ad83b4839c4df7ddfa"
+  } ],
+  "chunkSize" : 1000,
+  "chunkOverlap" : 100,
+  "documents" : 13,
+  "corpusVersion" : "stage21-rag-corpus-v2",
+  "chunks" : 14,
+  "project42Documents" : 5,
+  "embeddingDimension" : 1024,
+  "legacyStage21SmokeDocumentRemoved" : false,
+  "embeddingModel" : "embedding-3",
+  "qdrantPoints" : 14,
+  "project41Documents" : 8
+}

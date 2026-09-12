@@ -102,6 +102,37 @@ class AssertionResult(_RunnerModel):
     message: StrictStr
 
 
+class HttpMessageSnapshot(_RunnerModel):
+    """Bounded, redacted display facts produced by Java after execution."""
+
+    headers: dict[StrictStr, tuple[StrictStr, ...]]
+    body: StrictStr | None
+    body_state: Literal["captured", "omitted", "empty"] = Field(alias="bodyState")
+    truncated: StrictBool
+
+    @field_validator("headers", mode="before")
+    @classmethod
+    def accept_header_arrays(cls, value: object) -> object:
+        if isinstance(value, dict):
+            return {key: tuple(items) if isinstance(items, list) else items
+                    for key, items in value.items()}
+        return value
+
+
+class HttpRequestSnapshot(HttpMessageSnapshot):
+    method: NonEmptyString
+    url: NonEmptyString
+
+
+class HttpResponseSnapshot(HttpMessageSnapshot):
+    status_code: Annotated[StrictInt, Field(ge=100, le=599)] = Field(alias="statusCode")
+
+
+class HttpExchangeSnapshot(_RunnerModel):
+    request: HttpRequestSnapshot
+    response: HttpResponseSnapshot | None
+
+
 class TestReportStep(_RunnerModel):
     step_id: NonEmptyString = Field(alias="stepId")
     status: RunStatus
@@ -109,6 +140,11 @@ class TestReportStep(_RunnerModel):
     response_status_code: StrictInt | None = Field(alias="responseStatusCode")
     duration_ms: Annotated[StrictInt, Field(ge=0)] | None = Field(alias="durationMs")
     assertion_results: tuple[AssertionResult, ...] = Field(alias="assertionResults")
+    # Accept the additive Java display contract without changing diagnostic prompts
+    # or persisting large response bodies in existing Diagnosis checkpoints.
+    http_exchange: HttpExchangeSnapshot | None = Field(
+        default=None, alias="httpExchange", exclude=True,
+    )
 
     @field_validator("assertion_results", mode="before")
     @classmethod

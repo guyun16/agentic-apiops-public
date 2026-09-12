@@ -1,0 +1,60 @@
+{
+  "agentRetryCount": 0,
+  "agentRunId": "agent_run:22e8a61e00b243be88fb31448bca4239",
+  "authProfile": null,
+  "authorityReferences": [],
+  "benchmarkTaskId": "bench_task_testcase_auth_missing_token",
+  "caseId": "case:evaluation_run:stage21-real-model-full-105-20260901T110644Z:bench_task_testcase_auth_missing_token",
+  "cleanupErrorSummary": null,
+  "cleanupStatus": "SUCCESS",
+  "completionTokens": null,
+  "durationMs": 1.216,
+  "errorSummary": "BenchmarkTaskFailure: trusted canonical project identity is required before execution",
+  "evaluationId": null,
+  "evaluationResult": null,
+  "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260901T110644Z",
+  "executionMode": "UNKNOWN",
+  "failureCategory": "CONTRACT_FAILURE",
+  "failureCode": "PROJECT_IDENTITY_MISSING",
+  "failureStage": "EXECUTION",
+  "fixtureRefs": [
+    "literal:strategy",
+    "examples/openapi-metadata-valid.json"
+  ],
+  "infrastructureAttempts": 1,
+  "javaExecutionStatus": "NOT_APPLICABLE",
+  "modelCallCount": 0,
+  "modelCallIds": [],
+  "modelLatencyMs": null,
+  "principalId": null,
+  "principalLabel": null,
+  "promptTokens": null,
+  "ragQueryIds": [],
+  "reportId": null,
+  "runId": null,
+  "semanticAdjudication": null,
+  "setupStatus": "SUCCESS",
+  "status": "FAILED",
+  "taskSuccess": {
+    "conditions": [
+      {
+        "metric": null,
+        "metricStatus": null,
+        "name": "execution",
+        "reason": "task success could not be evaluated because execution or evaluation did not complete",
+        "required": true,
+        "status": "UNKNOWN"
+      }
+    ],
+    "failCount": 0,
+    "notApplicableCount": 0,
+    "passCount": 0,
+    "status": "UNKNOWN",
+    "unknownCount": 1
+  },
+  "taskType": "TESTCASE_GENERATION",
+  "toolCallIds": [],
+  "toolResultObservations": [],
+  "totalTokens": null,
+  "traceId": "trace:db66b35e23ad49448ecc357ada128042"
+}

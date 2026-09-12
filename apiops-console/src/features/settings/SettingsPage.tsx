@@ -1,4 +1,7 @@
-import { Braces, Building2, Check, ChevronDown, Code2, Copy, Info, Link2, Moon, Palette, Stethoscope, Sun } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { fetchJavaHealth, fetchPythonHealth } from '../overview/overview-api'
+import type { HealthStatus } from '../overview/types'
+import { Braces, Building2, Check, Code2, Copy, Info, Link2, Moon, Palette, Stethoscope, Sun } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import type { ThemePreference } from '../../app/App'
 import { useConsoleLanguage, type ConsoleLanguage } from '../../app/ConsoleLanguage'
@@ -32,10 +35,11 @@ const connections: Array<{ nameKey: string; descriptionKey: string; icon: Lucide
   { nameKey: 'settings.pythonAgentLab', descriptionKey: 'settings.pythonDescription', icon: Code2 },
 ]
 
-function SettingsToggle({ checked, label, onChange }: { checked: boolean; label: string; onChange: () => void }) {
+function SettingsToggle({ checked, label, onChange, disabled = false }: { checked: boolean; label: string; onChange: () => void; disabled?: boolean }) {
   return (
     <div className="settings-toggle-control">
       <button
+        disabled={disabled}
         aria-checked={checked}
         aria-label={label}
         className={`settings-toggle${checked ? ' is-on' : ''}`}
@@ -76,6 +80,22 @@ export function SettingsPage({
 }: SettingsPageProps) {
   const { language, setLanguage, t, ui } = useConsoleLanguage()
   const { currentProject } = useProject()
+  const [health, setHealth] = useState<HealthStatus[]>(['UNKNOWN', 'UNKNOWN'])
+  const [refresh, setRefresh] = useState(0)
+  const [copyStatus, setCopyStatus] = useState('')
+  const baseUrl = new URL(import.meta.env.VITE_API_BASE_URL || '/', window.location.origin).href
+  useEffect(() => {
+    const controller = new AbortController()
+    setHealth(['UNKNOWN', 'UNKNOWN'])
+    void Promise.allSettled([fetchJavaHealth(controller.signal), fetchPythonHealth(controller.signal)]).then(results => {
+      if (!controller.signal.aborted) setHealth(results.map(result => result.status === 'fulfilled' ? result.value.status : 'UNKNOWN'))
+    })
+    return () => controller.abort()
+  }, [refresh])
+  const copyUrl = async () => {
+    try { await navigator.clipboard.writeText(baseUrl); setCopyStatus(language === 'zh-CN' ? '已复制' : 'Copied') }
+    catch { setCopyStatus(language === 'zh-CN' ? '复制失败，请手动复制地址' : 'Copy failed; copy the address manually') }
+  }
 
   return (
     <section className="settings-page" aria-label={t('page.settings.title')}>
@@ -84,6 +104,7 @@ export function SettingsPage({
         title={t('page.settings.title')}
       />
 
+      <p role="status">{copyStatus}</p>
       <div className="settings-grid">
         <section className="settings-card panel" aria-labelledby="settings-project-title">
           <PanelHeading icon={Building2} id="settings-project-title" title={t('settings.projectEnvironment')} />
@@ -93,23 +114,24 @@ export function SettingsPage({
                 <span>{t('settings.project')}</span>
                 <div className="settings-control settings-select" aria-label={t('settings.project')}>
                   <strong>{currentProject ? currentProject.projectName : t('project.noProjectSelected')}</strong>
-                  <ChevronDown size={16} strokeWidth={1.8} />
+
                 </div>
               </div>
               <div className="settings-field">
                 <span>{t('settings.environment')}</span>
                 <div className="settings-control settings-select" aria-label={t('settings.environment')}>
-                  <strong>{t('settings.production')}</strong>
-                  <ChevronDown size={16} strokeWidth={1.8} />
+                  <strong>{window.location.hostname}</strong>
+
                 </div>
               </div>
             </div>
             <div className="settings-field settings-url-field">
               <span>{t('settings.apiBaseUrl')}</span>
               <div className="settings-control settings-url-control">
-                <code>https://api.demo.apio.ps</code>
+                <code>{baseUrl}</code>
                 <button
                   aria-label={language === 'zh-CN' ? '复制 API 基础 URL' : 'Copy API Base URL'}
+                  onClick={() => { void copyUrl() }}
                   className="settings-copy-button"
                   title={language === 'zh-CN' ? '复制 API 基础 URL' : 'Copy API Base URL'}
                   type="button"
@@ -125,19 +147,19 @@ export function SettingsPage({
           <PanelHeading icon={Link2} id="settings-connections-title" title={t('settings.platformConnections')} />
           <div className="settings-card-body">
             <div className="settings-connection-list">
-              {connections.map(({ descriptionKey, icon: Icon, nameKey }) => (
+              {connections.map(({ descriptionKey, icon: Icon, nameKey }, index) => (
                 <article className="settings-connection" key={nameKey}>
                   <span className="settings-connection-icon"><Icon size={19} strokeWidth={1.8} /></span>
                   <div className="settings-connection-copy">
                     <strong>{t(nameKey)}</strong>
                     <p>{t(descriptionKey)}</p>
                   </div>
-                  <span className="settings-status"><span className="settings-status-dot" />{t('settings.connected')}</span>
-                  <button className="settings-manage-button" type="button">{t('settings.manage')}</button>
+                  <span className="settings-status">{health[index]}</span>
+                  <button className="settings-manage-button" onClick={() => setRefresh(value => value + 1)} type="button">{ui('Refresh')}</button>
                 </article>
               ))}
             </div>
-            <p className="settings-muted-note"><Info size={15} strokeWidth={1.8} />{t('settings.mockStatus')}</p>
+            <p className="settings-muted-note"><Info size={15} strokeWidth={1.8} />{language === 'zh-CN' ? '状态来自服务健康检查；UNKNOWN 表示无法确认。' : 'Live service health; UNKNOWN means health could not be confirmed.'}</p>
           </div>
         </section>
 
@@ -206,13 +228,13 @@ export function SettingsPage({
               <div className="settings-preference-icon"><Check size={18} strokeWidth={1.8} /></div>
               <div className="settings-preference-copy">
                 <strong>{t('settings.autoDiagnose')}</strong>
-                <p>{t('settings.autoDiagnoseDescription')}</p>
+                <p>{language === 'zh-CN' ? '暂未接入自动触发，请从运行记录手动启动诊断。' : 'Automatic triggering is not available; start diagnosis from Runs.'}</p>
               </div>
-              <SettingsToggle checked={autoDiagnose} label={t('settings.autoDiagnose')} onChange={() => onAutoDiagnoseChange(!autoDiagnose)} />
+              <SettingsToggle disabled checked={false} label={t('settings.autoDiagnose')} onChange={() => onAutoDiagnoseChange(!autoDiagnose)} />
             </div>
             <div className="settings-preference-note">
               <Info size={15} strokeWidth={1.8} />
-              <span>{t('settings.frontendPreferenceNote')}</span>
+              <span>{language === 'zh-CN' ? '此功能当前不可用。' : 'This feature is currently unavailable.'}</span>
             </div>
           </div>
         </section>

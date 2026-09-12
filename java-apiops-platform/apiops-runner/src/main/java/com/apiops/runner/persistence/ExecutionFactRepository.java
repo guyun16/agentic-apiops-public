@@ -21,10 +21,15 @@ public interface ExecutionFactRepository {
 
     Optional<BatchExecutionFacts> findBatch(long projectId, UUID batchId);
 
+    default Optional<UUID> findBatchIdForRun(long projectId, long runId) {
+        return Optional.empty();
+    }
+
     boolean tryClaimBatch(long projectId, UUID batchId, Instant startedAt);
 
     boolean requestBatchCancel(long projectId, UUID batchId);
 
+    /** Closes the batch and atomically fails/cancels its still-pending members. */
     boolean completeBatch(
             long projectId,
             UUID batchId,
@@ -87,6 +92,34 @@ public interface ExecutionFactRepository {
 
     /** Returns the bounded, project-scoped Run summaries used by the Runs explorer. */
     List<RunSummary> findRecentRunSummaries(long projectId);
+
+    /** Returns one stable id-ordered page for exhaustive public-boundary resolution. */
+    default List<RunSummary> findRunSummariesPage(
+            long projectId,
+            Long beforeRunId,
+            int limit
+    ) {
+        if (limit < 1 || limit > 100) {
+            throw new IllegalArgumentException("limit must be between 1 and 100");
+        }
+        return findRecentRunSummaries(projectId).stream()
+                .filter(summary -> beforeRunId == null || summary.runId() < beforeRunId)
+                .limit(limit)
+                .toList();
+    }
+
+    /**
+     * Resolves the newest project-scoped Run for one exact case identity.
+     *
+     * <p>This boundary is deliberately independent of the bounded Runs explorer window so
+     * long-lived symbolic benchmark inputs cannot disappear after unrelated Runs are created.</p>
+     */
+    default Optional<RunSummary> findLatestRunSummary(long projectId, String caseId) {
+        Objects.requireNonNull(caseId, "caseId must not be null");
+        return findRecentRunSummaries(projectId).stream()
+                .filter(summary -> caseId.equals(summary.caseId()))
+                .findFirst();
+    }
 
     Optional<RunExecutionFacts> findRun(long projectId, long runId);
 
@@ -244,7 +277,7 @@ public interface ExecutionFactRepository {
         }
     }
 
-    /** Stored response facts intentionally exclude raw headers and body. */
+    /** Only the separately sanitized exchange is persisted; raw headers/body stay in memory. */
     record StepExecutionFacts(
             long projectId,
             long runId,
@@ -256,8 +289,16 @@ public interface ExecutionFactRepository {
             String assertionResultsJson,
             Integer responseStatusCode,
             Long durationMs,
-            Instant createdAt
+            Instant createdAt,
+            String httpExchangeJson
     ) {
+        public StepExecutionFacts(long projectId, long runId, long caseResultId, long stepResultId,
+                                  String stepId, RunStatus status, FailureType failureType,
+                                  String assertionResultsJson, Integer responseStatusCode,
+                                  Long durationMs, Instant createdAt) {
+            this(projectId, runId, caseResultId, stepResultId, stepId, status, failureType,
+                    assertionResultsJson, responseStatusCode, durationMs, createdAt, null);
+        }
         public StepExecutionFacts {
             Objects.requireNonNull(stepId, "stepId must not be null");
             Objects.requireNonNull(status, "status must not be null");

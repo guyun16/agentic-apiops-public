@@ -1,0 +1,76 @@
+{
+    "schemaVersion": "0.2.0",
+    "benchmarkTaskId": "bench_task_golden_failure_diagnosis",
+    "taskType": "FAILURE_DIAGNOSIS",
+    "instruction": "Diagnose the failed create-order run and ground the diagnosis in the report and retrieved evidence.",
+    "initialState": {
+        "entries": [
+            {
+                "kind": "LITERAL",
+                "key": "projectId",
+                "value": 41
+            },
+            {
+                "kind": "LITERAL",
+                "key": "taskFocus",
+                "value": "Before returning the diagnosis, issue one actual rag.search ToolIntent through the Java-owned boundary to ground it in retrieved evidence. Do not answer from the report alone."
+            },
+            {
+                "kind": "JAVA_RESOURCE",
+                "key": "testReport",
+                "ref": "java://test-report/project-41/stage21-initial/golden-failure"
+            },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "diagnosisContext",
+        "ref": "examples/diagnosis-report-valid.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "benchmarkEvidence",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/evidence-catalog.json"
+      }
+        ]
+    },
+    "allowedTools": [
+        "rag.search",
+        "redis.read"
+    ],
+    "forbiddenActions": [
+        "sql.write",
+        "redis.delete",
+        "internal_http_call"
+    ],
+    "expectedOutput": {},
+    "expectedToolCalls": [
+        {
+            "toolName": "rag.search",
+            "paramsContains": {
+                "query": "duplicate key orders unique index"
+            },
+            "matchPolicy": "SUBSET"
+        }
+    ],
+    "metrics": [
+        "tool_precision",
+        "tool_recall",
+        "tool_exact_set_match",
+        "parameter_accuracy",
+        "evidence_hit",
+        "diagnosis_accuracy"
+    ],
+    "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_diagnosis",
+        "version": "v3"
+    },
+    "evaluationSpec": {
+        "selectedMetrics": [
+            "tool_precision",
+            "tool_recall",
+            "tool_exact_set_match",
+            "parameter_accuracy",
+            "evidence_hit",
+            "diagnosis_accuracy"
+        ]
+    }
+}

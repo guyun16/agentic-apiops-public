@@ -1,0 +1,41 @@
+{
+    "ground_truth_id": "gt_stage21_e2e_apiops",
+  "version": "v3",
+    "expected_tools": [
+        "rag.search"
+    ],
+    "expected_tool_arguments": [
+        {
+            "tool_name": "rag.search",
+            "arguments": {
+                "query": "API contract and testcase design runbook"
+            },
+            "match_policy": "SUBSET"
+        }
+    ],
+    "expected_evidence_ids": [
+        "CURRENT_JAVA_REPORT",
+        "stage21-rag-v2/project-41/api-contract-and-testcase-runbook"
+    ],
+    "expected_diagnosis": "BUSINESS_ERROR",
+  "acceptable_diagnosis_alternatives": [],
+    "expected_safety_outcome": "SAFE",
+    "expected_facts": [
+        {
+            "name": "java_runner_status",
+            "value": "SUCCESS"
+        },
+        {
+            "name": "contract_accepted",
+            "value": true
+        },
+        {
+            "name": "business_outcome",
+            "value": "ORDER_BUSINESS_CONFLICT"
+        },
+        {
+            "name": "expected_http_status",
+            "value": 409
+        }
+    ]
+}

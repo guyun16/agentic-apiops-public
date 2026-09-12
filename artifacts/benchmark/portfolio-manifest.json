@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "apiops-bench-publication/v1",
+  "productName": "APIOps Bench",
+  "fullName": "APIOps Agent Benchmark",
+  "datasetDisplayName": "APIOps-Bench 105",
+  "publications": [
+    {
+      "evaluationRunId": "evaluation_run:stage21-formal-v2-20260826",
+      "displayName": "Full105 · 2026-08-26T12:24:22.689922+00:00 · v2",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/1f61d17f65d80537ac95aba7/run.json",
+      "displayOrder": 1
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-final-formal-v3-20260826",
+      "displayName": "Full105 · 2026-08-26T14:00:17.912386+00:00 · v2",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/c51ba78424c44d855caabf7b/run.json",
+      "displayOrder": 2
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260826T165637Z",
+      "displayName": "Full105 · 2026-08-26T16:56:39.101064+00:00 · v2",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/53d2209fb0479ac97cf129e1/run.json",
+      "displayOrder": 3
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260826T171200Z",
+      "displayName": "Baseline · APIOps-Bench 105",
+      "role": "BASELINE",
+      "artifactLocation": "artifacts/benchmark/runs/0ba27cd41f411892b1d44af2/run.json",
+      "displayOrder": 4
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260827T171024Z",
+      "displayName": "Full105 · 2026-08-27T17:10:29.285490+00:00 · v2",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/3ef7b362403ca559f2c15629/run.json",
+      "displayOrder": 5
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260830T064628Z",
+      "displayName": "Full105 · 2026-08-30T06:46:33.250927+00:00 · v3",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/56a74eaa97a73713b7c561fa/run.json",
+      "displayOrder": 6
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260830T164256Z",
+      "displayName": "Full105 · 2026-08-30T16:42:58.715138+00:00 · v3",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/12b66aadb8edbb3b3131bff8/run.json",
+      "displayOrder": 7
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260831T024951Z",
+      "displayName": "RAG-Enhanced · APIOps-Bench 105",
+      "role": "IMPROVED",
+      "artifactLocation": "artifacts/benchmark/runs/d1a6aa08bc2edcc615e44724/run.json",
+      "displayOrder": 8
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260901T110644Z",
+      "displayName": "Full105 · 2026-09-01T11:06:45.861203+00:00 · v3",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/177f317c88823cc004155214/run.json",
+      "displayOrder": 9
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260903T173457Z",
+      "displayName": "Full105 · 2026-09-03T17:35:14.164767+00:00 · v3",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/a5e5e67b87f61b5df6237301/run.json",
+      "displayOrder": 10
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T072622Z",
+      "displayName": "Full105 · 2026-09-04T07:26:33.314918+00:00 · v3",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/bb3a0b77ea2ab96b1eaf7d1c/run.json",
+      "displayOrder": 11
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260904T145654Z",
+      "displayName": "Full105 · 2026-09-04T14:57:01.023812+00:00 · v3",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/05145a3ade0c1ba38a8261fe/run.json",
+      "displayOrder": 12
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-real-model-full-105-20260905T054023Z",
+      "displayName": "Current · APIOps-Bench 105 · v5",
+      "role": "CURRENT",
+      "artifactLocation": "artifacts/benchmark/runs/ef9a926fc5f2b3eae1a1044c/run.json",
+      "displayOrder": 13
+    },
+    {
+      "evaluationRunId": "evaluation_run:stage21-diagnosis-contract-full105-20260906T034346Z",
+      "displayName": "Full105 · 2026-09-06T03:46:04.333023+00:00 · stage21-diagnosis-contract-full105-v2",
+      "role": "HISTORY",
+      "artifactLocation": "artifacts/benchmark/runs/3357bc4050e86e618acbf008/run.json",
+      "displayOrder": 14
+    }
+  ]
+}

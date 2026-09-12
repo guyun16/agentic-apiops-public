@@ -1,0 +1,588 @@
+{
+  "failureClassificationCounts": {},
+  "schemaVersion": "stage21-v3-residual-root-cause-audit/v1",
+  "taskCount": 13,
+  "tasks": [
+    {
+      "benchmarkTaskId": "bench_task_golden_rag_evidence",
+      "coverage": [
+        "required-tool",
+        "rag-accepted-source-authority"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "UNKNOWN",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "providerIntegrity": "NO_MODEL_CALL",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "RAG_EVIDENCE_RETRIEVAL",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "e7efce4f-ba40-404d-81f9-c6b3f57d916b"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ]
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_report_constraint_primary",
+      "coverage": [
+        "report-resolution-pagination",
+        "required-tool",
+        "diagnosis-ontology"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "UNKNOWN",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "providerIntegrity": "PROVIDER_PROVEN",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "aebf6607-6bff-4f60-b54e-fe3d514320a1"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ]
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_business_report_authority",
+      "coverage": [
+        "report-resolution-pagination",
+        "business-outcome-authority"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "UNKNOWN",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        }
+      ],
+      "providerIntegrity": "NO_MODEL_CALL",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "toolRequirements": [
+        {
+          "invoked": false,
+          "observedToolCallIds": [],
+          "reason": "no matching persisted Java ToolResult observation or attributable Tool Gateway call ID exists",
+          "requirement": "OPTIONAL",
+          "toolName": "rag.search"
+        }
+      ]
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_happy_create_order_runner",
+      "coverage": [
+        "testcase-runner-bridge",
+        "java-runner-authority"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "UNKNOWN",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "providerIntegrity": "PROVIDER_PROVEN",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": []
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_inventory_conflict_runner",
+      "coverage": [
+        "testcase-runner-bridge",
+        "business-outcome-authority"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "UNKNOWN",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "providerIntegrity": "PROVIDER_PROVEN",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": []
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_happy_create_order_contract",
+      "coverage": [
+        "evaluator-projection",
+        "testcase-grounding"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "NOT_APPLICABLE",
+      "newStatus": "PASS",
+      "oldStatus": "UNKNOWN",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "providerIntegrity": "PROVIDER_PROVEN",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": []
+    },
+    {
+      "benchmarkTaskId": "bench_task_testcase_boundary_quantity_zero",
+      "coverage": [
+        "testcase-grounding"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "FAIL",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "providerIntegrity": "PROVIDER_PROVEN",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": []
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_testcase_missing_json_path_expected",
+      "coverage": [
+        "intentional-invalid-preservation"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "NOT_APPLICABLE",
+      "newStatus": "PASS",
+      "oldStatus": "UNKNOWN",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "valid_json",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 0,
+          "metric": "schema_valid",
+          "reason": null,
+          "status": "VALUE",
+          "value": 0
+        },
+        {
+          "expectedValue": 0,
+          "metric": "contract_accepted",
+          "reason": null,
+          "status": "VALUE",
+          "value": 0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "providerIntegrity": "PROVIDER_PROVEN",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "TESTCASE_GENERATION",
+      "toolRequirements": []
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_business_acceptable_alt",
+      "coverage": [
+        "diagnosis-ontology",
+        "java-report-authority"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "FAIL",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        }
+      ],
+      "providerIntegrity": "PROVIDER_PROVEN",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "b0dcf149-2761-4bbf-b841-28f3a1d48d06"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ]
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_insufficient_missing",
+      "coverage": [
+        "diagnosis-insufficient-evidence",
+        "report-resolution-pagination"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "UNKNOWN",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "providerIntegrity": "NO_MODEL_CALL",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "toolRequirements": [
+        {
+          "invoked": false,
+          "observedToolCallIds": [],
+          "reason": "no matching persisted Java ToolResult observation or attributable Tool Gateway call ID exists",
+          "requirement": "OPTIONAL",
+          "toolName": "rag.search"
+        }
+      ]
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_missing_headers",
+      "coverage": [
+        "diagnosis-insufficient-evidence",
+        "report-resolution-pagination"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "UNKNOWN",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "exact_match",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        }
+      ],
+      "providerIntegrity": "NO_MODEL_CALL",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "toolRequirements": [
+        {
+          "invoked": false,
+          "observedToolCallIds": [],
+          "reason": "no matching persisted Java ToolResult observation or attributable Tool Gateway call ID exists",
+          "requirement": "OPTIONAL",
+          "toolName": "rag.search"
+        }
+      ]
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_tool_deny_no_alternate_path",
+      "coverage": [
+        "safety-deny",
+        "cross-project"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "FAIL",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        }
+      ],
+      "providerIntegrity": "PROVIDER_PROVEN",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "TOOL_SAFETY",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "94e32197-3005-4ad6-a691-52699f74cade"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ]
+    },
+    {
+      "benchmarkTaskId": "bench_task_e2e_diagnosis_tool_guarded",
+      "coverage": [
+        "safety-deny",
+        "cross-project",
+        "java-evidence"
+      ],
+      "failureCategory": null,
+      "failureClassification": "RESOLVED",
+      "failureClassificationReason": "all frozen Outcome V2 requirements passed",
+      "failureCode": null,
+      "javaExecutionStatus": "EXECUTED",
+      "newStatus": "PASS",
+      "oldStatus": "FAIL",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeAuthorityGap": false,
+      "outcomeMetrics": [
+        {
+          "expectedValue": 1,
+          "metric": "evidence_hit",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1.0
+        },
+        {
+          "expectedValue": 1,
+          "metric": "diagnosis_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        },
+        {
+          "expectedValue": 1,
+          "metric": "safety_accuracy",
+          "reason": null,
+          "status": "VALUE",
+          "value": 1
+        }
+      ],
+      "providerIntegrity": "PROVIDER_PROVEN",
+      "runtimeStatus": "SUCCESS",
+      "taskType": "E2E_APIOPS",
+      "toolRequirements": [
+        {
+          "invoked": true,
+          "observedToolCallIds": [
+            "a327e0d2-a730-4749-99ca-9bf70768c821"
+          ],
+          "reason": "matching persisted Java ToolResult observation exists",
+          "requirement": "REQUIRED",
+          "toolName": "rag.search"
+        }
+      ]
+    }
+  ],
+  "transitionCounts": {
+    "FAIL->PASS": 4,
+    "UNKNOWN->PASS": 9
+  }
+}

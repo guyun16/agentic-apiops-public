@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_testcase_auth_missing_token",
+  "taskType": "TESTCASE_GENERATION",
+  "instruction": "Generate a TestCase DSL that preserves the supplied document-level apiKeyAuth security requirement; do not invent a credential or an operation-specific HTTP status that the metadata does not declare.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "strategy",
+        "value": "AUTH_FAILURE"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "apiMetadata",
+        "ref": "examples/openapi-metadata-valid.json"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "submit_unvalidated_dsl",
+    "credential_invention"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "valid_json",
+    "schema_valid",
+    "contract_accepted",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_testcase_auth_missing_token",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "valid_json",
+      "schema_valid",
+      "contract_accepted",
+      "exact_match"
+    ]
+  }
+}

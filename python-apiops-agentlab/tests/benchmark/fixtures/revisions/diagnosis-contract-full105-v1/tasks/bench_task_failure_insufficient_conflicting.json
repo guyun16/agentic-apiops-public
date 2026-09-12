@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_failure_insufficient_conflicting",
+  "taskType": "FAILURE_DIAGNOSIS",
+  "instruction": "Return insufficient evidence when the report contains conflicting signals and no frozen root cause resolves the conflict.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 42
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "testReport",
+        "ref": "java://test-report/project-42/stage21-initial/insufficient-conflicting"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "diagnosisContext",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/diagnosis-insufficient-conflicting.json"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search",
+    "redis.read"
+  ],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "diagnosis_contract",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_failure_insufficient_conflicting",
+    "version": "v3-insufficient-evidence-v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "diagnosis_contract",
+      "exact_match"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "conflicting evidence for run 703"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

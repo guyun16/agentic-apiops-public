@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_e2e_generation_runner_success",
+  "taskType": "E2E_APIOPS",
+  "instruction": "Generate the validated create-order testcase, submit it through the existing Java Runner boundary, and preserve the successful execution fact.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "strategy",
+        "value": "HAPPY_PATH"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 1001
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "runnerFixture",
+        "ref": "java://runner-testcase-dsl/e2e/create-order-success.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "candidateFixture",
+        "ref": "examples/testcase-valid.json"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "submit_unvalidated_dsl",
+    "sql.write",
+    "redis.delete"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "valid_json",
+    "schema_valid",
+    "contract_accepted",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_e2e_generation_runner_success",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "valid_json",
+      "schema_valid",
+      "contract_accepted",
+      "exact_match"
+    ]
+  }
+}

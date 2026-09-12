@@ -1,18 +1,29 @@
-"""In-process runtime facts and aggregation for the Evaluation read model."""
+"""SQLite-backed runtime facts and aggregation for the Evaluation read model."""
 
 from __future__ import annotations
 
+import os
+import sqlite3
 from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from pathlib import Path
 from statistics import fmean
 from threading import RLock
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.evaluator.models import MetricStatus
+from app.core.settings import get_settings
+from app.evaluator import (
+    EvaluationCase,
+    EvaluationResult,
+    GroundTruth,
+    JudgeResult,
+    MetricStatus,
+    RuleBasedEvaluator,
+)
 from app.tracing import (
     AgentRun,
     ApprovalFact,
@@ -129,6 +140,11 @@ class RuntimeRunDetail(RuntimeRunSummary):
     trace_record_count: int = Field(alias="traceRecordCount", ge=0)
     failure_code: str | None = Field(default=None, alias="failureCode")
     failure_message: str | None = Field(default=None, alias="failureMessage")
+    evaluation_result: EvaluationResult | None = Field(
+        default=None,
+        alias="evaluationResult",
+    )
+    judge_results: tuple[JudgeResult, ...] = Field(default=(), alias="judgeResults")
 
 
 class RuntimeEvaluationSummary(_RuntimeModel):
@@ -172,12 +188,71 @@ class _RuntimeRun:
     failure_message: str | None = None
 
 
-class RuntimeEvaluationStore:
-    """Small process-local read model; durable history is deliberately out of scope."""
+class _StoredRuntimeRun(_RuntimeModel):
+    """Versioned durable state; Trace remains in the existing Trace sink."""
 
-    def __init__(self) -> None:
-        self._runs: dict[str, _RuntimeRun] = {}
+    schema_version: Literal["runtime-evaluation-v1"] = "runtime-evaluation-v1"
+    agent_run_id: str
+    trace_id: str
+    execution_type: RuntimeExecutionType
+    provider: str
+    model: str
+    project_id: int | None
+    api_id: str | None
+    run_id: int | None
+    report_id: str | None
+    started_at: datetime
+    validation_applicable: bool
+    status: RuntimeRunStatus
+    finished_at: datetime | None
+    valid_json: bool | None
+    schema_valid: bool | None
+    contract_accepted: bool | None
+    failure_code: str | None
+    failure_message: str | None
+    detail: RuntimeRunDetail
+
+
+_TABLE_NAME = "runtime_evaluation_run"
+_SCHEMA = f"""
+CREATE TABLE IF NOT EXISTS {_TABLE_NAME} (
+    agent_run_id TEXT PRIMARY KEY,
+    trace_id TEXT NOT NULL,
+    project_id INTEGER,
+    run_id INTEGER,
+    evaluation_type TEXT NOT NULL,
+    status TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_runtime_evaluation_project_created
+    ON {_TABLE_NAME}(project_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_runtime_evaluation_trace
+    ON {_TABLE_NAME}(trace_id);
+"""
+
+
+class RuntimeEvaluationStore:
+    """Latest/current Console Evaluation projection for each Agent Run.
+
+    This durable read model is keyed by ``agent_run_id``. It is not formal,
+    multi-version Evaluation experiment history and does not replace the
+    Stage 19 or Benchmark Evaluation artifacts.
+    """
+
+    def __init__(self, database_path: str | os.PathLike[str] = ":memory:") -> None:
+        self.database_path = os.fspath(database_path)
+        if not self.database_path:
+            raise ValueError("database_path must not be empty")
+        if self.database_path != ":memory:":
+            Path(self.database_path).parent.mkdir(parents=True, exist_ok=True)
         self._lock = RLock()
+        self._trace_records: dict[str, tuple[TraceRecord, ...]] = {}
+        self._connection = sqlite3.connect(self.database_path, check_same_thread=False)
+        self._connection.row_factory = sqlite3.Row
+        with self._connection:
+            self._connection.executescript(_SCHEMA)
 
     def begin(
         self,
@@ -208,7 +283,7 @@ class RuntimeEvaluationStore:
             validation_applicable=validation_applicable,
         )
         with self._lock:
-            self._runs[agent_run_id] = run
+            self._save(self._stored(run, self._detail(run)))
 
     def update(
         self,
@@ -222,11 +297,14 @@ class RuntimeEvaluationStore:
         finished_at: datetime | None = None,
     ) -> None:
         with self._lock:
-            run = self._runs.get(agent_run_id)
-            if run is None:
+            stored = self._get(agent_run_id)
+            if stored is None:
                 return
+            run = self._run(stored)
             run.status = status
-            run.trace_records = tuple(trace_records)
+            records = tuple(trace_records)
+            run.trace_records = records
+            self._trace_records[agent_run_id] = records
             if validation is not None:
                 run.validation = validation
             if failure_code is not None:
@@ -239,6 +317,41 @@ class RuntimeEvaluationStore:
                 run.finished_at = finished_at or datetime.now(UTC)
             else:
                 run.finished_at = None
+            detail = self._detail(
+                run,
+                evaluation_result=stored.detail.evaluation_result,
+                judge_results=stored.detail.judge_results,
+            )
+            self._save(self._stored(run, detail))
+
+    def evaluate_and_persist(
+        self,
+        *,
+        case: EvaluationCase,
+        ground_truth: GroundTruth,
+        trace_records: Sequence[TraceRecord],
+        judge_results: Sequence[JudgeResult] = (),
+    ) -> EvaluationResult:
+        """Run the Stage 19 evaluator only with an explicit, real Ground Truth."""
+
+        with self._lock:
+            stored = self._get(case.agent_run_id)
+            if stored is None:
+                raise KeyError(f"runtime run not found: {case.agent_run_id}")
+            if (stored.trace_id, stored.agent_run_id) != (case.trace_id, case.agent_run_id):
+                raise ValueError("EvaluationCase identity does not match runtime run")
+            result = RuleBasedEvaluator().evaluate(case, ground_truth, trace_records)
+            judges = tuple(judge_results)
+            if any(
+                item.trace_id != case.trace_id or item.agent_run_id != case.agent_run_id
+                for item in judges
+            ):
+                raise ValueError("JudgeResult identity does not match runtime run")
+            detail = stored.detail.model_copy(
+                update={"evaluation_result": result, "judge_results": judges}
+            )
+            self._save(stored.model_copy(update={"detail": detail}))
+            return result
 
     def list_runs(
         self,
@@ -247,23 +360,18 @@ class RuntimeEvaluationStore:
         limit: int = 50,
     ) -> tuple[RuntimeRunSummary, ...]:
         with self._lock:
-            runs = [
-                run
-                for run in self._runs.values()
-                if project_id is None or run.project_id == project_id
-            ]
-            runs.sort(key=lambda item: item.started_at, reverse=True)
-            return tuple(self._summary(run) for run in runs[:limit])
+            stored = self._list(project_id=project_id, limit=limit)
+        return tuple(self._summary(self._run(item)) for item in stored)
 
     def get_detail(self, agent_run_id: str) -> RuntimeRunDetail | None:
         with self._lock:
-            run = self._runs.get(agent_run_id)
-            return None if run is None else self._detail(run)
+            stored = self._get(agent_run_id)
+            return None if stored is None else stored.detail
 
     def get_project_id(self, agent_run_id: str) -> int | None:
         with self._lock:
-            run = self._runs.get(agent_run_id)
-            return None if run is None else run.project_id
+            stored = self._get(agent_run_id)
+            return None if stored is None else stored.project_id
 
     def list_trace_records(self, *, project_id: int) -> tuple[TraceRecord, ...]:
         """Return only observed records for one already-authorized project."""
@@ -271,9 +379,10 @@ class RuntimeEvaluationStore:
         with self._lock:
             records = [
                 record
-                for run in self._runs.values()
-                if run.project_id == project_id
-                for record in run.trace_records
+                for agent_run_id, run_records in self._trace_records.items()
+                if (stored := self._get(agent_run_id)) is not None
+                and stored.project_id == project_id
+                for record in run_records
             ]
         return tuple(sorted(records, key=_trace_record_sort_key))
 
@@ -283,9 +392,9 @@ class RuntimeEvaluationStore:
         with self._lock:
             records = [
                 record
-                for run in self._runs.values()
-                if run.trace_id == trace_id
-                for record in run.trace_records
+                for agent_run_id, run_records in self._trace_records.items()
+                if (stored := self._get(agent_run_id)) is not None and stored.trace_id == trace_id
+                for record in run_records
                 if record.trace_id == trace_id
             ]
         return tuple(sorted(records, key=_trace_record_sort_key))
@@ -295,21 +404,17 @@ class RuntimeEvaluationStore:
 
         with self._lock:
             project_ids = {
-                run.project_id
-                for run in self._runs.values()
-                if run.trace_id == trace_id
-                and any(record.trace_id == trace_id for record in run.trace_records)
+                stored.project_id
+                for agent_run_id, records in self._trace_records.items()
+                if (stored := self._get(agent_run_id)) is not None
+                and stored.trace_id == trace_id
+                and any(record.trace_id == trace_id for record in records)
             }
         return next(iter(project_ids)) if len(project_ids) == 1 else None
 
     def summary(self, *, project_id: int | None = None) -> RuntimeEvaluationSummary:
         with self._lock:
-            runs = [
-                run
-                for run in self._runs.values()
-                if project_id is None or run.project_id == project_id
-            ]
-            details = [self._detail(run) for run in runs]
+            details = [item.detail for item in self._list(project_id=project_id)]
 
         execution = RuntimeExecutionCounts(
             total=len(details),
@@ -343,10 +448,126 @@ class RuntimeEvaluationStore:
         )
 
     def clear(self) -> None:
-        """Reset the process-local store for tests and local development."""
+        """Reset this read model for tests and local development."""
 
         with self._lock:
-            self._runs.clear()
+            with self._connection:
+                self._connection.execute(f"DELETE FROM {_TABLE_NAME}")
+            self._trace_records.clear()
+
+    def close(self) -> None:
+        with self._lock:
+            self._connection.close()
+
+    def _get(self, agent_run_id: str) -> _StoredRuntimeRun | None:
+        row = self._connection.execute(
+            f"SELECT payload_json FROM {_TABLE_NAME} WHERE agent_run_id = ?",
+            (agent_run_id,),
+        ).fetchone()
+        return None if row is None else _StoredRuntimeRun.model_validate_json(row["payload_json"])
+
+    def _list(
+        self,
+        *,
+        project_id: int | None = None,
+        limit: int | None = None,
+    ) -> tuple[_StoredRuntimeRun, ...]:
+        where = "" if project_id is None else "WHERE project_id = ?"
+        parameters: list[object] = [] if project_id is None else [project_id]
+        suffix = "" if limit is None else " LIMIT ?"
+        if limit is not None:
+            parameters.append(limit)
+        rows = self._connection.execute(
+            f"SELECT payload_json FROM {_TABLE_NAME} {where} "
+            f"ORDER BY created_at DESC, agent_run_id DESC{suffix}",
+            parameters,
+        ).fetchall()
+        return tuple(_StoredRuntimeRun.model_validate_json(row["payload_json"]) for row in rows)
+
+    def _save(self, stored: _StoredRuntimeRun) -> None:
+        now = datetime.now(UTC).isoformat()
+        existing = self._connection.execute(
+            f"SELECT created_at FROM {_TABLE_NAME} WHERE agent_run_id = ?",
+            (stored.agent_run_id,),
+        ).fetchone()
+        created_at = existing["created_at"] if existing is not None else now
+        with self._connection:
+            self._connection.execute(
+                f"""
+                INSERT INTO {_TABLE_NAME} (
+                    agent_run_id, trace_id, project_id, run_id, evaluation_type,
+                    status, payload_json, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(agent_run_id) DO UPDATE SET
+                    trace_id = excluded.trace_id,
+                    project_id = excluded.project_id,
+                    run_id = excluded.run_id,
+                    evaluation_type = excluded.evaluation_type,
+                    status = excluded.status,
+                    payload_json = excluded.payload_json,
+                    updated_at = excluded.updated_at
+                """,
+                (
+                    stored.agent_run_id,
+                    stored.trace_id,
+                    stored.project_id,
+                    stored.run_id,
+                    stored.execution_type,
+                    stored.status,
+                    stored.model_dump_json(by_alias=True),
+                    created_at,
+                    now,
+                ),
+            )
+
+    @staticmethod
+    def _run(stored: _StoredRuntimeRun) -> _RuntimeRun:
+        return _RuntimeRun(
+            agent_run_id=stored.agent_run_id,
+            trace_id=stored.trace_id,
+            execution_type=stored.execution_type,
+            provider=stored.provider,
+            model=stored.model,
+            project_id=stored.project_id,
+            api_id=stored.api_id,
+            run_id=stored.run_id,
+            report_id=stored.report_id,
+            started_at=stored.started_at,
+            validation_applicable=stored.validation_applicable,
+            status=stored.status,
+            finished_at=stored.finished_at,
+            validation=RuntimeValidationFacts(
+                stored.valid_json,
+                stored.schema_valid,
+                stored.contract_accepted,
+            ),
+            failure_code=stored.failure_code,
+            failure_message=stored.failure_message,
+        )
+
+    @staticmethod
+    def _stored(run: _RuntimeRun, detail: RuntimeRunDetail) -> _StoredRuntimeRun:
+        return _StoredRuntimeRun(
+            agent_run_id=run.agent_run_id,
+            trace_id=run.trace_id,
+            execution_type=run.execution_type,
+            provider=run.provider,
+            model=run.model,
+            project_id=run.project_id,
+            api_id=run.api_id,
+            run_id=run.run_id,
+            report_id=run.report_id,
+            started_at=run.started_at,
+            validation_applicable=run.validation_applicable,
+            status=run.status,
+            finished_at=run.finished_at,
+            valid_json=run.validation.valid_json,
+            schema_valid=run.validation.schema_valid,
+            contract_accepted=run.validation.contract_accepted,
+            failure_code=run.failure_code,
+            failure_message=run.failure_message,
+            detail=detail,
+        )
 
     def _summary(self, run: _RuntimeRun) -> RuntimeRunSummary:
         return RuntimeRunSummary(
@@ -364,7 +585,13 @@ class RuntimeEvaluationStore:
             finishedAt=run.finished_at,
         )
 
-    def _detail(self, run: _RuntimeRun) -> RuntimeRunDetail:
+    def _detail(
+        self,
+        run: _RuntimeRun,
+        *,
+        evaluation_result: EvaluationResult | None = None,
+        judge_results: tuple[JudgeResult, ...] = (),
+    ) -> RuntimeRunDetail:
         metrics = {
             "executionSuccess": self._execution_metric(run),
             "validJson": self._validation_metric(run, "valid_json"),
@@ -392,6 +619,8 @@ class RuntimeEvaluationStore:
             traceRecordCount=len(run.trace_records),
             failureCode=run.failure_code,
             failureMessage=run.failure_message,
+            evaluationResult=evaluation_result,
+            judgeResults=judge_results,
         )
 
     @staticmethod
@@ -678,7 +907,7 @@ class RuntimeEvaluationStore:
         )
 
 
-runtime_evaluation_store = RuntimeEvaluationStore()
+runtime_evaluation_store = RuntimeEvaluationStore(get_settings().runtime_db_path)
 
 
 def _trace_record_sort_key(record: TraceRecord) -> tuple[datetime, int]:

@@ -276,6 +276,7 @@ function ActiveTrailContent({
   userExpanded,
   visibleGroups,
 }: ActiveTrailContentProps) {
+  const { ui } = useConsoleLanguage()
   const visibleTestCases = userExpanded.testcase
     ? testCases
     : currentTestCase ? [currentTestCase] : []
@@ -303,12 +304,12 @@ function ActiveTrailContent({
               active={activeTarget?.type === 'endpoint' && activeTarget.id === endpoint.id}
               className="trail-endpoint"
               onClick={() => onNavigate({ type: 'endpoint', id: endpoint.id, apiDocId: endpoint.apiDocId })}
-              title="Endpoint"
+              title={ui('Endpoint')}
             >
               <span className="trail-endpoint-route">
                 <span className="trail-endpoint-method" data-method={endpoint.method}>{endpoint.method}</span>
                 <strong>{endpoint.path}</strong>
-                <span className="trail-node-badge">ROOT</span>
+                <span className="trail-node-badge">{ui('ROOT')}</span>
               </span>
               {endpoint.operationId && <small>{endpoint.operationId}</small>}
             </TrailNode>
@@ -318,11 +319,11 @@ function ActiveTrailContent({
               className="trail-endpoint trail-endpoint-unresolved"
               disabled
               onClick={() => undefined}
-              title={endpointResolution.resolution === 'AMBIGUOUS_OPERATION_ID' ? 'Unresolved / Ambiguous' : 'Unresolved'}
+              title={ui(endpointResolution.resolution === 'AMBIGUOUS_OPERATION_ID' ? 'Unresolved / Ambiguous' : 'Unresolved')}
             >
-              <strong>{endpointResolution.resolution === 'AMBIGUOUS_OPERATION_ID' ? 'Unresolved / Ambiguous' : 'Unresolved'}</strong>
+              <strong>{ui(endpointResolution.resolution === 'AMBIGUOUS_OPERATION_ID' ? 'Unresolved / Ambiguous' : 'Unresolved')}</strong>
               <small>operationId: {endpointResolution.sourceValue}</small>
-              <small>{endpointResolution.resolution === 'AMBIGUOUS_OPERATION_ID' ? 'Multiple endpoints share this operationId.' : 'Endpoint identity is unavailable.'}</small>
+              <small>{ui(endpointResolution.resolution === 'AMBIGUOUS_OPERATION_ID' ? 'Multiple endpoints share this operationId.' : 'Endpoint identity is unavailable.')}</small>
             </TrailNode>
           ) : null}
         </TrailGroupSection>
@@ -376,7 +377,7 @@ function ActiveTrailContent({
             >
               <strong>#{run.runId}</strong>
               <small>{run.name}</small>
-              <small>{run.status}</small>
+              <small>{ui(run.status)}</small>
             </TrailNode>
           ))}
         </TrailGroupSection>
@@ -403,7 +404,7 @@ function ActiveTrailContent({
               title={diagnosis.agentRunId}
             >
               <strong>{diagnosis.agentRunId}</strong>
-              <small>{diagnosis.status}</small>
+              <small>{ui(diagnosis.status)}</small>
             </TrailNode>
           ))}
         </TrailGroupSection>
@@ -431,7 +432,7 @@ function ActiveTrailContent({
               title={report.reportId}
             >
               <strong>{report.reportId}</strong>
-              <small>Run #{report.runId}</small>
+              <small>{ui('Run')} #{report.runId}</small>
             </TrailNode>
           ))}
         </TrailGroupSection>
@@ -439,23 +440,24 @@ function ActiveTrailContent({
 
       {contextReadModelGap ? (
         <div className="context-trail-gap" role="status">
-          <strong>Context Read Model Gap</strong>
+          <strong>{ui('Context Read Model Gap')}</strong>
           <span>{contextReadModelGap.reason}</span>
         </div>
       ) : null}
 
-      {!activeContext && <div className="context-trail-empty">No active context</div>}
+      {!activeContext && <div className="context-trail-empty">{ui('No active context')}</div>}
     </>
   )
 }
 
 function TrailGroupSection({ children, count, expanded, group, onToggle }: { children: ReactNode; count: number | null; expanded: boolean; group: TrailGroup; onToggle: () => void }) {
+  const { ui } = useConsoleLanguage()
   return (
     <section className={`context-trail-group trail-group-${group}`}>
       <button className="context-trail-group-heading" onClick={onToggle} type="button">
         <ChevronDown className={`context-trail-chevron${expanded ? ' is-expanded' : ''}`} size={13} strokeWidth={1.8} />
         <span className="trail-group-dot" />
-        <strong>{groupLabels[group]}</strong>
+        <strong>{ui(groupLabels[group])}</strong>
         {count !== null && <span className="trail-group-count">({count})</span>}
       </button>
       {expanded && <div className="context-trail-group-content">{children}</div>}

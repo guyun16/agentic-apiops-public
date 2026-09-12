@@ -25,6 +25,7 @@ from app.tracing import (
 from app.workflows.approval import ApprovalAction
 
 from .models import (
+    DiagnosisContentReview,
     EvaluationCase,
     EvaluationResult,
     GroundTruth,
@@ -38,6 +39,156 @@ from .normalization import compare_parameters, exact_match
 
 EVALUATOR_VERSION = "rule-evaluator-v1"
 
+_CURRENT_JAVA_REPORT_SLOT = "<CURRENT_JAVA_REPORT>"
+
+_INVENTORY_CONFLICT_RUNNER_EXPECTED_FACTS = (
+    ("task_strategy", "DOCUMENTED_BUSINESS_ERROR"),
+    ("business_error", "INVENTORY_NOT_ENOUGH"),
+    ("expected_http_status", 409),
+    ("java_runner_business_outcome", "ORDER_BUSINESS_CONFLICT"),
+)
+
+# Stage21 RAG V2 has a frozen, evaluation-owned source authority.  The
+# GroundTruth ids predate the live corpus and therefore retain semantic aliases
+# (for example ``report:701``); the Java Tool Gateway returns the immutable
+# corpus source ids.  Keep this mapping keyed by GroundTruth identity and version so an
+# unrelated task that happens to reuse an alias cannot receive credit.
+_ACCEPTED_EVIDENCE_SOURCE_AUTHORITY: dict[
+    tuple[str, str],
+    tuple[tuple[str, ...], tuple[str, ...]],
+] = {
+    ("gt_stage21_rag_evidence", "v1"): (
+        ("rag:orders-constraint-001",),
+        ("stage21-rag-v2/project-41/orders-api-constraints",),
+    ),
+    ("gt_stage21_formal_failure_report_constraint_primary", "v2"): (
+        (_CURRENT_JAVA_REPORT_SLOT, "rag:orders-unique-index"),
+        (
+            _CURRENT_JAVA_REPORT_SLOT,
+            "stage21-rag-v2/project-41/orders-api-constraints",
+            "stage21-rag-v2/project-41/orders-incident-report",
+        ),
+    ),
+    ("gt_stage21_formal_failure_multi_evidence_report", "v2"): (
+        (_CURRENT_JAVA_REPORT_SLOT, "rag:orders-unique-index"),
+        (
+            _CURRENT_JAVA_REPORT_SLOT,
+            "stage21-rag-v2/project-41/orders-constraint-index",
+        ),
+    ),
+    ("gt_stage21_failure_diagnosis", "v3"): (
+        (_CURRENT_JAVA_REPORT_SLOT, "rag:orders-unique-index"),
+        (
+            _CURRENT_JAVA_REPORT_SLOT,
+            "stage21-rag-v2/project-41/orders-constraint-index",
+        ),
+    ),
+    ("gt_stage21_rag_multi_hit", "v2"): (
+        (_CURRENT_JAVA_REPORT_SLOT, "rag:orders-unique-index"),
+        (
+            _CURRENT_JAVA_REPORT_SLOT,
+            "stage21-rag-v2/project-41/orders-constraint-index",
+        ),
+    ),
+    ("gt_stage21_rag_irrelevant_distractor", "v1"): (
+        ("rag:orders-constraint-001",),
+        ("stage21-rag-v2/project-41/orders-constraint-index",),
+    ),
+    ("gt_stage21_formal_rag_citation_report", "v1"): (
+        ("report:701",),
+        ("stage21-rag-v2/project-41/orders-incident-report",),
+    ),
+    ("gt_stage21_formal_rag_distractor_filter", "v1"): (
+        ("rag:orders-constraint-001",),
+        ("stage21-rag-v2/project-41/orders-constraint-index",),
+    ),
+    ("gt_stage21_formal_rag_multi_constraint_summary", "v1"): (
+        ("rag:orders-constraint-001", "rag:orders-unique-index"),
+        (
+            "stage21-rag-v2/project-41/orders-api-constraints",
+            "stage21-rag-v2/project-41/orders-constraint-index",
+        ),
+    ),
+    ("gt_stage21_formal_rag_multi_report_index", "v1"): (
+        ("report:701", "rag:orders-unique-index"),
+        (
+            "stage21-rag-v2/project-41/orders-incident-report",
+            "stage21-rag-v2/project-41/orders-constraint-index",
+        ),
+    ),
+    ("gt_stage21_formal_rag_near_match_exact", "v1"): (
+        ("rag:orders-unique-index",),
+        ("stage21-rag-v2/project-41/orders-constraint-index",),
+    ),
+    ("gt_stage21_formal_rag_single_constraint", "v1"): (
+        ("rag:orders-constraint-001",),
+        ("stage21-rag-v2/project-41/orders-api-constraints",),
+    ),
+    ("gt_stage21_rag_near_match", "v1"): (
+        ("rag:orders-unique-index",),
+        ("stage21-rag-v2/project-41/orders-constraint-index",),
+    ),
+}
+
+
+def _bind_accepted_evidence_source_authority(
+    expected_ids: tuple[str, ...],
+    legacy_ids: tuple[str, ...],
+    accepted_source_ids: tuple[str, ...],
+) -> tuple[str, ...] | None:
+    """Bind one Java report slot while preserving the exact frozen contract."""
+
+    if _CURRENT_JAVA_REPORT_SLOT not in legacy_ids:
+        return accepted_source_ids if expected_ids == legacy_ids else None
+    if legacy_ids.count(_CURRENT_JAVA_REPORT_SLOT) != 1:
+        return None
+    report_index = legacy_ids.index(_CURRENT_JAVA_REPORT_SLOT)
+    if len(expected_ids) != len(legacy_ids):
+        return None
+    report_id = expected_ids[report_index]
+    if not report_id.startswith("report:") or report_id.startswith("report:fixture:"):
+        return None
+    bound_legacy_ids = tuple(
+        report_id if value == _CURRENT_JAVA_REPORT_SLOT else value for value in legacy_ids
+    )
+    if expected_ids != bound_legacy_ids:
+        return None
+    return tuple(
+        report_id if value == _CURRENT_JAVA_REPORT_SLOT else value
+        for value in accepted_source_ids
+    )
+
+
+def _accepted_structured_fact_authority(
+    ground_truth: GroundTruth,
+    actual: dict[str, object],
+) -> frozenset[str]:
+    """Bind one frozen fixture label to the exact observed Java outcome.
+
+    The formal inventory-conflict GT predates the live demo response name and
+    intentionally retains the fixture-level ``INVENTORY_NOT_ENOUGH`` label.
+    Credit that one legacy fact only when the complete frozen GT identity and
+    the Java Runner's exact response authority are both present.  This is not a
+    general alias or case-insensitive comparison.
+    """
+
+    if ground_truth.ground_truth_id != "gt_stage21_formal_testcase_inventory_conflict_runner":
+        return frozenset()
+    expected = tuple((fact.name, fact.value) for fact in ground_truth.expected_facts)
+    if expected != _INVENTORY_CONFLICT_RUNNER_EXPECTED_FACTS:
+        return frozenset()
+    required_actual = {
+        "task_strategy": "DOCUMENTED_BUSINESS_ERROR",
+        "business_error": "ORDER_BUSINESS_CONFLICT",
+        "expected_http_status": 409,
+        "java_runner_business_outcome": "ORDER_BUSINESS_CONFLICT",
+        "report_authority": "JAVA_TEST_REPORT",
+        "runner_status": "SUCCESS",
+    }
+    if any(not exact_match(value, actual.get(name)) for name, value in required_actual.items()):
+        return frozenset()
+    return frozenset({"business_error"})
+
 
 class RuleBasedEvaluator:
     """Evaluate observed facts without changing workflow or authority state."""
@@ -47,6 +198,8 @@ class RuleBasedEvaluator:
         case: EvaluationCase,
         ground_truth: GroundTruth,
         trace_records: Sequence[TraceRecord],
+        *,
+        diagnosis_content_reviews: tuple[DiagnosisContentReview, ...] | None = None,
     ) -> EvaluationResult:
         if case.ground_truth_id != ground_truth.ground_truth_id:
             raise ValueError("EvaluationCase ground_truth_id does not match GroundTruth")
@@ -73,6 +226,9 @@ class RuleBasedEvaluator:
             ),
             MetricName.EVIDENCE_HIT: lambda: self._evidence_hit(case, ground_truth, records),
             MetricName.DIAGNOSIS_ACCURACY: lambda: self._diagnosis(case, ground_truth),
+            MetricName.DIAGNOSIS_CONTRACT: lambda: self._diagnosis_contract(
+                case, ground_truth, diagnosis_content_reviews,
+            ),
             MetricName.SAFETY_ACCURACY: lambda: self._safety(case, ground_truth, records),
             MetricName.WALL_CLOCK_LATENCY_MS: lambda: self._wall_clock(records),
             MetricName.MODEL_LATENCY_MS: lambda: self._model_latency(records),
@@ -99,13 +255,29 @@ class RuleBasedEvaluator:
                 "metric excluded by EvaluationCase applicability",
             )
             for metric in MetricName
+            if metric is not MetricName.DIAGNOSIS_CONTRACT
+            or ground_truth.diagnosis_contract is not None
+            or metric in (case.applicable_metrics or ())
+        )
+        evaluator_version = (
+            "rule-evaluator-v2-insufficient-evidence"
+            if ground_truth.diagnosis_contract is not None else EVALUATOR_VERSION
         )
         evaluation_material = {
             "case": case.model_dump(mode="json"),
             "ground_truth": ground_truth.model_dump(mode="json"),
             "trace": [record.model_dump(mode="json") for record in records],
-            "evaluator_version": EVALUATOR_VERSION,
+            "evaluator_version": evaluator_version,
         }
+        if diagnosis_content_reviews is not None:
+            evaluation_material["external_content_reviews"] = [
+                review.model_dump(mode="json") for review in diagnosis_content_reviews
+            ]
+        if ground_truth.diagnosis_contract is None:
+            # Keep legacy evaluation identity as well as metrics stable. New optional
+            # model fields must not change v5's canonical evaluation material.
+            evaluation_material["ground_truth"].pop("diagnosis_contract")
+            evaluation_material["ground_truth"].pop("diagnosis_content_reviews")
         return EvaluationResult(
             evaluation_id=f"evaluation:{canonical_json_hash(evaluation_material)[:24]}",
             case_id=case.case_id,
@@ -113,9 +285,68 @@ class RuleBasedEvaluator:
             agent_run_id=case.agent_run_id,
             ground_truth_id=ground_truth.ground_truth_id,
             ground_truth_version=ground_truth.version,
-            evaluator_version=EVALUATOR_VERSION,
+            evaluator_version=evaluator_version,
             metrics=metrics,
         )
+
+    @staticmethod
+    def _diagnosis_contract(
+        case: EvaluationCase, ground_truth: GroundTruth,
+        external_reviews: tuple[DiagnosisContentReview, ...] | None = None,
+    ) -> MetricResult:
+        metric = MetricName.DIAGNOSIS_CONTRACT
+        if ground_truth.diagnosis_contract is None:
+            return MetricResult.unavailable(metric, MetricStatus.NOT_APPLICABLE, "no contract GT")
+        facts = {fact.name: fact.value for fact in case.facts.structured_facts}
+        observation = facts.get("diagnosis_contract_observation")
+        if not isinstance(observation, dict) or observation.get("version") != (
+            ground_truth.diagnosis_contract
+        ):
+            return MetricResult.unavailable(metric, MetricStatus.UNKNOWN, "contract facts missing")
+        issues = observation.get("structuralIssues")
+        if isinstance(issues, list) and issues:
+            return MetricResult.measured(metric, 0, reason="deterministic contract violation",
+                                         details=tuple(str(issue) for issue in issues))
+        if observation.get("sufficientEvidence") is True:
+            return MetricResult.measured(metric, 0, reason="insufficiency target was not met")
+        reviews = (
+            ground_truth.diagnosis_content_reviews if external_reviews is None else external_reviews
+        )
+        partial_review = next((r for r in reviews if (
+            r.candidate_scope == "persisted_fields"
+            and r.candidate_digest == observation.get("persistedFieldsDigest")
+            and r.evidence_digest == observation.get("evidenceDigest")
+        )), None)
+        if partial_review is not None and "FAIL" in partial_review.checks.values():
+            return MetricResult.measured(
+                metric, 0, reason=partial_review.rationale,
+                details=tuple(f"{k}={v}" for k, v in partial_review.checks.items()),
+            )
+        if (
+            issues != [] or observation.get("complete") is not True
+            or observation.get("sufficientEvidence") is not False
+            or observation.get("missingFields") != []
+        ):
+            return MetricResult.unavailable(
+                metric, MetricStatus.UNKNOWN, "complete original DiagnosisReport is unavailable"
+            )
+        review = next((r for r in reviews if (
+            r.candidate_scope == "complete"
+            and r.candidate_digest == observation.get("candidateDigest")
+            and r.evidence_digest == observation.get("evidenceDigest")
+        )), None)
+        if review is None:
+            return MetricResult.unavailable(
+                metric, MetricStatus.UNKNOWN,
+                "no content review bound to this complete candidate and evidence; structure alone "
+                "cannot prove grounding, provisional wording, citation support or useful checks",
+            )
+        details = tuple(f"{name}={value}" for name, value in review.checks.items())
+        if "FAIL" in review.checks.values():
+            return MetricResult.measured(metric, 0, reason=review.rationale, details=details)
+        if "UNKNOWN" in review.checks.values():
+            return MetricResult.unavailable(metric, MetricStatus.UNKNOWN, review.rationale)
+        return MetricResult.measured(metric, 1, reason=review.reference, details=details)
 
     @staticmethod
     def _ordered_records(
@@ -224,9 +455,31 @@ class RuleBasedEvaluator:
                 "Ground Truth has no structured exact-match facts",
             )
         actual = {fact.name: fact.value for fact in case.facts.structured_facts}
+        authority_accepted = _accepted_structured_fact_authority(ground_truth, actual)
         missing = tuple(
-            fact.name for fact in ground_truth.expected_facts if fact.name not in actual
+            fact.name
+            for fact in ground_truth.expected_facts
+            if fact.name not in actual and fact.name not in authority_accepted
         )
+        mismatched = tuple(
+            fact.name
+            for fact in ground_truth.expected_facts
+            if fact.name in actual
+            and fact.name not in authority_accepted
+            and not exact_match(fact.value, actual[fact.name])
+        )
+        if mismatched and missing:
+            # A known contradiction is decisive even when another expected fact
+            # is unavailable.  Missing authority can prevent a PASS claim, but
+            # it cannot erase evidence that the result is already wrong.
+            return MetricResult.measured(
+                MetricName.EXACT_MATCH,
+                0,
+                details=(
+                    f"mismatched={','.join(mismatched)}",
+                    f"missing={','.join(missing) or '-'}",
+                ),
+            )
         if missing:
             return MetricResult.unavailable(
                 MetricName.EXACT_MATCH,
@@ -234,13 +487,19 @@ class RuleBasedEvaluator:
                 f"structured facts unavailable: {', '.join(missing)}",
             )
         matched = sum(
-            exact_match(fact.value, actual[fact.name]) for fact in ground_truth.expected_facts
+            fact.name in authority_accepted or exact_match(fact.value, actual[fact.name])
+            for fact in ground_truth.expected_facts
         )
         denominator = len(ground_truth.expected_facts)
+        details = [f"matched={matched}", f"expected={denominator}"]
+        if authority_accepted:
+            details.append(
+                "accepted_structured_authority=" + ",".join(sorted(authority_accepted))
+            )
         return MetricResult.measured(
             MetricName.EXACT_MATCH,
             matched / denominator,
-            details=(f"matched={matched}", f"expected={denominator}"),
+            details=tuple(details),
         )
 
     @staticmethod
@@ -404,6 +663,20 @@ class RuleBasedEvaluator:
             for reference in record.reference.evidence_references
         )
         expected = set(expected_ids)
+        accepted_authority = _ACCEPTED_EVIDENCE_SOURCE_AUTHORITY.get(
+            (ground_truth.ground_truth_id, ground_truth.version)
+        )
+        authority_used = False
+        if accepted_authority is not None:
+            legacy_ids, accepted_source_ids = accepted_authority
+            accepted = _bind_accepted_evidence_source_authority(
+                tuple(expected_ids),
+                legacy_ids,
+                accepted_source_ids,
+            )
+            if accepted is not None:
+                expected = set(accepted)
+                authority_used = True
         hit_count = len(expected & actual_ids)
         return MetricResult.measured(
             MetricName.EVIDENCE_HIT,
@@ -411,6 +684,7 @@ class RuleBasedEvaluator:
             details=(
                 f"hit_count={hit_count}",
                 f"denominator_expected_evidence={len(expected)}",
+                f"accepted_source_authority={'used' if authority_used else 'not-used'}",
             ),
         )
 

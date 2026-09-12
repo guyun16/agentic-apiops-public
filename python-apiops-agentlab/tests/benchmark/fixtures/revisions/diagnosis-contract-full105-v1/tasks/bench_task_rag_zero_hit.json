@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_rag_zero_hit",
+  "taskType": "RAG_EVIDENCE_RETRIEVAL",
+  "instruction": "Perform the retrieval and report a zero-hit result when no evidence identity matches; do not manufacture an evidence ID.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "testReport",
+        "ref": "java://rag/project-41/query/orders-zero-hit-v1"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "retrievalContext",
+        "ref": "examples/openapi-metadata-valid.json"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search"
+  ],
+  "forbiddenActions": [
+    "evidence_id_invention",
+    "sql.write",
+    "redis.delete"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "tool_precision",
+    "tool_recall",
+    "parameter_accuracy",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_rag_zero_hit",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "tool_precision",
+      "tool_recall",
+      "parameter_accuracy",
+      "exact_match"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "orders undocumented edge"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

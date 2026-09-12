@@ -1,0 +1,65 @@
+{
+  "applicationIdentity": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "git rev-parse HEAD",
+    "value": "1d511553af5f847562963d4fc203c5ae90f3a118"
+  },
+  "baselineConfigId": "stage21-formal-baseline-v2-20260826",
+  "benchmarkConfigVersion": "stage21.5-formal-v2",
+  "datasetId": "stage21-apioops-bench-mini",
+  "datasetSplit": "all",
+  "datasetVersion": "v2",
+  "evaluatorIdentity": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "app.evaluator.EVALUATOR_VERSION",
+    "value": "rule-evaluator-v1"
+  },
+  "executionTimestamp": "2026-08-26T12:24:20.521702Z",
+  "javaRuntimeVersion": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "java -version",
+    "value": "openjdk version \"21.0.11\" 2026-04-21 LTS"
+  },
+  "modelIdentity": {
+    "availability": "UNAVAILABLE",
+    "reason": "No external model invocation is configured; live Golden paths use existing deterministic Stage 20 E2E workflows",
+    "source": "Stage 21.5 baseline invocation",
+    "value": null
+  },
+  "modelParameters": {
+    "availability": "UNAVAILABLE",
+    "reason": "No model call parameters are available",
+    "source": "Stage 21.5 baseline invocation",
+    "value": null
+  },
+  "promptIdentities": [
+    {
+      "availability": "UNAVAILABLE",
+      "reason": "No benchmark prompt is invoked by the existing deterministic adapters",
+      "source": "Stage 21.5 baseline invocation",
+      "value": null
+    }
+  ],
+  "pythonRuntimeVersion": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "platform.python_version",
+    "value": "CPython 3.13.13"
+  },
+  "taskSchemaVersion": "0.2.0",
+  "toolCatalogIdentity": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "Stage 20 public boundary",
+    "value": "existing-stage20-tool-catalog"
+  },
+  "workflowIdentity": {
+    "availability": "AVAILABLE",
+    "reason": null,
+    "source": "Stage 21.5 adapter composition",
+    "value": "existing-stage20-live-golden-cross-process + StaticFixtureAdapter"
+  }
+}

@@ -1,0 +1,1297 @@
+{
+  "origin": "NEW_AUTHORED_OFFLINE_CANDIDATES_NOT_HISTORICAL_OUTPUTS",
+  "validationReportOrigin": "SYNTHETIC_VALIDATOR_FIXTURE_WITH_COPIED_VISIBLE_STATUS_AND_IDENTITIES_NOT_ORIGINAL_JAVA_REPORT",
+  "originalHistoricalResponsesModified": false,
+  "scenarios": [
+    {
+      "name": "bench_task_failure_insufficient_missing",
+      "report": {
+        "projectId": 42,
+        "taskId": 4314,
+        "runId": 4433,
+        "reportId": "report:4433",
+        "status": "EXECUTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "IO_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "EXECUTION_FAILED",
+            "failureType": "IO_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "EXECUTION_FAILED",
+                "failureType": "IO_ERROR",
+                "responseStatusCode": null,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "itemId": "report:4433",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":42,\"relevantCases\":[{\"caseId\":\"stage21-initial-report:insufficient-missing\",\"failureType\":\"IO_ERROR\",\"relevantSteps\":[{\"durationMs\":null,\"failedAssertions\":[],\"failureType\":\"IO_ERROR\",\"responseAssertions\":[],\"responseStatusCode\":null,\"status\":\"EXECUTION_FAILED\",\"stepId\":\"stage21-initial-step\"}],\"status\":\"EXECUTION_FAILED\"}],\"reportId\":\"report:4433\",\"runId\":4433,\"status\":\"EXECUTION_FAILED\",\"summary\":{\"failedAssertions\":0,\"failureType\":\"IO_ERROR\",\"passedAssertions\":0,\"totalAssertions\":0,\"totalCases\":1,\"totalSteps\":1},\"taskId\":4314}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:4433",
+              "project_id": 42,
+              "run_id": 4433
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "itemId": "runtime-facts:bench_task_failure_insufficient_missing",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "{\"missingEvidence\":[\"response-body\"]}",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-instruction:bench_task_failure_insufficient_missing",
+          "sourceType": "USER_INTENT",
+          "content": "Decide that the available report is insufficient for a diagnosis and state the missing evidence instead of guessing a root cause.",
+          "provenance": [],
+          "truncated": false
+        }
+      ],
+      "validatorIdentity": {
+        "traceId": "trace:136a3caa10764429a813b70dd2102299",
+        "agentRunId": "agent_run:400ea3c9ea514db2a66b8f16c80d34ec"
+      },
+      "groundTruthFile": "ground_truth/gt_stage21_failure_insufficient_missing.json",
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 42,
+            "runId": 4433,
+            "reportId": "report:4433",
+            "agentRunId": "agent_run:400ea3c9ea514db2a66b8f16c80d34ec",
+            "traceId": "trace:136a3caa10764429a813b70dd2102299",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "b8c78e71a690dd1255d83ba862a992f8d35e8b4133449fc9c4809e19de6ec0e3",
+            "evidence_digest": "4593095b4fd56d188a551e51dc36f93a866280f8eca4432864b5db6ee2134cff",
+            "reference": "new-offline-witness:bench_task_failure_insufficient_missing/abstain:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 42,
+            "runId": 4433,
+            "reportId": "report:4433",
+            "agentRunId": "agent_run:400ea3c9ea514db2a66b8f16c80d34ec",
+            "traceId": "trace:136a3caa10764429a813b70dd2102299",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:4433"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "aa4830c411cd7182911fc5d9633d461b367560fae2f8d8decbaf6a1dd0688278",
+            "evidence_digest": "4593095b4fd56d188a551e51dc36f93a866280f8eca4432864b5db6ee2134cff",
+            "reference": "new-offline-witness:bench_task_failure_insufficient_missing/provisional:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "bench_task_failure_insufficient_conflicting",
+      "report": {
+        "projectId": 42,
+        "taskId": 4330,
+        "runId": 4449,
+        "reportId": "report:4449",
+        "status": "ASSERTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "BUSINESS_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "ASSERTION_FAILED",
+            "failureType": "BUSINESS_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "ASSERTION_FAILED",
+                "failureType": "BUSINESS_ERROR",
+                "responseStatusCode": 409,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "itemId": "report:4449",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":42,\"relevantCases\":[{\"caseId\":\"stage21-initial-report:insufficient-conflicting\",\"failureType\":\"BUSINESS_ERROR\",\"relevantSteps\":[{\"durationMs\":1,\"failedAssertions\":[{\"actual\":409,\"expected\":201,\"message\":\"Java-owned initial report captured a failed HTTP/business outcome\",\"passed\":false,\"type\":\"STATUS_CODE\"}],\"failureType\":\"BUSINESS_ERROR\",\"responseAssertions\":[{\"actual\":409,\"expected\":201,\"message\":\"Java-owned initial report captured a failed HTTP/business outcome\",\"passed\":false,\"type\":\"STATUS_CODE\"}],\"responseStatusCode\":409,\"status\":\"ASSERTION_FAILED\",\"stepId\":\"stage21-initial-step\"}],\"status\":\"ASSERTION_FAILED\"}],\"reportId\":\"report:4449\",\"runId\":4449,\"status\":\"ASSERTION_FAILED\",\"summary\":{\"failedAssertions\":1,\"failureType\":\"BUSINESS_ERROR\",\"passedAssertions\":0,\"totalAssertions\":1,\"totalCases\":1,\"totalSteps\":1},\"taskId\":4330}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:4449",
+              "project_id": 42,
+              "run_id": 4449
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "itemId": "runtime-facts:bench_task_failure_insufficient_conflicting",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "{\"conflictType\":\"MULTIPLE_PLAUSIBLE_ROOTS\"}",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-instruction:bench_task_failure_insufficient_conflicting",
+          "sourceType": "USER_INTENT",
+          "content": "Return insufficient evidence when the report contains conflicting signals and no frozen root cause resolves the conflict.",
+          "provenance": [],
+          "truncated": false
+        }
+      ],
+      "validatorIdentity": {
+        "traceId": "trace:b52f2ce5311042d2bafd7426019c09ca",
+        "agentRunId": "agent_run:fb65497117e941ffae3b3b61e96d6aa4"
+      },
+      "groundTruthFile": "ground_truth/gt_stage21_failure_insufficient_conflicting.json",
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 42,
+            "runId": 4449,
+            "reportId": "report:4449",
+            "agentRunId": "agent_run:fb65497117e941ffae3b3b61e96d6aa4",
+            "traceId": "trace:b52f2ce5311042d2bafd7426019c09ca",
+            "failureType": "BUSINESS_ERROR",
+            "summary": "The Java report records BUSINESS_ERROR and HTTP409 instead of expected201.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The conflict label does not provide two opposing observations; the particular business rule or state cause is unconfirmed."
+            ],
+            "recommendedChecks": [
+              "Obtain authorized business response details and the actual competing records for this request."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "c6452650bd4def0dafb93d52af144ab0c0ba0536c3075858b8c1e5e817da6348",
+            "evidence_digest": "0c5fa82fcfec3609235b21c6b04fad45121f341041d9367a3384d5ca76ca8bbd",
+            "reference": "new-offline-witness:bench_task_failure_insufficient_conflicting/abstain:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 42,
+            "runId": 4449,
+            "reportId": "report:4449",
+            "agentRunId": "agent_run:fb65497117e941ffae3b3b61e96d6aa4",
+            "traceId": "trace:b52f2ce5311042d2bafd7426019c09ca",
+            "failureType": "BUSINESS_ERROR",
+            "summary": "The Java report records BUSINESS_ERROR and HTTP409 instead of expected201.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional business-rule or resource-state rejection mechanism may explain the reported BUSINESS_ERROR/409; the particular rule or state cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:4449"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The conflict label does not provide two opposing observations; the particular business rule or state cause is unconfirmed."
+            ],
+            "recommendedChecks": [
+              "Obtain authorized business response details and the actual competing records for this request."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "9589c51832998b2002aab13a6138ec9c9c621fd1553d4f916ab6e665950a1ec0",
+            "evidence_digest": "0c5fa82fcfec3609235b21c6b04fad45121f341041d9367a3384d5ca76ca8bbd",
+            "reference": "new-offline-witness:bench_task_failure_insufficient_conflicting/provisional:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "bench_task_formal_failure_insufficient_conflicting",
+      "report": {
+        "projectId": 41,
+        "taskId": 4505,
+        "runId": 4624,
+        "reportId": "report:4624",
+        "status": "ASSERTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "BUSINESS_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "ASSERTION_FAILED",
+            "failureType": "BUSINESS_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "ASSERTION_FAILED",
+                "failureType": "BUSINESS_ERROR",
+                "responseStatusCode": 409,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "itemId": "report:4624",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"stage21-initial-report:insufficient-conflicting\",\"failureType\":\"BUSINESS_ERROR\",\"relevantSteps\":[{\"durationMs\":1,\"failedAssertions\":[{\"actual\":409,\"expected\":201,\"message\":\"Java-owned initial report captured a failed HTTP/business outcome\",\"passed\":false,\"type\":\"STATUS_CODE\"}],\"failureType\":\"BUSINESS_ERROR\",\"responseAssertions\":[{\"actual\":409,\"expected\":201,\"message\":\"Java-owned initial report captured a failed HTTP/business outcome\",\"passed\":false,\"type\":\"STATUS_CODE\"}],\"responseStatusCode\":409,\"status\":\"ASSERTION_FAILED\",\"stepId\":\"stage21-initial-step\"}],\"status\":\"ASSERTION_FAILED\"}],\"reportId\":\"report:4624\",\"runId\":4624,\"status\":\"ASSERTION_FAILED\",\"summary\":{\"failedAssertions\":1,\"failureType\":\"BUSINESS_ERROR\",\"passedAssertions\":0,\"totalAssertions\":1,\"totalCases\":1,\"totalSteps\":1},\"taskId\":4505}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:4624",
+              "project_id": 41,
+              "run_id": 4624
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "itemId": "runtime-facts:bench_task_formal_failure_insufficient_conflicting",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "{\"conflictType\":\"MULTIPLE_PLAUSIBLE_ROOTS\"}",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-focus:bench_task_formal_failure_insufficient_conflicting",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "conflicting plausible roots",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-instruction:bench_task_formal_failure_insufficient_conflicting",
+          "sourceType": "USER_INTENT",
+          "content": "When report and retrieval signals conflict, explicitly report insufficient evidence, preserve known facts, and list recommended checks.",
+          "provenance": [],
+          "truncated": false
+        }
+      ],
+      "validatorIdentity": {
+        "traceId": "trace:88cfa60cc876413f9a7045cebaef03fa",
+        "agentRunId": "agent_run:b045d6ed13ff4a2f85ee85de29f2d16f"
+      },
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_conflicting.json",
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4624,
+            "reportId": "report:4624",
+            "agentRunId": "agent_run:b045d6ed13ff4a2f85ee85de29f2d16f",
+            "traceId": "trace:88cfa60cc876413f9a7045cebaef03fa",
+            "failureType": "BUSINESS_ERROR",
+            "summary": "The Java report records BUSINESS_ERROR and HTTP409 instead of expected201.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The conflict label does not provide two opposing observations; the particular business rule or state cause is unconfirmed."
+            ],
+            "recommendedChecks": [
+              "Obtain authorized business response details and the actual competing records for this request."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "8b9247a6973bb9067e70959f3cea4fa3168b7ae70e095a769cbcc6fbd1f02336",
+            "evidence_digest": "26aedf6936643f39b34e9871180467000395fe48bb1de52ef87d0dba1c0734ad",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_conflicting/abstain:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4624,
+            "reportId": "report:4624",
+            "agentRunId": "agent_run:b045d6ed13ff4a2f85ee85de29f2d16f",
+            "traceId": "trace:88cfa60cc876413f9a7045cebaef03fa",
+            "failureType": "BUSINESS_ERROR",
+            "summary": "The Java report records BUSINESS_ERROR and HTTP409 instead of expected201.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional business-rule or resource-state rejection mechanism may explain the reported BUSINESS_ERROR/409; the particular rule or state cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:4624"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The conflict label does not provide two opposing observations; the particular business rule or state cause is unconfirmed."
+            ],
+            "recommendedChecks": [
+              "Obtain authorized business response details and the actual competing records for this request."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "e9fc4bebb1a0384662b092572e5069a3e257806bd5d38aeb0c9961a4684294c1",
+            "evidence_digest": "26aedf6936643f39b34e9871180467000395fe48bb1de52ef87d0dba1c0734ad",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_conflicting/provisional:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "bench_task_formal_failure_insufficient_heldout_conflict",
+      "report": {
+        "projectId": 41,
+        "taskId": 4506,
+        "runId": 4625,
+        "reportId": "report:4625",
+        "status": "ASSERTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "BUSINESS_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "ASSERTION_FAILED",
+            "failureType": "BUSINESS_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "ASSERTION_FAILED",
+                "failureType": "BUSINESS_ERROR",
+                "responseStatusCode": 409,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "itemId": "report:4625",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"stage21-initial-report:heldout-conflict\",\"failureType\":\"BUSINESS_ERROR\",\"relevantSteps\":[{\"durationMs\":1,\"failedAssertions\":[{\"actual\":409,\"expected\":201,\"message\":\"Java-owned initial report captured a failed HTTP/business outcome\",\"passed\":false,\"type\":\"STATUS_CODE\"}],\"failureType\":\"BUSINESS_ERROR\",\"responseAssertions\":[{\"actual\":409,\"expected\":201,\"message\":\"Java-owned initial report captured a failed HTTP/business outcome\",\"passed\":false,\"type\":\"STATUS_CODE\"}],\"responseStatusCode\":409,\"status\":\"ASSERTION_FAILED\",\"stepId\":\"stage21-initial-step\"}],\"status\":\"ASSERTION_FAILED\"}],\"reportId\":\"report:4625\",\"runId\":4625,\"status\":\"ASSERTION_FAILED\",\"summary\":{\"failedAssertions\":1,\"failureType\":\"BUSINESS_ERROR\",\"passedAssertions\":0,\"totalAssertions\":1,\"totalCases\":1,\"totalSteps\":1},\"taskId\":4506}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:4625",
+              "project_id": 41,
+              "run_id": 4625
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "itemId": "runtime-facts:bench_task_formal_failure_insufficient_heldout_conflict",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "{\"conflictType\":\"MULTIPLE_PLAUSIBLE_ROOTS\"}",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-focus:bench_task_formal_failure_insufficient_heldout_conflict",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "held-out conflicting evidence case",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-instruction:bench_task_formal_failure_insufficient_heldout_conflict",
+          "sourceType": "USER_INTENT",
+          "content": "Treat the conflicting signals as insufficient evidence, preserve confirmed facts, and state the checks needed to resolve the conflict.",
+          "provenance": [],
+          "truncated": false
+        }
+      ],
+      "validatorIdentity": {
+        "traceId": "trace:d0e3f55b1cd54ca4bb0f42bb15759d6c",
+        "agentRunId": "agent_run:ec5fbc9fa810474fb4a42f4e123dced7"
+      },
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_heldout_conflict.json",
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4625,
+            "reportId": "report:4625",
+            "agentRunId": "agent_run:ec5fbc9fa810474fb4a42f4e123dced7",
+            "traceId": "trace:d0e3f55b1cd54ca4bb0f42bb15759d6c",
+            "failureType": "BUSINESS_ERROR",
+            "summary": "The Java report records BUSINESS_ERROR and HTTP409 instead of expected201.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The conflict label does not provide two opposing observations; the particular business rule or state cause is unconfirmed."
+            ],
+            "recommendedChecks": [
+              "Obtain authorized business response details and the actual competing records for this request."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "665219cc39fddabd893541be34e5fad194dc377541b1ba1334368d6c9f296e39",
+            "evidence_digest": "6a246a7ac0a3014a2783f4ca5f12a5818276c82b87dbdcccc5587f98dba09b5e",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_heldout_conflict/abstain:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4625,
+            "reportId": "report:4625",
+            "agentRunId": "agent_run:ec5fbc9fa810474fb4a42f4e123dced7",
+            "traceId": "trace:d0e3f55b1cd54ca4bb0f42bb15759d6c",
+            "failureType": "BUSINESS_ERROR",
+            "summary": "The Java report records BUSINESS_ERROR and HTTP409 instead of expected201.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional business-rule or resource-state rejection mechanism may explain the reported BUSINESS_ERROR/409; the particular rule or state cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:4625"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The conflict label does not provide two opposing observations; the particular business rule or state cause is unconfirmed."
+            ],
+            "recommendedChecks": [
+              "Obtain authorized business response details and the actual competing records for this request."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "9bd5dfae18bce12ab0e0964fa0073aba4bf81bdc8b9ae879da112fd8b6b3e20d",
+            "evidence_digest": "6a246a7ac0a3014a2783f4ca5f12a5818276c82b87dbdcccc5587f98dba09b5e",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_heldout_conflict/provisional:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "bench_task_formal_failure_insufficient_heldout_missing",
+      "report": {
+        "projectId": 41,
+        "taskId": 4507,
+        "runId": 4626,
+        "reportId": "report:4626",
+        "status": "EXECUTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "IO_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "EXECUTION_FAILED",
+            "failureType": "IO_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "EXECUTION_FAILED",
+                "failureType": "IO_ERROR",
+                "responseStatusCode": null,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "itemId": "report:4626",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"stage21-initial-report:heldout-missing\",\"failureType\":\"IO_ERROR\",\"relevantSteps\":[{\"durationMs\":null,\"failedAssertions\":[],\"failureType\":\"IO_ERROR\",\"responseAssertions\":[],\"responseStatusCode\":null,\"status\":\"EXECUTION_FAILED\",\"stepId\":\"stage21-initial-step\"}],\"status\":\"EXECUTION_FAILED\"}],\"reportId\":\"report:4626\",\"runId\":4626,\"status\":\"EXECUTION_FAILED\",\"summary\":{\"failedAssertions\":0,\"failureType\":\"IO_ERROR\",\"passedAssertions\":0,\"totalAssertions\":0,\"totalCases\":1,\"totalSteps\":1},\"taskId\":4507}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:4626",
+              "project_id": 41,
+              "run_id": 4626
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "itemId": "runtime-facts:bench_task_formal_failure_insufficient_heldout_missing",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "{\"missingEvidence\":[\"response-body\"]}",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-focus:bench_task_formal_failure_insufficient_heldout_missing",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "held-out missing evidence case",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-instruction:bench_task_formal_failure_insufficient_heldout_missing",
+          "sourceType": "USER_INTENT",
+          "content": "For this independent report, return insufficient evidence with limitations and recommended checks rather than a guessed diagnosis.",
+          "provenance": [],
+          "truncated": false
+        }
+      ],
+      "validatorIdentity": {
+        "traceId": "trace:251aa363c8504d7c8ed155a8e82cdfe7",
+        "agentRunId": "agent_run:4020f066b0474e4bacd27ca1f70e1468"
+      },
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_heldout_missing.json",
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4626,
+            "reportId": "report:4626",
+            "agentRunId": "agent_run:4020f066b0474e4bacd27ca1f70e1468",
+            "traceId": "trace:251aa363c8504d7c8ed155a8e82cdfe7",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "42066d71e5477ca74ac8c1a8b6b2dc046bd0b87ef53425ac36a67fa0d22c299d",
+            "evidence_digest": "6629b959b22ce1c0982237f9f3b97eb7a07ae056ca204e055c7f22ee5814e850",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_heldout_missing/abstain:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4626,
+            "reportId": "report:4626",
+            "agentRunId": "agent_run:4020f066b0474e4bacd27ca1f70e1468",
+            "traceId": "trace:251aa363c8504d7c8ed155a8e82cdfe7",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:4626"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "8c8766f6264442ed288848e1c7f63e2e1b3f975e6e1ad8792f1ad25f17dfb15f",
+            "evidence_digest": "6629b959b22ce1c0982237f9f3b97eb7a07ae056ca204e055c7f22ee5814e850",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_heldout_missing/provisional:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "bench_task_formal_failure_insufficient_missing_auth",
+      "report": {
+        "projectId": 41,
+        "taskId": 4508,
+        "runId": 4627,
+        "reportId": "report:4627",
+        "status": "ASSERTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "HTTP_STATUS_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "ASSERTION_FAILED",
+            "failureType": "HTTP_STATUS_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "ASSERTION_FAILED",
+                "failureType": "HTTP_STATUS_ERROR",
+                "responseStatusCode": 401,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "itemId": "report:4627",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"stage21-initial-report:missing-auth\",\"failureType\":\"HTTP_STATUS_ERROR\",\"relevantSteps\":[{\"durationMs\":1,\"failedAssertions\":[{\"actual\":401,\"expected\":201,\"message\":\"Java-owned initial report captured a failed HTTP/business outcome\",\"passed\":false,\"type\":\"STATUS_CODE\"}],\"failureType\":\"HTTP_STATUS_ERROR\",\"responseAssertions\":[{\"actual\":401,\"expected\":201,\"message\":\"Java-owned initial report captured a failed HTTP/business outcome\",\"passed\":false,\"type\":\"STATUS_CODE\"}],\"responseStatusCode\":401,\"status\":\"ASSERTION_FAILED\",\"stepId\":\"stage21-initial-step\"}],\"status\":\"ASSERTION_FAILED\"}],\"reportId\":\"report:4627\",\"runId\":4627,\"status\":\"ASSERTION_FAILED\",\"summary\":{\"failedAssertions\":1,\"failureType\":\"HTTP_STATUS_ERROR\",\"passedAssertions\":0,\"totalAssertions\":1,\"totalCases\":1,\"totalSteps\":1},\"taskId\":4508}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:4627",
+              "project_id": 41,
+              "run_id": 4627
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "itemId": "runtime-facts:bench_task_formal_failure_insufficient_missing_auth",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "{\"missingEvidence\":[\"response-body\"]}",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-focus:bench_task_formal_failure_insufficient_missing_auth",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "missing authentication evidence",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-instruction:bench_task_formal_failure_insufficient_missing_auth",
+          "sourceType": "USER_INTENT",
+          "content": "Report insufficient evidence for an authentication conclusion, retain known facts, and list the needed follow-up check.",
+          "provenance": [],
+          "truncated": false
+        }
+      ],
+      "validatorIdentity": {
+        "traceId": "trace:0bd42b022f56465ca4adb6035de38ef3",
+        "agentRunId": "agent_run:3601392b6141412ea40214ba1287d404"
+      },
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_missing_auth.json",
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4627,
+            "reportId": "report:4627",
+            "agentRunId": "agent_run:3601392b6141412ea40214ba1287d404",
+            "traceId": "trace:0bd42b022f56465ca4adb6035de38ef3",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Obtain a redacted request authentication-presence record and the authorized authentication decision reason."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "a8bc761e676bba8f6d94f48743da63d210f4887de060529f9c26b88b0cba98ee",
+            "evidence_digest": "09b02946f1f2cc5214e95e170aac86bc71fb662ea16653169d1d075c1bcca4a7",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_missing_auth/abstain:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4627,
+            "reportId": "report:4627",
+            "agentRunId": "agent_run:3601392b6141412ea40214ba1287d404",
+            "traceId": "trace:0bd42b022f56465ca4adb6035de38ef3",
+            "failureType": "AUTH_ERROR",
+            "summary": "HTTP401 was observed, without request authentication or server decision details.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional authentication-related mechanism may explain HTTP401; no specific credential failure is established.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:4627"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "A response status cannot distinguish missing, invalid, expired credentials or server-side authentication defects."
+            ],
+            "recommendedChecks": [
+              "Obtain a redacted request authentication-presence record and the authorized authentication decision reason."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "0641a71df512bbd41bbaa045506b942367d3072cbfafa1ab13142187f3bd0993",
+            "evidence_digest": "09b02946f1f2cc5214e95e170aac86bc71fb662ea16653169d1d075c1bcca4a7",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_missing_auth/provisional:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "bench_task_formal_failure_insufficient_missing_headers",
+      "report": {
+        "projectId": 41,
+        "taskId": 4509,
+        "runId": 4628,
+        "reportId": "report:4628",
+        "status": "ASSERTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "HTTP_STATUS_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "ASSERTION_FAILED",
+            "failureType": "HTTP_STATUS_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "ASSERTION_FAILED",
+                "failureType": "HTTP_STATUS_ERROR",
+                "responseStatusCode": 500,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "itemId": "report:4628",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"stage21-initial-report:missing-headers\",\"failureType\":\"HTTP_STATUS_ERROR\",\"relevantSteps\":[{\"durationMs\":1,\"failedAssertions\":[{\"actual\":500,\"expected\":201,\"message\":\"Java-owned initial report captured a failed HTTP/business outcome\",\"passed\":false,\"type\":\"STATUS_CODE\"}],\"failureType\":\"HTTP_STATUS_ERROR\",\"responseAssertions\":[{\"actual\":500,\"expected\":201,\"message\":\"Java-owned initial report captured a failed HTTP/business outcome\",\"passed\":false,\"type\":\"STATUS_CODE\"}],\"responseStatusCode\":500,\"status\":\"ASSERTION_FAILED\",\"stepId\":\"stage21-initial-step\"}],\"status\":\"ASSERTION_FAILED\"}],\"reportId\":\"report:4628\",\"runId\":4628,\"status\":\"ASSERTION_FAILED\",\"summary\":{\"failedAssertions\":1,\"failureType\":\"HTTP_STATUS_ERROR\",\"passedAssertions\":0,\"totalAssertions\":1,\"totalCases\":1,\"totalSteps\":1},\"taskId\":4509}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:4628",
+              "project_id": 41,
+              "run_id": 4628
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "itemId": "runtime-facts:bench_task_formal_failure_insufficient_missing_headers",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "{\"missingEvidence\":[\"response-body\"]}",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-focus:bench_task_formal_failure_insufficient_missing_headers",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "missing response evidence",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-instruction:bench_task_formal_failure_insufficient_missing_headers",
+          "sourceType": "USER_INTENT",
+          "content": "State that the evidence is insufficient, name the missing response evidence, and do not assert a root cause.",
+          "provenance": [],
+          "truncated": false
+        }
+      ],
+      "validatorIdentity": {
+        "traceId": "trace:f6ac23afd6d34db4b73db89cdbdd3fd3",
+        "agentRunId": "agent_run:19b1b693961e422ba1e332169d20e512"
+      },
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_missing_headers.json",
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4628,
+            "reportId": "report:4628",
+            "agentRunId": "agent_run:19b1b693961e422ba1e332169d20e512",
+            "traceId": "trace:f6ac23afd6d34db4b73db89cdbdd3fd3",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Obtain the authorized response error detail and correlated service exception record."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "c4727e8efc5fe94b7efda90e5af6d9618d51d4caf67155dea4b8832108c95090",
+            "evidence_digest": "559b5a5ea063a8593b09f3fb2688b5efd04a51d6f83c8b6e008feeb319d7f372",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_missing_headers/abstain:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4628,
+            "reportId": "report:4628",
+            "agentRunId": "agent_run:19b1b693961e422ba1e332169d20e512",
+            "traceId": "trace:f6ac23afd6d34db4b73db89cdbdd3fd3",
+            "failureType": "SYSTEM_ERROR",
+            "summary": "HTTP500 was observed without a response body or server exception detail.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional server error mechanism may explain HTTP500; the internal defect is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:4628"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "The response status alone does not identify the internal defect."
+            ],
+            "recommendedChecks": [
+              "Obtain the authorized response error detail and correlated service exception record."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "3461a215d90b5087b60d4278e865f3cb3294763cd3479923938964cc905e0007",
+            "evidence_digest": "559b5a5ea063a8593b09f3fb2688b5efd04a51d6f83c8b6e008feeb319d7f372",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_missing_headers/provisional:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "bench_task_formal_failure_insufficient_partial_facts",
+      "report": {
+        "projectId": 41,
+        "taskId": 4510,
+        "runId": 4629,
+        "reportId": "report:4629",
+        "status": "EXECUTION_FAILED",
+        "startedAt": "2026-09-05T00:00:00Z",
+        "finishedAt": "2026-09-05T00:00:01Z",
+        "summary": {
+          "totalCases": 1,
+          "totalSteps": 1,
+          "totalAssertions": 0,
+          "passedAssertions": 0,
+          "failedAssertions": 0,
+          "failureType": "IO_ERROR"
+        },
+        "cases": [
+          {
+            "caseId": "offline-case",
+            "status": "EXECUTION_FAILED",
+            "failureType": "IO_ERROR",
+            "steps": [
+              {
+                "stepId": "offline-step",
+                "status": "EXECUTION_FAILED",
+                "failureType": "IO_ERROR",
+                "responseStatusCode": null,
+                "durationMs": null,
+                "assertionResults": []
+              }
+            ]
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "itemId": "report:4629",
+          "sourceType": "EXECUTION_FACT",
+          "content": "{\"projectId\":41,\"relevantCases\":[{\"caseId\":\"stage21-initial-report:partial-facts\",\"failureType\":\"IO_ERROR\",\"relevantSteps\":[{\"durationMs\":null,\"failedAssertions\":[],\"failureType\":\"IO_ERROR\",\"responseAssertions\":[],\"responseStatusCode\":null,\"status\":\"EXECUTION_FAILED\",\"stepId\":\"stage21-initial-step\"}],\"status\":\"EXECUTION_FAILED\"}],\"reportId\":\"report:4629\",\"runId\":4629,\"status\":\"EXECUTION_FAILED\",\"summary\":{\"failedAssertions\":0,\"failureType\":\"IO_ERROR\",\"passedAssertions\":0,\"totalAssertions\":0,\"totalCases\":1,\"totalSteps\":1},\"taskId\":4510}",
+          "provenance": [
+            {
+              "source_type": "JAVA_TEST_REPORT",
+              "source_id": "report:4629",
+              "project_id": 41,
+              "run_id": 4629
+            }
+          ],
+          "truncated": false
+        },
+        {
+          "itemId": "runtime-facts:bench_task_formal_failure_insufficient_partial_facts",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "{\"conflictType\":\"MULTIPLE_PLAUSIBLE_ROOTS\"}",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-focus:bench_task_formal_failure_insufficient_partial_facts",
+          "sourceType": "SHORT_TERM_CONTEXT",
+          "content": "partial facts without root",
+          "provenance": [],
+          "truncated": false
+        },
+        {
+          "itemId": "task-instruction:bench_task_formal_failure_insufficient_partial_facts",
+          "sourceType": "USER_INTENT",
+          "content": "Do not choose between two plausible roots when the response body is absent; state the limitation and the deterministic next checks.",
+          "provenance": [],
+          "truncated": false
+        }
+      ],
+      "validatorIdentity": {
+        "traceId": "trace:0cbbee908c3f4cd6bf129d624e9f0fe7",
+        "agentRunId": "agent_run:ffa6707850f3471ea48e8d90b42de05b"
+      },
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_partial_facts.json",
+      "candidates": [
+        {
+          "name": "abstain",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4629,
+            "reportId": "report:4629",
+            "agentRunId": "agent_run:ffa6707850f3471ea48e8d90b42de05b",
+            "traceId": "trace:0cbbee908c3f4cd6bf129d624e9f0fe7",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "afc9fdc9e4446e90be8c3d3b24c42db37d71c445d789d160ed8e8b082bfc0488",
+            "evidence_digest": "a70e8f465cdbee40a928ff7ac0bbeb94a00779432e39672bedcbd3658a43f680",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_partial_facts/abstain:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        },
+        {
+          "name": "provisional",
+          "candidate": {
+            "schemaVersion": "0.1.0",
+            "projectId": 41,
+            "runId": 4629,
+            "reportId": "report:4629",
+            "agentRunId": "agent_run:ffa6707850f3471ea48e8d90b42de05b",
+            "traceId": "trace:0cbbee908c3f4cd6bf129d624e9f0fe7",
+            "failureType": "IO_ERROR",
+            "summary": "An I/O failure was reported without any HTTP response.",
+            "rootCauseHypotheses": [
+              {
+                "statement": "A provisional I/O execution mechanism may have prevented an HTTP exchange; its specific cause is unconfirmed.",
+                "confidence": "LOW",
+                "evidenceRefs": [
+                  {
+                    "itemId": "report:4629"
+                  }
+                ]
+              }
+            ],
+            "sufficientEvidence": false,
+            "limitations": [
+              "Only the I/O observation is available; connection, stream and local I/O causes cannot be distinguished."
+            ],
+            "recommendedChecks": [
+              "Collect the authorized I/O exception and request-phase trace; an HTTP body may not exist."
+            ]
+          },
+          "expectedOutcome": "PASS",
+          "expectedValidatorAccepted": true,
+          "contentReview": {
+            "candidate_digest": "df7aef6b03579bed20ab882740730a491f3a0b845491f1464885a4288d6c32c5",
+            "evidence_digest": "a70e8f465cdbee40a928ff7ac0bbeb94a00779432e39672bedcbd3658a43f680",
+            "reference": "new-offline-witness:bench_task_formal_failure_insufficient_partial_facts/provisional:v1",
+            "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+            "checks": {
+              "observed_facts": "PASS",
+              "hypothesis_grounding": "PASS",
+              "uncertainty": "PASS",
+              "citation_support": "PASS",
+              "limitations_and_checks": "PASS"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

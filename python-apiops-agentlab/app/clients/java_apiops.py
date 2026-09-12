@@ -6,6 +6,7 @@ import asyncio
 import json
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Generic, TypeVar
 from urllib.parse import quote
 from uuid import uuid4
@@ -179,6 +180,7 @@ class JavaAuthenticatedSession:
     username: str
     token_type: str
     token: str = field(repr=False)
+    expires_at: datetime
 
     def __post_init__(self) -> None:
         if isinstance(self.user_id, bool) or not isinstance(self.user_id, int):
@@ -191,6 +193,8 @@ class JavaAuthenticatedSession:
             raise ValueError("token_type must be non-empty")
         if not isinstance(self.token, str) or not self.token.strip():
             raise ValueError("token must be non-empty")
+        if not isinstance(self.expires_at, datetime) or self.expires_at.utcoffset() is None:
+            raise ValueError("expires_at must be a timezone-aware datetime")
 
 
 @dataclass(frozen=True, slots=True)
@@ -274,11 +278,20 @@ class JavaApiOpsClient:
             raise JavaApiOpsResponseValidationError(
                 "Java API Ops login returned an unsupported token type"
             )
+        try:
+            expires_at = datetime.fromisoformat(login.expires_at)
+            if expires_at.utcoffset() is None:
+                raise ValueError("timezone required")
+        except ValueError as exc:
+            raise JavaApiOpsResponseValidationError(
+                "Java API Ops login returned an invalid session expiry"
+            ) from exc
         return JavaAuthenticatedSession(
             user_id=login.user_id,
             username=login.username,
             token_type=login.token_type,
             token=login.access_token,
+            expires_at=expires_at,
         )
 
     async def get_api_metadata(
@@ -357,6 +370,110 @@ class JavaApiOpsClient:
             JavaRunSummary(run_id=item.run_id, case_id=item.case_id, api_id=item.api_id)
             for item in summaries
         )
+
+    async def find_latest_test_run(
+        self,
+        *,
+        project_id: int,
+        case_id: str,
+        token: str,
+        trace_id: str,
+    ) -> JavaRunSummary | None:
+        """Resolve one exact case without depending on the bounded Runs explorer window."""
+
+        self._validate_project_auth_trace(project_id, token, trace_id)
+        if not isinstance(case_id, str) or not case_id.strip():
+            raise ValueError("case_id must be non-empty")
+        path = (
+            f"/api/v1/projects/{project_id}/test-runs/latest-by-case"
+            f"?caseId={quote(case_id, safe='')}"
+        )
+        try:
+            response = await self._request(
+                "GET",
+                path,
+                token=token,
+                trace_id=trace_id,
+                operation="Runner summary by case",
+            )
+        except JavaApiOpsClientError as exc:
+            if exc.status_code != 404:
+                raise
+            return await self._find_test_run_by_case_paginated(
+                project_id=project_id,
+                case_id=case_id,
+                token=token,
+                trace_id=trace_id,
+            )
+        payload = self._parse_json(response, operation="Runner summary by case")
+        try:
+            envelope = _JavaResultEnvelope[object].model_validate(payload)
+        except ValidationError as exc:
+            raise JavaApiOpsResponseValidationError(
+                "Java API Ops case Run response did not match the response envelope"
+            ) from exc
+        if not envelope.success:
+            raise JavaApiOpsResponseValidationError(
+                "Java API Ops case Run response reported an unsuccessful envelope"
+            )
+        if envelope.data is None:
+            return None
+        try:
+            item = _JavaRunSummaryPayload.model_validate(envelope.data)
+        except ValidationError as exc:
+            raise JavaApiOpsResponseValidationError(
+                "Java API Ops case Run response did not match the Run summary contract"
+            ) from exc
+        if item.case_id != case_id:
+            raise JavaApiOpsResponseValidationError(
+                "Java case Run identity did not match the request"
+            )
+        return JavaRunSummary(run_id=item.run_id, case_id=item.case_id, api_id=item.api_id)
+
+    async def _find_test_run_by_case_paginated(
+        self,
+        *,
+        project_id: int,
+        case_id: str,
+        token: str,
+        trace_id: str,
+    ) -> JavaRunSummary | None:
+        """Compatibility path for servers exposing paging but not exact-case lookup."""
+
+        before_run_id: int | None = None
+        previous_floor: int | None = None
+        while True:
+            query = "limit=100"
+            if before_run_id is not None:
+                query += f"&beforeRunId={before_run_id}"
+            response = await self._request(
+                "GET",
+                f"/api/v1/projects/{project_id}/test-runs?{query}",
+                token=token,
+                trace_id=trace_id,
+                operation="Runner summaries page",
+            )
+            page = self._parse_envelope(
+                response,
+                list[_JavaRunSummaryPayload],
+                operation="Runner summaries page",
+            )
+            for item in page:
+                if item.case_id == case_id:
+                    return JavaRunSummary(
+                        run_id=item.run_id,
+                        case_id=item.case_id,
+                        api_id=item.api_id,
+                    )
+            if len(page) < 100:
+                return None
+            floor = min(item.run_id for item in page)
+            if previous_floor is not None and floor >= previous_floor:
+                raise JavaApiOpsResponseValidationError(
+                    "Java Run summary pagination did not advance"
+                )
+            previous_floor = floor
+            before_run_id = floor
 
     async def execute_tool_call(
         self,

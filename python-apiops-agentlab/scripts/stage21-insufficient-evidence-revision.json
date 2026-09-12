@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "stage21-final-revision-config/v1",
+  "revision": "stage21-insufficient-evidence-contract-v1",
+  "parentOfficialRevision": "stage21-formal105-final-closure-v5",
+  "parentEvaluationRunId": "evaluation_run:stage21-real-model-full-105-20260905T054023Z",
+  "executionMode": "OFFLINE_ONLY",
+  "taskCount": 8,
+  "contractVersion": "insufficient-evidence-v1",
+  "datasetManifest": "python-apiops-agentlab/tests/benchmark/fixtures/revisions/insufficient-evidence-v1/dataset-manifest.json",
+  "outcomePolicy": "python-apiops-agentlab/tests/benchmark/fixtures/revisions/insufficient-evidence-v1/outcome-policy.json",
+  "official105Eligible": false,
+  "officialArtifactsMutable": false
+}

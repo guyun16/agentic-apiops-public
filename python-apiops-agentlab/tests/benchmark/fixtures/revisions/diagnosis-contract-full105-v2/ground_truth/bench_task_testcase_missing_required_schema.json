@@ -1,0 +1,20 @@
+{
+  "ground_truth_id": "gt_stage21_testcase_missing_required_schema",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "MISSING_REQUIRED"
+    },
+    {
+      "name": "missing_field",
+      "value": "schemaVersion"
+    },
+    {
+      "name": "schema_valid",
+      "value": false
+    }
+  ]
+}

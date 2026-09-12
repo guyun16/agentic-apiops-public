@@ -1,0 +1,52 @@
+{
+  "apiId": "api-stage21-generation",
+  "apiDocId": "doc-stage21-generation",
+  "operationId": "createOrder",
+  "method": "POST",
+  "path": "/orders",
+  "summary": "Create an order",
+  "description": "Creates an order for a product and documents success and business-conflict responses.",
+  "tags": ["orders"],
+  "servers": [{"url": "http://localhost"}],
+  "security": [{"apiKeyAuth": []}],
+  "deprecated": false,
+  "parameters": [
+    {
+      "name": "quantity",
+      "location": "query",
+      "required": true,
+      "description": "Number of items to order.",
+      "schema": {"type": "integer", "minimum": 1, "maximum": 100},
+      "example": 1
+    }
+  ],
+  "requestSchemas": [
+    {
+      "required": true,
+      "mediaType": "application/json",
+      "schema": {
+        "type": "object",
+        "required": ["productId", "quantity"],
+        "properties": {
+          "productId": {"type": "string"},
+          "quantity": {"type": "integer", "minimum": 1, "maximum": 100}
+        }
+      }
+    }
+  ],
+  "responseSchemas": [
+    {
+      "statusCode": "200",
+      "description": "Order created.",
+      "mediaType": "application/json",
+      "schema": {"type": "object"}
+    },
+    {
+      "statusCode": "409",
+      "description": "The requested quantity is not available.",
+      "mediaType": "application/json",
+      "schema": {"type": "object"}
+    }
+  ],
+  "examples": []
+}

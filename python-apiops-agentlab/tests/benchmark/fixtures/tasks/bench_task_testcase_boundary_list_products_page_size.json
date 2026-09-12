@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_testcase_boundary_list_products_page_size",
+  "taskType": "TESTCASE_GENERATION",
+  "instruction": "Generate a boundary testcase for the listProducts operation using the documented pageSize minimum of 1; do not infer an unsupported idempotency contract.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "strategy",
+        "value": "BOUNDARY"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "apiMetadata",
+        "ref": "java://metadata/project-41/stage21-list-products"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "metadataEvidence",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/metadata-list-products-boundary.json"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "submit_unvalidated_dsl",
+    "infer_idempotency_without_metadata_evidence"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "valid_json",
+    "schema_valid",
+    "contract_accepted",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_testcase_boundary_list_products_page_size",
+    "version": "v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "valid_json",
+      "schema_valid",
+      "contract_accepted",
+      "exact_match"
+    ]
+  }
+}

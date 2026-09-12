@@ -12,7 +12,7 @@ type LoginPageProps = {
 }
 
 export function LoginPage({ mode, onThemeChange, theme }: LoginPageProps) {
-  const { language, setLanguage, t } = useConsoleLanguage()
+  const { language, setLanguage, t, ui } = useConsoleLanguage()
   const { signIn, signOut, status } = useAuth()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -46,7 +46,7 @@ export function LoginPage({ mode, onThemeChange, theme }: LoginPageProps) {
           <span className="login-brand-mark"><Bot size={22} strokeWidth={1.8} /></span>
           <span>
             <strong>APIOps</strong>
-            <small>Agentic API Operations</small>
+            <small>{ui('Agentic API Operations')}</small>
           </span>
         </div>
         <div className="login-preferences">

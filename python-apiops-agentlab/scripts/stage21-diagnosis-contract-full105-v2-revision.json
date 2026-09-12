@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "stage21-final-revision-config/v1",
+  "revision": "stage21-diagnosis-contract-full105-v2",
+  "parentRevision": "stage21-diagnosis-contract-full105-v1",
+  "executionMode": "REAL_MODEL_ONE_SHOT",
+  "official105Eligible": true,
+  "officialArtifactsMutable": false,
+  "taskCount": 105,
+  "devCount": 95,
+  "heldOutCount": 10,
+  "provider": "Qwen",
+  "model": "qwen3.8-max",
+  "minimumPassCount": 90,
+  "contractVersion": "insufficient-evidence-v1",
+  "admissionRequires": [
+    "offline-quality",
+    "runtime",
+    "source-freeze",
+    "output-retention"
+  ],
+  "reviewMethod": "CODEX_REVIEW",
+  "reviewer": "Codex",
+  "datasetManifest": "python-apiops-agentlab/tests/benchmark/fixtures/revisions/diagnosis-contract-full105-v2/dataset-manifest.json",
+  "outcomePolicy": "python-apiops-agentlab/tests/benchmark/fixtures/outcome-policy-diagnosis-contract-full105-v2.json"
+}

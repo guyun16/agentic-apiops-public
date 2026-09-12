@@ -1,0 +1,445 @@
+{
+  "accuracyRepairContract": {
+    "authorityBindings": {
+      "digest": "4fb3ba2fe2add6da56f27b06796d81748ee0c10c5ca7b9ce736029fe312f1b29",
+      "directOutcomeAuthority": false,
+      "groundTruthIds": [
+        "gt_stage21_rag_evidence",
+        "gt_stage21_formal_failure_report_constraint_primary",
+        "gt_stage21_formal_rag_citation_report",
+        "gt_stage21_formal_rag_distractor_filter",
+        "gt_stage21_formal_rag_multi_constraint_summary",
+        "gt_stage21_formal_rag_multi_report_index",
+        "gt_stage21_formal_rag_near_match_exact",
+        "gt_stage21_formal_rag_single_constraint",
+        "gt_stage21_rag_near_match",
+        "gt_stage21_formal_testcase_inventory_conflict_runner"
+      ],
+      "mode": "EXACT_GROUND_TRUTH_IDENTITY_AND_AUTHORITY_FACTS",
+      "source": "python-apiops-agentlab/app/evaluator/evaluator.py"
+    },
+    "changeRecord": {
+      "boundedSemanticCorrections": [
+        {
+          "basis": "JAVA_REPORT_AND_DENY_AUTHORITY_CONSISTENCY",
+          "benchmarkTaskId": "bench_task_e2e_diagnosis_tool_guarded",
+          "groundTruthId": "gt_stage21_e2e_diagnosis_tool_guarded",
+          "groundTruthVersion": "v4",
+          "reason": "a Java-denied retrieval cannot simultaneously be required as returned evidence; diagnosis remains grounded in the current Java report and the denied attempt remains safety authority"
+        },
+        {
+          "basis": "HAPPY_PATH_JAVA_REPORT_AND_DENY_AUTHORITY_CONSISTENCY",
+          "benchmarkTaskId": "bench_task_formal_e2e_generation_diagnosis_guarded",
+          "groundTruthId": "gt_stage21_formal_e2e_generation_diagnosis_guarded",
+          "groundTruthVersion": "v2",
+          "reason": "the happy-path Java Runner report proves no execution failure, while a cross-project RAG denial cannot return its evidence; diagnosis is NONE and the denied attempt remains safety authority"
+        }
+      ],
+      "changesTaskSemantics": true,
+      "digest": "4dab4f39601592cb1bbabac0dee02225fc85bde7edb01984960bbd8f692e36c0",
+      "modelOutputBasis": false,
+      "path": "docs/stage21-formal105-accuracy-repair-contract.md",
+      "reason": "freeze the accuracy repairs, exact authority bindings, live Runner metadata, diagnosis semantics, and the bounded guarded-task correction"
+    },
+    "executionPrerequisites": {
+      "digest": "9bc1b9d900dde0741754009196ba3ed5005eb662b793d51a7a1a7aed3423f054",
+      "path": "python-apiops-agentlab/tests/benchmark/fixtures/stage21-execution-prerequisites.json",
+      "requiredToolTaskCount": 32,
+      "schemaIdentity": "stage21-execution-prerequisites-sidecar",
+      "schemaVersion": "1.1.1",
+      "taskCount": 105
+    },
+    "generationMetadata": {
+      "authority": "LIVE_JAVA_RUNNER_ENDPOINT_CONTRACT",
+      "digest": "3da04ad7bce7dd1e5da2b38946b831f310ce1b0d8cee1f14f93089fe35cfa59b",
+      "path": "python-apiops-agentlab/tests/benchmark/fixtures/support/generation-live-runner-openapi-metadata.json",
+      "resolverDigest": "29c0c60fee941c380710c8f53a40123116336aac1b481c05a1af53eb683ed874",
+      "resolverPath": "python-apiops-agentlab/app/benchmark/generation_inputs.py",
+      "schemaIdentity": null,
+      "taskIds": [
+        "bench_task_testcase_happy_create_order_runner",
+        "bench_task_formal_testcase_inventory_conflict_runner"
+      ]
+    },
+    "guardedTaskContract": {
+      "authorityBasis": "JAVA_REPORT_AND_DENY_AUTHORITY_CONSISTENCY",
+      "groundTruthDigest": "e0dd69d8aa705f3d6dd566b456142f6c3b828554fcff9c5ee31d1fcb18f72d30",
+      "groundTruthId": "gt_stage21_e2e_diagnosis_tool_guarded",
+      "groundTruthPath": "python-apiops-agentlab/tests/benchmark/fixtures/ground_truth/gt_stage21_e2e_diagnosis_tool_guarded.json",
+      "groundTruthVersion": "v4",
+      "taskDigest": "9c9fb9bec702285fe90d4a559bf1ce357ab9b8942b8e0591327ad1767cb0a352",
+      "taskPath": "python-apiops-agentlab/tests/benchmark/fixtures/tasks/bench_task_e2e_diagnosis_tool_guarded.json"
+    },
+    "guardedTaskContracts": [
+      {
+        "authorityBasis": "JAVA_REPORT_AND_DENY_AUTHORITY_CONSISTENCY",
+        "groundTruthDigest": "e0dd69d8aa705f3d6dd566b456142f6c3b828554fcff9c5ee31d1fcb18f72d30",
+        "groundTruthId": "gt_stage21_e2e_diagnosis_tool_guarded",
+        "groundTruthPath": "python-apiops-agentlab/tests/benchmark/fixtures/ground_truth/gt_stage21_e2e_diagnosis_tool_guarded.json",
+        "groundTruthVersion": "v4",
+        "taskDigest": "9c9fb9bec702285fe90d4a559bf1ce357ab9b8942b8e0591327ad1767cb0a352",
+        "taskPath": "python-apiops-agentlab/tests/benchmark/fixtures/tasks/bench_task_e2e_diagnosis_tool_guarded.json"
+      },
+      {
+        "authorityBasis": "HAPPY_PATH_JAVA_REPORT_AND_DENY_AUTHORITY_CONSISTENCY",
+        "groundTruthDigest": "b34af783f2277f28d5e21e045aa83ba75acd7879c8e6fe3a470eb1d5ee2391e5",
+        "groundTruthId": "gt_stage21_formal_e2e_generation_diagnosis_guarded",
+        "groundTruthPath": "python-apiops-agentlab/tests/benchmark/fixtures/formal/ground_truth/gt_stage21_e2e_generation_diagnosis_guarded.json",
+        "groundTruthVersion": "v2",
+        "taskDigest": "af0dd3572475ca56a06bac27fc09ea59cf3b473e5d843730128f01ad3bfb17c6",
+        "taskPath": "python-apiops-agentlab/tests/benchmark/fixtures/formal/tasks/bench_task_formal_e2e_generation_diagnosis_guarded.json"
+      }
+    ],
+    "parentOfficialBaseline": "official-20260903T173410Z",
+    "ragRuntimeRecipes": {
+      "digest": "54b6d4d63a0fde0e14d4c96fbc743362346e1bbed7b2b8b752508ff23ad6a478",
+      "path": "python-apiops-agentlab/tests/benchmark/fixtures/support/stage21-remaining-rag-recipes.json",
+      "recipeCount": 31,
+      "schemaVersion": "stage21-rag-runtime-recipe/v1"
+    },
+    "revision": "stage21-formal105-accuracy-repair-v4",
+    "schemas": {
+      "digest": "115dc231c69bec157bece8eb7da27bd23d323127e652da52ef14471fbebff1f4",
+      "files": [
+        "shared-schemas/diagnosis-report-schema.json",
+        "shared-schemas/evaluation-task-schema.json",
+        "shared-schemas/testcase-dsl-schema.json",
+        "shared-schemas/tool-call-schema.json",
+        "shared-schemas/tool-result-schema.json",
+        "python-apiops-agentlab/app/schemas/diagnosis_report.py",
+        "python-apiops-agentlab/app/schemas/testcase_dsl.py",
+        "python-apiops-agentlab/app/schemas/tool_call.py",
+        "python-apiops-agentlab/app/schemas/tool_result.py",
+        "python-apiops-agentlab/app/clients/qwen_structured_output.py"
+      ],
+      "qwenStructuredOutput": {
+        "diagnosisInitial": {
+          "allowedOutputs": [
+            "DiagnosisReport",
+            "ToolIntent"
+          ],
+          "mode": "JSON_OBJECT"
+        },
+        "diagnosisMemoryRefinement": {
+          "mode": "JSON_SCHEMA",
+          "schemaDigest": "3a5fef50c9b2944a9ea92c6842c0857363c3991d3c7ed1d65b6fbfbe58ccd339",
+          "schemaName": "diagnosis_report_v1"
+        },
+        "diagnosisNativeCoverage": "REPORT_PATH_ONLY",
+        "diagnosisReportContinuation": {
+          "mode": "JSON_SCHEMA",
+          "schemaDigest": "3a5fef50c9b2944a9ea92c6842c0857363c3991d3c7ed1d65b6fbfbe58ccd339",
+          "schemaName": "diagnosis_report_v1"
+        },
+        "testcase": {
+          "mode": "JSON_SCHEMA",
+          "schemaDigest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+          "schemaName": "testcase_candidate_object_v1"
+        }
+      }
+    },
+    "workflowSources": {
+      "digest": "7c69f102e6697a360a1f84e6bd465aa03fc6f7f7bd5dde8d1d6a09da5a4de6db",
+      "files": [
+        "python-apiops-agentlab/app/benchmark/generation_inputs.py",
+        "python-apiops-agentlab/app/benchmark/outcome_projection.py",
+        "python-apiops-agentlab/app/benchmark/outcome_v2.py",
+        "python-apiops-agentlab/app/benchmark/real_model.py",
+        "python-apiops-agentlab/app/benchmark/stage21_rag_runtime_recipes.py",
+        "python-apiops-agentlab/app/evaluator/evaluator.py",
+        "python-apiops-agentlab/app/workflows/diagnosis_workflow.py",
+        "python-apiops-agentlab/app/workflows/tool_planning.py"
+      ]
+    }
+  },
+  "branch": "main",
+  "dataset": {
+    "datasetId": "stage21-apioops-bench-mini",
+    "datasetVersion": "v3",
+    "devCount": 95,
+    "groundTruthDigest": "957c772adddc24ab78656da15a1fb79720df05fa44980ec738d9bab49cd8af71",
+    "groundTruthReferenceCount": 105,
+    "heldOutCount": 10,
+    "manifestDigest": "fd0c7fd8b3cc77b6aceec0c852bc2e550109d87fac04306450b98e0dcbc85612",
+    "orderedTaskIdsDigest": "166944f0ed790fe3548645b53ecef5b81bacd2bcb5b5256f9ad1644979204c92",
+    "policyTaskIdsDigest": "166944f0ed790fe3548645b53ecef5b81bacd2bcb5b5256f9ad1644979204c92",
+    "qualityGate": {
+      "blockingIssueCount": 0,
+      "issueCount": 0,
+      "status": "PASS"
+    },
+    "reviewStatusCounts": {
+      "APPROVED": 105
+    },
+    "schemaVersion": "0.2.0",
+    "splitCounts": {
+      "DEV": 95,
+      "HELD_OUT": 10
+    },
+    "taskCount": 105,
+    "taskFilesDigest": "12be9d2548664cf443d079ee63c83fcd3ef856d2a23fc0cfbc06732ae006c1e5"
+  },
+  "dirtyDiffDigest": "3876f215dbb75da3236f227819f9499fa45178bf901102a049f17b3afc7532ae",
+  "environmentReadiness": {
+    "QWEN_API_KEY": true,
+    "QWEN_BASE_URL": true,
+    "QWEN_MODEL": true,
+    "QWEN_TIMEOUT_SECONDS": true,
+    "optional": {
+      "DEEPSEEK_API_KEY": false
+    },
+    "provider": "qwen",
+    "ready": true,
+    "required": {
+      "JAVA_APIOPS_BASE_URL": true,
+      "QWEN_API_KEY": true,
+      "QWEN_BASE_URL": true,
+      "QWEN_MODEL": true,
+      "QWEN_TIMEOUT_SECONDS": true,
+      "STAGE21_NORMAL_PASSWORD": true,
+      "STAGE21_NORMAL_USERNAME": true,
+      "STAGE21_SAFETY41_PASSWORD": true,
+      "STAGE21_SAFETY41_USERNAME": true,
+      "STAGE21_SAFETY42_PASSWORD": true,
+      "STAGE21_SAFETY42_USERNAME": true
+    }
+  },
+  "evaluation": {
+    "diagnosisSemanticValidator": {
+      "digest": "9e9c38b7720810b3eb8ba32fcfa2ef5d52ca75905ea37992600cce95435021f7",
+      "source": "python-apiops-agentlab/app/agents/diagnosis.py"
+    },
+    "evaluator": {
+      "digest": "4fb3ba2fe2add6da56f27b06796d81748ee0c10c5ca7b9ce736029fe312f1b29",
+      "name": "RuleBasedEvaluator",
+      "source": "python-apiops-agentlab/app/evaluator/evaluator.py",
+      "version": "rule-evaluator-v1"
+    },
+    "outcomePolicy": {
+      "datasetId": "stage21-apioops-bench-mini",
+      "datasetVersion": "v3",
+      "digest": "5401d04801706cd6d21996635f78e3875ee56ad074e3e2cd6b9449fc5aedb8fd",
+      "taskSchemaVersion": "0.2.0",
+      "version": "stage21-outcome-v2-v2"
+    },
+    "safetyPolicy": {
+      "digest": "4fb3ba2fe2add6da56f27b06796d81748ee0c10c5ca7b9ce736029fe312f1b29",
+      "source": "python-apiops-agentlab/app/evaluator/evaluator.py"
+    },
+    "semanticAdjudication": {
+      "digest": "efc5ebe2efce727a9e6a6da238ca034c0d4b4c4ffe85f7852160c9a2b3c66103",
+      "reason": "existing Formal105 baseline constructs BenchmarkRunner without Judge configuration",
+      "source": "python-apiops-agentlab/app/benchmark/semantic_adjudication.py",
+      "status": "NOT_APPLICABLE"
+    },
+    "toolPlanning": {
+      "digest": "2f9be8bdfc04264a1de4fdb419c6a9ea242782b65cd02d672a20f14c2e4beec4",
+      "source": "python-apiops-agentlab/app/workflows/tool_planning.py"
+    },
+    "v2Projector": {
+      "digest": "06de367077acacf1fd7930c03e1928d6a4e8bc492c9c2003205a02ef5d38dfd1",
+      "schemaVersion": "stage21-outcome-v2-projection/v1",
+      "source": "python-apiops-agentlab/app/benchmark/outcome_v2.py"
+    }
+  },
+  "freezeStatus": "FROZEN_BEFORE_FORMAL105",
+  "gitDiffBinarySha256": "26724912a78249ae63a755c684a7be7581ee359b838861fd921a0cd34e048827",
+  "gitHead": "f3c0ed7a3016d515d9ae7357e749670bf1ebab88",
+  "javaVersion": "openjdk version \"21.0.11\" 2026-04-21 LTS",
+  "modelParameters": {
+    "enableThinking": false,
+    "responseFormat": "provider-specific",
+    "stream": false,
+    "structuredOutputProfile": {
+      "diagnosisInitial": {
+        "allowedOutputs": [
+          "DiagnosisReport",
+          "ToolIntent"
+        ],
+        "mode": "JSON_OBJECT"
+      },
+      "diagnosisMemoryRefinement": {
+        "mode": "JSON_SCHEMA",
+        "schemaDigest": "3a5fef50c9b2944a9ea92c6842c0857363c3991d3c7ed1d65b6fbfbe58ccd339",
+        "schemaName": "diagnosis_report_v1"
+      },
+      "diagnosisNativeCoverage": "REPORT_PATH_ONLY",
+      "diagnosisReportContinuation": {
+        "mode": "JSON_SCHEMA",
+        "schemaDigest": "3a5fef50c9b2944a9ea92c6842c0857363c3991d3c7ed1d65b6fbfbe58ccd339",
+        "schemaName": "diagnosis_report_v1"
+      },
+      "testcase": {
+        "mode": "JSON_SCHEMA",
+        "schemaDigest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schemaName": "testcase_candidate_object_v1"
+      }
+    },
+    "timeoutSeconds": 60.0
+  },
+  "modelProvider": {
+    "model": "qwen3.8-max",
+    "provider": "Qwen"
+  },
+  "promptIdentities": [
+    {
+      "digest": "134db8d2f4e47bab9977f243634d699cee26e92000d05d0efe1068cebe5bf407",
+      "files": [
+        "python-apiops-agentlab/app/agents/prompts/testcase_generate_v1.txt"
+      ],
+      "name": "testcase_generate",
+      "version": "v1"
+    },
+    {
+      "digest": "c6ffc1d7bc893c0d57485b0eba0a6f66ecc0ce8924de2ac438805f658620d607",
+      "files": [
+        "python-apiops-agentlab/app/agents/prompts/testcase_repair_v1.txt"
+      ],
+      "name": "testcase_repair",
+      "version": "v1"
+    },
+    {
+      "digest": "610a8c064e388b37e18cce4757d1e9bc0b80a6876b4cda8279382b1a279963e7",
+      "files": [
+        "python-apiops-agentlab/app/agents/prompts/diagnosis_v1.txt"
+      ],
+      "name": "diagnosis",
+      "version": "1"
+    },
+    {
+      "digest": "5e847ff425dd95e1219836eb63449fff0fb257eb8f1a55b5512c69255fbab323",
+      "files": [
+        "python-apiops-agentlab/app/agents/prompts/diagnosis_memory_refinement_v1.txt"
+      ],
+      "name": "diagnosis_memory_refinement",
+      "version": "v1"
+    }
+  ],
+  "providerGate": {
+    "acceptanceArtifact": "artifacts/stage21/qwen38-provider-acceptance-v3/final-gate.md",
+    "acceptanceDigest": "8515ebfb1b0667eb2bcd12c067cde7d4f1e59a76f1b8f872e4739dd40a38feec",
+    "formal105Status": "NOT_RUN",
+    "markers": {
+      "DEEPSEEK_REGRESSION = PASS": "PASS",
+      "FORMAL105_STATUS = NOT_RUN": "PASS",
+      "QWEN_DIAGNOSIS_SEMANTIC = PASS": "PASS",
+      "QWEN_PROVIDER = PASS": "PASS",
+      "QWEN_PROVIDER_CHAIN = PASS": "PASS",
+      "QWEN_RUNTIME_WIRING = PASS": "PASS",
+      "QWEN_TESTCASE_NATIVE_INTENTIONAL_INVALID = PASS": "PASS",
+      "QWEN_TESTCASE_NATIVE_POSITIVE = PASS": "PASS"
+    },
+    "model": "qwen3.8-max",
+    "provider": "Qwen",
+    "qualityGateArtifact": "artifacts/stage21/qwen38-provider-acceptance-v3/quality-gate.json",
+    "qualityGateDigest": "0e559b364b4bc01348722262911ef1830a811610ade8a0b1cb4e90c2db63650b",
+    "sourceFreezeArtifact": "artifacts/stage21/qwen38-provider-acceptance-v3/source-freeze.json",
+    "sourceFreezeDigest": "9e065c6c12dd32a7c0e5a3ef6da03c6401cc7081d313eb4a994ece6855de894d",
+    "status": "PASS",
+    "structuredOutputProfile": {
+      "diagnosisInitial": {
+        "allowedOutputs": [
+          "DiagnosisReport",
+          "ToolIntent"
+        ],
+        "mode": "JSON_OBJECT"
+      },
+      "diagnosisMemoryRefinement": {
+        "mode": "JSON_SCHEMA",
+        "schemaDigest": "3a5fef50c9b2944a9ea92c6842c0857363c3991d3c7ed1d65b6fbfbe58ccd339",
+        "schemaName": "diagnosis_report_v1"
+      },
+      "diagnosisNativeCoverage": "REPORT_PATH_ONLY",
+      "diagnosisReportContinuation": {
+        "mode": "JSON_SCHEMA",
+        "schemaDigest": "3a5fef50c9b2944a9ea92c6842c0857363c3991d3c7ed1d65b6fbfbe58ccd339",
+        "schemaName": "diagnosis_report_v1"
+      },
+      "testcase": {
+        "mode": "JSON_SCHEMA",
+        "schemaDigest": "82ef96cebaf5fbe16269fd18b0240d78f5b9b90a4155a17eb797115b09148ecf",
+        "schemaName": "testcase_candidate_object_v1"
+      }
+    }
+  },
+  "pythonVersion": "3.13.13",
+  "ragCorpusV2": {
+    "acceptanceArtifact": "artifacts/stage21/rag-v2-acceptance/acceptance.json",
+    "acceptanceDigest": "ffc31d987a5283ab6833523af7dcbf10b9c2f0c888404761448155ae3b6a45ba",
+    "corpusDigest": "1f27b1ccbf1fd63146fdcd77aab7963f3443a59680ccb82aac9b13abd27e2a4a",
+    "corpusVersion": "stage21-rag-corpus-v2",
+    "documentCount": 13,
+    "embeddingDimension": 1024,
+    "embeddingModel": "embedding-3",
+    "embeddingProvider": "zhipu",
+    "manifestDigest": "d7f9c326b8c8c168411f70adc32dbf507dcd3a810a0d12e4f53186a9949c23bb",
+    "threshold": 0.516365
+  },
+  "runtimePreflight": {
+    "artifact": "python-apiops-agentlab/artifacts/stage21/v4-runtime-preflight-final-20260904T1424Z/run.json",
+    "artifactDigest": "3bda52f2997650d9ddb01e32c7b4041f4d4553fc0985b19211b973e5e55ac0b8",
+    "auditStatus": "STAGE21_ALL_105_INPUT_AUDIT_COMPLETE",
+    "classificationCounts": {
+      "AUTH_PREREQUISITE_GAP": 0,
+      "NOT_PREFLIGHTABLE_MODEL_BEHAVIOR": 2,
+      "READY": 103,
+      "REAL_JAVA_BUG": 0,
+      "RESOURCE_MAPPING_BUG": 0,
+      "RUNTIME_RECIPE_GAP": 0,
+      "RUNTIME_RESOURCE_MISSING": 0,
+      "STRATEGY_INPUT_CONTRACT_GAP": 0,
+      "TASK_INPUT_CONTRACT_GAP": 0
+    },
+    "nonReadyTaskIds": [],
+    "pendingClassificationCount": 0,
+    "runtime-prerequisite-audit-verification.json": {
+      "digest": "1c6ea56f41575c4f9f2218b16361485ccc5603ae71551ab4fabb7c2112c6f3a5",
+      "path": "python-apiops-agentlab/artifacts/stage21/v4-runtime-preflight-final-20260904T1424Z/runtime-prerequisite-audit-verification.json"
+    },
+    "runtime-probe-snapshot.json": {
+      "digest": "7445b936c85ed33ccd76a6657da3b7f995e432e867010e38c4c62d8639651550",
+      "path": "python-apiops-agentlab/artifacts/stage21/v4-runtime-preflight-final-20260904T1424Z/runtime-probe-snapshot.json"
+    },
+    "status": "PASS",
+    "unresolvedJavaResourceCount": 0
+  },
+  "runtimeTimestamp": "2026-09-04T14:56:55.150286Z",
+  "schemaVersion": "stage21-final-formal105-freeze/v4",
+  "sourceOfTruth": "local dirty worktree",
+  "stage19Evaluator": {
+    "digest": "4fb3ba2fe2add6da56f27b06796d81748ee0c10c5ca7b9ce736029fe312f1b29",
+    "name": "RuleBasedEvaluator",
+    "source": "python-apiops-agentlab/app/evaluator/evaluator.py",
+    "version": "rule-evaluator-v1"
+  },
+  "toolCatalogIdentity": {
+    "name": "ToolCatalog",
+    "version": "approved-tool-catalog-v1"
+  },
+  "trackedDirtyPathCount": 170,
+  "trackedDirtyPathDigest": "6c6e97ec0fb8c247975eecb35c771b0b739d65bdf4d19b1b0aa392317b5b914a",
+  "untrackedPathCount": 2020,
+  "untrackedPathDigest": "971307023c4df9140c1fe4afdb3826fd03f32a17e9d0ba02d6a21e4c4ce53369",
+  "v1PolicyIdentity": {
+    "digest": "caebeaa133dc3117370c8ead0ae692c58f3aa251c788e93d373a96fe38ea1539",
+    "name": "evaluate_task_success / TaskSuccessResult",
+    "source": "python-apiops-agentlab/app/benchmark/success.py"
+  },
+  "v2Policy": {
+    "datasetId": "stage21-apioops-bench-mini",
+    "datasetVersion": "v3",
+    "digest": "5401d04801706cd6d21996635f78e3875ee56ad074e3e2cd6b9449fc5aedb8fd",
+    "taskCount": 105,
+    "version": "stage21-outcome-v2-v2"
+  },
+  "v2Projector": {
+    "digest": "06de367077acacf1fd7930c03e1928d6a4e8bc492c9c2003205a02ef5d38dfd1",
+    "schemaVersion": "stage21-outcome-v2-projection/v1",
+    "source": "python-apiops-agentlab/app/benchmark/outcome_v2.py"
+  },
+  "workflowIdentity": {
+    "name": "RealModelStage20WorkflowAdapter",
+    "version": "stage21-real-model-adapter-v1"
+  },
+  "workingTreeDirty": true
+}

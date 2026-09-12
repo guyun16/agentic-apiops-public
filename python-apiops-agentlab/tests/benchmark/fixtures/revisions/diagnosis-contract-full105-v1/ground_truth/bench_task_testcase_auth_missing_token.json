@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_testcase_auth_missing_token",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "AUTH_FAILURE"
+    },
+    {
+      "name": "security_requirement",
+      "value": "apiKeyAuth"
+    },
+    {
+      "name": "security_scope",
+      "value": "DOCUMENT_LEVEL"
+    },
+    {
+      "name": "operation_http_status",
+      "value": "UNSPECIFIED_BY_METADATA"
+    }
+  ]
+}

@@ -40,6 +40,7 @@ from app.clients.java_apiops import (
 )
 from app.clients.qwen import QwenError
 from app.core.errors import ApplicationError
+from app.core.http_tls import client_tls_context
 from app.core.settings import AppSettings, get_settings
 from app.memory import (
     HistoricalFailureMemoryCandidate,
@@ -54,6 +55,7 @@ from app.schemas.diagnosis_api import (
     DiagnosisExecutionStep,
     DiagnosisFailure,
     DiagnosisMemoryWriteResponse,
+    DiagnosisRunSummary,
 )
 from app.schemas.diagnosis_report import DiagnosisReport
 from app.schemas.runner import TestReport
@@ -63,7 +65,14 @@ from app.services.diagnosis_repository import (
 )
 from app.services.runtime_evaluation import runtime_evaluation_store
 from app.tools import ToolCatalog, ToolIntent, ToolRouter
-from app.tracing import TraceEvent, TraceRecorder, create_trace_recorder, new_identity
+from app.tracing import (
+    TraceEvent,
+    TraceRecord,
+    TraceRecorder,
+    create_trace_recorder,
+    new_identity,
+    query_persisted_trace_records,
+)
 from app.workflows.approval import ApprovalAction, ApprovalDecision, ApprovalRequest
 from app.workflows.diagnosis_memory_query import build_memory_symptoms
 from app.workflows.diagnosis_workflow import (
@@ -102,6 +111,9 @@ class _DiagnosisRun:
     tool_intent_id: str | None = None
     tool_call_id: str | None = None
     failure: DiagnosisFailure | None = None
+    persisted_steps: tuple[DiagnosisExecutionStep, ...] | None = None
+    persisted_context: DiagnosisContextSummary | None = None
+    historical_trace_records: tuple[TraceRecord, ...] = ()
 
 
 class DiagnosisExecutionService:
@@ -148,6 +160,7 @@ class DiagnosisExecutionService:
                 "run_repository and checkpoint_db_path must use the same database path"
             )
         self._trace_recorders: dict[str, TraceRecorder] = {}
+        self._historical_trace_records: dict[str, tuple[TraceRecord, ...]] = {}
 
     async def start(
         self,
@@ -174,74 +187,94 @@ class DiagnosisExecutionService:
                 "Diagnosis requires a failed or timed-out Java run.",
                 409,
             )
-        require_diagnosis_llm_credentials(effective_settings)
-        identity = diagnosis_llm_identity(effective_settings)
-        api_id = (
-            await self._resolve_api_id(
+        with self._run_repository.execution_lock(project_id, run_id):
+            self._run_repository.recover_locked(project_id, run_id)
+            existing = [
+                entry
+                for entry in self._run_repository.list_by_project_id(project_id)
+                if entry.run.run_id == run_id
+            ]
+            for entry in existing:
+                if entry.run.status == "APPROVAL_REQUIRED":
+                    return self._snapshot(
+                        self._get_record(entry.run.agent_run_id, settings=effective_settings)
+                    )
+            if (
+                existing
+                and existing[0].run.status == "COMPLETED"
+                and existing[0].run.test_report.report_id == report.report_id
+            ):
+                return self._snapshot(
+                    self._get_record(existing[0].run.agent_run_id, settings=effective_settings)
+                )
+            require_diagnosis_llm_credentials(effective_settings)
+            identity = diagnosis_llm_identity(effective_settings)
+            api_id = (
+                await self._resolve_api_id(
+                    project_id=project_id,
+                    run_id=run_id,
+                    token=token,
+                    trace_id=trace_id,
+                    settings=effective_settings,
+                )
+                if self._memory_retriever is not None
+                else None
+            )
+
+            record = _DiagnosisRun(
+                agent_run_id=new_identity("agent_run"),
+                workflow_id=new_identity("diagnosis_workflow"),
+                trace_id=trace_id,
                 project_id=project_id,
                 run_id=run_id,
-                token=token,
-                trace_id=trace_id,
-                settings=effective_settings,
+                api_id=api_id,
+                test_report=report,
+                trace_recorder=create_trace_recorder(effective_settings),
+                provider=identity.provider,
+                model=identity.model,
             )
-            if self._memory_retriever is not None
-            else None
-        )
-
-        record = _DiagnosisRun(
-            agent_run_id=new_identity("agent_run"),
-            workflow_id=new_identity("diagnosis_workflow"),
-            trace_id=trace_id,
-            project_id=project_id,
-            run_id=run_id,
-            api_id=api_id,
-            test_report=report,
-            trace_recorder=create_trace_recorder(effective_settings),
-            provider=identity.provider,
-            model=identity.model,
-        )
-        self._trace_recorders[record.agent_run_id] = record.trace_recorder
-        self._persist_record(record)
-        runtime_evaluation_store.begin(
-            agent_run_id=record.agent_run_id,
-            trace_id=record.trace_id,
-            execution_type="DIAGNOSIS",
-            provider=record.provider,
-            model=record.model,
-            project_id=record.project_id,
-            run_id=record.run_id,
-            report_id=record.test_report.report_id,
-            validation_applicable=False,
-        )
-
-        try:
-            result = await self._invoke(
-                record=record,
-                token=token,
-                settings=effective_settings,
-                resume_decision=None,
-            )
-            self._apply_graph_result(record, result)
+            self._trace_recorders[record.agent_run_id] = record.trace_recorder
             self._persist_record(record)
-            self._sync_runtime(record)
-        except ApplicationError as exc:
-            self._mark_failure(record, exc.code, exc.message)
-            raise
-        except (DeepSeekError, QwenError, DiagnosisInferenceError) as exc:
-            self._mark_failure(record, "DIAGNOSIS_FAILED", "The diagnosis workflow failed.")
-            raise ApplicationError(
-                "DIAGNOSIS_FAILED",
-                "The diagnosis workflow failed.",
-                502,
-            ) from exc
-        except Exception as exc:  # noqa: BLE001 - public boundary must be stable and fail closed
-            self._mark_failure(record, "DIAGNOSIS_FAILED", "The diagnosis workflow failed.")
-            raise ApplicationError(
-                "DIAGNOSIS_FAILED",
-                "The diagnosis workflow failed.",
-                502,
-            ) from exc
-        return self._snapshot(record)
+            runtime_evaluation_store.begin(
+                agent_run_id=record.agent_run_id,
+                trace_id=record.trace_id,
+                execution_type="DIAGNOSIS",
+                provider=record.provider,
+                model=record.model,
+                project_id=record.project_id,
+                run_id=record.run_id,
+                report_id=record.test_report.report_id,
+                validation_applicable=False,
+            )
+
+            try:
+                result = await self._invoke(
+                    record=record,
+                    token=token,
+                    settings=effective_settings,
+                    resume_decision=None,
+                )
+                self._apply_graph_result(record, result)
+                self._persist_record(record)
+                self._sync_runtime(record)
+            except ApplicationError as exc:
+                self._mark_failure(record, exc.code, exc.message)
+                raise
+            except (DeepSeekError, QwenError, DiagnosisInferenceError) as exc:
+                self._mark_failure(record, "DIAGNOSIS_FAILED", "The diagnosis workflow failed.")
+                raise ApplicationError(
+                    "DIAGNOSIS_FAILED",
+                    "The diagnosis workflow failed.",
+                    502,
+                ) from exc
+            except Exception as exc:  # noqa: BLE001 - public boundary must be stable and fail closed
+                self._mark_failure(record, "DIAGNOSIS_FAILED", "The diagnosis workflow failed.")
+                raise ApplicationError(
+                    "DIAGNOSIS_FAILED",
+                    "The diagnosis workflow failed.",
+                    502,
+                ) from exc
+            return self._snapshot(record)
 
     async def resume(
         self,
@@ -278,57 +311,66 @@ class DiagnosisExecutionService:
             trace_id=record.trace_id,
             settings=effective_settings,
         )
-        if refreshed.report_id != record.test_report.report_id:
-            self._mark_failure(
-                record,
-                "TEST_REPORT_CHANGED",
-                "The Java TestReport changed while approval was pending.",
-            )
-            raise ApplicationError(
-                "TEST_REPORT_CHANGED",
-                "The Java TestReport changed while approval was pending.",
-                409,
-        )
-        record.test_report = refreshed
-        self._persist_record(record)
-
-        approval = ApprovalDecision(
-            workflow_id=record.approval_request.workflow_id,
-            project_id=record.approval_request.project_id,
-            intent_id=record.approval_request.intent_id,
-            tool_name=record.approval_request.tool_name,
-            arguments_fingerprint=record.approval_request.arguments_fingerprint,
-            decision=decision,
-            edited_arguments=edited_arguments,
-        )
-        try:
-            result = await self._invoke(
-                record=record,
-                token=token,
-                settings=effective_settings,
-                resume_decision=approval,
-            )
-            self._apply_graph_result(record, result)
+        with self._run_repository.execution_lock(record.project_id, record.run_id):
+            record = self._get_record(agent_run_id, settings=effective_settings)
+            if record.status != "APPROVAL_REQUIRED" or record.approval_request is None:
+                raise ApplicationError(
+                    "APPROVAL_NOT_PENDING",
+                    "This diagnosis execution has no pending approval request.",
+                    409,
+                )
+            if refreshed.report_id != record.test_report.report_id:
+                self._mark_failure(
+                    record,
+                    "TEST_REPORT_CHANGED",
+                    "The Java TestReport changed while approval was pending.",
+                )
+                raise ApplicationError(
+                    "TEST_REPORT_CHANGED",
+                    "The Java TestReport changed while approval was pending.",
+                    409,
+                )
+            record.test_report = refreshed
+            record.status = "RUNNING"
             self._persist_record(record)
-            self._sync_runtime(record)
-        except ApplicationError as exc:
-            self._mark_failure(record, exc.code, exc.message)
-            raise
-        except (DeepSeekError, QwenError, DiagnosisInferenceError) as exc:
-            self._mark_failure(record, "DIAGNOSIS_FAILED", "The diagnosis workflow failed.")
-            raise ApplicationError(
-                "DIAGNOSIS_FAILED",
-                "The diagnosis workflow failed.",
-                502,
-            ) from exc
-        except Exception as exc:  # noqa: BLE001 - public boundary must be stable and fail closed
-            self._mark_failure(record, "DIAGNOSIS_FAILED", "The diagnosis workflow failed.")
-            raise ApplicationError(
-                "DIAGNOSIS_FAILED",
-                "The diagnosis workflow failed.",
-                502,
-            ) from exc
-        return self._snapshot(record)
+
+            approval = ApprovalDecision(
+                workflow_id=record.approval_request.workflow_id,
+                project_id=record.approval_request.project_id,
+                intent_id=record.approval_request.intent_id,
+                tool_name=record.approval_request.tool_name,
+                arguments_fingerprint=record.approval_request.arguments_fingerprint,
+                decision=decision,
+                edited_arguments=edited_arguments,
+            )
+            try:
+                result = await self._invoke(
+                    record=record,
+                    token=token,
+                    settings=effective_settings,
+                    resume_decision=approval,
+                )
+                self._apply_graph_result(record, result)
+                self._persist_record(record)
+                self._sync_runtime(record)
+            except ApplicationError as exc:
+                self._mark_failure(record, exc.code, exc.message)
+                raise
+            except (DeepSeekError, QwenError, DiagnosisInferenceError) as exc:
+                self._mark_failure(record, "DIAGNOSIS_FAILED", "The diagnosis workflow failed.")
+                raise ApplicationError(
+                    "DIAGNOSIS_FAILED",
+                    "The diagnosis workflow failed.",
+                    502,
+                ) from exc
+            except Exception as exc:  # noqa: BLE001 - public boundary must be stable and fail closed
+                self._mark_failure(record, "DIAGNOSIS_FAILED", "The diagnosis workflow failed.")
+                raise ApplicationError(
+                    "DIAGNOSIS_FAILED",
+                    "The diagnosis workflow failed.",
+                    502,
+                ) from exc
+            return self._snapshot(record)
 
     async def get(
         self,
@@ -354,9 +396,51 @@ class DiagnosisExecutionService:
                 "The Java TestReport no longer matches this diagnosis execution.",
                 409,
             )
-        record.test_report = refreshed
-        self._persist_record(record)
+        self._run_repository.recover_interrupted(record.project_id)
+        record = self._get_record(agent_run_id, settings=effective_settings)
+        if record.status == "RUNNING":
+            raise ApplicationError(
+                "DIAGNOSIS_ALREADY_RUNNING",
+                "The diagnosis is still running. Read its saved history for progress.",
+                409,
+            )
         return self._snapshot(record)
+
+    def list(self, *, project_id: int) -> tuple[DiagnosisRunSummary, ...]:
+        """List durable Diagnosis runs for exactly one authorized project."""
+
+        self._run_repository.recover_interrupted(project_id)
+
+        return tuple(
+            DiagnosisRunSummary.model_validate(
+                {
+                    "status": entry.run.status,
+                    "provider": entry.run.provider,
+                    "model": entry.run.model,
+                    "projectId": entry.run.project_id,
+                    "runId": entry.run.run_id,
+                    "taskId": entry.run.test_report.task_id,
+                    "agentRunId": entry.run.agent_run_id,
+                    "traceId": entry.run.trace_id,
+                    "workflowId": entry.run.workflow_id,
+                    "apiId": entry.run.api_id,
+                    "reportId": entry.run.test_report.report_id,
+                    "diagnosisReportId": (
+                        entry.run.diagnosis_report.report_id
+                        if entry.run.diagnosis_report is not None
+                        else None
+                    ),
+                    "summary": (
+                        entry.run.diagnosis_report.summary
+                        if entry.run.diagnosis_report is not None
+                        else None
+                    ),
+                    "createdAt": entry.created_at,
+                    "updatedAt": entry.updated_at,
+                }
+            )
+            for entry in self._run_repository.list_by_project_id(project_id)
+        )
 
     async def remember_verified_diagnosis(
         self,
@@ -481,7 +565,7 @@ class DiagnosisExecutionService:
         trace_id: str,
         settings: AppSettings,
     ) -> TestReport:
-        async with httpx.AsyncClient(trust_env=False) as http_client:
+        async with httpx.AsyncClient(trust_env=False, verify=client_tls_context()) as http_client:
             client = JavaApiOpsClient(
                 http_client,
                 base_url=settings.java_apiops_base_url,
@@ -509,7 +593,9 @@ class DiagnosisExecutionService:
         """Resolve apiId only from one exact Java run-summary match."""
 
         try:
-            async with httpx.AsyncClient(trust_env=False) as http_client:
+            async with httpx.AsyncClient(
+                trust_env=False, verify=client_tls_context()
+            ) as http_client:
                 client = JavaApiOpsClient(
                     http_client,
                     base_url=settings.java_apiops_base_url,
@@ -526,8 +612,7 @@ class DiagnosisExecutionService:
         matches = tuple(summary for summary in summaries if summary.run_id == run_id)
         return matches[0].api_id if len(matches) == 1 else None
 
-    @staticmethod
-    def _to_stored_record(record: _DiagnosisRun) -> StoredDiagnosisRun:
+    def _to_stored_record(self, record: _DiagnosisRun) -> StoredDiagnosisRun:
         intent = record.latest_state.get("intent")
         approval_arguments = dict(intent.arguments) if isinstance(intent, ToolIntent) else None
         risk = record.latest_state.get("tool_risk")
@@ -551,6 +636,8 @@ class DiagnosisExecutionService:
             tool_intent_id=record.tool_intent_id,
             tool_call_id=record.tool_call_id,
             failure=record.failure,
+            steps=self._steps(record),
+            context=self._context_summary(record),
         )
 
     @staticmethod
@@ -585,6 +672,8 @@ class DiagnosisExecutionService:
             tool_intent_id=stored.tool_intent_id,
             tool_call_id=stored.tool_call_id,
             failure=stored.failure,
+            persisted_steps=stored.steps,
+            persisted_context=stored.context,
         )
 
     def _persist_record(self, record: _DiagnosisRun) -> None:
@@ -599,7 +688,9 @@ class DiagnosisExecutionService:
         resume_decision: ApprovalDecision | None,
     ) -> Mapping[str, object]:
         async with AsyncSqliteSaver.from_conn_string(self._checkpoint_db_path) as checkpointer:
-            async with httpx.AsyncClient(trust_env=False) as http_client:
+            async with httpx.AsyncClient(
+                trust_env=False, verify=client_tls_context()
+            ) as http_client:
                 java_client = JavaApiOpsClient(
                     http_client,
                     base_url=settings.java_apiops_base_url,
@@ -757,21 +848,16 @@ class DiagnosisExecutionService:
         }
 
     def _steps(self, record: _DiagnosisRun) -> tuple[DiagnosisExecutionStep, ...]:
-        records = record.trace_recorder.typed_records
+        records = self._trace_records(record)
         steps: list[DiagnosisExecutionStep] = []
-        if any(
-            item.record_type == "retrieval"
-            and getattr(item, "retrieval_kind", None) == "JAVA_TEST_REPORT"
-            for item in records
-        ):
-            steps.append(
-                DiagnosisExecutionStep(
-                    id="java-test-report",
-                    label="Java TestReport",
-                    detail="Read through JavaApiOpsClient.",
-                    state="COMPLETED",
-                )
+        steps.append(
+            DiagnosisExecutionStep(
+                id="java-test-report",
+                label="Java TestReport",
+                detail="Read through JavaApiOpsClient.",
+                state="COMPLETED",
             )
+        )
         if isinstance(record.latest_state.get("context_pack"), ContextPack):
             steps.append(
                 DiagnosisExecutionStep(
@@ -794,7 +880,9 @@ class DiagnosisExecutionService:
                     ),
                 )
             )
-        if record.approval_request is not None:
+        if record.approval_request is not None or any(
+            item.record_type in {"approval", "interrupt", "resume"} for item in records
+        ):
             steps.append(
                 DiagnosisExecutionStep(
                     id="hitl-approval",
@@ -803,8 +891,9 @@ class DiagnosisExecutionService:
                     state="ACTIVE" if record.status == "APPROVAL_REQUIRED" else "COMPLETED",
                 )
             )
-        if record.tool_intent_id is not None and any(
-            item.record_type == "tool_result" for item in records
+        if record.tool_intent_id is not None and (
+            record.tool_call_id is not None
+            or any(item.record_type == "tool_result" for item in records)
         ):
             steps.append(
                 DiagnosisExecutionStep(
@@ -823,29 +912,45 @@ class DiagnosisExecutionService:
                     state="REJECTED" if record.status == "REJECTED" else "COMPLETED",
                 )
             )
-        return tuple(steps)
+        projected = {step.id: step for step in record.persisted_steps or ()}
+        projected.update({step.id: step for step in steps})
+        return tuple(projected.values())
 
     def _context_summary(self, record: _DiagnosisRun) -> DiagnosisContextSummary:
         pack = record.latest_state.get("context_pack")
-        evidence_items = 0
-        context_characters = 0
+        persisted = record.persisted_context
+        evidence_items = persisted.evidence_items if persisted is not None else 0
+        context_characters = persisted.context_characters if persisted is not None else 0
+        unavailable = set(persisted.unavailable_fields if persisted is not None else ())
         if isinstance(pack, ContextPack):
             evidence_items = len(pack.items)
             context_characters = sum(len(item.content) for item in pack.items)
+            unavailable.difference_update({"evidenceItems", "contextCharacters"})
+        elif persisted is None:
+            unavailable.update({"evidenceItems", "contextCharacters"})
+        records = self._trace_records(record)
         model_calls = sum(
             1
-            for item in record.trace_recorder.typed_records
+            for item in records
             if item.record_type == "model_call" and item.event is TraceEvent.START
         )
-        tool_calls = sum(
-            1 for item in record.trace_recorder.typed_records if item.record_type == "tool_result"
-        )
+        tool_calls = sum(1 for item in records if item.record_type == "tool_result")
+        if not records and persisted is not None:
+            model_calls = persisted.model_calls
+            tool_calls = persisted.tool_calls
+        elif not records:
+            unavailable.update({"modelCalls", "toolCalls"})
         return DiagnosisContextSummary(
             evidenceItems=evidence_items,
             contextCharacters=context_characters,
             modelCalls=model_calls,
             toolCalls=tool_calls,
+            unavailableFields=tuple(sorted(unavailable)),
         )
+
+    @staticmethod
+    def _trace_records(record: _DiagnosisRun) -> tuple[TraceRecord, ...]:
+        return record.historical_trace_records + record.trace_recorder.typed_records
 
     def _get_record(
         self,
@@ -860,9 +965,23 @@ class DiagnosisExecutionService:
             raise ApplicationError("DIAGNOSIS_NOT_FOUND", "Diagnosis execution was not found.", 404)
         recorder = self._trace_recorders.get(agent_run_id)
         if recorder is None:
-            recorder = create_trace_recorder(settings or self._settings)
+            effective_settings = settings or self._settings
+            recorder = create_trace_recorder(effective_settings)
             self._trace_recorders[agent_run_id] = recorder
-        return self._from_stored_record(stored, trace_recorder=recorder)
+            try:
+                historical_records = query_persisted_trace_records(
+                    trace_id=stored.trace_id,
+                    agent_run_id=stored.agent_run_id,
+                    settings=effective_settings,
+                )
+            except (OSError, ValueError):
+                historical_records = ()
+            self._historical_trace_records[agent_run_id] = historical_records
+        elif agent_run_id not in self._historical_trace_records:
+            self._historical_trace_records[agent_run_id] = ()
+        record = self._from_stored_record(stored, trace_recorder=recorder)
+        record.historical_trace_records = self._historical_trace_records[agent_run_id]
+        return record
 
     @staticmethod
     def _map_java_error(exc: JavaApiOpsError) -> ApplicationError:
@@ -913,7 +1032,7 @@ class DiagnosisExecutionService:
         runtime_evaluation_store.update(
             agent_run_id=record.agent_run_id,
             status=record.status,  # type: ignore[arg-type]
-            trace_records=record.trace_recorder.typed_records,
+            trace_records=self._trace_records(record),
             failure_code=failure_code,
             failure_message=failure_message,
         )

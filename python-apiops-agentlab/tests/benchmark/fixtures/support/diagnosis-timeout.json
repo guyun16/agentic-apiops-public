@@ -1,0 +1,10 @@
+{
+  "fixtureId": "stage21-diagnosis-timeout",
+  "setup": "load deterministic timeout execution fact from the existing runner timeout test boundary",
+  "reset": "reload immutable JSON fixture",
+  "authority": "Java runner timeout test evidence",
+  "facts": {
+    "failureType": "TIMEOUT",
+    "sufficientEvidence": true
+  }
+}

@@ -8,10 +8,13 @@ import { PageState } from '../../components/common/PageState'
 import { ContextTrail } from '../../components/layout/ContextTrail'
 import { agentApiFetch, apiFetch, ApiError } from '../../lib/api-client'
 import { formatTime } from '../runs/presentation'
+import { fetchExactRun, includeExactRun } from '../runs/run-api'
 import { RunStatusBadge } from '../runs/components/RunStatusBadge'
 import type { RunStatus, RunSummary, TestReport } from '../runs/types'
 import { isDiagnosableStatus } from '../runs/types'
-import type { DiagnosisExecutionResponse } from '../diagnosis/types'
+import type { DiagnosisExecutionResponse, DiagnosisRunSummary } from '../diagnosis/types'
+import { diagnosisHistoryPath } from '../diagnosis/diagnosisHistoryModel'
+import { findRecoverableDiagnosis } from './recoveryModel'
 import { DiagnosisRuntimeSelector, type DiagnosisRuntime } from './components/DiagnosisRuntimeSelector'
 import { DiagnosisWorkflowProgress } from './components/DiagnosisWorkflowProgress'
 import { ExecutionEvidence } from './components/ExecutionEvidence'
@@ -23,6 +26,7 @@ type DiagnosisAgentExecutionPageProps = {
   onClose?: () => void
   onViewResult: (agentRunId: string) => void
   onViewRunReport?: (runId: number) => void
+  onRunSelected?: (runId: number) => void
 }
 
 type LoadState = 'loading' | 'ready' | 'error'
@@ -241,6 +245,7 @@ export function DiagnosisAgentExecutionPage({
   onClose,
   onViewResult,
   onViewRunReport,
+  onRunSelected,
   returnTo,
 }: DiagnosisAgentExecutionPageProps) {
   const { t, ui } = useConsoleLanguage()
@@ -250,6 +255,7 @@ export function DiagnosisAgentExecutionPage({
   const [runs, setRuns] = useState<RunSummary[]>([])
   const [runsState, setRunsState] = useState<LoadState>('loading')
   const [runsError, setRunsError] = useState<ApiError | null>(null)
+  const [runsAttempt, setRunsAttempt] = useState(0)
   const [selectedRunId, setSelectedRunId] = useState<number | null>(parseRunId(initialRunId))
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<StudioFilter>('ALL')
@@ -261,12 +267,17 @@ export function DiagnosisAgentExecutionPage({
   const [editedArguments, setEditedArguments] = useState('{}')
   const [isEditing, setIsEditing] = useState(false)
   const [notice, setNotice] = useState('')
+  const [noticeStatus, setNoticeStatus] = useState('')
+  const [recovery, setRecovery] = useState<{ key: string; state: 'loading' | 'ready' | 'running' | 'error' }>({ key: '', state: 'loading' })
+  const [recoveryAttempt, setRecoveryAttempt] = useState(0)
   const selectedRunIdRef = useRef<number | null>(parseRunId(initialRunId))
   const selectionVersionRef = useRef(0)
   const runtimeRef = useRef<DiagnosisRuntime>('PYTHON_AGENTLAB')
   const runtimeVersionRef = useRef(0)
 
   const projectId = currentProject?.projectId ?? null
+  const recoveryKey = `${projectId}:${selectedRunId}`
+  const recoveryReady = recovery.key === recoveryKey && recovery.state === 'ready'
   const selectedRun = runs.find((run) => run.runId === selectedRunId) ?? null
   const diagnosedRunIds = useMemo(
     () => new Set(diagnoses.map((diagnosis) => diagnosis.runId)),
@@ -284,6 +295,15 @@ export function DiagnosisAgentExecutionPage({
     const response = await apiFetch<RunSummary[]>(`/api/v1/projects/${encodeURIComponent(nextProjectId)}/test-runs`, { signal })
     return response.map(normalizeRunSummary)
   }, [])
+
+  const fetchRunsWithTarget = useCallback(async (nextProjectId: string, signal?: AbortSignal) => {
+    const targetRunId = parseRunId(initialRunId)
+    const [recentRuns, exactRun] = await Promise.all([
+      fetchRuns(nextProjectId, signal),
+      targetRunId === null ? Promise.resolve(null) : fetchExactRun(nextProjectId, targetRunId, signal),
+    ])
+    return includeExactRun(recentRuns, exactRun)
+  }, [fetchRuns, initialRunId])
 
   const rememberRuns = useCallback((nextRuns: RunSummary[]) => {
     nextRuns.forEach((run) => {
@@ -341,9 +361,10 @@ export function DiagnosisAgentExecutionPage({
     setExecution(null)
     setRunsError(null)
     setReportError(null)
-    setNotice('')
+    setNotice(''); setNoticeStatus('')
     setQuery('')
     setFilter('ALL')
+    setActionState('idle')
 
     if (!projectId) {
       setRunsState('ready')
@@ -352,7 +373,7 @@ export function DiagnosisAgentExecutionPage({
 
     setRunsState('loading')
     const controller = new AbortController()
-    void fetchRuns(projectId, controller.signal)
+    void fetchRunsWithTarget(projectId, controller.signal)
       .then((nextRuns) => {
         if (cancelled) return
         rememberRuns(nextRuns)
@@ -383,16 +404,17 @@ export function DiagnosisAgentExecutionPage({
 
     return () => {
       cancelled = true
+      selectionVersionRef.current += 1
       controller.abort()
     }
-  }, [activateContext, fetchRuns, handleApiFailure, initialRunId, projectId, rememberRuns])
+  }, [activateContext, fetchRunsWithTarget, handleApiFailure, initialRunId, projectId, rememberRuns, runsAttempt])
 
   useEffect(() => {
     let cancelled = false
     setTestReport(null)
     setReportError(null)
     setExecution(null)
-    setNotice('')
+    setNotice(''); setNoticeStatus('')
     setIsEditing(false)
     setEditedArguments('{}')
 
@@ -414,17 +436,59 @@ export function DiagnosisAgentExecutionPage({
     }
   }, [handleApiFailure, projectId, selectedRun?.runId])
 
+  useEffect(() => {
+    if (!projectId || !selectedRunId || runsState !== 'ready') return
+    let cancelled = false
+    const controller = new AbortController()
+    let timer: ReturnType<typeof setTimeout> | undefined
+    setRecovery({ key: recoveryKey, state: 'loading' })
+    const restore = async () => {
+      try {
+        const history = await agentApiFetch<DiagnosisRunSummary[]>(diagnosisHistoryPath(projectId), { signal: controller.signal })
+        if (cancelled) return
+        const existing = findRecoverableDiagnosis(history, projectId, selectedRunId)
+        if (existing?.status === 'RUNNING') {
+          setRecovery({ key: recoveryKey, state: 'running' })
+          setNotice('An existing diagnosis is running. Waiting for its saved result…')
+          timer = setTimeout(() => { void restore() }, 3000)
+          return
+        }
+        const restored = existing ? await agentApiFetch<DiagnosisExecutionResponse>(`/api/v1/diagnosis/runs/${encodeURIComponent(existing.agentRunId)}`, { signal: controller.signal }) : null
+        if (cancelled) return
+        if (restored && (String(restored.projectId) !== projectId || restored.runId !== selectedRunId)) throw new ApiError('Saved diagnosis does not belong to the selected run.', 409, 'DIAGNOSIS_SCOPE_MISMATCH')
+        setExecution(restored)
+        if (restored) {
+          rememberExecution(restored)
+          setEditedArguments(JSON.stringify(restored.approvalRequest?.arguments ?? {}, null, 2))
+        }
+        setIsEditing(false)
+        setNotice(restored ? 'Restored saved diagnosis' : '')
+        setNoticeStatus(restored?.status ?? '')
+        setRecovery({ key: recoveryKey, state: 'ready' })
+      } catch (error) {
+        if (cancelled || isAbortError(error)) return
+        const failure = handleApiFailure(error, 'Unable to check saved diagnoses. Retry before starting a new diagnosis.')
+        setNotice(`${failure.code}: ${failure.message}`)
+        setRecovery({ key: recoveryKey, state: 'error' })
+      }
+    }
+    void restore()
+    return () => { cancelled = true; controller.abort(); clearTimeout(timer) }
+  }, [handleApiFailure, projectId, recoveryAttempt, recoveryKey, rememberExecution, runsState, selectedRunId])
+
   const selectRun = (runId: number) => {
+    if (runId === selectedRunId) return
     selectionVersionRef.current += 1
     selectedRunIdRef.current = runId
     setSelectedRunId(runId)
     setTestReport(null)
     setReportError(null)
     setExecution(null)
-    setNotice('')
+    setNotice(''); setNoticeStatus('')
     setIsEditing(false)
     setEditedArguments('{}')
     setActionState('idle')
+    onRunSelected?.(runId)
     const nextRun = runs.find((run) => run.runId === runId)
     if (nextRun) {
       activateContext({
@@ -438,7 +502,7 @@ export function DiagnosisAgentExecutionPage({
   }
 
   const startDiagnosis = async () => {
-    if (!projectId || !selectedRun || runtime !== 'PYTHON_AGENTLAB' || !isDiagnosableStatus(selectedRun.status) || actionState !== 'idle') return
+    if (!projectId || !selectedRun || !recoveryReady || runtime !== 'PYTHON_AGENTLAB' || !isDiagnosableStatus(selectedRun.status) || actionState !== 'idle') return
     if (execution && !['FAILED', 'REJECTED'].includes(execution.status)) return
 
     const requestRunId = selectedRun.runId
@@ -447,6 +511,15 @@ export function DiagnosisAgentExecutionPage({
     setActionState('starting')
     setNotice('Calling the real Python Diagnosis Workflow…')
     try {
+      // Re-check immediately before a mutation: another page may have started a run.
+      const history = await agentApiFetch<DiagnosisRunSummary[]>(diagnosisHistoryPath(projectId))
+      if (selectionVersionRef.current !== requestSelectionVersion || runtimeVersionRef.current !== requestRuntimeVersion) return
+      const existing = findRecoverableDiagnosis(history, projectId, requestRunId)
+      if (existing && !['FAILED', 'REJECTED'].includes(existing.status)) {
+        setRecovery({ key: recoveryKey, state: 'loading' })
+        setRecoveryAttempt((attempt) => attempt + 1)
+        return
+      }
       const nextExecution = await agentApiFetch<DiagnosisExecutionResponse>('/api/v1/diagnosis/runs', {
         body: JSON.stringify({ projectId: Number(projectId), runId: selectedRun.runId }),
         method: 'POST',
@@ -460,7 +533,13 @@ export function DiagnosisAgentExecutionPage({
     } catch (error: unknown) {
       const apiError = handleApiFailure(error, 'Unable to start the Python diagnosis workflow')
       if (selectedRunIdRef.current === requestRunId && selectionVersionRef.current === requestSelectionVersion && runtimeVersionRef.current === requestRuntimeVersion) {
-        setNotice(`${apiError.code}: ${apiError.message}`)
+        setNotice(apiError.message)
+        if (apiError.code === 'DIAGNOSIS_ALREADY_RUNNING' || apiError.code === 'APPROVAL_NOT_PENDING') {
+          setRecovery({ key: recoveryKey, state: 'loading' })
+          setRecoveryAttempt((attempt) => attempt + 1)
+        } else {
+          setRecovery({ key: recoveryKey, state: 'error' })
+        }
       }
     } finally {
       if (selectionVersionRef.current === requestSelectionVersion && runtimeVersionRef.current === requestRuntimeVersion) setActionState('idle')
@@ -468,7 +547,7 @@ export function DiagnosisAgentExecutionPage({
   }
 
   const resumeDiagnosis = async (decision: 'APPROVE' | 'EDIT' | 'REJECT') => {
-    if (runtime !== 'PYTHON_AGENTLAB' || !execution || actionState !== 'idle') return
+    if (runtime !== 'PYTHON_AGENTLAB' || !recoveryReady || !execution || execution.status !== 'APPROVAL_REQUIRED' || actionState !== 'idle') return
     const requestRunId = execution.runId
     const requestSelectionVersion = selectionVersionRef.current
     const requestRuntimeVersion = runtimeVersionRef.current
@@ -484,7 +563,7 @@ export function DiagnosisAgentExecutionPage({
       }
     }
     setActionState('resuming')
-    setNotice(`Submitting ${decision} to the existing HITL workflow…`)
+    setNotice('Submitting approval decision…'); setNoticeStatus('')
     try {
       const nextExecution = await agentApiFetch<DiagnosisExecutionResponse>(`/api/v1/diagnosis/runs/${encodeURIComponent(execution.agentRunId)}/resume`, {
         body: JSON.stringify({ decision, ...(parsedArguments ? { editedArguments: parsedArguments } : {}) }),
@@ -495,11 +574,18 @@ export function DiagnosisAgentExecutionPage({
       rememberExecution(nextExecution)
       setEditedArguments(JSON.stringify(nextExecution.approvalRequest?.arguments ?? parsedArguments ?? {}, null, 2))
       setIsEditing(false)
-      setNotice(nextExecution.status === 'COMPLETED' ? 'The real DiagnosisReport is ready.' : `Workflow status: ${nextExecution.status}`)
+      setNotice(nextExecution.status === 'COMPLETED' ? 'The real DiagnosisReport is ready.' : 'Workflow status')
+      setNoticeStatus(nextExecution.status === 'COMPLETED' ? '' : nextExecution.status)
     } catch (error: unknown) {
       const apiError = handleApiFailure(error, 'Unable to resume the Python diagnosis workflow')
       if (selectedRunIdRef.current === requestRunId && selectionVersionRef.current === requestSelectionVersion && runtimeVersionRef.current === requestRuntimeVersion) {
-        setNotice(`${apiError.code}: ${apiError.message}`)
+        setNotice(apiError.message)
+        if (apiError.code === 'DIAGNOSIS_ALREADY_RUNNING' || apiError.code === 'APPROVAL_NOT_PENDING') {
+          setRecovery({ key: recoveryKey, state: 'loading' })
+          setRecoveryAttempt((attempt) => attempt + 1)
+        } else {
+          setRecovery({ key: recoveryKey, state: 'error' })
+        }
       }
     } finally {
       if (selectionVersionRef.current === requestSelectionVersion && runtimeVersionRef.current === requestRuntimeVersion) setActionState('idle')
@@ -537,9 +623,16 @@ export function DiagnosisAgentExecutionPage({
     && isDiagnosableStatus(selectedRun.status)
     && runtime === 'PYTHON_AGENTLAB'
     && actionState === 'idle'
+    && recoveryReady
     && (!execution || execution.status === 'FAILED' || execution.status === 'REJECTED'),
   )
   const reportStatus = reportError ? 'error' : testReport ? 'ready' : selectedRun ? 'loading' : 'idle'
+  const currentDiagnosisState = actionState !== 'idle' || (recovery.key === recoveryKey && recovery.state === 'running')
+    ? 'RUNNING'
+    : recovery.key === recoveryKey && recovery.state === 'error'
+      ? 'Saved diagnosis unavailable'
+      : !recoveryReady ? 'Checking saved diagnoses before starting…'
+        : execution?.status ?? (selectedRun && isDiagnosableStatus(selectedRun.status) ? 'Ready to diagnose' : selectedRun?.status ?? 'READY')
   const layoutClass = runtime === 'PYTHON_AGENTLAB' ? 'diagnosis-studio-layout--python' : 'diagnosis-studio-layout--java'
 
   return (
@@ -556,26 +649,7 @@ export function DiagnosisAgentExecutionPage({
           actionLabel={t('common.retry')}
           description={runsError?.message ?? 'Java Runner executions are unavailable.'}
           kind="error"
-          onAction={() => {
-            if (!projectId) return
-            setRunsState('loading')
-            void fetchRuns(projectId)
-              .then((nextRuns) => {
-                rememberRuns(nextRuns)
-                setRuns(nextRuns)
-                const preferredId = parseRunId(initialRunId)
-                const preferred = preferredId === null ? null : nextRuns.find((run) => run.runId === preferredId) ?? null
-                const nextSelectedRun = preferred ?? nextRuns.find((run) => isDiagnosableStatus(run.status)) ?? nextRuns[0] ?? null
-                selectionVersionRef.current += 1
-                selectedRunIdRef.current = nextSelectedRun?.runId ?? null
-                setSelectedRunId(nextSelectedRun?.runId ?? null)
-                setRunsState('ready')
-              })
-              .catch((error: unknown) => {
-                setRunsError(handleApiFailure(error, 'Unable to load Java Runner executions'))
-                setRunsState('error')
-              })
-          }}
+          onAction={() => setRunsAttempt((attempt) => attempt + 1)}
           title="Runs unavailable"
         />
       ) : null}
@@ -612,7 +686,7 @@ export function DiagnosisAgentExecutionPage({
                     <div><span>{ui('API')}</span><strong>{selectedRun.apiId}</strong></div>
                     <div><span>{ui('Failure Type')}</span><code>{runFailureLabel(selectedRun)}</code></div>
                     <div><span>{ui('Java Report')}</span><strong className="diagnosis-studio-report-value">{reportStatus === 'loading' ? ui('Loading TestReport') : reportStatus === 'error' ? ui('Report unavailable') : testReport ? testReport.reportId : '—'}</strong></div>
-                    <div><span>{ui('Current State')}</span><strong className={isDiagnosableStatus(selectedRun.status) ? 'is-ready' : 'is-unavailable'}>{isDiagnosableStatus(selectedRun.status) ? ui('Ready to diagnose') : ui(selectedRun.status)}</strong></div>
+                    <div><span>{ui('Current State')}</span><strong className={canStartDiagnosis ? 'is-ready' : 'is-unavailable'}>{ui(currentDiagnosisState)}</strong></div>
                   </div>
 
                   <DiagnosisRuntimeSelector
@@ -622,6 +696,9 @@ export function DiagnosisAgentExecutionPage({
                   />
 
                   <div className="diagnosis-studio-action-row">
+                    <button className="diagnosis-execution-secondary-button" disabled={actionState !== 'idle' || (recovery.key === recoveryKey && recovery.state === 'loading')} onClick={() => { setRecovery({ key: recoveryKey, state: 'loading' }); setRecoveryAttempt((attempt) => attempt + 1) }} type="button">
+                      {ui('Refresh saved diagnosis')}
+                    </button>
                     <button
                       className="diagnosis-execution-primary-button"
                       disabled={!canStartDiagnosis}
@@ -644,9 +721,9 @@ export function DiagnosisAgentExecutionPage({
                       ? ui('Java Platform browser diagnosis is not wired. No diagnosis request will be sent.')
                       : !isDiagnosableStatus(selectedRun.status)
                         ? ui('Start Diagnosis is available only for failed or timed-out runs.')
-                        : execution?.status === 'APPROVAL_REQUIRED'
+                        : (notice ? `${ui(notice)}${noticeStatus ? ': ' + ui(noticeStatus) : ''}` : '') || (!recoveryReady ? ui('Checking saved diagnoses before starting…') : execution?.status === 'APPROVAL_REQUIRED'
                           ? ui('The Python workflow is paused for human approval.')
-                          : notice || ui('Python AgentLab is ready to run against this Java TestReport.')}
+                          : ui('Python AgentLab is ready to run against this Java TestReport.'))}
                   </div>
                 </>
               ) : (
@@ -665,7 +742,7 @@ export function DiagnosisAgentExecutionPage({
 
           <div className="diagnosis-studio-control-column">
             <HumanApprovalPanel
-              busy={actionState === 'resuming'}
+              busy={actionState !== 'idle' || !recoveryReady}
               editedArguments={editedArguments}
               execution={runtime === 'PYTHON_AGENTLAB' ? execution : null}
               isEditing={isEditing}

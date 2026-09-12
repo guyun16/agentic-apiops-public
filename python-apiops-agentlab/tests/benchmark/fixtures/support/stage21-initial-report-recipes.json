@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "stage21-initial-report-recipe/v1",
+  "recipes": [
+    {"resourceKey": "golden-failure", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:golden-failure"},
+    {"resourceKey": "golden-rag", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:golden-rag"},
+    {"resourceKey": "root-report", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:root-report"},
+    {"resourceKey": "insufficient-missing", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:insufficient-missing"},
+    {"resourceKey": "rag-multi-hit", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:rag-multi-hit"},
+    {"resourceKey": "rag-irrelevant-distractor", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:rag-irrelevant-distractor"},
+    {"resourceKey": "citation-current-report", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:citation-current-report"},
+    {"resourceKey": "guarded-diagnosis", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:guarded-diagnosis"},
+    {"resourceKey": "business-report", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:business-report"},
+    {"resourceKey": "insufficient-conflicting", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:insufficient-conflicting"},
+    {"resourceKey": "heldout-conflict", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:heldout-conflict"},
+    {"resourceKey": "heldout-missing", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:heldout-missing"},
+    {"resourceKey": "missing-auth", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:missing-auth"},
+    {"resourceKey": "missing-headers", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:missing-headers"},
+    {"resourceKey": "partial-facts", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:partial-facts"},
+    {"resourceKey": "inventory-duplicate-key", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:inventory-duplicate-key"},
+    {"resourceKey": "multi-evidence", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:multi-evidence"},
+    {"resourceKey": "constraint-alternative", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:constraint-alternative"},
+    {"resourceKey": "constraint-primary", "resourceType": "TEST_REPORT", "lifecycle": "STAGE21_INITIAL", "caseId": "stage21-initial-report:constraint-primary"}
+  ]
+}

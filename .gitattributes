@@ -1,4 +1,4 @@
-﻿# Default text handling
+# Default text handling
 * text=auto
 
 # Source code and structured text
@@ -31,3 +31,9 @@ mvnw.cmd      text eol=crlf
 *.pdf  binary
 *.jar  binary
 *.zip  binary
+
+# Immutable benchmark records: preserve original bytes and digest chains.
+artifacts/benchmark/** -text -whitespace
+artifacts/stage21/** -text -whitespace
+f105r/** -text -whitespace
+python-apiops-agentlab/app/reports/artifacts/** -text -whitespace

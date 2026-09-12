@@ -1,0 +1,20 @@
+{
+  "ground_truth_id": "gt_stage21_testcase_business_inventory_python",
+  "version": "v2",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "DOCUMENTED_BUSINESS_ERROR"
+    },
+    {
+      "name": "business_error",
+      "value": "ORDER_BUSINESS_CONFLICT"
+    },
+    {
+      "name": "expected_http_status",
+      "value": 409
+    }
+  ]
+}

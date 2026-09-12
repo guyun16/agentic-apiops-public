@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_formal_testcase_auth_missing_token_post",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "AUTH_FAILURE"
+    },
+    {
+      "name": "security_requirement",
+      "value": "apiKeyAuth"
+    },
+    {
+      "name": "expected_http_status",
+      "value": 401
+    },
+    {
+      "name": "expected_error_code",
+      "value": "AUTH_UNAUTHORIZED"
+    }
+  ]
+}

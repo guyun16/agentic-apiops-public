@@ -3,19 +3,31 @@
 from __future__ import annotations
 
 import logging
+from asyncio import to_thread
 from collections.abc import Awaitable, Callable
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request, Response
 
 from app.api.routes import router
 from app.core.errors import register_exception_handlers
+from app.core.http_tls import client_tls_context
 from app.core.logging import bind_correlation, configure_logging, correlation_log_extra
 
 configure_logging()
 
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    # Pay certificate loading once before accepting traffic, off the event loop.
+    await to_thread(client_tls_context)
+    yield
+
+
 app = FastAPI(
     title="Python APIOps AgentLab",
     version="0.1.0",
+    lifespan=lifespan,
 )
 http_logger = logging.getLogger("app.http")
 

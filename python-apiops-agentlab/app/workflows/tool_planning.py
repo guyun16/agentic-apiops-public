@@ -1,7 +1,7 @@
 """Deterministic Tool Planning and evidence sufficiency decisions.
 
 This module is intentionally a small execution-side boundary.  It never
-imports external evaluation Ground Truth and it does not decide from a model's final
+imports benchmark Ground Truth and it does not decide from a model's final
 diagnosis.  Callers provide the runtime task contract, observed facts, and the
 allow-listed tool names; the returned decision is safe to record and route.
 """
@@ -476,6 +476,21 @@ def _has_transport_boundary(report: TestReport) -> bool:
     )
 
 
+def _has_error_http_response(report: TestReport) -> bool:
+    """Whether Java observed a semantic HTTP error response.
+
+    Runner ``SUCCESS`` means that request execution and configured assertions
+    completed successfully.  It does not turn an observed 4xx/5xx business
+    response into a semantic no-failure result.
+    """
+
+    return any(
+        step.response_status_code is not None and step.response_status_code >= 400
+        for case in report.cases
+        for step in case.steps
+    )
+
+
 def assess_evidence_sufficiency(
     report: TestReport | None = None,
     context_items: Iterable[ContextItem] | ContextPack = (),
@@ -538,7 +553,11 @@ def assess_evidence_sufficiency(
     if report.status in {"PENDING", "RUNNING"}:
         return EvidenceSufficiency.UNRESOLVED
     failure_type = report.summary.failure_type
-    if failure_type == "NONE" and report.status == "SUCCESS":
+    if (
+        failure_type == "NONE"
+        and report.status == "SUCCESS"
+        and not _has_error_http_response(report)
+    ):
         return EvidenceSufficiency.SUFFICIENT
     if failure_type == "UNKNOWN":
         return EvidenceSufficiency.UNRESOLVED

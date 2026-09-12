@@ -1,0 +1,397 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://apiops.dev/schemas/evaluation-task-diagnosis-contract-v1-schema.json",
+  "title": "EvaluationTask",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "benchmarkTaskId",
+    "taskType",
+    "instruction",
+    "initialState",
+    "allowedTools",
+    "forbiddenActions",
+    "expectedOutput",
+    "metrics"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "enum": [
+        "0.1.0",
+        "0.2.0"
+      ]
+    },
+    "benchmarkTaskId": {
+      "type": "string",
+      "pattern": "^bench_task_[a-zA-Z0-9_\\-]+$"
+    },
+    "taskType": {
+      "type": "string",
+      "enum": [
+        "TESTCASE_GENERATION",
+        "FAILURE_DIAGNOSIS",
+        "TOOL_SAFETY",
+        "RAG_EVIDENCE_RETRIEVAL",
+        "E2E_APIOPS"
+      ]
+    },
+    "instruction": {
+      "type": "string",
+      "minLength": 1
+    },
+    "initialState": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/InitialStateEntry"
+          }
+        }
+      }
+    },
+    "allowedTools": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "forbiddenActions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "expectedOutput": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "expectedToolCalls": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ExpectedToolCall"
+      }
+    },
+    "groundTruthRef": {
+      "$ref": "#/$defs/GroundTruthRef"
+    },
+    "evaluationSpec": {
+      "$ref": "#/$defs/EvaluationSpec"
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "valid_json_rate",
+          "schema_valid_rate",
+          "executable_testcase_rate",
+          "tool_call_accuracy",
+          "tool_parameter_accuracy",
+          "evidence_hit_rate",
+          "diagnosis_top1_accuracy",
+          "safety_violation_count",
+          "average_steps",
+          "average_latency_ms",
+          "cost_per_task",
+          "valid_json",
+          "schema_valid",
+          "contract_accepted",
+          "exact_match",
+          "tool_precision",
+          "tool_recall",
+          "tool_exact_set_match",
+          "parameter_accuracy",
+          "evidence_hit",
+          "diagnosis_accuracy",
+          "safety_accuracy",
+          "wall_clock_latency_ms",
+          "model_latency_ms",
+          "tool_latency_ms",
+          "human_wait_ms",
+          "active_execution_ms",
+          "prompt_tokens",
+          "completion_tokens",
+          "total_tokens",
+          "cost",
+          "diagnosis_contract"
+        ]
+      },
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schemaVersion": {
+            "const": "0.2.0"
+          }
+        },
+        "required": [
+          "schemaVersion"
+        ]
+      },
+      "then": {
+        "required": [
+          "groundTruthRef",
+          "evaluationSpec"
+        ],
+        "properties": {
+          "initialState": {
+            "$ref": "#/$defs/InitialState"
+          },
+          "expectedToolCalls": {
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/ExpectedToolCall"
+                },
+                {
+                  "required": [
+                    "matchPolicy"
+                  ]
+                }
+              ]
+            }
+          },
+          "metrics": {
+            "items": {
+              "enum": [
+                "valid_json",
+                "schema_valid",
+                "contract_accepted",
+                "exact_match",
+                "tool_precision",
+                "tool_recall",
+                "tool_exact_set_match",
+                "parameter_accuracy",
+                "evidence_hit",
+                "diagnosis_accuracy",
+                "safety_accuracy",
+                "wall_clock_latency_ms",
+                "model_latency_ms",
+                "tool_latency_ms",
+                "human_wait_ms",
+                "active_execution_ms",
+                "prompt_tokens",
+                "completion_tokens",
+                "total_tokens",
+                "cost",
+                "diagnosis_contract"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "GroundTruthRef": {
+      "type": "object",
+      "required": [
+        "groundTruthId",
+        "version"
+      ],
+      "properties": {
+        "groundTruthId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "EvaluationSpec": {
+      "type": "object",
+      "required": [
+        "selectedMetrics"
+      ],
+      "properties": {
+        "selectedMetrics": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "valid_json",
+              "schema_valid",
+              "contract_accepted",
+              "exact_match",
+              "tool_precision",
+              "tool_recall",
+              "tool_exact_set_match",
+              "parameter_accuracy",
+              "evidence_hit",
+              "diagnosis_accuracy",
+              "safety_accuracy",
+              "wall_clock_latency_ms",
+              "model_latency_ms",
+              "tool_latency_ms",
+              "human_wait_ms",
+              "active_execution_ms",
+              "prompt_tokens",
+              "completion_tokens",
+              "total_tokens",
+              "cost",
+              "diagnosis_contract"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "InitialState": {
+      "type": "object",
+      "required": [
+        "entries"
+      ],
+      "properties": {
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/InitialStateEntry"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "InitialStateEntry": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "key",
+            "value"
+          ],
+          "properties": {
+            "kind": {
+              "const": "LITERAL"
+            },
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "value": {}
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "key",
+            "ref"
+          ],
+          "properties": {
+            "kind": {
+              "const": "JAVA_RESOURCE"
+            },
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "key",
+            "ref"
+          ],
+          "properties": {
+            "kind": {
+              "const": "PYTHON_FIXTURE"
+            },
+            "key": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ExpectedToolCall": {
+      "type": "object",
+      "required": [
+        "toolName"
+      ],
+      "properties": {
+        "toolName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "paramsContains": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "matchPolicy": {
+          "type": "string",
+          "enum": [
+            "EXACT",
+            "SUBSET"
+          ]
+        },
+        "optionalFields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "caseInsensitiveFields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "trimFields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "orderInsensitiveFields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

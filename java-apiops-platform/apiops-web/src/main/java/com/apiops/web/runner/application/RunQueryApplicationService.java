@@ -3,6 +3,7 @@ package com.apiops.web.runner.application;
 import com.apiops.auth.application.ProjectAuthorizationService;
 import com.apiops.auth.security.ApiOpsPrincipal;
 import com.apiops.runner.persistence.ExecutionFactRepository;
+import com.apiops.web.runner.vo.RunDetailVO;
 import com.apiops.web.runner.vo.RunSummaryVO;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /** Project-authorized read boundary for the Runs explorer. */
 public class RunQueryApplicationService {
@@ -33,6 +35,32 @@ public class RunQueryApplicationService {
         return repository.findRecentRunSummaries(projectId).stream()
                 .map(RunSummaryVO::from)
                 .toList();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public List<RunSummaryVO> listPage(long projectId, Long beforeRunId, int limit) {
+        ApiOpsPrincipal principal = currentPrincipal();
+        authorization.requireProjectReadable(principal.getUserId(), projectId);
+        return repository.findRunSummariesPage(projectId, beforeRunId, limit).stream()
+                .map(RunSummaryVO::from)
+                .toList();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public Optional<RunSummaryVO> findLatestByCase(long projectId, String caseId) {
+        if (caseId == null || caseId.isBlank()) {
+            throw new IllegalArgumentException("caseId must not be blank");
+        }
+        ApiOpsPrincipal principal = currentPrincipal();
+        authorization.requireProjectReadable(principal.getUserId(), projectId);
+        return repository.findLatestRunSummary(projectId, caseId).map(RunSummaryVO::from);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    public Optional<RunDetailVO> find(long projectId, long runId) {
+        ApiOpsPrincipal principal = currentPrincipal();
+        authorization.requireProjectReadable(principal.getUserId(), projectId);
+        return repository.findRun(projectId, runId).map(RunDetailVO::from);
     }
 
     private ApiOpsPrincipal currentPrincipal() {

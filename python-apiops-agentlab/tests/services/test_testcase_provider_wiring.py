@@ -9,6 +9,8 @@ import pytest
 from pydantic import SecretStr
 
 from app.clients.java_apiops import JavaApiOpsClient
+from app.clients.llm import StructuredOutputSpec
+from app.clients.qwen_structured_output import TESTCASE_CANDIDATE_SCHEMA_NAME
 from app.core.settings import AppSettings
 from app.schemas.openapi_metadata import OpenApiMetadataDetail
 from app.schemas.testcase_generation_api import TestCaseGenerationRequest as GenerationRequest
@@ -45,6 +47,18 @@ class _FakeProviderLLM:
                 ],
             }
         )
+
+
+class _FakeQwenProviderLLM(_FakeProviderLLM):
+    async def complete_structured(
+        self,
+        prompt: str,
+        *,
+        output_spec: StructuredOutputSpec,
+    ) -> str:
+        assert output_spec.schema_name == TESTCASE_CANDIDATE_SCHEMA_NAME
+        assert output_spec.schema == {"type": "object", "additionalProperties": True}
+        return await self.complete(prompt)
 
 
 @pytest.mark.anyio
@@ -86,7 +100,8 @@ async def test_testcase_service_uses_selected_client_and_runtime_identity(
     ) -> _FakeProviderLLM:
         del http_client, settings
         selected.append(provider)
-        return _FakeProviderLLM(expected_provider, expected_model)
+        client_type = _FakeQwenProviderLLM if expected_provider == "Qwen" else _FakeProviderLLM
+        return client_type(expected_provider, expected_model)
 
     monkeypatch.setattr(JavaApiOpsClient, "get_api_metadata", fake_metadata)
     monkeypatch.setattr("app.services.testcase_generation.build_llm", fake_builder)

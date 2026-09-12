@@ -18,14 +18,15 @@ from app.agents.diagnosis import (
     DiagnosisEvidenceReferenceError,
     DiagnosisIdentityError,
     DiagnosisInferenceError,
-    DiagnosisSemanticContractError,
 )
 from app.clients import JavaApiOpsClient, JavaApiOpsToolGatewayAdapter
+from app.clients.llm import StructuredOutputSpec
+from app.clients.qwen_structured_output import DIAGNOSIS_REPORT_SCHEMA_NAME
 from app.memory import InMemoryMemoryStore, MemoryRetriever
 from app.rag.context import ContextPolicy, ContextSource
 from app.schemas.runner import TestReport as RunnerTestReport
 from app.schemas.tool_result import ToolResult
-from app.tools import FakeToolGatewayAdapter, ToolCatalog, ToolRouter
+from app.tools import FakeToolGatewayAdapter, ToolCatalog, ToolIntent, ToolRouter
 from app.tracing import InMemoryTraceSink, TraceRecorder
 from app.workflows import diagnosis_workflow as workflow_module
 from app.workflows.approval import ApprovalAction, ApprovalDecision, ApprovalRequest
@@ -39,6 +40,11 @@ from app.workflows.diagnosis_workflow import (
     test_report_context_item as report_context_item,
 )
 from app.workflows.runtime_control import checkpoint_config
+from app.workflows.tool_planning import (
+    EvidenceSufficiency,
+    ToolPlanningDecision,
+    ToolRequirement,
+)
 from app.workflows.tool_use_state import ToolFailureCode
 
 
@@ -54,6 +60,37 @@ class SequenceLLM:
         if not self._responses:
             raise AssertionError("unexpected model call")
         return json.dumps(self._responses.pop(0))
+
+
+class QwenSequenceLLM(SequenceLLM):
+    """Qwen-shaped double that exposes native capability for report-only calls."""
+
+    provider = "Qwen"
+    model = "qwen3.7-plus-2026-05-26"
+
+    def __init__(
+        self,
+        responses: Sequence[dict[str, object]],
+        structured_responses: Sequence[dict[str, object]],
+    ) -> None:
+        super().__init__(responses)
+        self._structured_responses = list(structured_responses)
+        self.structured_prompts: list[str] = []
+        self.structured_specs: list[StructuredOutputSpec] = []
+
+    async def complete_structured(
+        self,
+        prompt: str,
+        *,
+        output_spec: StructuredOutputSpec,
+    ) -> str:
+        self.structured_prompts.append(prompt)
+        self.structured_specs.append(output_spec)
+        assert output_spec.schema_name == DIAGNOSIS_REPORT_SCHEMA_NAME
+        assert output_spec.strict is True
+        if not self._structured_responses:
+            raise AssertionError("unexpected native model call")
+        return json.dumps(self._structured_responses.pop(0))
 
 
 def failed_report() -> RunnerTestReport:
@@ -190,13 +227,13 @@ def tool_result(
     )
 
 
-def rag_data(*, evidence: bool = True) -> dict[str, object]:
+def rag_data(*, evidence: bool = True, project_id: int = 41) -> dict[str, object]:
     return {
         "ragQueryId": "rag-query-fallback",
         "results": (
             [
                 {
-                    "projectId": 41,
+                    "projectId": project_id,
                     "documentId": "doc-fallback",
                     "chunkId": "chunk-fallback",
                     "content": "bounded upstream response guidance",
@@ -204,7 +241,7 @@ def rag_data(*, evidence: bool = True) -> dict[str, object]:
                     "citation": {
                         "sourceType": "RUNBOOK",
                         "sourceId": "runbook-fallback",
-                        "projectId": 41,
+                        "projectId": project_id,
                         "documentId": "doc-fallback",
                         "chunkId": "chunk-fallback",
                         "score": 0.9,
@@ -302,6 +339,80 @@ def test_report_adapter_selects_failure_facts_and_keeps_provenance() -> None:
     assert "finishedAt" not in item.content
 
 
+def test_report_adapter_retains_successful_java_business_response_fact() -> None:
+    payload = failed_report().model_dump(mode="json")
+    payload.update(status="SUCCESS")
+    payload["summary"].update(
+        failureType="NONE",
+        failedAssertions=0,
+        passedAssertions=2,
+        totalAssertions=2,
+    )
+    payload["cases"][0].update(status="SUCCESS", failureType="NONE")
+    payload["cases"][0]["steps"][0].update(
+        status="SUCCESS",
+        failureType="NONE",
+        responseStatusCode=409,
+        assertionResults=[
+            {
+                "type": "STATUS_CODE",
+                "passed": True,
+                "expected": 409,
+                "actual": 409,
+                "message": "status matched",
+            },
+            {
+                "type": "JSON_PATH",
+                "passed": True,
+                "expected": "ORDER_BUSINESS_CONFLICT",
+                "actual": "ORDER_BUSINESS_CONFLICT",
+                "message": "business outcome matched",
+            },
+        ],
+    )
+    payload["cases"][1].update(status="SUCCESS", failureType="NONE")
+    runtime_report = RunnerTestReport.model_validate(payload)
+
+    item = report_context_item(runtime_report)
+    content = json.loads(item.content)
+
+    assert content["status"] == "SUCCESS"
+    assert content["summary"]["failureType"] == "NONE"
+    assert content["relevantCases"] == [
+        {
+            "caseId": "case-failed",
+            "failureType": "NONE",
+            "relevantSteps": [
+                {
+                    "durationMs": 12,
+                    "failedAssertions": [],
+                    "failureType": "NONE",
+                    "responseStatusCode": 409,
+                    "responseAssertions": [
+                        {
+                            "actual": 409,
+                            "expected": 409,
+                            "message": "status matched",
+                            "passed": True,
+                            "type": "STATUS_CODE",
+                        },
+                        {
+                            "actual": "ORDER_BUSINESS_CONFLICT",
+                            "expected": "ORDER_BUSINESS_CONFLICT",
+                            "message": "business outcome matched",
+                            "passed": True,
+                            "type": "JSON_PATH",
+                        },
+                    ],
+                    "status": "SUCCESS",
+                    "stepId": "step-failed",
+                }
+            ],
+            "status": "SUCCESS",
+        }
+    ]
+
+
 def test_diagnosis_wiring_imports_no_raw_resource_client() -> None:
     forbidden_roots = {
         "mysql",
@@ -342,6 +453,68 @@ async def test_no_tool_path_returns_valid_report_without_gateway_call() -> None:
     assert len(llm.prompts) == 1
 
 
+@pytest.mark.anyio
+async def test_qwen_dual_output_initial_stays_json_object_and_report_continuation_is_native(
+) -> None:
+    llm = QwenSequenceLLM(
+        [tool_intent()],
+        [diagnosis(item_id="tool-result:java-tool-call-1")],
+    )
+    gateway = FakeToolGatewayAdapter(tool_result(data=rag_data()))
+    sink = InMemoryTraceSink()
+
+    result = await workflow(llm, gateway, trace_recorder=TraceRecorder(sink)).ainvoke(
+        initial_state(), config=checkpoint_config("diagnosis-native-report-path")
+    )
+
+    assert result["diagnosis_report"].report_id == "report:701"
+    assert len(llm.prompts) == 1
+    assert len(llm.structured_prompts) == 1
+    assert llm.structured_specs[0].schema_name == DIAGNOSIS_REPORT_SCHEMA_NAME
+    calls = [record for record in sink.records if record["record_type"] == "model_call"]
+    assert [record["structured_output_mode"] for record in calls] == [
+        "JSON_OBJECT",
+        "JSON_OBJECT",
+        "JSON_SCHEMA",
+        "JSON_SCHEMA",
+    ]
+    assert calls[2]["schema_name"] == DIAGNOSIS_REPORT_SCHEMA_NAME
+    assert calls[2]["schema_digest"]
+    assert calls[3]["schema_digest"] == calls[2]["schema_digest"]
+
+
+@pytest.mark.anyio
+async def test_qwen_continuation_gets_one_bounded_semantic_repair() -> None:
+    invalid = diagnosis(
+        sufficient=False,
+        updates={"limitations": [], "recommendedChecks": []},
+    )
+    repaired = diagnosis(sufficient=False)
+    llm = QwenSequenceLLM(
+        [tool_intent()],
+        [invalid, repaired],
+    )
+    gateway = FakeToolGatewayAdapter(tool_result(data=rag_data()))
+    sink = InMemoryTraceSink()
+
+    result = await workflow(llm, gateway, trace_recorder=TraceRecorder(sink)).ainvoke(
+        initial_state(), config=checkpoint_config("diagnosis-native-semantic-repair")
+    )
+
+    assert result["diagnosis_report"].limitations
+    assert result["diagnosis_report"].recommended_checks
+    assert len(llm.structured_prompts) == 2
+    assert "DETERMINISTIC SEMANTIC VALIDATION ISSUES" in llm.structured_prompts[1]
+    assert "requires a limitation" in llm.structured_prompts[1]
+    repair_steps = [
+        record
+        for record in sink.records
+        if record["record_type"] == "agent_step"
+        and record.get("step_type") == "diagnosis_semantic_repair"
+    ]
+    assert [record["status"] for record in repair_steps] == ["RUNNING", "SUCCESS"]
+
+
 def test_insufficient_evidence_query_is_exact_and_order_invariant() -> None:
     report = failed_report()
     expected = (
@@ -355,38 +528,39 @@ def test_insufficient_evidence_query_is_exact_and_order_invariant() -> None:
 
 
 @pytest.mark.anyio
-async def test_known_empty_diagnosis_fails_closed_before_rag_fallback() -> None:
+async def test_known_empty_diagnosis_can_continue_existing_guarded_rag_fallback() -> None:
     llm = SequenceLLM(
         [
+            diagnosis(sufficient=False, include_hypothesis=False),
             diagnosis(sufficient=False, include_hypothesis=False),
         ]
     )
     gateway = FakeToolGatewayAdapter(tool_result(data=rag_data()))
 
-    with pytest.raises(DiagnosisSemanticContractError):
-        await workflow(
-            llm,
-            gateway,
-            api_id="api-orders",
-        ).ainvoke(initial_state(), config=checkpoint_config("diagnosis-empty-fallback"))
+    result = await workflow(
+        llm,
+        gateway,
+        api_id="api-orders",
+    ).ainvoke(initial_state(), config=checkpoint_config("diagnosis-empty-fallback"))
 
-    assert len(llm.prompts) == 1
-    assert gateway.calls == []
+    assert len(llm.prompts) == 2
+    assert len(gateway.calls) == 1
+    assert not result["diagnosis_report"].root_cause_hypotheses
+    assert result["diagnosis_report"].sufficient_evidence is False
 
 
 @pytest.mark.anyio
-async def test_known_empty_diagnosis_without_api_id_fails_closed() -> None:
+async def test_known_empty_diagnosis_without_api_id_can_abstain() -> None:
     llm = SequenceLLM([diagnosis(sufficient=False, include_hypothesis=False)])
     gateway = FakeToolGatewayAdapter(tool_result(data=rag_data()))
 
-    with pytest.raises(DiagnosisSemanticContractError):
-        await workflow(
-            llm,
-            gateway,
-        ).ainvoke(
-            initial_state(), config=checkpoint_config("diagnosis-empty-no-api-id")
-        )
+    result = await workflow(llm, gateway).ainvoke(
+        initial_state(), config=checkpoint_config("diagnosis-empty-no-api-id")
+    )
 
+    assert not result["diagnosis_report"].root_cause_hypotheses
+    assert result["diagnosis_report"].limitations
+    assert result["diagnosis_report"].recommended_checks
     assert len(llm.prompts) == 1
     assert gateway.calls == []
 
@@ -697,6 +871,153 @@ async def test_tool_result_is_guarded_before_one_continuation_and_traced() -> No
     assert any(record["record_type"] == "model_call" for record in sink.records)
     assert result["tool_result_mapping_status"] == "SUCCESS"
     assert result["tool_result_mapping_error_code"] is None
+
+
+@pytest.mark.anyio
+async def test_rag_result_limiter_metadata_maps_without_weakening_evidence_schema() -> None:
+    data = rag_data()
+    data["_resultTruncated"] = True
+    llm = SequenceLLM([tool_intent(), diagnosis(item_id="tool-result:java-tool-call-1")])
+    gateway = FakeToolGatewayAdapter(tool_result(data=data))
+
+    result = await workflow(llm, gateway).ainvoke(
+        initial_state(), config=checkpoint_config("diagnosis-workflow-limited-rag")
+    )
+
+    assert result["tool_result_mapping_status"] == "SUCCESS"
+    assert result["tool_result_mapping_error_code"] is None
+    assert result["rag_evidence_count"] == 1
+    assert result["result_truncated"] is True
+
+
+@pytest.mark.anyio
+async def test_retrieval_only_consumes_exact_selection_not_java_near_match() -> None:
+    data = {
+        "ragQueryId": "rag-query-exact",
+        "results": [
+            {
+                "projectId": 41,
+                "documentId": "doc-orders",
+                "chunkId": "chunk-orders",
+                "content": "Orders exact unique index constraint.",
+                "relevanceScore": 0.81,
+                "citation": {
+                    "sourceType": "REFERENCE_INDEX",
+                    "sourceId": "orders-constraint-index",
+                    "projectId": 41,
+                    "documentId": "doc-orders",
+                    "chunkId": "chunk-orders",
+                    "score": 0.81,
+                    "title": "Orders constraint index",
+                    "location": "chunk:0",
+                    "excerpt": "Orders exact unique index constraint.",
+                },
+            },
+            {
+                "projectId": 41,
+                "documentId": "doc-payment",
+                "chunkId": "chunk-payment",
+                "content": "Payments unique provider reference.",
+                "relevanceScore": 0.79,
+                "citation": {
+                    "sourceType": "SERVICE_DOC",
+                    "sourceId": "payment-near-match",
+                    "projectId": 41,
+                    "documentId": "doc-payment",
+                    "chunkId": "chunk-payment",
+                    "score": 0.79,
+                    "title": "Payment near match",
+                    "location": "chunk:0",
+                    "excerpt": "Payments unique provider reference.",
+                },
+            },
+        ],
+    }
+    gateway = FakeToolGatewayAdapter(tool_result(data=data))
+    catalog = ToolCatalog()
+    router = ToolRouter(catalog, {"rag.search": gateway})
+    planning = ToolPlanningDecision(
+        requirement=ToolRequirement.REQUIRED,
+        selected_tool="rag.search",
+        reason="runtime contract requires exact retrieval",
+        evidence_sufficiency=EvidenceSufficiency.INSUFFICIENT,
+        authority_source="RUNTIME_TASK_CONTRACT",
+        allowed=True,
+        capability_available=True,
+    )
+    intent = ToolIntent(
+        tool_name="rag.search",
+        arguments={"query": "formal exact unique index near match", "topK": 3},
+    )
+    sink = InMemoryTraceSink()
+    graph = build_diagnosis_workflow(
+        SequenceLLM([]),
+        router,
+        project_id=41,
+        catalog=catalog,
+        planning_decision=planning,
+        required_tool_intent=intent,
+        retrieval_only=True,
+        trace_recorder=TraceRecorder(sink),
+        checkpointer=InMemorySaver(),
+    )
+
+    result = await graph.ainvoke(
+        initial_state(),
+        config=checkpoint_config("diagnosis-exact-retrieval-selection"),
+    )
+
+    assert result["rag_evidence_count"] == 1
+    retrieval = next(
+        record
+        for record in sink.records
+        if record["record_type"] == "retrieval"
+        and record["retrieval_kind"] == "JAVA_RAG_TOOL_RESULT"
+    )
+    assert retrieval["result_count"] == 1
+    assert [
+        item["source_id"] for item in retrieval["reference"]["evidence_references"]
+    ] == ["orders-constraint-index"]
+
+
+@pytest.mark.anyio
+async def test_cross_project_rag_result_maps_against_requested_target_project() -> None:
+    llm = SequenceLLM([diagnosis(item_id="tool-result:java-tool-call-1")])
+    gateway = FakeToolGatewayAdapter(tool_result(data=rag_data(project_id=42)))
+    catalog = ToolCatalog()
+    router = ToolRouter(catalog, {"rag.search": gateway})
+    planning = ToolPlanningDecision(
+        requirement=ToolRequirement.REQUIRED,
+        selected_tool="rag.search",
+        reason="runtime contract requires the cross-project authorization decision",
+        evidence_sufficiency=EvidenceSufficiency.INSUFFICIENT,
+        authority_source="RUNTIME_TASK_CONTRACT",
+        allowed=True,
+        capability_available=True,
+    )
+    intent = ToolIntent(
+        tool_name="rag.search",
+        arguments={"query": "formal project 42 evidence", "topK": 2, "targetProjectId": 42},
+    )
+    graph = build_diagnosis_workflow(
+        llm,
+        router,
+        project_id=41,
+        catalog=catalog,
+        planning_decision=planning,
+        required_tool_intent=intent,
+        checkpointer=InMemorySaver(),
+    )
+
+    result = await graph.ainvoke(
+        initial_state(),
+        config=checkpoint_config("diagnosis-cross-project-target"),
+    )
+
+    assert gateway.calls[0].params["targetProjectId"] == 42
+    assert result["tool_result_mapping_status"] == "SUCCESS"
+    assert result["tool_result_mapping_error_code"] is None
+    assert result["rag_evidence_count"] == 1
 
 
 @pytest.mark.anyio

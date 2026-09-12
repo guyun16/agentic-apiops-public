@@ -1,0 +1,35 @@
+{
+  "ground_truth_id": "gt_stage21_formal_rag_multi_constraint_summary",
+  "version": "v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal orders constraint and index"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "retrieval_expectation",
+      "value": "MULTI_HIT"
+    },
+    {
+      "name": "expected_evidence_count",
+      "value": 2
+    },
+    {
+      "name": "diagnosis_independent",
+      "value": true
+    }
+  ],
+  "expected_evidence_ids": [
+    "rag:orders-constraint-001",
+    "rag:orders-unique-index"
+  ],
+  "expected_safety_outcome": "SAFE"
+}

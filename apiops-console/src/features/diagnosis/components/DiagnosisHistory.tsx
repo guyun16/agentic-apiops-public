@@ -3,12 +3,11 @@ import type { LucideIcon } from 'lucide-react'
 import type { ApiError } from '../../../lib/api-client'
 import { useConsoleLanguage } from '../../../app/ConsoleLanguage'
 import { formatTimestamp } from '../../runs/presentation'
-import type { RuntimeRunStatus, RuntimeRunSummary } from '../../evaluation/types'
-import type { DiagnosisHistoryFilter } from '../types'
+import type { DiagnosisHistoryFilter, DiagnosisRunStatus, DiagnosisRunSummary } from '../types'
 
 type DiagnosisHistoryProps = {
-  runs: RuntimeRunSummary[]
-  visibleRuns: RuntimeRunSummary[]
+  runs: DiagnosisRunSummary[]
+  visibleRuns: DiagnosisRunSummary[]
   selectedAgentRunId: string | null
   query: string
   filter: DiagnosisHistoryFilter
@@ -18,8 +17,6 @@ type DiagnosisHistoryProps = {
   totalMatches: number
   historyLoading: boolean
   historyError: ApiError | null
-  summaryByAgentRunId: Readonly<Record<string, string | null>>
-  summaryLoadingIds: ReadonlySet<string>
   accessDeniedDescription: string
   onQueryChange: (query: string) => void
   onFilterChange: (filter: DiagnosisHistoryFilter) => void
@@ -35,7 +32,7 @@ const filters: Array<{ value: DiagnosisHistoryFilter; label: string }> = [
   { value: 'FAILED', label: 'Failed' },
 ]
 
-const statusIcons: Record<RuntimeRunStatus, LucideIcon> = {
+const statusIcons: Record<DiagnosisRunStatus, LucideIcon> = {
   COMPLETED: CheckCircle2,
   RUNNING: LoaderCircle,
   APPROVAL_REQUIRED: CircleAlert,
@@ -43,7 +40,7 @@ const statusIcons: Record<RuntimeRunStatus, LucideIcon> = {
   REJECTED: Ban,
 }
 
-function statusLabel(status: RuntimeRunStatus, ui: (text: string) => string) {
+function statusLabel(status: DiagnosisRunStatus, ui: (text: string) => string) {
   switch (status) {
     case 'COMPLETED':
       return ui('Completed')
@@ -58,27 +55,19 @@ function statusLabel(status: RuntimeRunStatus, ui: (text: string) => string) {
   }
 }
 
-function statusTone(status: RuntimeRunStatus) {
+function statusTone(status: DiagnosisRunStatus) {
   return status.toLowerCase().replace(/_/g, '-')
 }
 
-function hasSummary(summaryByAgentRunId: Readonly<Record<string, string | null>>, agentRunId: string) {
-  return Object.prototype.hasOwnProperty.call(summaryByAgentRunId, agentRunId)
-}
-
 function summaryText(
-  run: RuntimeRunSummary,
-  summaryByAgentRunId: Readonly<Record<string, string | null>>,
-  summaryLoadingIds: ReadonlySet<string>,
+  run: DiagnosisRunSummary,
   ui: (text: string) => string,
 ) {
-  const summary = summaryByAgentRunId[run.agentRunId]
-  if (hasSummary(summaryByAgentRunId, run.agentRunId) && summary) return summary
+  if (run.summary) return run.summary
   if (run.status === 'RUNNING') return ui('Diagnosis in progress')
   if (run.status === 'APPROVAL_REQUIRED') return ui('Approval required')
   if (run.status === 'FAILED') return ui('Diagnosis failed')
   if (run.status === 'REJECTED') return ui('Diagnosis rejected')
-  if (summaryLoadingIds.has(run.agentRunId)) return ui('Loading report summary...')
   return ui('Report not available')
 }
 
@@ -105,8 +94,6 @@ export function DiagnosisHistory({
   query,
   runs,
   selectedAgentRunId,
-  summaryByAgentRunId,
-  summaryLoadingIds,
   totalMatches,
   visibleRuns,
 }: DiagnosisHistoryProps) {
@@ -184,14 +171,14 @@ export function DiagnosisHistory({
                     </span>
                   </span>
                   <span className="diagnosis-history-item-meta">
-                    <span>{ui('Source run')}: {run.runId === null ? '—' : `#${run.runId}`}</span>
+                    <span>{ui('Source run')}: #{run.runId}</span>
                     <span>{ui('Diagnosis')} · {run.provider}</span>
                   </span>
-                  <span className="diagnosis-history-item-summary" title={summaryText(run, summaryByAgentRunId, summaryLoadingIds, ui)}>
-                    {summaryText(run, summaryByAgentRunId, summaryLoadingIds, ui)}
+                  <span className="diagnosis-history-item-summary" title={summaryText(run, ui)}>
+                    {summaryText(run, ui)}
                   </span>
                 </span>
-                <time dateTime={run.finishedAt ?? run.startedAt}>{formatTimestamp(run.finishedAt ?? run.startedAt, locale)}</time>
+                <time dateTime={run.updatedAt}>{formatTimestamp(run.updatedAt, locale)}</time>
               </button>
             )
           })

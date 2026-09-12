@@ -50,6 +50,8 @@ class TestStepRunnerTest {
         assertEquals(FailureType.NONE, result.failureType());
         assertEquals(2, result.assertionResults().size());
         assertTrue(result.assertionResults().stream().allMatch(AssertionResult::passed));
+        assertEquals("http://localhost:8080/resource", result.httpExchange().request().url());
+        assertEquals("{\"ok\":true}", result.httpExchange().response().body());
     }
 
     @Test
@@ -146,6 +148,8 @@ class TestStepRunnerTest {
         assertEquals(RunStatus.EXECUTION_FAILED, result.status());
         assertEquals(FailureType.CONNECT_ERROR, result.failureType());
         assertNull(result.responseSnapshot());
+        assertEquals("http://localhost:8080/resource", result.httpExchange().request().url());
+        assertNull(result.httpExchange().response());
         assertEquals(0, evaluations.get());
     }
 
@@ -167,6 +171,7 @@ class TestStepRunnerTest {
         assertEquals(RunStatus.EXECUTION_FAILED, result.status());
         assertEquals(FailureType.REQUEST_BUILD_ERROR, result.failureType());
         assertNull(result.responseSnapshot());
+        assertNull(result.httpExchange());
         assertEquals(0, evaluations.get());
     }
 

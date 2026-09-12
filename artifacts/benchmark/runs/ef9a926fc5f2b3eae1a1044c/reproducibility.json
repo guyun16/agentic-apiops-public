@@ -1,0 +1,226 @@
+{
+  "baselineConfigId": "stage21-real-model-baseline-v1",
+  "baselineReportArtifact": "results/run-32892b0b5903f34756209cc6/baseline-report.md",
+  "baselineRunArtifact": "results/run-32892b0b5903f34756209cc6/baseline-run.json",
+  "benchmarkRunId": "evaluation_run:stage21-real-model-full-105-20260905T054023Z",
+  "collateralDamageArtifact": "results/run-32892b0b5903f34756209cc6/collateral-damage.json",
+  "configuration": {
+    "applicationIdentity": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "git revision and working-tree snapshot",
+      "value": {
+        "revision": "f3c0ed7a3016d515d9ae7357e749670bf1ebab88",
+        "workingTreeDirty": true
+      }
+    },
+    "baselineConfigId": "stage21-real-model-baseline-v1",
+    "benchmarkConfigVersion": "stage21.5-real-model-v1",
+    "datasetId": "stage21-apioops-bench-mini",
+    "datasetSplit": "all",
+    "datasetVersion": "v3",
+    "evaluatorIdentity": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "app.evaluator.EVALUATOR_VERSION",
+      "value": {
+        "name": "RuleBasedEvaluator",
+        "version": "rule-evaluator-v1"
+      }
+    },
+    "executionTimestamp": "2026-09-05T05:40:33.029738Z",
+    "javaRuntimeVersion": {
+      "availability": "UNAVAILABLE",
+      "reason": "Java runtime version is not emitted by this Python process",
+      "source": "Stage20 runtime context",
+      "value": null
+    },
+    "modelIdentity": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "AppSettings.qwen_model",
+      "value": {
+        "model": "qwen3.8-max",
+        "provider": "Qwen"
+      }
+    },
+    "modelParameters": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "QwenClient.complete request",
+      "value": {
+        "enable_thinking": false,
+        "response_format": "json_object",
+        "stream": false,
+        "timeout_seconds": 60.0
+      }
+    },
+    "promptIdentities": [
+      {
+        "availability": "AVAILABLE",
+        "reason": null,
+        "source": "existing workflow prompt file",
+        "value": {
+          "name": "testcase_generate",
+          "version": "v1"
+        }
+      },
+      {
+        "availability": "AVAILABLE",
+        "reason": null,
+        "source": "existing workflow prompt file",
+        "value": {
+          "name": "testcase_repair",
+          "version": "v1"
+        }
+      },
+      {
+        "availability": "AVAILABLE",
+        "reason": null,
+        "source": "existing workflow prompt file",
+        "value": {
+          "name": "diagnosis",
+          "version": "1"
+        }
+      }
+    ],
+    "pythonRuntimeVersion": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "platform.python_version",
+      "value": "python 3.13.13"
+    },
+    "taskSchemaVersion": "0.2.0",
+    "toolCatalogIdentity": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "app.tools.ToolCatalog",
+      "value": {
+        "name": "ToolCatalog",
+        "version": "approved-tool-catalog-v1"
+      }
+    },
+    "workflowIdentity": {
+      "availability": "AVAILABLE",
+      "reason": null,
+      "source": "app.benchmark.real_model",
+      "value": {
+        "name": "RealModelStage20WorkflowAdapter",
+        "version": "stage21-real-model-adapter-v1"
+      }
+    }
+  },
+  "configurationDigest": "8e5c8e53864e676f006684adc4cadff716347a0d6fe957b8a5000454730dd54f",
+  "evaluationCsvArtifact": "results/run-32892b0b5903f34756209cc6/evaluation_result.csv",
+  "executedTaskCount": 105,
+  "failureInventoryArtifact": "results/run-32892b0b5903f34756209cc6/failure-inventory.json",
+  "runArtifact": "results/run-32892b0b5903f34756209cc6/run.json",
+  "selectedTaskCount": 105,
+  "taskResultArtifacts": [
+    "results/run-32892b0b5903f34756209cc6/task-3cc3dee423463df726be997b.json",
+    "results/run-32892b0b5903f34756209cc6/task-d7320aa9b33f7dead30409c7.json",
+    "results/run-32892b0b5903f34756209cc6/task-1814f61e182e983a9dad3b29.json",
+    "results/run-32892b0b5903f34756209cc6/task-847b37343b35b47fd9f1caae.json",
+    "results/run-32892b0b5903f34756209cc6/task-fcca48a9844ca92fd94f4ed3.json",
+    "results/run-32892b0b5903f34756209cc6/task-7e9a97e2699d94b1219931ad.json",
+    "results/run-32892b0b5903f34756209cc6/task-cdc01ba3814c66f9e5fc769c.json",
+    "results/run-32892b0b5903f34756209cc6/task-e92c44661ca298260a8a194d.json",
+    "results/run-32892b0b5903f34756209cc6/task-934ef4e8fbbe27ecf8a9d137.json",
+    "results/run-32892b0b5903f34756209cc6/task-7a18fd02ec1a745f1a25947c.json",
+    "results/run-32892b0b5903f34756209cc6/task-38e85d889f563b83c1333317.json",
+    "results/run-32892b0b5903f34756209cc6/task-2915e8deae2849bff776f6bf.json",
+    "results/run-32892b0b5903f34756209cc6/task-e33d055bb75854339a8b2ab1.json",
+    "results/run-32892b0b5903f34756209cc6/task-528563938a499aa15e4f9912.json",
+    "results/run-32892b0b5903f34756209cc6/task-6a20d59288b65f1685df1b0c.json",
+    "results/run-32892b0b5903f34756209cc6/task-7980c3980bac17ba6b7ce1cc.json",
+    "results/run-32892b0b5903f34756209cc6/task-e307ed165525125c6922fa58.json",
+    "results/run-32892b0b5903f34756209cc6/task-5ec16fcc910a76576f696ba8.json",
+    "results/run-32892b0b5903f34756209cc6/task-dee32343526641b40c2a0aed.json",
+    "results/run-32892b0b5903f34756209cc6/task-8f529dd1169aeb16a9712566.json",
+    "results/run-32892b0b5903f34756209cc6/task-30539c2c9f8d73f20dc8840f.json",
+    "results/run-32892b0b5903f34756209cc6/task-58f07d391bd1300a5d57a616.json",
+    "results/run-32892b0b5903f34756209cc6/task-e886960b194306e71594135e.json",
+    "results/run-32892b0b5903f34756209cc6/task-117a0a6a5f14cd2e83b8ff7d.json",
+    "results/run-32892b0b5903f34756209cc6/task-90546548fd65d4bd5e315f72.json",
+    "results/run-32892b0b5903f34756209cc6/task-847d1e3d3d5f2c67b1377212.json",
+    "results/run-32892b0b5903f34756209cc6/task-1249f36c6191ae31e79806bd.json",
+    "results/run-32892b0b5903f34756209cc6/task-b657786c91412a5a31d758f2.json",
+    "results/run-32892b0b5903f34756209cc6/task-48bf453827515d359948b8c7.json",
+    "results/run-32892b0b5903f34756209cc6/task-9d24deaed91b9fe1f1e6128c.json",
+    "results/run-32892b0b5903f34756209cc6/task-9c52a2bb2dbe0b61b6e05677.json",
+    "results/run-32892b0b5903f34756209cc6/task-991b8c4c16e9fe3381d88354.json",
+    "results/run-32892b0b5903f34756209cc6/task-19080c805a909183b2393a70.json",
+    "results/run-32892b0b5903f34756209cc6/task-afb3d422f812042ce8acb78c.json",
+    "results/run-32892b0b5903f34756209cc6/task-76e8d4ffedd52cfe72564f58.json",
+    "results/run-32892b0b5903f34756209cc6/task-d99545d8953b0e680c78c4a2.json",
+    "results/run-32892b0b5903f34756209cc6/task-7847c6a29495045ae4258b47.json",
+    "results/run-32892b0b5903f34756209cc6/task-cc4561363369330aebdeb156.json",
+    "results/run-32892b0b5903f34756209cc6/task-be71992281f13104e6af1992.json",
+    "results/run-32892b0b5903f34756209cc6/task-621bfe666124eb662cc2d5be.json",
+    "results/run-32892b0b5903f34756209cc6/task-57d48c84d6954ea953eb05d5.json",
+    "results/run-32892b0b5903f34756209cc6/task-96e77a43f2ebe1bffa29f2d7.json",
+    "results/run-32892b0b5903f34756209cc6/task-f707a84779971dd3604ac23a.json",
+    "results/run-32892b0b5903f34756209cc6/task-3d216f3f9a727b3d34cd4f57.json",
+    "results/run-32892b0b5903f34756209cc6/task-4c23bf741fcf3ce21dde5825.json",
+    "results/run-32892b0b5903f34756209cc6/task-211b09941ded59849b843562.json",
+    "results/run-32892b0b5903f34756209cc6/task-93f462a29ac8e953e813efc1.json",
+    "results/run-32892b0b5903f34756209cc6/task-fe55dd16daf81e407e046c20.json",
+    "results/run-32892b0b5903f34756209cc6/task-64316b3245b671f130d9a8c6.json",
+    "results/run-32892b0b5903f34756209cc6/task-3e8c18b9fc5cb2a97d2ef999.json",
+    "results/run-32892b0b5903f34756209cc6/task-5f9b18cb56d11e97f25c395a.json",
+    "results/run-32892b0b5903f34756209cc6/task-76c89384d48f5cec339f4106.json",
+    "results/run-32892b0b5903f34756209cc6/task-e6fedc378b69b82d4bd9199f.json",
+    "results/run-32892b0b5903f34756209cc6/task-1e760541537ec4a3495e48f3.json",
+    "results/run-32892b0b5903f34756209cc6/task-82a4601f72b2b66c77451780.json",
+    "results/run-32892b0b5903f34756209cc6/task-68d74afa9b40c8dee88b4db2.json",
+    "results/run-32892b0b5903f34756209cc6/task-e047533bb12bf656d63d08c7.json",
+    "results/run-32892b0b5903f34756209cc6/task-62402f04ec6c30aaa5672e45.json",
+    "results/run-32892b0b5903f34756209cc6/task-b3cdfc6cd27aeee33df7bb15.json",
+    "results/run-32892b0b5903f34756209cc6/task-f45d0d026a387163136a29ae.json",
+    "results/run-32892b0b5903f34756209cc6/task-040aca301608bcd6be6e8fea.json",
+    "results/run-32892b0b5903f34756209cc6/task-bcb88ff4d998f088847f00d4.json",
+    "results/run-32892b0b5903f34756209cc6/task-1b7fad0f001127a5a54b88e0.json",
+    "results/run-32892b0b5903f34756209cc6/task-c6b9c7c2ead49307a3e629bf.json",
+    "results/run-32892b0b5903f34756209cc6/task-9bcebacb6f60af33d2f24c90.json",
+    "results/run-32892b0b5903f34756209cc6/task-8df626fc0dcd056c8b831354.json",
+    "results/run-32892b0b5903f34756209cc6/task-1cd65436b7cd512df5a5b8d4.json",
+    "results/run-32892b0b5903f34756209cc6/task-3c0487bb56ab8d5d1346aeff.json",
+    "results/run-32892b0b5903f34756209cc6/task-b1892a89f81f3a225a876cd3.json",
+    "results/run-32892b0b5903f34756209cc6/task-4a96731f9f240370bbf2329e.json",
+    "results/run-32892b0b5903f34756209cc6/task-dde0c386af139502e49b02c2.json",
+    "results/run-32892b0b5903f34756209cc6/task-b9b3e572c38b101d7df18339.json",
+    "results/run-32892b0b5903f34756209cc6/task-0d0a6ccc0352cacac19f09ee.json",
+    "results/run-32892b0b5903f34756209cc6/task-59cf5f88bad48de947503c36.json",
+    "results/run-32892b0b5903f34756209cc6/task-c42886793e107b61a0844e6f.json",
+    "results/run-32892b0b5903f34756209cc6/task-cb64a00d2805860766665625.json",
+    "results/run-32892b0b5903f34756209cc6/task-a91d07b44e18bcf9f236be42.json",
+    "results/run-32892b0b5903f34756209cc6/task-05a9b89ee1f6b3acb9e08cbe.json",
+    "results/run-32892b0b5903f34756209cc6/task-859abf2d98490201e45a8eac.json",
+    "results/run-32892b0b5903f34756209cc6/task-1496cd8f50c541ea57f134ad.json",
+    "results/run-32892b0b5903f34756209cc6/task-e5173717306131102d6d9b6e.json",
+    "results/run-32892b0b5903f34756209cc6/task-7d6099f425a9f9dd48549ea6.json",
+    "results/run-32892b0b5903f34756209cc6/task-cb0774f06f8813296367f18d.json",
+    "results/run-32892b0b5903f34756209cc6/task-63c5af1e3a2c4924043138a9.json",
+    "results/run-32892b0b5903f34756209cc6/task-4fe2b060c04dd078d3782176.json",
+    "results/run-32892b0b5903f34756209cc6/task-4de4aae43f7988ae0d805711.json",
+    "results/run-32892b0b5903f34756209cc6/task-4ffdc3730ebc93ee7cb07885.json",
+    "results/run-32892b0b5903f34756209cc6/task-7d4928fcc820cc49281859d3.json",
+    "results/run-32892b0b5903f34756209cc6/task-cc401605ef85f42036dcbee4.json",
+    "results/run-32892b0b5903f34756209cc6/task-1ed14748d10f48a3ec8c5571.json",
+    "results/run-32892b0b5903f34756209cc6/task-a3f8aab2e268985ffb6a1d8b.json",
+    "results/run-32892b0b5903f34756209cc6/task-0100b22be0f1136b84b909db.json",
+    "results/run-32892b0b5903f34756209cc6/task-4af72b2d7773f2e9377d0c37.json",
+    "results/run-32892b0b5903f34756209cc6/task-0fde4240d9d2072a92dae09e.json",
+    "results/run-32892b0b5903f34756209cc6/task-c7b958337046897bdd26d8cb.json",
+    "results/run-32892b0b5903f34756209cc6/task-cc938b5f128f28eebbd146fa.json",
+    "results/run-32892b0b5903f34756209cc6/task-741aa06d1dabfda90789109d.json",
+    "results/run-32892b0b5903f34756209cc6/task-ec4c28f3777b4cd33a746134.json",
+    "results/run-32892b0b5903f34756209cc6/task-4b40afe478ab805adb777a99.json",
+    "results/run-32892b0b5903f34756209cc6/task-c1befbfb1afddde169f50cc1.json",
+    "results/run-32892b0b5903f34756209cc6/task-3ce6b4c03876d5eaa60f6e2e.json",
+    "results/run-32892b0b5903f34756209cc6/task-acbf25d828c558324365f0c3.json",
+    "results/run-32892b0b5903f34756209cc6/task-09268dd708ee5967d5dee182.json",
+    "results/run-32892b0b5903f34756209cc6/task-8c760461f7c756f6f0871c22.json",
+    "results/run-32892b0b5903f34756209cc6/task-818024c9f55d16aa564d1c6c.json"
+  ]
+}

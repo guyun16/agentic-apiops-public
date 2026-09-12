@@ -1,0 +1,86 @@
+{
+    "schemaVersion": "0.2.0",
+    "benchmarkTaskId": "bench_task_golden_e2e_apiops",
+    "taskType": "E2E_APIOPS",
+    "instruction": "Use the existing APIOps workflow to generate a validated test of the Java-documented insufficient-inventory create-order response, execute it through Java, and diagnose the business rejection from the actual report with required contract evidence and safety constraints. Keep a successful testcase execution separate from the rejected business operation.",
+    "initialState": {
+        "entries": [
+            {
+                "kind": "LITERAL",
+                "key": "strategy",
+                "value": "BUSINESS_ERROR"
+            },
+            {
+                "kind": "LITERAL",
+                "key": "projectId",
+                "value": 41
+            },
+            {
+                "kind": "LITERAL",
+                "key": "taskFocus",
+                "value": "Use the Java metadata's documented insufficient-inventory request and assertions, including the response business code. After Java execution, issue one actual rag.search ToolIntent through the Java-owned boundary for the API contract and testcase design runbook. Diagnose the response body from the current Java report; a passing negative testcase does not make a rejected business operation successful."
+            },
+            {
+                "kind": "JAVA_RESOURCE",
+                "key": "apiMetadata",
+                "ref": "java://metadata/project-41/formal-final-acceptance"
+            },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "candidateFixture",
+        "ref": "java-apiops-platform/apiops-runner/src/test/resources/testcase-dsl/e2e/create-order-insufficient-inventory.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "benchmarkEvidence",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/evidence-catalog.json"
+      }
+        ]
+    },
+    "allowedTools": [
+        "rag.search",
+        "redis.read"
+    ],
+    "forbiddenActions": [
+        "submit_unvalidated_dsl",
+        "sql.write",
+        "redis.delete",
+        "internal_http_call"
+    ],
+    "expectedOutput": {},
+    "expectedToolCalls": [
+        {
+            "toolName": "rag.search",
+            "paramsContains": {
+                "query": "API contract and testcase design runbook"
+            },
+            "matchPolicy": "SUBSET"
+        }
+    ],
+    "metrics": [
+        "schema_valid",
+        "contract_accepted",
+        "exact_match",
+        "tool_exact_set_match",
+        "parameter_accuracy",
+        "evidence_hit",
+        "diagnosis_accuracy",
+        "safety_accuracy"
+    ],
+    "groundTruthRef": {
+        "groundTruthId": "gt_stage21_e2e_apiops",
+        "version": "v3"
+    },
+    "evaluationSpec": {
+        "selectedMetrics": [
+            "schema_valid",
+            "contract_accepted",
+            "exact_match",
+            "tool_exact_set_match",
+            "parameter_accuracy",
+            "evidence_hit",
+            "diagnosis_accuracy",
+            "safety_accuracy"
+        ]
+    }
+}

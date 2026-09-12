@@ -1,4 +1,4 @@
-"""Generalized diagnosis semantics with a deterministic model."""
+"""Generalized pre-Formal105 diagnosis semantics with a deterministic model."""
 
 from __future__ import annotations
 
@@ -6,8 +6,9 @@ import json
 
 import pytest
 
-from app.agents.diagnosis import DiagnosisSemanticContractError
-from app.rag.context import ContextItem, ContextSource
+from app.agents.diagnosis import DiagnosisSemanticContractError, validate_diagnosis_semantics
+from app.rag.context import ContextItem, ContextPackBuilder, ContextPolicy, ContextSource
+from app.schemas.diagnosis_report import DiagnosisReport
 from app.schemas.runner import TestReport as RunnerTestReport
 from app.tools import FakeToolGatewayAdapter, ToolCatalog, ToolRouter
 from app.workflows.diagnosis_workflow import (
@@ -22,14 +23,14 @@ class SemanticFakeLLM:
 
     async def complete(self, prompt: str) -> str:
         required_rules = (
-            "failureType as the observed failure classification, not as the root cause",
+            "DiagnosisReport `failureType` is a separate Agent-authored semantic diagnosis",
             "Rank authority as: observed execution facts",
             "validated retrieval evidence",
             "model inference. Never override an observed fact",
             "An assertion mismatch proves only that actual differed from expected",
             "evidence is missing or conflicting",
-            "known failure type",
-            "does not permit an empty rootCauseHypotheses array",
+            "known failure facts",
+            "Empty hypotheses are allowed when no defensible hypothesis can be formed",
         )
         assert all(rule in prompt for rule in required_rules)
         context = json.loads(
@@ -312,6 +313,89 @@ async def test_generalized_diagnosis_families_preserve_semantic_boundaries(
 
 
 @pytest.mark.anyio
+async def test_semantic_diagnosis_may_differ_from_observed_runner_failure_type() -> None:
+    runtime_report = report(
+        "NONE",
+        status="SUCCESS",
+        response_status=409,
+    )
+    context = (
+        ContextItem(
+            source_type=ContextSource.EXECUTION_FACT,
+            source_id=runtime_report.report_id,
+            project_scope=41,
+            content="authoritative Java response status 409",
+            priority=100,
+        ),
+    )
+    candidate = {
+        "schemaVersion": "0.1.0",
+        "reportId": runtime_report.report_id,
+        "agentRunId": "agent-semantic",
+        "projectId": 41,
+        "runId": 701,
+        "failureType": "BUSINESS_ERROR",
+        "summary": "The successful Runner execution observed a business-error response.",
+        "rootCauseHypotheses": [],
+        "sufficientEvidence": False,
+        "limitations": ["The response body is unavailable."],
+        "recommendedChecks": ["Inspect the authorized response body."],
+        "traceId": "trace-semantic",
+    }
+
+    pack = ContextPackBuilder(
+        ContextPolicy(source_precedence=tuple(ContextSource)),
+        project_scope=41,
+    ).build(context)
+    diagnosis = DiagnosisReport.model_validate(candidate)
+
+    validate_diagnosis_semantics(diagnosis, report=runtime_report, context_pack=pack)
+    assert diagnosis.failure_type == "BUSINESS_ERROR"
+    assert diagnosis.semantic_diagnosis == "BUSINESS_ERROR"
+    assert runtime_report.summary.failure_type == "NONE"
+
+
+def test_error_http_response_rejects_semantic_none() -> None:
+    runtime_report = report(
+        "NONE",
+        status="SUCCESS",
+        response_status=500,
+    )
+    context = (
+        ContextItem(
+            source_type=ContextSource.EXECUTION_FACT,
+            source_id=runtime_report.report_id,
+            project_scope=41,
+            content="authoritative Java response status 500",
+            priority=100,
+        ),
+    )
+    pack = ContextPackBuilder(
+        ContextPolicy(source_precedence=tuple(ContextSource)),
+        project_scope=41,
+    ).build(context)
+    diagnosis = DiagnosisReport.model_validate(
+        {
+            "schemaVersion": "0.1.0",
+            "reportId": runtime_report.report_id,
+            "agentRunId": "agent-semantic",
+            "projectId": 41,
+            "runId": 701,
+            "failureType": "NONE",
+            "summary": "No failure was observed.",
+            "rootCauseHypotheses": [],
+            "sufficientEvidence": False,
+            "limitations": ["The response body is unavailable."],
+            "recommendedChecks": ["Inspect the authorized response body."],
+            "traceId": "trace-semantic",
+        }
+    )
+
+    with pytest.raises(DiagnosisSemanticContractError, match="cannot have semantic diagnosis NONE"):
+        validate_diagnosis_semantics(diagnosis, report=runtime_report, context_pack=pack)
+
+
+@pytest.mark.anyio
 async def test_same_failure_type_with_different_evidence_changes_hypothesis() -> None:
     runtime_report = report(
         "ASSERTION_MISMATCH",
@@ -360,7 +444,7 @@ class EmptyDiagnosisLLM:
 
 
 @pytest.mark.anyio
-async def test_known_terminal_failure_with_empty_hypotheses_fails_closed() -> None:
+async def test_known_terminal_failure_can_abstain_without_erasing_observations() -> None:
     runtime_report = report("DNS_ERROR", status="EXECUTION_FAILED", response_status=None)
     catalog = ToolCatalog()
     graph = build_diagnosis_workflow(
@@ -376,5 +460,9 @@ async def test_known_terminal_failure_with_empty_hypotheses_fails_closed() -> No
         workflow_id="workflow:semantic-empty-known",
     )
 
-    with pytest.raises(DiagnosisSemanticContractError, match="at least one provisional"):
-        await graph.ainvoke(state, config=checkpoint_config(state["workflow_id"]))
+    result = await graph.ainvoke(state, config=checkpoint_config(state["workflow_id"]))
+    diagnosis = result["diagnosis_report"]
+    assert diagnosis.sufficient_evidence is False
+    assert diagnosis.root_cause_hypotheses == []
+    assert diagnosis.failure_type == "DNS_ERROR"
+    assert diagnosis.limitations and diagnosis.recommended_checks

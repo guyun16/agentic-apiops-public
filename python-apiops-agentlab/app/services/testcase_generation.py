@@ -25,6 +25,7 @@ from app.clients.java_apiops import (
 from app.clients.llm_provider import build_llm, provider_identity
 from app.clients.qwen import QwenError
 from app.core.errors import ApplicationError
+from app.core.http_tls import client_tls_context
 from app.core.settings import AppSettings, get_settings
 from app.schemas.testcase_dsl import TestCaseDSL
 from app.schemas.testcase_generation_api import (
@@ -63,7 +64,9 @@ class TestCaseGenerationService:
         effective_settings = settings or get_settings()
 
         try:
-            async with httpx.AsyncClient(trust_env=False) as http_client:
+            async with httpx.AsyncClient(
+                trust_env=False, verify=client_tls_context()
+            ) as http_client:
                 java_client = JavaApiOpsClient(
                     http_client,
                     base_url=effective_settings.java_apiops_base_url,

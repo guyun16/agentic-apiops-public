@@ -1,0 +1,322 @@
+{
+  "generatedAt": "2026-09-01T10:59:32.141073+00:00",
+  "mode": "acceptance",
+  "recipeCount": 11,
+  "threshold": 0.516365,
+  "corpus": {
+    "corpusVersion": "stage21-rag-corpus-v2",
+    "documents": 13,
+    "chunks": 14,
+    "qdrantPoints": 14,
+    "project41": {
+      "documents": 8,
+      "chunks": 8,
+      "qdrantPoints": 8
+    },
+    "project42": {
+      "documents": 5,
+      "chunks": 6,
+      "qdrantPoints": 6
+    }
+  },
+  "coverageNotCovered": [],
+  "knowledgeTypes": {
+    "declared": [
+      "ASSERTION_MISMATCH",
+      "AUTHORIZATION_PROJECT_ISOLATION",
+      "CITATION_RULES",
+      "DATABASE_UNIQUE_CONSTRAINT",
+      "FAILURE_TAXONOMY",
+      "FOREIGN_KEY_DATA_CONSTRAINT",
+      "HTTP_STATUS_MISMATCH",
+      "MULTI_EVIDENCE_DIAGNOSIS",
+      "NEAR_MATCH_INCIDENTS",
+      "OPENAPI_ENDPOINT_CONSTRAINTS",
+      "RAG_USAGE",
+      "REPORT_INDEX_CORRELATION",
+      "REQUEST_RESPONSE_CONSTRAINTS",
+      "RUNNER_LIFECYCLE",
+      "SIMILAR_WRONG_DISTRACTORS",
+      "TESTCASE_DSL_SEMANTICS",
+      "TIMEOUT_RETRY_SEMANTICS",
+      "TOOL_GATEWAY_RULES",
+      "ZERO_HIT_SEMANTICS"
+    ],
+    "required": [
+      "ASSERTION_MISMATCH",
+      "AUTHORIZATION_PROJECT_ISOLATION",
+      "CITATION_RULES",
+      "DATABASE_UNIQUE_CONSTRAINT",
+      "FAILURE_TAXONOMY",
+      "FOREIGN_KEY_DATA_CONSTRAINT",
+      "HTTP_STATUS_MISMATCH",
+      "MULTI_EVIDENCE_DIAGNOSIS",
+      "NEAR_MATCH_INCIDENTS",
+      "OPENAPI_ENDPOINT_CONSTRAINTS",
+      "RAG_USAGE",
+      "REPORT_INDEX_CORRELATION",
+      "REQUEST_RESPONSE_CONSTRAINTS",
+      "RUNNER_LIFECYCLE",
+      "SIMILAR_WRONG_DISTRACTORS",
+      "TESTCASE_DSL_SEMANTICS",
+      "TIMEOUT_RETRY_SEMANTICS",
+      "TOOL_GATEWAY_RULES",
+      "ZERO_HIT_SEMANTICS"
+    ],
+    "missing": []
+  },
+  "scenarioCounts": {
+    "positive": 7,
+    "multi": 2,
+    "nearMatch": 2,
+    "distractor": 1,
+    "zeroHit": 2,
+    "crossProjectDeny": 2
+  },
+  "statusCounts": {
+    "ZERO_HIT": 2,
+    "FORBIDDEN": 2,
+    "SUCCESS_WITH_RESULTS": 7
+  },
+  "metrics": {
+    "Hit@1": 1.0,
+    "Hit@K": 1.0,
+    "Recall@K": 0.9285714285714286,
+    "MRR": 1.0,
+    "positiveScenarioCount": 7
+  },
+  "citationMismatches": 0,
+  "projectIsolationViolations": 0,
+  "unexpectedSources": [],
+  "scenarioMisses": [],
+  "hardGate": {
+    "corpusNotCoveredZero": true,
+    "requiredKnowledgeTypesCovered": true,
+    "failedZero": true,
+    "twoZeroHitScenarios": true,
+    "crossProjectDenyForbidden": true,
+    "citationMismatchZero": true,
+    "projectIsolationViolationZero": true,
+    "positiveEvidenceRetrieves": true,
+    "noUnexpectedSources": true
+  },
+  "readiness": "PASS",
+  "recipes": [
+    {
+      "taskId": "bench_task_rag_zero_hit",
+      "profile": "NORMAL",
+      "currentProjectId": 41,
+      "targetProjectId": null,
+      "query": "stage21 no indexed match",
+      "topK": 3,
+      "toolCallId": "07760890-1cb8-46ea-889a-0eed7b56caed",
+      "ragQueryId": "ragq_fa4b8d8d7e474864b8da11446d8f95c6",
+      "gatewayStatus": "SUCCESS",
+      "resultCount": 0,
+      "scores": [],
+      "sourceIds": [],
+      "category": "AUTHORIZED_ZERO_HIT",
+      "acceptanceStatus": "ZERO_HIT"
+    },
+    {
+      "taskId": "bench_task_rag_wrong_project",
+      "profile": "SAFETY_42_ISOLATED",
+      "currentProjectId": 42,
+      "targetProjectId": 41,
+      "query": "stage21 forbidden project evidence",
+      "topK": 3,
+      "toolCallId": "240d4568-4ed8-4934-8449-3354caf851bc",
+      "ragQueryId": null,
+      "gatewayStatus": "FORBIDDEN",
+      "resultCount": 0,
+      "scores": [],
+      "sourceIds": [],
+      "category": "CROSS_PROJECT_ISOLATION",
+      "acceptanceStatus": "FORBIDDEN"
+    },
+    {
+      "taskId": "bench_task_rag_near_match",
+      "profile": "NORMAL",
+      "currentProjectId": 41,
+      "targetProjectId": null,
+      "query": "stage21 orders unique index exact",
+      "topK": 3,
+      "toolCallId": "c3dbd705-b040-4e72-92b7-0051519d62c7",
+      "ragQueryId": "ragq_0a4c7e24c66d41239cab5c34f8866613",
+      "gatewayStatus": "SUCCESS",
+      "resultCount": 2,
+      "scores": [
+        0.7081431,
+        0.65932345
+      ],
+      "sourceIds": [
+        "stage21-rag-v2/project-41/orders-constraint-index",
+        "stage21-rag-v2/project-41/orders-api-constraints"
+      ],
+      "category": "EXACT_OVER_NEAR_MATCH",
+      "acceptanceStatus": "SUCCESS_WITH_RESULTS"
+    },
+    {
+      "taskId": "bench_task_formal_rag_citation_report",
+      "profile": "NORMAL",
+      "currentProjectId": 41,
+      "targetProjectId": null,
+      "query": "stage21 formal report citation identity",
+      "topK": 3,
+      "toolCallId": "aef65506-20ff-4b44-a523-f3677efc5ff1",
+      "ragQueryId": "ragq_a23e77d46084467f807d12ec6db7d260",
+      "gatewayStatus": "SUCCESS",
+      "resultCount": 2,
+      "scores": [
+        0.5742383,
+        0.5478577
+      ],
+      "sourceIds": [
+        "stage21-rag-v2/project-41/orders-incident-report",
+        "stage21-rag-v2/project-41/runner-reliability-runbook"
+      ],
+      "category": "CITATION",
+      "acceptanceStatus": "SUCCESS_WITH_RESULTS"
+    },
+    {
+      "taskId": "bench_task_formal_rag_distractor_filter",
+      "profile": "NORMAL",
+      "currentProjectId": 41,
+      "targetProjectId": null,
+      "query": "stage21 relevant evidence over distractor",
+      "topK": 3,
+      "toolCallId": "f331868e-b7db-4f01-bca7-bf78482b0808",
+      "ragQueryId": "ragq_b95e49353cdc419e9b5630e4703daaa8",
+      "gatewayStatus": "SUCCESS",
+      "resultCount": 2,
+      "scores": [
+        0.53291035,
+        0.5214411
+      ],
+      "sourceIds": [
+        "stage21-rag-v2/project-41/orders-constraint-index",
+        "stage21-rag-v2/project-41/data-integrity-constraints"
+      ],
+      "category": "RELEVANT_OVER_DISTRACTOR",
+      "acceptanceStatus": "SUCCESS_WITH_RESULTS"
+    },
+    {
+      "taskId": "bench_task_formal_rag_multi_constraint_summary",
+      "profile": "NORMAL",
+      "currentProjectId": 41,
+      "targetProjectId": null,
+      "query": "stage21 independent order constraints",
+      "topK": 3,
+      "toolCallId": "bbd75755-4a29-44d9-9a17-47c2223dc0a2",
+      "ragQueryId": "ragq_34dc79fc8bd14e3c8de700ecf6f10f6b",
+      "gatewayStatus": "SUCCESS",
+      "resultCount": 2,
+      "scores": [
+        0.655493,
+        0.5809414
+      ],
+      "sourceIds": [
+        "stage21-rag-v2/project-41/orders-api-constraints",
+        "stage21-rag-v2/project-41/orders-constraint-index"
+      ],
+      "category": "MULTI_CONSTRAINT",
+      "acceptanceStatus": "SUCCESS_WITH_RESULTS"
+    },
+    {
+      "taskId": "bench_task_formal_rag_multi_report_index",
+      "profile": "NORMAL",
+      "currentProjectId": 41,
+      "targetProjectId": null,
+      "query": "stage21 report and unique index",
+      "topK": 3,
+      "toolCallId": "13f56da6-5979-4c78-94db-4a8dbb4f186b",
+      "ragQueryId": "ragq_d5bf7c065bf84722bb1916a16019836a",
+      "gatewayStatus": "SUCCESS",
+      "resultCount": 2,
+      "scores": [
+        0.5970912,
+        0.5878918
+      ],
+      "sourceIds": [
+        "stage21-rag-v2/project-41/orders-incident-report",
+        "stage21-rag-v2/project-41/orders-constraint-index"
+      ],
+      "category": "MULTI_REPORT_INDEX",
+      "acceptanceStatus": "SUCCESS_WITH_RESULTS"
+    },
+    {
+      "taskId": "bench_task_formal_rag_near_match_exact",
+      "profile": "NORMAL",
+      "currentProjectId": 41,
+      "targetProjectId": null,
+      "query": "stage21 exact evidence near match",
+      "topK": 3,
+      "toolCallId": "66135422-85a5-424b-9af5-2d4f40d91f77",
+      "ragQueryId": "ragq_f66ebe5fdb9d48898a0a26b4fd790635",
+      "gatewayStatus": "SUCCESS",
+      "resultCount": 1,
+      "scores": [
+        0.5190153
+      ],
+      "sourceIds": [
+        "stage21-rag-v2/project-41/orders-api-constraints"
+      ],
+      "category": "EXACT_OVER_NEAR_MATCH",
+      "acceptanceStatus": "SUCCESS_WITH_RESULTS"
+    },
+    {
+      "taskId": "bench_task_formal_rag_single_constraint",
+      "profile": "NORMAL",
+      "currentProjectId": 41,
+      "targetProjectId": null,
+      "query": "stage21 exact single constraint",
+      "topK": 3,
+      "toolCallId": "ec6873c8-9507-46e0-86d7-8f7bcc96443d",
+      "ragQueryId": "ragq_5479e89cef874418b6c8c1177fcf09f4",
+      "gatewayStatus": "SUCCESS",
+      "resultCount": 2,
+      "scores": [
+        0.59181225,
+        0.52832186
+      ],
+      "sourceIds": [
+        "stage21-rag-v2/project-41/orders-api-constraints",
+        "stage21-rag-v2/project-41/data-integrity-constraints"
+      ],
+      "category": "SINGLE_EXACT",
+      "acceptanceStatus": "SUCCESS_WITH_RESULTS"
+    },
+    {
+      "taskId": "bench_task_formal_rag_wrong_project_isolation",
+      "profile": "SAFETY_41_ISOLATED",
+      "currentProjectId": 41,
+      "targetProjectId": 42,
+      "query": "stage21 target project isolation",
+      "topK": 3,
+      "toolCallId": "cc921d38-a9b9-4d9c-afe1-eb60325cb331",
+      "ragQueryId": null,
+      "gatewayStatus": "FORBIDDEN",
+      "resultCount": 0,
+      "scores": [],
+      "sourceIds": [],
+      "category": "CROSS_PROJECT_ISOLATION",
+      "acceptanceStatus": "FORBIDDEN"
+    },
+    {
+      "taskId": "bench_task_formal_rag_zero_hit_authorized",
+      "profile": "NORMAL",
+      "currentProjectId": 41,
+      "targetProjectId": null,
+      "query": "stage21 authorized query with no hit",
+      "topK": 3,
+      "toolCallId": "54c2214b-2c85-48ba-92e9-1dfc16f0d6c5",
+      "ragQueryId": "ragq_0aeaa7ac3e9140c9875c52b08aaff1e3",
+      "gatewayStatus": "SUCCESS",
+      "resultCount": 0,
+      "scores": [],
+      "sourceIds": [],
+      "category": "AUTHORIZED_ZERO_HIT",
+      "acceptanceStatus": "ZERO_HIT"
+    }
+  ]
+}

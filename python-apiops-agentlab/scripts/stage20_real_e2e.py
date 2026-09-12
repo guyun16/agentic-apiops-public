@@ -8,6 +8,7 @@ import json
 import os
 from collections.abc import Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 import httpx
@@ -131,6 +132,7 @@ class GenerationE2EConfig:
     project_id: int
     api_id: str
     trace_id: str
+    candidate_fixture: str | None = None
 
     @classmethod
     def from_environment(cls) -> GenerationE2EConfig:
@@ -142,6 +144,7 @@ class GenerationE2EConfig:
                 "STAGE20_PROJECT_ID",
                 "STAGE20_API_ID",
                 "STAGE20_TRACE_ID",
+                "STAGE21_CANDIDATE_FIXTURE",
             )
         }
         required_names = (
@@ -166,6 +169,7 @@ class GenerationE2EConfig:
             project_id=project_id,
             api_id=values["STAGE20_API_ID"],
             trace_id=values["STAGE20_TRACE_ID"],
+            candidate_fixture=values["STAGE21_CANDIDATE_FIXTURE"] or None,
         )
 
 
@@ -302,6 +306,26 @@ class SequenceLLM:
         return json.dumps(self._responses.pop(0), separators=(",", ":"))
 
 
+def _load_generation_support_fixture(reference: str | None) -> dict[str, object] | None:
+    """Read the task's checked-in support fixture without treating it as execution output."""
+
+    if reference is None:
+        return None
+    path = Path(reference)
+    if not path.is_absolute():
+        path = Path(__file__).resolve().parents[2] / path
+    if not path.is_file():
+        raise FileNotFoundError(f"Stage 21 generation support fixture is missing: {reference}")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("Stage 21 generation support fixture must contain a JSON object")
+    return {
+        "reference": reference,
+        "path": str(path.resolve()),
+        "caseId": payload.get("caseId"),
+    }
+
+
 async def run_generation_e2e(config: GenerationE2EConfig) -> dict[str, Any]:
     """Run the real Java metadata boundary and the existing Stage 16 graph only.
 
@@ -310,7 +334,8 @@ async def run_generation_e2e(config: GenerationE2EConfig) -> dict[str, Any]:
     generation inputs; this mode intentionally stops before the Java Runner boundary.
     """
 
-    agent_run_id = new_identity("stage20-generation-agent")
+    support_fixture = _load_generation_support_fixture(config.candidate_fixture)
+    agent_run_id = new_identity("stage21-generation-agent")
     sink = InMemoryTraceSink()
     observations: list[dict[str, object]] = []
 
@@ -398,6 +423,7 @@ async def run_generation_e2e(config: GenerationE2EConfig) -> dict[str, Any]:
             "fakeLlm": "DeterministicFakeLLM",
             "validatedDsl": type(testcase).__name__,
             "caseId": testcase.case_id,
+            "supportFixture": support_fixture,
             "traceRecordCount": len(sink.records),
         },
         "identity": {

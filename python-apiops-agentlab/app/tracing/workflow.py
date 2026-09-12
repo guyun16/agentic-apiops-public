@@ -7,7 +7,7 @@ business workflow.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterator
+from collections.abc import Awaitable, Callable, Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
@@ -16,6 +16,7 @@ from time import perf_counter_ns
 from uuid import uuid4
 
 from app.agents.testcase_generator import TestCaseGenerator
+from app.clients.llm import StructuredLLMClient, StructuredOutputSpec
 
 from .models import (
     FailureDetail,
@@ -143,6 +144,12 @@ class InstrumentedLLM:
         value = getattr(self._llm, "provider", None)
         return value if isinstance(value, str) and value.strip() else type(self._llm).__name__
 
+    @property
+    def supports_structured_output(self) -> bool:
+        """Expose the wrapped client's optional native capability accurately."""
+
+        return isinstance(self._llm, StructuredLLMClient)
+
     def _completion_usage(self) -> TokenUsage | None:
         metadata = getattr(self._llm, "last_completion_metadata", None)
         if metadata is None:
@@ -154,6 +161,7 @@ class InstrumentedLLM:
             provider_metadata=ProviderUsageMetadata(
                 provider_request_id=getattr(metadata, "provider_request_id", None),
                 finish_reason=getattr(metadata, "finish_reason", None),
+                response_model=getattr(metadata, "model", None),
             ),
         )
         if usage.provider_metadata is not None and not any(
@@ -164,15 +172,54 @@ class InstrumentedLLM:
                 usage.total_tokens,
                 usage.provider_metadata.provider_request_id,
                 usage.provider_metadata.finish_reason,
+                usage.provider_metadata.response_model,
             )
         ):
             return None
         return usage
 
     async def complete(self, prompt: str) -> str:
+        return await self._complete_observed(
+            prompt,
+            invoke=lambda: self._llm.complete(prompt),  # type: ignore[attr-defined]
+            structured_output_mode="JSON_OBJECT",
+            schema_name=None,
+            schema_digest=None,
+        )
+
+    async def complete_structured(
+        self,
+        prompt: str,
+        *,
+        output_spec: StructuredOutputSpec,
+    ) -> str:
+        if not isinstance(output_spec, StructuredOutputSpec):
+            raise TypeError("output_spec must be a StructuredOutputSpec")
+        from app.clients.qwen_structured_output import schema_digest
+
+        return await self._complete_observed(
+            prompt,
+            invoke=lambda: self._llm.complete_structured(  # type: ignore[attr-defined]
+                prompt,
+                output_spec=output_spec,
+            ),
+            structured_output_mode="JSON_SCHEMA",
+            schema_name=output_spec.schema_name,
+            schema_digest=schema_digest(output_spec.schema),
+        )
+
+    async def _complete_observed(
+        self,
+        prompt: str,
+        *,
+        invoke: Callable[[], Awaitable[str]],
+        structured_output_mode: str,
+        schema_name: str | None,
+        schema_digest: str | None,
+    ) -> str:
         context = _ACTIVE_TRACE_STEP.get()
         if context is None:
-            return await self._llm.complete(prompt)  # type: ignore[attr-defined]
+            return await invoke()
 
         model_call_id = new_identity("model_call")
         started_at = datetime.now(UTC)
@@ -198,10 +245,13 @@ class InstrumentedLLM:
                 ),
                 prompt=context.prompt,
                 model_input=digest_payload(prompt),
+                structured_output_mode=structured_output_mode,  # type: ignore[arg-type]
+                schema_name=schema_name,
+                schema_digest=schema_digest,
             ),
         )
         try:
-            output = await self._llm.complete(prompt)  # type: ignore[attr-defined]
+            output = await invoke()
         except Exception as exc:
             exc_type = type(exc).__name__
             exc_message = str(exc)
@@ -235,6 +285,9 @@ class InstrumentedLLM:
                         finished_at=finished_at,
                         duration_ms=duration_ms,
                     ),
+                    structured_output_mode=structured_output_mode,  # type: ignore[arg-type]
+                    schema_name=schema_name,
+                    schema_digest=schema_digest,
                 ),
             )
             raise
@@ -264,6 +317,9 @@ class InstrumentedLLM:
                     finished_at=finished_at,
                     duration_ms=duration_ms,
                 ),
+                structured_output_mode=structured_output_mode,  # type: ignore[arg-type]
+                schema_name=schema_name,
+                schema_digest=schema_digest,
             ),
         )
         return output

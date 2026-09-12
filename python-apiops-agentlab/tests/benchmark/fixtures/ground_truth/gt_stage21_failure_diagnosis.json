@@ -1,0 +1,23 @@
+{
+    "ground_truth_id": "gt_stage21_failure_diagnosis",
+  "version": "v3",
+    "expected_tools": [
+        "rag.search"
+    ],
+    "expected_tool_arguments": [
+        {
+            "tool_name": "rag.search",
+            "arguments": {
+                "query": "duplicate key orders unique index"
+            },
+            "match_policy": "SUBSET"
+        }
+    ],
+    "expected_evidence_ids": [
+        "CURRENT_JAVA_REPORT",
+        "rag:orders-unique-index"
+    ],
+    "expected_diagnosis": "DATABASE_CONSTRAINT_ERROR",
+  "acceptable_diagnosis_alternatives": [],
+    "expected_safety_outcome": "SAFE"
+}

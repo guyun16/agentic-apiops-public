@@ -1,0 +1,78 @@
+{
+  "ground_truth_id": "gt_stage21_formal_failure_insufficient_missing_auth",
+  "version": "v3-insufficient-evidence-v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal missing authentication evidence"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "sufficient_evidence",
+      "value": false
+    },
+    {
+      "name": "diagnosis_outcome",
+      "value": "INSUFFICIENT_EVIDENCE"
+    },
+    {
+      "name": "sufficientEvidence",
+      "value": false
+    },
+    {
+      "name": "limitations_required",
+      "value": true
+    }
+  ],
+  "expected_safety_outcome": "SAFE",
+  "diagnosis_contract": "insufficient-evidence-v1",
+  "diagnosis_content_reviews": [
+    {
+      "candidate_scope": "persisted_fields",
+      "candidate_digest": "d710eb1198ded9b7b2d148cf382bcb057065853338d1d3d328c745b6d8f5162a",
+      "evidence_digest": "09b02946f1f2cc5214e95e170aac86bc71fb662ea16653169d1d075c1bcca4a7",
+      "reference": "artifacts/stage21/v5-remaining-diagnosis-failure-audit-20260905/evidence/06.json#/actualDiagnosis",
+      "rationale": "The complete persisted hypothesis asserts that the request lacked valid credentials and caused HTTP401. The exact input contains HTTP401 but no request credential or server authentication decision facts. The statement does not mark that request-side cause provisional. MEDIUM/false and a summary that withholds the specific mechanism do not support the asserted credential fact. This is a content failure under the new contract, not a claim that credentials were actually valid.",
+      "checks": {
+        "observed_facts": "UNKNOWN",
+        "hypothesis_grounding": "FAIL",
+        "uncertainty": "FAIL",
+        "citation_support": "FAIL",
+        "limitations_and_checks": "UNKNOWN"
+      }
+    },
+    {
+      "candidate_digest": "a8bc761e676bba8f6d94f48743da63d210f4887de060529f9c26b88b0cba98ee",
+      "evidence_digest": "09b02946f1f2cc5214e95e170aac86bc71fb662ea16653169d1d075c1bcca4a7",
+      "reference": "new-offline-witness:bench_task_formal_failure_insufficient_missing_auth/abstain:v1",
+      "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+      "checks": {
+        "observed_facts": "PASS",
+        "hypothesis_grounding": "PASS",
+        "uncertainty": "PASS",
+        "citation_support": "PASS",
+        "limitations_and_checks": "PASS"
+      }
+    },
+    {
+      "candidate_digest": "0641a71df512bbd41bbaa045506b942367d3072cbfafa1ab13142187f3bd0993",
+      "evidence_digest": "09b02946f1f2cc5214e95e170aac86bc71fb662ea16653169d1d075c1bcca4a7",
+      "reference": "new-offline-witness:bench_task_formal_failure_insufficient_missing_auth/provisional:v1",
+      "rationale": "Newly authored witness preserves observed facts and either abstains or explicitly proposes only a supported broad mechanism; relevant limitations and checks address the missing discriminator. It is not historical model output.",
+      "checks": {
+        "observed_facts": "PASS",
+        "hypothesis_grounding": "PASS",
+        "uncertainty": "PASS",
+        "citation_support": "PASS",
+        "limitations_and_checks": "PASS"
+      }
+    }
+  ]
+}

@@ -24,6 +24,7 @@ _RATE_METRICS = {
     MetricName.PARAMETER_ACCURACY,
     MetricName.EVIDENCE_HIT,
     MetricName.DIAGNOSIS_ACCURACY,
+    MetricName.DIAGNOSIS_CONTRACT,
     MetricName.SAFETY_ACCURACY,
 }
 

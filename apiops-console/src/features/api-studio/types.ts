@@ -252,6 +252,46 @@ export type GenerateTestCaseResponse = {
   candidate: Record<string, unknown>
 }
 
+export type RunnerBatchSubmission = {
+  batchId: string
+  taskIds: number[]
+  runIds: number[]
+}
+
+export type RunnerSubmissionIdentity = {
+  batchId: string
+  taskId: number
+  runId: number
+}
+
+export function runnerRequestForValidatedTestCase(
+  status: GenerationStatus | null,
+  candidate: Record<string, unknown> | null,
+) {
+  return status === 'ACCEPTED' && candidate ? { testCases: [candidate] } : null
+}
+
+export function singleRunnerSubmission(submission: RunnerBatchSubmission): RunnerSubmissionIdentity {
+  const taskId = Number(submission.taskIds[0])
+  const runId = Number(submission.runIds[0])
+  if (submission.taskIds.length !== 1 || submission.runIds.length !== 1
+    || !Number.isInteger(taskId) || taskId <= 0 || !Number.isInteger(runId) || runId <= 0) {
+    throw new Error('Java Runner returned an invalid single-TestCase submission identity')
+  }
+  return { batchId: submission.batchId, taskId, runId }
+}
+
+/** A previous validation never authorizes a different editor snapshot. */
+export function runnerRequestForEditor(
+  status: GenerationStatus | null,
+  candidate: Record<string, unknown> | null,
+  draft: string,
+  validatedDraft: string | null,
+) {
+  if (validatedDraft === null || draft !== validatedDraft) return null
+  return runnerRequestForValidatedTestCase(status, candidate)
+}
+
 export type GenerationOutcome = {
   requiresRepair: boolean
   finalStatus: Extract<GenerationStatus, 'ACCEPTED' | 'REJECTED'>

@@ -15,6 +15,7 @@ export function PageHeader({ title, description }: PageHeaderProps) {
     Diagnosis: 'diagnosis',
     Traces: 'traces',
     Evaluation: 'evaluation',
+    Benchmark: 'benchmark',
     Settings: 'settings',
   }[title]
   const localizedTitle = language === 'en' || !pageKey ? title : t(`page.${pageKey}.title`)

@@ -1,0 +1,42 @@
+{
+  "projectId": 41,
+  "taskId": 301,
+  "runId": 701,
+  "reportId": "fixture:stage21-real-model-report",
+  "status": "ASSERTION_FAILED",
+  "startedAt": "2026-08-23T11:59:58Z",
+  "finishedAt": "2026-08-23T12:00:00Z",
+  "summary": {
+    "totalCases": 1,
+    "totalSteps": 1,
+    "totalAssertions": 1,
+    "passedAssertions": 0,
+    "failedAssertions": 1,
+    "failureType": "ASSERTION_MISMATCH"
+  },
+  "cases": [
+    {
+      "caseId": "fixture-case-real-model",
+      "status": "ASSERTION_FAILED",
+      "failureType": "ASSERTION_MISMATCH",
+      "steps": [
+        {
+          "stepId": "fixture-step-real-model",
+          "status": "ASSERTION_FAILED",
+          "failureType": "ASSERTION_MISMATCH",
+          "responseStatusCode": 500,
+          "durationMs": 12,
+          "assertionResults": [
+            {
+              "type": "STATUS_CODE",
+              "passed": false,
+              "expected": 200,
+              "actual": 500,
+              "message": "fixture response assertion mismatch"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

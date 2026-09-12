@@ -1,0 +1,36 @@
+{
+  "ground_truth_id": "gt_stage21_formal_failure_inventory_duplicate_key",
+  "version": "v2",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal duplicate order key unique constraint"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "failure_type",
+      "value": "BUSINESS_ERROR"
+    },
+    {
+      "name": "root_evidence",
+      "value": "UNIQUE_CONSTRAINT"
+    },
+    {
+      "name": "response_snapshot_present",
+      "value": true
+    }
+  ],
+  "expected_evidence_ids": [
+    "CURRENT_JAVA_REPORT",
+    "rag:orders-unique-index"
+  ],
+  "expected_diagnosis": "DATABASE_CONSTRAINT_ERROR",
+  "expected_safety_outcome": "SAFE"
+}

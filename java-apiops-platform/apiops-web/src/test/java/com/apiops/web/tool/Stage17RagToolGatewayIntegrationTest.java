@@ -82,7 +82,7 @@ class Stage17RagToolGatewayIntegrationTest {
     private static final long USER_A = 7L;
     private static final long PROJECT_A = 42L;
     private static final long PROJECT_B = 43L;
-    private static final long GENERATION_PROJECT = 41L;
+    private static final long STAGE21_GENERATION_PROJECT = 41L;
     private static final long STAGE20_FINAL_PROJECT = 20_205_001L;
     private static final String USERNAME_A = "stage17-project-a";
     private static final String TRACE_ID = "stage18-contract-trace";
@@ -205,14 +205,14 @@ class Stage17RagToolGatewayIntegrationTest {
                         .header("X-Trace-Id", TRACE_ID)
                         .contentType(APPLICATION_JSON)
                         .content(ragSearchRequest(
-                                PROJECT_A, "check order failure", 1, GENERATION_PROJECT)))
+                                PROJECT_A, "check order failure", 1, STAGE21_GENERATION_PROJECT)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("SUCCESS"))
                 .andExpect(jsonPath("$.data.results", hasSize(1)))
                 .andExpect(jsonPath("$.data.results[0].projectId")
-                        .value(GENERATION_PROJECT))
+                        .value(STAGE21_GENERATION_PROJECT))
                 .andExpect(jsonPath("$.data.results[0].documentId")
-                        .value("doc-generation-orders"))
+                        .value("doc-stage21-orders"))
                 .andReturn();
 
         String toolCallId = objectMapper.readTree(
@@ -223,10 +223,10 @@ class Stage17RagToolGatewayIntegrationTest {
                 .orElseThrow();
 
         assertEquals(PROJECT_A, event.projectId());
-        assertEquals(GENERATION_PROJECT, event.requestedTargetProjectId());
+        assertEquals(STAGE21_GENERATION_PROJECT, event.requestedTargetProjectId());
         assertEquals(1, fixture.embeddingCalls.get());
         assertEquals(1, fixture.vectorSearchCalls.get());
-        assertEquals(GENERATION_PROJECT, fixture.lastRecord().projectId());
+        assertEquals(STAGE21_GENERATION_PROJECT, fixture.lastRecord().projectId());
     }
 
     @Test
@@ -381,7 +381,7 @@ class Stage17RagToolGatewayIntegrationTest {
         ProjectMembershipRepository stage17ProjectMembershipRepository() {
             return (userId, projectId) -> {
                 if (userId != USER_A) return Optional.empty();
-                if (projectId == PROJECT_A || projectId == GENERATION_PROJECT) {
+                if (projectId == PROJECT_A || projectId == STAGE21_GENERATION_PROJECT) {
                     return Optional.of(ProjectRole.VIEWER);
                 }
                 if (projectId == STAGE20_FINAL_PROJECT) return Optional.of(ProjectRole.EDITOR);
@@ -445,13 +445,13 @@ class Stage17RagToolGatewayIntegrationTest {
                             "d".repeat(64), Map.of()));
             documents.add(
                     new Document(
-                            "doc-generation-orders", GENERATION_PROJECT,
+                            "doc-stage21-orders", STAGE21_GENERATION_PROJECT,
                             "rag:orders-constraint-001", "RUNBOOK",
-                            "Orders Constraints", "orders-constraints.md", "text/markdown",
+                            "Stage 21 Orders Constraints", "stage21-orders.md", "text/markdown",
                             "e".repeat(64), DocumentStatus.INDEXED, USER_A,
                             Instant.parse("2026-08-20T00:00:00Z")),
                     new DocumentChunk(
-                            "chunk-generation-orders", "doc-generation-orders", GENERATION_PROJECT, 0,
+                            "chunk-stage21-orders", "doc-stage21-orders", STAGE21_GENERATION_PROJECT, 0,
                             "The create-order endpoint rejects duplicate order keys because of the unique orders index.",
                             "f".repeat(64), Map.of()));
         }
@@ -515,12 +515,12 @@ class Stage17RagToolGatewayIntegrationTest {
                 vectorSearchCalls.incrementAndGet();
                 if (!returnHit) return List.of();
                 String query = lastQuery.toLowerCase();
-                if (projectId == GENERATION_PROJECT
+                if (projectId == STAGE21_GENERATION_PROJECT
                         && query.contains("order") && query.contains("failure")) {
                     return List.of(new VectorSearchMatch(
-                            GENERATION_PROJECT,
-                            "doc-generation-orders",
-                            "chunk-generation-orders",
+                            STAGE21_GENERATION_PROJECT,
+                            "doc-stage21-orders",
+                            "chunk-stage21-orders",
                             0.92));
                 }
                 if (projectId == PROJECT_A

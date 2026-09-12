@@ -6,7 +6,12 @@ from typing import Final, Literal
 
 from langgraph.graph import END, START, StateGraph
 
-from app.agents.testcase_generator import Candidate, GenerationFailure, TestCaseGenerator
+from app.agents.testcase_generator import (
+    Candidate,
+    GenerationFailure,
+    IntentionalInvaliditySpec,
+    TestCaseGenerator,
+)
 from app.tracing import (
     AgentRun,
     AgentStep,
@@ -35,7 +40,7 @@ from app.workflows.state import (
 
 GenerationDecision = Literal["validate", "end"]
 ContextDecision = Literal["generate", "end"]
-ValidationDecision = Literal["accept", "repair", "reject"]
+ValidationDecision = Literal["accept", "repair", "reject", "preserve_invalidity"]
 
 _CONTEXT_NODE: Final = "context_enrichment"
 _GENERATE_NODE: Final = "generate"
@@ -43,6 +48,7 @@ _VALIDATE_NODE: Final = "validate"
 _REPAIR_NODE: Final = "repair"
 _ACCEPT_NODE: Final = "accept"
 _REJECT_NODE: Final = "reject"
+_PRESERVE_INVALIDITY_NODE: Final = "preserve_invalidity"
 _TRACE_START_NODE: Final = "trace_start"
 _TRACE_TERMINAL_NODE: Final = "trace_terminal"
 
@@ -80,6 +86,38 @@ def _require_validation(state: APIOpsAgentState) -> CandidateValidationResult:
     return result
 
 
+def _json_pointer_value(root: object, pointer: str) -> tuple[bool, object | None]:
+    current = root
+    if not pointer.startswith("/"):
+        return False, None
+    for raw_token in pointer[1:].split("/"):
+        token = raw_token.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, dict) and token in current:
+            current = current[token]
+        elif isinstance(current, list) and token.isdigit() and int(token) < len(current):
+            current = current[int(token)]
+        else:
+            return False, None
+    return True, current
+
+
+def _intentional_invalidity_observed(
+    state: APIOpsAgentState,
+    spec: IntentionalInvaliditySpec,
+) -> bool:
+    result = _require_validation(state)
+    if not any(
+        issue.code == spec.issue_code
+        and (issue.path == spec.path or spec.path.startswith(f"{issue.path}/"))
+        for issue in result.issues
+    ):
+        return False
+    present, value = _json_pointer_value(_require_candidate(state).structured, spec.path)
+    if spec.preservation == "MISSING":
+        return not present
+    return present and type(value) is type(spec.invalid_value) and value == spec.invalid_value
+
+
 def route_after_generation(state: APIOpsAgentState) -> GenerationDecision:
     if state["generation_status"] is TestCaseGenerationStatus.GENERATION_FAILURE:
         return "end"
@@ -95,8 +133,20 @@ def route_after_context(state: APIOpsAgentState) -> ContextDecision:
     raise RuntimeError("context enrichment did not produce a terminal status")
 
 
-def route_after_validation(state: APIOpsAgentState) -> ValidationDecision:
+def route_after_validation(
+    state: APIOpsAgentState,
+    *,
+    preserve_intentional_invalidity: bool = False,
+    intentional_invalidity: IntentionalInvaliditySpec | None = None,
+) -> ValidationDecision:
     result = _require_validation(state)
+    if preserve_intentional_invalidity:
+        if intentional_invalidity is None:
+            raise RuntimeError("intentional-invalidity policy has no trusted specification")
+        if _intentional_invalidity_observed(state, intentional_invalidity):
+            return "preserve_invalidity"
+        attempts, maximum = _read_repair_budget(state)
+        return "repair" if attempts < maximum else "reject"
     if result.valid:
         return "accept"
     attempts, maximum = _read_repair_budget(state)
@@ -121,10 +171,14 @@ def accept_candidate(state: APIOpsAgentState) -> dict[str, object]:
     }
 
 
-def reject_after_repair(state: APIOpsAgentState) -> dict[str, object]:
+def reject_after_repair(
+    state: APIOpsAgentState,
+    *,
+    preserve_intentional_invalidity: bool = False,
+) -> dict[str, object]:
     result = _require_validation(state)
     attempts, maximum = _read_repair_budget(state)
-    if result.valid or attempts < maximum:
+    if (result.valid and not preserve_intentional_invalidity) or attempts < maximum:
         raise RuntimeError("repair rejection requires invalid exhausted state")
     return {
         "phase": WorkflowPhase.REJECTED,
@@ -134,14 +188,38 @@ def reject_after_repair(state: APIOpsAgentState) -> dict[str, object]:
     }
 
 
+def finish_intentional_invalidity(
+    state: APIOpsAgentState,
+    *,
+    intentional_invalidity: IntentionalInvaliditySpec,
+) -> dict[str, object]:
+    """Finish after the validator proves the requested candidate is invalid."""
+
+    result = _require_validation(state)
+    if result.valid or not _intentional_invalidity_observed(state, intentional_invalidity):
+        raise RuntimeError("intentional-invalidity policy requires an invalid candidate")
+    return {
+        "phase": WorkflowPhase.FINISHED,
+        "route": WorkflowRoute.BLOCKED,
+        "generation_status": TestCaseGenerationStatus.INTENTIONAL_INVALIDITY_PRESERVED,
+        "error": None,
+    }
+
+
 def build_testcase_generation_graph(
     generator: TestCaseGenerator,
     *,
     context_enricher: ContextEnricher | None = None,
     trace_recorder: TraceRecorder | None = None,
+    preserve_intentional_invalidity: bool = False,
+    intentional_invalidity: IntentionalInvaliditySpec | None = None,
 ):
     """Compile the Stage 16 graph with one initial call and at most one repair."""
 
+    if preserve_intentional_invalidity != (intentional_invalidity is not None):
+        raise ValueError(
+            "intentional-invalidity policy and trusted specification must be supplied together"
+        )
     traced_generator = instrument_generator(generator, trace_recorder)
 
     def start_trace(state: APIOpsAgentState) -> dict[str, object]:
@@ -365,12 +443,14 @@ def build_testcase_generation_graph(
                         context,
                         project_id=state["project_id"],
                         context_pack=state["context_pack"],
+                        intentional_invalidity=intentional_invalidity,
                     )
             else:
                 candidate = await traced_generator.generate(
                     context,
                     project_id=state["project_id"],
                     context_pack=state["context_pack"],
+                    intentional_invalidity=intentional_invalidity,
                 )
         except GenerationFailure:
             finish_step(
@@ -471,7 +551,7 @@ def build_testcase_generation_graph(
         if attempts >= maximum:
             raise RuntimeError("repair budget exhausted")
         result = _require_validation(state)
-        if result.valid:
+        if result.valid and not preserve_intentional_invalidity:
             raise RuntimeError("valid candidate cannot enter repair")
         step_id = start_step(state, _REPAIR_NODE)
         trace_id = state.get("trace_id")
@@ -497,6 +577,7 @@ def build_testcase_generation_graph(
                         result.issues,
                         project_id=state["project_id"],
                         context_pack=state["context_pack"],
+                        intentional_invalidity=intentional_invalidity,
                     )
             else:
                 candidate = await traced_generator.repair(
@@ -505,6 +586,7 @@ def build_testcase_generation_graph(
                     result.issues,
                     project_id=state["project_id"],
                     context_pack=state["context_pack"],
+                    intentional_invalidity=intentional_invalidity,
                 )
         except GenerationFailure:
             finish_step(
@@ -562,7 +644,23 @@ def build_testcase_generation_graph(
     builder.add_node(_VALIDATE_NODE, validate)
     builder.add_node(_REPAIR_NODE, repair_candidate)
     builder.add_node(_ACCEPT_NODE, accept_candidate)
-    builder.add_node(_REJECT_NODE, reject_after_repair)
+    builder.add_node(
+        _REJECT_NODE,
+        lambda state: reject_after_repair(
+            state,
+            preserve_intentional_invalidity=preserve_intentional_invalidity,
+        ),
+    )
+    if intentional_invalidity is not None:
+        builder.add_node(
+            _PRESERVE_INVALIDITY_NODE,
+            lambda state: finish_intentional_invalidity(
+                state,
+                intentional_invalidity=intentional_invalidity,
+            ),
+        )
+    else:
+        builder.add_node(_PRESERVE_INVALIDITY_NODE, finish_intentional_invalidity)
     builder.add_edge(START, _TRACE_START_NODE)
     builder.add_edge(_TRACE_START_NODE, _CONTEXT_NODE)
     builder.add_conditional_edges(
@@ -577,11 +675,16 @@ def build_testcase_generation_graph(
     )
     builder.add_conditional_edges(
         _VALIDATE_NODE,
-        route_after_validation,
+        lambda state: route_after_validation(
+            state,
+            preserve_intentional_invalidity=preserve_intentional_invalidity,
+            intentional_invalidity=intentional_invalidity,
+        ),
         {
             "accept": _ACCEPT_NODE,
             "repair": _REPAIR_NODE,
             "reject": _REJECT_NODE,
+            "preserve_invalidity": _PRESERVE_INVALIDITY_NODE,
         },
     )
     builder.add_conditional_edges(
@@ -591,6 +694,7 @@ def build_testcase_generation_graph(
     )
     builder.add_edge(_ACCEPT_NODE, _TRACE_TERMINAL_NODE)
     builder.add_edge(_REJECT_NODE, _TRACE_TERMINAL_NODE)
+    builder.add_edge(_PRESERVE_INVALIDITY_NODE, _TRACE_TERMINAL_NODE)
     builder.add_edge(_TRACE_TERMINAL_NODE, END)
     return builder.compile()
 
@@ -602,6 +706,7 @@ __all__ = [
     "accept_candidate",
     "build_testcase_generation_graph",
     "reject_after_repair",
+    "finish_intentional_invalidity",
     "route_after_generation",
     "route_after_context",
     "route_after_repair",

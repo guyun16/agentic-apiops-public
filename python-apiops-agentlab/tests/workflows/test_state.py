@@ -37,6 +37,7 @@ def test_testcase_generation_status_public_values_are_stable() -> None:
         "VALIDATION_FAILURE",
         "GENERATION_FAILURE",
         "REPAIR_EXHAUSTED",
+        "INTENTIONAL_INVALIDITY_PRESERVED",
     ]
 
 

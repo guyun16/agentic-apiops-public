@@ -1,0 +1,24 @@
+{
+  "benchmarkRunId": "evaluation_run:stage21-real-model-full-105-20260901T110644Z",
+  "failureCount": 1,
+  "items": [
+    {
+      "agentRunId": "agent_run:22e8a61e00b243be88fb31448bca4239",
+      "artifactRef": "results/evaluation_run_stage21-real-model-full-105-20260901T110644Z/bench_task_testcase_auth_missing_token.json",
+      "benchmarkTaskId": "bench_task_testcase_auth_missing_token",
+      "caseId": "case:evaluation_run:stage21-real-model-full-105-20260901T110644Z:bench_task_testcase_auth_missing_token",
+      "evaluationFailureMetrics": [],
+      "evaluationId": null,
+      "failureCategory": "CONTRACT_FAILURE",
+      "failureCode": "PROJECT_IDENTITY_MISSING",
+      "failureStage": "EXECUTION",
+      "ragQueryIds": [],
+      "reportId": null,
+      "runId": null,
+      "taskStatus": "FAILED",
+      "taskType": "TESTCASE_GENERATION",
+      "toolCallIds": [],
+      "traceId": "trace:db66b35e23ad49448ecc357ada128042"
+    }
+  ]
+}

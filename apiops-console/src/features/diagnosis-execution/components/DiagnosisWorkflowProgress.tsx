@@ -45,7 +45,7 @@ export function DiagnosisWorkflowProgress({ runtime, steps, runtimeLabel }: Diag
       <header className="diagnosis-execution-panel-header">
         <span className="diagnosis-execution-eyebrow">5. {ui('Workflow Progress')}</span>
         <h2 id="workflow-progress-title">{ui('Workflow Progress')}</h2>
-        {runtimeLabel ? <small className="diagnosis-workflow-runtime">{runtimeLabel}</small> : null}
+        {runtimeLabel ? <small className="diagnosis-workflow-runtime">{ui(runtimeLabel)}</small> : null}
       </header>
       {steps.length ? (
         <ol className="diagnosis-workflow-list">

@@ -1,0 +1,214 @@
+{
+  "corpusVersion": "stage21-rag-corpus-v2",
+  "embeddingProvider": "zhipu",
+  "embeddingModel": "embedding-3",
+  "embeddingDimension": 1024,
+  "chunking": {
+    "chunkSize": 1000,
+    "chunkOverlap": 100,
+    "strategy": "fixed-character-window"
+  },
+  "knowledgeTypes": [
+    "OPENAPI_ENDPOINT_CONSTRAINTS",
+    "REQUEST_RESPONSE_CONSTRAINTS",
+    "TESTCASE_DSL_SEMANTICS",
+    "ASSERTION_MISMATCH",
+    "HTTP_STATUS_MISMATCH",
+    "DATABASE_UNIQUE_CONSTRAINT",
+    "FOREIGN_KEY_DATA_CONSTRAINT",
+    "TIMEOUT_RETRY_SEMANTICS",
+    "RUNNER_LIFECYCLE",
+    "FAILURE_TAXONOMY",
+    "AUTHORIZATION_PROJECT_ISOLATION",
+    "TOOL_GATEWAY_RULES",
+    "RAG_USAGE",
+    "ZERO_HIT_SEMANTICS",
+    "CITATION_RULES",
+    "REPORT_INDEX_CORRELATION",
+    "MULTI_EVIDENCE_DIAGNOSIS",
+    "NEAR_MATCH_INCIDENTS",
+    "SIMILAR_WRONG_DISTRACTORS"
+  ],
+  "documents": [
+    {
+      "projectId": 41,
+      "sourceKey": "stage21-rag-v2/project-41/orders-api-constraints",
+      "sourceType": "RUNBOOK",
+      "title": "Orders API constraints runbook",
+      "file": "project-41/orders-api-constraints.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "REQUEST_RESPONSE_CONSTRAINTS",
+        "HTTP_STATUS_MISMATCH",
+        "TIMEOUT_RETRY_SEMANTICS"
+      ]
+    },
+    {
+      "projectId": 41,
+      "sourceKey": "stage21-rag-v2/project-41/orders-incident-report",
+      "sourceType": "INCIDENT_REPORT",
+      "title": "Orders duplicate-key incident report",
+      "file": "project-41/orders-incident-report.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "HTTP_STATUS_MISMATCH",
+        "REPORT_INDEX_CORRELATION",
+        "MULTI_EVIDENCE_DIAGNOSIS"
+      ]
+    },
+    {
+      "projectId": 41,
+      "sourceKey": "stage21-rag-v2/project-41/orders-constraint-index",
+      "sourceType": "REFERENCE_INDEX",
+      "title": "Orders constraint reference index",
+      "file": "project-41/orders-constraint-index.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "DATABASE_UNIQUE_CONSTRAINT",
+        "REPORT_INDEX_CORRELATION",
+        "MULTI_EVIDENCE_DIAGNOSIS"
+      ]
+    },
+    {
+      "projectId": 41,
+      "sourceKey": "stage21-rag-v2/project-41/catalog-distractor",
+      "sourceType": "SERVICE_DOC",
+      "title": "Catalog service reference",
+      "file": "project-41/catalog-distractor.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "SIMILAR_WRONG_DISTRACTORS"
+      ]
+    },
+    {
+      "projectId": 41,
+      "sourceKey": "stage21-rag-v2/project-41/payment-near-match",
+      "sourceType": "SERVICE_DOC",
+      "title": "Payment reference near-match note",
+      "file": "project-41/payment-near-match.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "NEAR_MATCH_INCIDENTS",
+        "SIMILAR_WRONG_DISTRACTORS"
+      ]
+    },
+    {
+      "projectId": 41,
+      "sourceKey": "stage21-rag-v2/project-41/api-contract-and-testcase-runbook",
+      "sourceType": "RUNBOOK",
+      "title": "API contract and testcase design runbook",
+      "file": "project-41/api-contract-and-testcase-runbook.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "OPENAPI_ENDPOINT_CONSTRAINTS",
+        "REQUEST_RESPONSE_CONSTRAINTS",
+        "TESTCASE_DSL_SEMANTICS",
+        "ASSERTION_MISMATCH",
+        "HTTP_STATUS_MISMATCH"
+      ]
+    },
+    {
+      "projectId": 41,
+      "sourceKey": "stage21-rag-v2/project-41/runner-reliability-runbook",
+      "sourceType": "RUNBOOK",
+      "title": "Runner reliability and failure taxonomy runbook",
+      "file": "project-41/runner-reliability-runbook.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "TIMEOUT_RETRY_SEMANTICS",
+        "RUNNER_LIFECYCLE",
+        "FAILURE_TAXONOMY",
+        "REPORT_INDEX_CORRELATION"
+      ]
+    },
+    {
+      "projectId": 41,
+      "sourceKey": "stage21-rag-v2/project-41/data-integrity-constraints",
+      "sourceType": "REFERENCE_INDEX",
+      "title": "Service data-integrity constraints reference",
+      "file": "project-41/data-integrity-constraints.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "DATABASE_UNIQUE_CONSTRAINT",
+        "FOREIGN_KEY_DATA_CONSTRAINT"
+      ]
+    },
+    {
+      "projectId": 42,
+      "sourceKey": "stage21-rag-v2/project-42/inventory-service-runbook",
+      "sourceType": "RUNBOOK",
+      "title": "Inventory service runbook",
+      "file": "project-42/inventory-service-runbook.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "HTTP_STATUS_MISMATCH",
+        "AUTHORIZATION_PROJECT_ISOLATION"
+      ]
+    },
+    {
+      "projectId": 42,
+      "sourceKey": "stage21-rag-v2/project-42/payments-incident-report",
+      "sourceType": "INCIDENT_REPORT",
+      "title": "Payments incident report",
+      "file": "project-42/payments-incident-report.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "TIMEOUT_RETRY_SEMANTICS",
+        "NEAR_MATCH_INCIDENTS"
+      ]
+    },
+    {
+      "projectId": 42,
+      "sourceKey": "stage21-rag-v2/project-42/protected-service-notes",
+      "sourceType": "SERVICE_DOC",
+      "title": "Protected service operations notes",
+      "file": "project-42/protected-service-notes.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "AUTHORIZATION_PROJECT_ISOLATION",
+        "TOOL_GATEWAY_RULES",
+        "MULTI_EVIDENCE_DIAGNOSIS"
+      ]
+    },
+    {
+      "projectId": 42,
+      "sourceKey": "stage21-rag-v2/project-42/tool-gateway-and-rag-operations",
+      "sourceType": "RUNBOOK",
+      "title": "Tool Gateway and retrieval operations runbook",
+      "file": "project-42/tool-gateway-and-rag-operations.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "AUTHORIZATION_PROJECT_ISOLATION",
+        "TOOL_GATEWAY_RULES",
+        "RAG_USAGE",
+        "ZERO_HIT_SEMANTICS",
+        "CITATION_RULES"
+      ]
+    },
+    {
+      "projectId": 42,
+      "sourceKey": "stage21-rag-v2/project-42/inventory-security-and-evidence-runbook",
+      "sourceType": "RUNBOOK",
+      "title": "Inventory security and evidence runbook",
+      "file": "project-42/inventory-security-and-evidence-runbook.md",
+      "mediaType": "text/markdown",
+      "knowledgeTypes": [
+        "AUTHORIZATION_PROJECT_ISOLATION",
+        "CITATION_RULES",
+        "MULTI_EVIDENCE_DIAGNOSIS",
+        "FOREIGN_KEY_DATA_CONSTRAINT"
+      ]
+    }
+  ],
+  "coverage": [
+    "single exact evidence",
+    "multi constraint",
+    "multi hit",
+    "report plus index",
+    "citation identity",
+    "relevant versus distractor",
+    "exact versus near match",
+    "authorized zero hit",
+    "cross-project isolation"
+  ]
+}

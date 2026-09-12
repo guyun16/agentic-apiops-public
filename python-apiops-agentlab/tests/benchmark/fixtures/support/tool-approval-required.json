@@ -1,0 +1,10 @@
+{
+  "fixtureId": "stage21-tool-approval-required",
+  "setup": "load the approval-required tool intent used by existing HITL workflow tests",
+  "reset": "reload immutable JSON fixture",
+  "authority": "Python workflow/HITL test evidence; Java authorization mapping requires human review",
+  "facts": {
+    "tool": "redis.read",
+    "approvalRequired": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "fixtureId": "stage21-diagnosis-insufficient-missing",
+  "setup": "load a report context with no response-body evidence",
+  "reset": "reload immutable JSON fixture",
+  "authority": "Stage 19 diagnosis contract fixture; real Stage 20 report mapping requires human review",
+  "facts": {
+    "sufficientEvidence": false,
+    "rootCauseHypotheses": [],
+    "limitations": [
+      "The response-body evidence is unavailable."
+    ],
+    "recommendedChecks": [
+      "Obtain the authorized response-body evidence before assigning a root cause."
+    ],
+    "missingEvidence": [
+      "response-body"
+    ]
+  }
+}

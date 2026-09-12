@@ -118,7 +118,7 @@ export type RunSummary = {
   testCaseName: string
   status: RunStatus
   failureType: FailureType | null
-  createdAt: string
+  createdAt: string | null
   startedAt: string | null
   finishedAt: string | null
   durationMs: number | null
@@ -132,6 +132,18 @@ export type TestReportAssertion = {
   message: string | null
 }
 
+export type HttpSnapshotBody = {
+  headers: Record<string, string[]>
+  body: string | null
+  bodyState: 'captured' | 'omitted' | 'empty'
+  truncated: boolean
+}
+
+export type HttpExchangeSnapshot = {
+  request: HttpSnapshotBody & { method: string; url: string }
+  response: (HttpSnapshotBody & { statusCode: number }) | null
+}
+
 export type TestReportStep = {
   stepId: string
   status: RunStatus
@@ -139,6 +151,7 @@ export type TestReportStep = {
   responseStatusCode: number | null
   durationMs: number | null
   assertionResults: TestReportAssertion[]
+  httpExchange?: HttpExchangeSnapshot | null
 }
 
 export type TestReportCase = {

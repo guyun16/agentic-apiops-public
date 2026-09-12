@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_formal_failure_insufficient_missing_headers",
+  "taskType": "FAILURE_DIAGNOSIS",
+  "instruction": "State that the evidence is insufficient, name the missing response evidence, and do not assert a root cause.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "authorityFixture",
+        "ref": "java://test-report/project-41/stage21-initial/missing-headers"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "taskFixture",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/diagnosis-insufficient-missing.json"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "taskFocus",
+        "value": "missing response evidence"
+      }
+    ]
+  },
+  "allowedTools": [
+    "rag.search",
+    "redis.read"
+  ],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": [
+    "diagnosis_contract",
+    "exact_match"
+  ],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_formal_failure_insufficient_missing_headers",
+    "version": "v3-insufficient-evidence-v1"
+  },
+  "evaluationSpec": {
+    "selectedMetrics": [
+      "diagnosis_contract",
+      "exact_match"
+    ]
+  },
+  "expectedToolCalls": [
+    {
+      "toolName": "rag.search",
+      "paramsContains": {
+        "query": "formal missing response evidence"
+      },
+      "matchPolicy": "SUBSET"
+    }
+  ]
+}

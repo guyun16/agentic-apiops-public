@@ -38,8 +38,8 @@ class ToolGatewayContractMapperTest {
                 """, ToolCallRequest.class);
 
         assertNull(mapper.validationError(request, 42L, "trace-contract-1"));
-        assertEquals("rag.search", mapper.toInternalIntent(request).toolName());
-        assertEquals(request.params(), mapper.toInternalIntent(request).arguments());
+        assertEquals("rag.search", mapper.toInternalIntent(request, 42L).toolName());
+        assertEquals(request.params(), mapper.toInternalIntent(request, 42L).arguments());
         JsonNode serialized = json.valueToTree(request);
         assertEquals("0.2.0", serialized.get("schemaVersion").asText());
         assertEquals("rag.search", serialized.get("toolName").asText());
@@ -57,6 +57,38 @@ class ToolGatewayContractMapperTest {
                 mapper.validationError(legacy, 42L, "trace-contract-1"));
         assertEquals("ToolCall projectId does not match the trusted path scope",
                 mapper.validationError(drifted, 42L, "trace-contract-1"));
+    }
+
+    @Test
+    void exactRedisLogicalAliasIsExpandedOnlyFromTrustedProjectScope() {
+        ToolCallRequest logical = new ToolCallRequest(
+                "0.2.0",
+                "run-1",
+                null,
+                "42",
+                "redis.read",
+                Map.of("key", "runner:701"),
+                "trace-contract-1",
+                null);
+
+        var normalized = mapper.toInternalIntent(logical, 42L);
+
+        assertEquals("redis.read", normalized.toolName());
+        assertEquals(Map.of(
+                "command", "HGET",
+                "keys", java.util.List.of("apiops:runner:progress:42:701"),
+                "fields", java.util.List.of("status")), normalized.arguments());
+
+        ToolCallRequest mixed = new ToolCallRequest(
+                "0.2.0",
+                "run-1",
+                null,
+                "42",
+                "redis.read",
+                Map.of("key", "runner:701", "command", "HGET"),
+                "trace-contract-1",
+                null);
+        assertEquals(mixed.params(), mapper.toInternalIntent(mixed, 42L).arguments());
     }
 
     @Test

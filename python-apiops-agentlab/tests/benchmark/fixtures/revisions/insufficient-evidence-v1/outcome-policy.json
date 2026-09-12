@@ -1,0 +1,168 @@
+{
+  "policyVersion": "stage21-outcome-insufficient-evidence-v1",
+  "datasetId": "stage21-apioops-bench-mini",
+  "datasetVersion": "v3-insufficient-evidence-v1",
+  "taskSchemaVersion": "0.2.0",
+  "tasks": [
+    {
+      "benchmarkTaskId": "bench_task_failure_insufficient_missing",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "split": "dev",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeMetrics": [
+        "diagnosis_contract",
+        "exact_match"
+      ],
+      "outcomeMode": "ALL",
+      "toolRequirements": [
+        {
+          "toolName": "rag.search",
+          "requirement": "OPTIONAL",
+          "reason": "Report/context can establish the final diagnosis or insufficiency; RAG is supplementary process evidence."
+        }
+      ],
+      "reason": "Versioned insufficiency contract: structural invariants AND evidence-bound content review. Missing review or incomplete original output remains UNKNOWN; known violations remain FAIL."
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_insufficient_conflicting",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "split": "held_out",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeMetrics": [
+        "diagnosis_contract",
+        "exact_match"
+      ],
+      "outcomeMode": "ALL",
+      "toolRequirements": [
+        {
+          "toolName": "rag.search",
+          "requirement": "OPTIONAL",
+          "reason": "Report/context can establish the final diagnosis or insufficiency; RAG is supplementary process evidence."
+        }
+      ],
+      "reason": "Versioned insufficiency contract: structural invariants AND evidence-bound content review. Missing review or incomplete original output remains UNKNOWN; known violations remain FAIL."
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_conflicting",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "split": "dev",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeMetrics": [
+        "diagnosis_contract",
+        "exact_match"
+      ],
+      "outcomeMode": "ALL",
+      "toolRequirements": [
+        {
+          "toolName": "rag.search",
+          "requirement": "OPTIONAL",
+          "reason": "Report/context can establish the final diagnosis or insufficiency; RAG is supplementary process evidence."
+        }
+      ],
+      "reason": "Versioned insufficiency contract: structural invariants AND evidence-bound content review. Missing review or incomplete original output remains UNKNOWN; known violations remain FAIL."
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_heldout_conflict",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "split": "dev",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeMetrics": [
+        "diagnosis_contract",
+        "exact_match"
+      ],
+      "outcomeMode": "ALL",
+      "toolRequirements": [
+        {
+          "toolName": "rag.search",
+          "requirement": "OPTIONAL",
+          "reason": "Report/context can establish the final diagnosis or insufficiency; RAG is supplementary process evidence."
+        }
+      ],
+      "reason": "Versioned insufficiency contract: structural invariants AND evidence-bound content review. Missing review or incomplete original output remains UNKNOWN; known violations remain FAIL."
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_heldout_missing",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "split": "dev",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeMetrics": [
+        "diagnosis_contract",
+        "exact_match"
+      ],
+      "outcomeMode": "ALL",
+      "toolRequirements": [
+        {
+          "toolName": "rag.search",
+          "requirement": "OPTIONAL",
+          "reason": "Report/context can establish the final diagnosis or insufficiency; RAG is supplementary process evidence."
+        }
+      ],
+      "reason": "Versioned insufficiency contract: structural invariants AND evidence-bound content review. Missing review or incomplete original output remains UNKNOWN; known violations remain FAIL."
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_missing_auth",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "split": "dev",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeMetrics": [
+        "diagnosis_contract",
+        "exact_match"
+      ],
+      "outcomeMode": "ALL",
+      "toolRequirements": [
+        {
+          "toolName": "rag.search",
+          "requirement": "OPTIONAL",
+          "reason": "Report/context can establish the final diagnosis or insufficiency; RAG is supplementary process evidence."
+        }
+      ],
+      "reason": "Versioned insufficiency contract: structural invariants AND evidence-bound content review. Missing review or incomplete original output remains UNKNOWN; known violations remain FAIL."
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_missing_headers",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "split": "dev",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeMetrics": [
+        "diagnosis_contract",
+        "exact_match"
+      ],
+      "outcomeMode": "ALL",
+      "toolRequirements": [
+        {
+          "toolName": "rag.search",
+          "requirement": "OPTIONAL",
+          "reason": "Report/context can establish the final diagnosis or insufficiency; RAG is supplementary process evidence."
+        }
+      ],
+      "reason": "Versioned insufficiency contract: structural invariants AND evidence-bound content review. Missing review or incomplete original output remains UNKNOWN; known violations remain FAIL."
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_partial_facts",
+      "taskType": "FAILURE_DIAGNOSIS",
+      "split": "dev",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "outcomeAuthority": "SUPPORTED_BY_EXISTING_FACTS",
+      "outcomeMetrics": [
+        "diagnosis_contract",
+        "exact_match"
+      ],
+      "outcomeMode": "ALL",
+      "toolRequirements": [
+        {
+          "toolName": "rag.search",
+          "requirement": "OPTIONAL",
+          "reason": "Report/context can establish the final diagnosis or insufficiency; RAG is supplementary process evidence."
+        }
+      ],
+      "reason": "Versioned insufficiency contract: structural invariants AND evidence-bound content review. Missing review or incomplete original output remains UNKNOWN; known violations remain FAIL."
+    }
+  ]
+}

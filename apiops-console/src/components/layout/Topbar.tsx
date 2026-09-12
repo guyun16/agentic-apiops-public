@@ -19,7 +19,7 @@ export function Topbar({ theme, onThemeChange }: TopbarProps) {
         <span aria-hidden="true" className="topbar-brand-mark">
           <Box size={22} strokeWidth={2.2} />
         </span>
-        <span className="topbar-brand-label">Agentic APIOps Console</span>
+        <span className="topbar-brand-label">{ui('Agentic APIOps Console')}</span>
       </div>
       <div className="topbar-project">
         <span className="topbar-project-label">{ui('Project')}</span>

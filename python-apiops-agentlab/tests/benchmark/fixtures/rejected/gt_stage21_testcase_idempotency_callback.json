@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_testcase_idempotency_callback",
+  "version": "v1",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "IDEMPOTENCY"
+    },
+    {
+      "name": "operation",
+      "value": "receivePaymentCallback"
+    },
+    {
+      "name": "idempotency_contract_status",
+      "value": "NEEDS_REVIEW"
+    },
+    {
+      "name": "idempotency_key_source",
+      "value": "NOT_PRESENT_IN_METADATA"
+    }
+  ]
+}

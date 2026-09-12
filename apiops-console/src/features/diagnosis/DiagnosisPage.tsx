@@ -6,15 +6,21 @@ import { useProject } from '../../app/ProjectContext'
 import { PageState } from '../../components/common/PageState'
 import { ContextTrail } from '../../components/layout/ContextTrail'
 import { agentApiFetch, apiFetch, ApiError } from '../../lib/api-client'
-import type { RuntimeRunSummary } from '../evaluation/types'
 import { DiagnosisHistory } from './components/DiagnosisHistory'
 import { DiagnosisReport } from './components/DiagnosisReport'
 import { EvidenceInspector } from './components/EvidenceInspector'
 import { resolveEndpointIdentityForRun } from '../../app/contextTrailModel'
-import type { DiagnosisExecutionResponse, DiagnosisHistoryFilter } from './types'
-import type { RunSummary } from '../runs/types'
+import {
+  diagnosisHistoryPath,
+  filterDiagnosisHistory,
+  resolveDiagnosisSelection,
+  sortDiagnosisHistory,
+} from './diagnosisHistoryModel'
+import type { DiagnosisExecutionResponse, DiagnosisHistoryFilter, DiagnosisRunSummary } from './types'
+import { fetchExactRun } from '../runs/run-api'
 
 type DiagnosisPageProps = {
+  onSelected?: (agentRunId: string) => void
   initialAgentRunId?: string | null
   onOpenSourceRun?: (runId: number) => void
   onOpenDiagnosisStudio?: (runId: number) => void
@@ -25,11 +31,6 @@ type DiagnosisPageProps = {
 type LoadState = 'idle' | 'loading' | 'ready' | 'error'
 
 const HISTORY_PAGE_SIZE = 6
-
-type RunSummaryResponse = Omit<RunSummary, 'runId' | 'durationMs'> & {
-  runId: number | string
-  durationMs: number | string | null
-}
 
 type ApiMetadataSummaryResponse = {
   apiId: string | number
@@ -46,39 +47,6 @@ function isAbortError(error: unknown) {
 
 function asApiError(error: unknown, fallbackMessage: string, fallbackCode: string) {
   return error instanceof ApiError ? error : new ApiError(fallbackMessage, 0, fallbackCode)
-}
-
-function hasSummary(summaryByAgentRunId: Readonly<Record<string, string | null>>, agentRunId: string) {
-  return Object.prototype.hasOwnProperty.call(summaryByAgentRunId, agentRunId)
-}
-
-function latestRuntimeTimestamp(run: Pick<RuntimeRunSummary, 'startedAt' | 'finishedAt'>) {
-  const startedAt = Date.parse(run.startedAt)
-  const finishedAt = run.finishedAt ? Date.parse(run.finishedAt) : Number.NaN
-  return Math.max(Number.isFinite(startedAt) ? startedAt : 0, Number.isFinite(finishedAt) ? finishedAt : 0)
-}
-
-function historySearchText(run: RuntimeRunSummary) {
-  return [
-    run.agentRunId,
-    run.traceId,
-    run.executionType,
-    run.status,
-    run.provider,
-    run.model,
-    run.projectId,
-    run.apiId,
-    run.runId,
-    run.reportId,
-  ].filter((value) => value !== null && value !== undefined).join(' ').toLowerCase()
-}
-
-function normalizeRunSummary(run: RunSummaryResponse): RunSummary {
-  return {
-    ...run,
-    runId: Number(run.runId),
-    durationMs: run.durationMs === null ? null : Number(run.durationMs),
-  }
 }
 
 function normalizeEndpointMetadata(summary: ApiMetadataSummaryResponse): ContextTrailEndpoint {
@@ -106,6 +74,7 @@ function DiagnosisResultUnavailable({ agentRunId }: { agentRunId?: string | null
 }
 
 export function DiagnosisPage({
+  onSelected,
   initialAgentRunId = null,
   onContextNavigate,
   onOpenDiagnosisStudio,
@@ -126,7 +95,7 @@ export function DiagnosisPage({
   const { currentProject, refreshProjects } = useProject()
   const projectId = currentProject?.projectId ?? null
 
-  const [history, setHistory] = useState<RuntimeRunSummary[]>([])
+  const [history, setHistory] = useState<DiagnosisRunSummary[]>([])
   const [historyLoading, setHistoryLoading] = useState(true)
   const [historyError, setHistoryError] = useState<ApiError | null>(null)
   const [historyAttempt, setHistoryAttempt] = useState(0)
@@ -134,8 +103,6 @@ export function DiagnosisPage({
   const [historyQuery, setHistoryQuery] = useState('')
   const [historyFilter, setHistoryFilter] = useState<DiagnosisHistoryFilter>('ALL')
   const [historyPage, setHistoryPage] = useState(1)
-  const [summaryByAgentRunId, setSummaryByAgentRunId] = useState<Record<string, string | null>>({})
-  const [summaryLoadingIds, setSummaryLoadingIds] = useState<Set<string>>(new Set())
   const [execution, setExecution] = useState<DiagnosisExecutionResponse | null>(null)
   const [detailState, setDetailState] = useState<LoadState>(initialAgentRunId ? 'loading' : 'idle')
   const [detailError, setDetailError] = useState<ApiError | null>(null)
@@ -145,12 +112,12 @@ export function DiagnosisPage({
     nextExecution: DiagnosisExecutionResponse,
     signal: AbortSignal,
   ): Promise<ContextReadModelGap | null> => {
-    const [runsResult, endpointsResult] = await Promise.allSettled([
-      apiFetch<RunSummaryResponse[]>(`/api/v1/projects/${encodeURIComponent(String(projectId))}/test-runs`, { signal }),
+    const [runResult, endpointsResult] = await Promise.allSettled([
+      fetchExactRun(String(projectId), nextExecution.runId, signal),
       apiFetch<ApiMetadataSummaryResponse[]>(`/api/v1/projects/${encodeURIComponent(String(projectId))}/openapi/apis`, { signal }),
     ])
-    if (runsResult.status === 'rejected' && !(runsResult.reason instanceof DOMException && runsResult.reason.name === 'AbortError')) {
-      const error = runsResult.reason
+    if (runResult.status === 'rejected' && !(runResult.reason instanceof DOMException && runResult.reason.name === 'AbortError')) {
+      const error = runResult.reason
       if (error instanceof ApiError && error.status === 401) expireSession()
       if (error instanceof ApiError && error.status === 403) void refreshProjects()
     }
@@ -160,11 +127,12 @@ export function DiagnosisPage({
       if (error instanceof ApiError && error.status === 403) void refreshProjects()
     }
 
-    const javaRuns = runsResult.status === 'fulfilled' ? runsResult.value.map(normalizeRunSummary) : []
+    const owningRun = runResult.status === 'fulfilled' ? runResult.value : null
     const javaEndpoints = endpointsResult.status === 'fulfilled'
       ? endpointsResult.value.map(normalizeEndpointMetadata)
       : []
-    javaRuns.forEach((run) => {
+    if (owningRun) {
+      const run = owningRun
       recordRun({
         apiId: run.apiId,
         caseId: run.caseId,
@@ -173,10 +141,9 @@ export function DiagnosisPage({
         runId: run.runId,
         status: run.status,
       })
-    })
+    }
     javaEndpoints.forEach(recordEndpoint)
 
-    const owningRun = javaRuns.find((run) => run.runId === nextExecution.runId) ?? null
     const endpointResolution = owningRun
       ? resolveEndpointIdentityForRun(owningRun.apiId, javaEndpoints)
       : null
@@ -210,7 +177,7 @@ export function DiagnosisPage({
       agentRunId: nextExecution.agentRunId,
       missing: [...missing],
       reason: !owningRun
-        ? `Java test-runs did not return owning run ${nextExecution.runId}; no ancestor was inferred.`
+        ? `Java exact Run query did not return owning run ${nextExecution.runId}; no ancestor was inferred.`
         : endpointResolution?.resolution === 'AMBIGUOUS_OPERATION_ID'
           ? 'Multiple endpoints share this operationId.'
           : 'Endpoint identity is unavailable.',
@@ -264,8 +231,6 @@ export function DiagnosisPage({
     setHistoryError(null)
     setHistoryLoading(true)
     setHistoryPage(1)
-    setSummaryByAgentRunId({})
-    setSummaryLoadingIds(new Set())
 
     if (!projectId) {
       setHistoryLoading(false)
@@ -273,24 +238,16 @@ export function DiagnosisPage({
     }
 
     const controller = new AbortController()
-    void agentApiFetch<RuntimeRunSummary[]>(
-      `/api/v1/evaluation/runtime/runs?projectId=${encodeURIComponent(projectId)}`,
+    void agentApiFetch<DiagnosisRunSummary[]>(
+      diagnosisHistoryPath(projectId),
       { signal: controller.signal },
     )
       .then((response) => {
         if (cancelled) return
-        const diagnosisRuns = response
-          .filter((run) => run.executionType === 'DIAGNOSIS')
-          .sort((left, right) => {
-            const timestampDifference = latestRuntimeTimestamp(right) - latestRuntimeTimestamp(left)
-            return timestampDifference || right.agentRunId.localeCompare(left.agentRunId)
-          })
+        const diagnosisRuns = sortDiagnosisHistory(response)
         setHistory(diagnosisRuns)
         setSelectedAgentRunId((currentId) => {
-          if (initialAgentRunId) return initialAgentRunId
-          return currentId && diagnosisRuns.some((run) => run.agentRunId === currentId)
-            ? currentId
-            : diagnosisRuns[0]?.agentRunId ?? null
+          return resolveDiagnosisSelection(initialAgentRunId ?? currentId, diagnosisRuns)
         })
         setHistoryLoading(false)
       })
@@ -311,11 +268,7 @@ export function DiagnosisPage({
   }, [expireSession, historyAttempt, initialAgentRunId, projectId, refreshProjects])
 
   const filteredHistory = useMemo(() => {
-    const normalizedQuery = historyQuery.trim().toLowerCase()
-    return history.filter((run) => {
-      const matchesFilter = historyFilter === 'ALL' || run.status === historyFilter
-      return matchesFilter && (!normalizedQuery || historySearchText(run).includes(normalizedQuery))
-    })
+    return filterDiagnosisHistory(history, historyFilter, historyQuery)
   }, [history, historyFilter, historyQuery])
 
   const pageCount = Math.max(1, Math.ceil(filteredHistory.length / HISTORY_PAGE_SIZE))
@@ -334,62 +287,21 @@ export function DiagnosisPage({
       setSelectedAgentRunId(null)
       return
     }
-    setSelectedAgentRunId((currentId) => filteredHistory.some((run) => run.agentRunId === currentId)
-      ? currentId
-      : filteredHistory[0].agentRunId)
+    setSelectedAgentRunId((currentId) => resolveDiagnosisSelection(currentId, filteredHistory))
   }, [filteredHistory, historyError, historyLoading])
-
-  useEffect(() => {
-    const candidates = visibleHistory.filter((run) => (
-      run.status === 'COMPLETED'
-      && run.agentRunId !== selectedAgentRunId
-      && !hasSummary(summaryByAgentRunId, run.agentRunId)
-      && !summaryLoadingIds.has(run.agentRunId)
-    ))
-    if (!candidates.length) return
-
-    let cancelled = false
-    const controller = new AbortController()
-    const candidateIds = candidates.map((run) => run.agentRunId)
-    setSummaryLoadingIds((currentIds) => new Set([...currentIds, ...candidateIds]))
-
-    void Promise.allSettled(candidates.map((run) => agentApiFetch<DiagnosisExecutionResponse>(
-      `/api/v1/diagnosis/runs/${encodeURIComponent(run.agentRunId)}`,
-      { signal: controller.signal },
-    ))).then((results) => {
-      if (cancelled) return
-      const summaries: Record<string, string | null> = {}
-      results.forEach((result, index) => {
-        const agentRunId = candidateIds[index]
-        if (result.status === 'fulfilled') {
-          summaries[agentRunId] = result.value.report?.summary?.trim() || null
-          return
-        }
-        const requestError = result.reason
-        if (requestError instanceof ApiError && requestError.status === 401) expireSession()
-        if (requestError instanceof ApiError && requestError.status === 403) void refreshProjects()
-        summaries[agentRunId] = null
-      })
-      setSummaryByAgentRunId((currentSummaries) => ({ ...currentSummaries, ...summaries }))
-      setSummaryLoadingIds((currentIds) => {
-        const nextIds = new Set(currentIds)
-        candidateIds.forEach((agentRunId) => nextIds.delete(agentRunId))
-        return nextIds
-      })
-    })
-
-    return () => {
-      cancelled = true
-      controller.abort()
-    }
-  }, [expireSession, refreshProjects, selectedAgentRunId, summaryByAgentRunId, summaryLoadingIds, visibleHistory])
 
   useEffect(() => {
     let cancelled = false
     setExecution(null)
     setDetailError(null)
 
-    if (!projectId || !selectedAgentRunId) {
+    if (
+      !projectId
+      || historyLoading
+      || historyError
+      || !selectedAgentRunId
+      || !history.some((run) => run.agentRunId === selectedAgentRunId)
+    ) {
       setDetailState('idle')
       return () => { cancelled = true }
     }
@@ -405,10 +317,6 @@ export function DiagnosisPage({
         const contextGap = await hydrateExecutionContext(nextExecution, controller.signal)
         if (cancelled) return
         setExecution(nextExecution)
-        setSummaryByAgentRunId((currentSummaries) => ({
-          ...currentSummaries,
-          [nextExecution.agentRunId]: nextExecution.report?.summary?.trim() || null,
-        }))
         rememberExecution(nextExecution)
         if (contextGap) recordContextReadModelGap(contextGap)
         setDetailState('ready')
@@ -426,7 +334,7 @@ export function DiagnosisPage({
       cancelled = true
       controller.abort()
     }
-  }, [detailAttempt, expireSession, hydrateExecutionContext, projectId, recordContextReadModelGap, refreshProjects, rememberExecution, selectedAgentRunId])
+  }, [detailAttempt, expireSession, history, historyError, historyLoading, hydrateExecutionContext, projectId, recordContextReadModelGap, refreshProjects, rememberExecution, selectedAgentRunId])
 
   const handleContextNavigate = onContextNavigate ?? (() => undefined)
   return (
@@ -448,14 +356,12 @@ export function DiagnosisPage({
             setHistoryPage(1)
           }}
           onRetry={() => setHistoryAttempt((attempt) => attempt + 1)}
-          onSelect={setSelectedAgentRunId}
+          onSelect={(id) => { setSelectedAgentRunId(id); onSelected?.(id) }}
           pageCount={pageCount}
           pageSize={HISTORY_PAGE_SIZE}
           query={historyQuery}
           runs={history}
           selectedAgentRunId={selectedAgentRunId}
-          summaryByAgentRunId={summaryByAgentRunId}
-          summaryLoadingIds={summaryLoadingIds}
           totalMatches={filteredHistory.length}
           visibleRuns={visibleHistory}
         />

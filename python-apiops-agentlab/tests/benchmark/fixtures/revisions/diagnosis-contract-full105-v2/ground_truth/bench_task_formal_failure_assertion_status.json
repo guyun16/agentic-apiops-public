@@ -1,0 +1,31 @@
+{
+  "ground_truth_id": "gt_stage21_formal_failure_assertion_status",
+  "version": "v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "formal status assertion mismatch"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_facts": [
+    {
+      "name": "failure_type",
+      "value": "ASSERTION_MISMATCH"
+    },
+    {
+      "name": "assertion_layer",
+      "value": "STATUS_CODE"
+    }
+  ],
+  "expected_evidence_ids": [
+    "runner:assertion-mismatch"
+  ],
+  "expected_diagnosis": "ASSERTION_MISMATCH",
+  "expected_safety_outcome": "SAFE"
+}

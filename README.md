@@ -2,6 +2,8 @@
 
 Production-style API testing and diagnosis platform with Java execution authority, Python Agent workflows, a guarded Tool Gateway, tracing/evaluation, and a React console.
 
+[中文说明](zh/README.md) · [Documentation](docs/README.md) · [HR demo](docs/hr-demo.md) · [Benchmark results](artifacts/benchmark/portfolio-manifest.json)
+
 [![Java CI](https://github.com/guyun16/agentic-apiops-public/actions/workflows/java-ci.yml/badge.svg)](https://github.com/guyun16/agentic-apiops-public/actions/workflows/java-ci.yml)
 ![Java 21](https://img.shields.io/badge/Java-21-007396?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-6DB33F?logo=springboot&logoColor=white)
@@ -17,6 +19,7 @@ Production-style API testing and diagnosis platform with Java execution authorit
 - Python AgentLab owns TestCase generation, diagnosis, tool orchestration, tracing, and runtime evaluation.
 - Agents cannot bypass Java-owned resources; resource access crosses the guarded Java Tool Gateway.
 - The Java ↔ Python boundary is verified with real cross-process E2E tests.
+- The public release includes 14 complete APIOps Bench runs, with failures, unknowns and execution modes preserved.
 
 ## Architecture
 
@@ -83,6 +86,46 @@ LLM-generated TestCases are candidates. Java validates the DSL, runs the test, a
 - Evaluation
 - Settings
 
+The Console supports Chinese and English, URL-based navigation, run cancellation
+and reruns, redacted HTTP snapshots, report export, persisted diagnosis history and
+approval recovery. Automatic diagnosis triggering and browser-based Java diagnosis
+are not implemented. Diagnosis locking and recovery target a single-machine SQLite
+deployment.
+
+## APIOps Bench
+
+APIOps-Bench 105 is a project-specific evaluation across generation, diagnosis, tool
+safety, RAG evidence and end-to-end API operations. The public bundle contains 14
+complete runs and 1,470 task results: 12 real-model adapter runs and two mixed fixture
+baselines.
+
+| Run | PASS | FAIL | UNKNOWN |
+| --- | ---: | ---: | ---: |
+| Portfolio v5 | 95 | 9 | 1 |
+| Diagnosis Contract v2 | 94 | 8 | 3 |
+
+These runs use different evaluation contracts and must not be combined or treated
+as a controlled model comparison. The v5 pass rate is 95/105 (90.48%). Historical
+failures and unavailable metrics remain visible. This is not a general model
+leaderboard or a production reliability estimate.
+
+The Console reads saved results and starts no evaluations. See
+[result interpretation](docs/benchmark-design.md),
+[publication policy](docs/benchmark-publication.md) and the
+[published bundles](artifacts/benchmark/). This release copies existing evidence;
+it does not call models, rerun tasks or change scores.
+
+## Recruiter walkthrough
+
+The [HR demo setup](docs/hr-demo.md) creates a dedicated project, presenter/viewer
+accounts with random local passwords, and real HTTP success/failure examples. After
+configuring the services, run `scripts/setup-hr-demo.ps1 -SkipStart` on Windows.
+The [prepared Windows launcher](docs/local-start.md) is also included.
+
+Walk through API Studio, a successful run, an intentional assertion failure, the
+diagnosis entry point and Benchmark history. The [existing examples](examples/)
+remain contract fixtures; they are not presented as new runtime evidence.
+
 ## Agent Safety Boundary
 
 ![Agent Tool Security boundary](.github/assets/agentic-apiops-tool-security.svg)
@@ -115,11 +158,13 @@ The public integration surface is project-scoped:
 | Capability | Method | Path |
 | --- | --- | --- |
 | OpenAPI metadata | `GET` | `/api/v1/projects/{projectId}/openapi/apis/{apiId}` |
+| Validate an API's TestCase DSL | `POST` | `/api/v1/projects/{projectId}/openapi/apis/{apiId}/testcases:validate` |
 | Submit test batch | `POST` | `/api/v1/projects/{projectId}/test-batches` |
 | Read test report | `GET` | `/api/v1/projects/{projectId}/test-runs/{runId}/report` |
 | Call a guarded tool | `POST` | `/api/v1/projects/{projectId}/tool-calls` |
 
-TestCase DSL validation is enforced inside Java Agent and Runner service boundaries; there is no standalone validation REST endpoint in the current public implementation.
+Java also validates the DSL at Agent and Runner boundaries. The Python read-only
+Benchmark endpoint is `GET /api/v1/benchmark/results`.
 
 ## Quick start
 
@@ -138,6 +183,7 @@ cd java-apiops-platform
 cd python-apiops-agentlab
 uv run ruff check .
 uv run pytest
+uv run python ../scripts/validate-schemas.py
 ```
 
 ```bash
@@ -146,6 +192,7 @@ cd apiops-console
 npm ci
 npm run lint
 npm run test:context
+npm run verify:benchmark
 npm run build
 ```
 
@@ -167,14 +214,21 @@ npm run dev
 
 The Console and AgentLab connect to their configured Java/Python services. `docker-compose.dev.yml` provides local MySQL, Redis, and RabbitMQ infrastructure; it is not a one-command application deployment.
 
+See [development setup](docs/README-dev-env.md) for configuration, proxy ports and
+the complete Console verification commands. Real provider credentials and personal
+deployment endpoints must be supplied locally.
+
 ## Verification
 
-The figures below come from the current public release verification; this README/assets-only pass did not rerun the full suites:
+The [public source and evidence workflow](https://github.com/guyun16/agentic-apiops-public/actions/workflows/public-checks.yml)
+runs the Python suite, Ruff, shared-schema checks, Console checks and immutable
+evidence verification. [Java CI](https://github.com/guyun16/agentic-apiops-public/actions/workflows/java-ci.yml)
+runs the default Maven verification with Docker. Use the commands above to reproduce
+the checks locally.
 
-- **Java:** 11-module Maven reactor, `BUILD SUCCESS`
-- **Python:** Ruff `PASS`; `740 passed`, 4 warnings
-- **Console:** lint `PASS`, context test `PASS`, build `PASS`
-- **GitHub Actions:** Java CI `PASS`
+Environment-gated live tests may be skipped; skipped checks are not successful live
+validation. Historical model-run results are independent of these code checks. The
+public source inventory records publication work with no benchmark execution or model calls.
 
 ## Repository structure
 
@@ -187,6 +241,8 @@ agentic-apiops-public
 ├── apiops-console
 ├── shared-schemas
 ├── examples
+├── artifacts/benchmark
+├── docs
 ├── scripts
 └── README.md
 ```
@@ -195,8 +251,12 @@ Java is responsible for execution, security, audit, and report truth. Python is 
 
 ## Public scope
 
-This public portfolio intentionally excludes private/internal documentation, runtime artifacts, and credentials. It includes executable production source, ordinary tests, shared schemas, and public-safe configuration.
-
-Benchmark materials are not included in this public release.
+This public portfolio includes executable source, ordinary tests, synthetic fixtures,
+shared schemas, selected documentation, demo initialization scripts and the reviewed
+Benchmark publication and selected regression evidence. Unrelated raw experiments, local databases, service logs,
+private development notes and credentials are excluded. Historical provenance paths
+remain as source identifiers; available public result files are listed in the manifest.
+Machine-local paths in selected regression copies are normalized and recorded in the
+evidence inventory; the published run bundles remain byte-identical to their sources.
 
 Configuration templates are provided as `.env.example` files; real credentials are never committed.

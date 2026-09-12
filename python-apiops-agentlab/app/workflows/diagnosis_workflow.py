@@ -9,7 +9,11 @@ from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
 
-from app.agents.diagnosis import DiagnosisInference, DiagnosisInferenceError
+from app.agents.diagnosis import (
+    DiagnosisInference,
+    DiagnosisInferenceError,
+    DiagnosisSemanticContractError,
+)
 from app.clients.llm import LLMClient
 from app.guardrails import ToolPreflightGuard, UntrustedEvidence, UntrustedEvidenceProcessor
 from app.memory import HistoricalFailureMemoryEntry, MemoryRetriever
@@ -22,6 +26,7 @@ from app.rag.context import (
     ContextSource,
 )
 from app.rag.models import EvidenceRetrieval
+from app.rag.relevance_selection import select_query_relevant_evidence
 from app.schemas.diagnosis_report import DiagnosisReport
 from app.schemas.runner import TestReport
 from app.schemas.tool_call import ToolCall
@@ -55,9 +60,7 @@ from app.workflows.approval import new_intent_id
 from app.workflows.diagnosis_memory_query import recall_historical_memory
 from app.workflows.tool_planning import (
     ToolPlanningDecision,
-    ToolPlanningError,
     ToolRequirement,
-    build_tool_intent,
 )
 from app.workflows.tool_use_graph import build_tool_use_graph
 from app.workflows.tool_use_state import ToolFailure, ToolUseStatus
@@ -116,6 +119,8 @@ class DiagnosisWorkflowState(TypedDict):
     ]
     tool_result_mapping_error_code: NotRequired[str | None]
     rag_evidence_count: NotRequired[int]
+    rag_context_items: NotRequired[tuple[ContextItem, ...]]
+    rag_untrusted_evidence: NotRequired[tuple[UntrustedEvidence, ...]]
     memory_hit: NotRequired[bool]
     tool_planning_decision: NotRequired[ToolPlanningDecision]
 
@@ -157,7 +162,11 @@ def test_report_context_item(report: TestReport) -> ContextItem:
         raise TypeError("report must be a TestReport")
     relevant_cases: list[dict[str, object]] = []
     for case in report.cases:
-        if case.status == "SUCCESS" and case.failure_type == "NONE":
+        has_error_response = any(
+            step.response_status_code is not None and step.response_status_code >= 400
+            for step in case.steps
+        )
+        if case.status == "SUCCESS" and case.failure_type == "NONE" and not has_error_response:
             continue
         relevant_steps: list[dict[str, object]] = []
         for step in case.steps:
@@ -166,7 +175,20 @@ def test_report_context_item(report: TestReport) -> ContextItem:
                 for assertion in step.assertion_results
                 if not assertion.passed
             ]
-            if step.status == "SUCCESS" and step.failure_type == "NONE" and not failed_assertions:
+            has_error_response = (
+                step.response_status_code is not None and step.response_status_code >= 400
+            )
+            response_assertions = (
+                [assertion.model_dump(mode="json") for assertion in step.assertion_results]
+                if has_error_response
+                else []
+            )
+            if (
+                step.status == "SUCCESS"
+                and step.failure_type == "NONE"
+                and not failed_assertions
+                and not has_error_response
+            ):
                 continue
             relevant_steps.append(
                 {
@@ -176,6 +198,7 @@ def test_report_context_item(report: TestReport) -> ContextItem:
                     "responseStatusCode": step.response_status_code,
                     "durationMs": step.duration_ms,
                     "failedAssertions": failed_assertions,
+                    "responseAssertions": response_assertions,
                 }
             )
         relevant_cases.append(
@@ -540,7 +563,7 @@ def build_diagnosis_workflow(
                 agent_step_id=step_id,
                 prompt=PromptIdentity(
                     name="diagnosis_memory_refinement" if memory_refinement else "diagnosis",
-                    version="v1" if memory_refinement else "1",
+                    version="v2" if memory_refinement else "2",
                 ),
             ):
                 if memory_refinement:
@@ -564,6 +587,93 @@ def build_diagnosis_workflow(
                         agent_run_id=state["agent_run_id"],
                         continuation_reason=continuation_reason,
                     )
+        except DiagnosisSemanticContractError as exc:
+            error_message = str(exc)
+            error_type = type(exc).__name__
+            observe(
+                trace_recorder,
+                lambda: AgentStep(
+                    trace_id=state["trace_id"],
+                    agent_run_id=state["agent_run_id"],
+                    agent_step_id=step_id,
+                    parent_identity=parent,
+                    project_id=project_id,
+                    event=TraceEvent.TERMINAL,
+                    status=TraceStatus.FAILED,
+                    failure=failure_detail(
+                        "DIAGNOSIS_INFERENCE_FAILURE",
+                        error_message,
+                        code=error_type,
+                    ),
+                    step_type=step_type,
+                ),
+            )
+            if continuation_reason is None or memory_refinement or exc.candidate is None:
+                raise
+            repair_step_id = new_identity("agent_step")
+            observe(
+                trace_recorder,
+                lambda: AgentStep(
+                    trace_id=state["trace_id"],
+                    agent_run_id=state["agent_run_id"],
+                    agent_step_id=repair_step_id,
+                    parent_identity=parent,
+                    project_id=project_id,
+                    event=TraceEvent.START,
+                    status=TraceStatus.RUNNING,
+                    step_type="diagnosis_semantic_repair",
+                ),
+            )
+            try:
+                with trace_step_scope(
+                    trace_recorder,
+                    trace_id=state["trace_id"],
+                    agent_run_id=state["agent_run_id"],
+                    agent_step_id=repair_step_id,
+                    prompt=PromptIdentity(name="diagnosis_semantic_repair", version="v2"),
+                ):
+                    repaired = await inference.repair_semantic(
+                        state["context_pack"],
+                        report=state["report"],
+                        candidate=exc.candidate,
+                        semantic_issues=exc.issues,
+                        trace_id=state["trace_id"],
+                        agent_run_id=state["agent_run_id"],
+                    )
+            except Exception as repair_exc:
+                observe(
+                    trace_recorder,
+                    lambda repair_exc=repair_exc: AgentStep(
+                        trace_id=state["trace_id"],
+                        agent_run_id=state["agent_run_id"],
+                        agent_step_id=repair_step_id,
+                        parent_identity=parent,
+                        project_id=project_id,
+                        event=TraceEvent.TERMINAL,
+                        status=TraceStatus.FAILED,
+                        failure=failure_detail(
+                            "DIAGNOSIS_SEMANTIC_REPAIR_FAILURE",
+                            str(repair_exc),
+                            code=type(repair_exc).__name__,
+                        ),
+                        step_type="diagnosis_semantic_repair",
+                    ),
+                )
+                raise
+            observe(
+                trace_recorder,
+                lambda: AgentStep(
+                    trace_id=state["trace_id"],
+                    agent_run_id=state["agent_run_id"],
+                    agent_step_id=repair_step_id,
+                    parent_identity=parent,
+                    project_id=project_id,
+                    event=TraceEvent.TERMINAL,
+                    status=TraceStatus.SUCCESS,
+                    step_type="diagnosis_semantic_repair",
+                ),
+            )
+            return repaired
         except Exception as exc:
             error_message = str(exc)
             error_type = type(exc).__name__
@@ -607,22 +717,32 @@ def build_diagnosis_workflow(
             if planned.requirement is ToolRequirement.REQUIRED:
                 intent = required_tool_intent
                 if intent is None:
-                    report = state["report"]
-                    query_source = json.dumps(
-                        {
-                            "failureType": report.summary.failure_type,
-                            "summary": report.summary.model_dump(mode="json"),
-                        },
-                        ensure_ascii=False,
-                        sort_keys=True,
+                    decision = await infer(
+                        state,
+                        continuation_reason=(
+                            "The execution contract requires exactly one call to "
+                            f"{planned.selected_tool}; provide its bounded arguments."
+                        ),
+                        step_type="required_tool_arguments",
                     )
-                    try:
-                        intent = build_tool_intent(
-                            planned,
-                            query_source=query_source,
+                    if (
+                        not isinstance(decision, ToolIntent)
+                        or decision.tool_name != planned.selected_tool
+                    ):
+                        unresolved = _insufficient_evidence_report(
+                            state["report"],
+                            trace_id=state["trace_id"],
+                            agent_run_id=state["agent_run_id"],
+                            limitation=(
+                                "Required tool arguments were not produced for "
+                                f"{planned.selected_tool}; no alternate tool was executed."
+                            ),
                         )
-                    except ToolPlanningError as exc:
-                        raise DiagnosisInferenceError(str(exc)) from exc
+                        return {
+                            "diagnosis_decision": unresolved,
+                            "diagnosis_report": unresolved,
+                        }
+                    intent = decision
                 return {"diagnosis_decision": intent}
             if planned.requirement in {ToolRequirement.DENY, ToolRequirement.UNRESOLVED}:
                 unresolved = _insufficient_evidence_report(
@@ -719,25 +839,42 @@ def build_diagnosis_workflow(
             state["tool_result_mapping_status"] = "NOT_APPLICABLE"
             state["tool_result_mapping_error_code"] = None
             state["rag_evidence_count"] = 0
+            state["rag_context_items"] = ()
             return
         if result.status != "SUCCESS":
             state["tool_result_mapping_status"] = "SKIPPED_NON_SUCCESS"
             state["tool_result_mapping_error_code"] = None
             state["rag_evidence_count"] = 0
+            state["rag_context_items"] = ()
             return
         mapping_error_code = "RAG_RESULT_SCHEMA_INVALID"
         try:
             retrieval = EvidenceRetrieval.model_validate(result.data)
+            requested_project_id = state["intent"].arguments.get("targetProjectId", project_id)
+            if (
+                isinstance(requested_project_id, bool)
+                or not isinstance(requested_project_id, int)
+                or requested_project_id < 1
+            ):
+                mapping_error_code = "RAG_RESULT_PROJECT_MISMATCH"
+                raise ValueError("RAG targetProjectId is invalid")
             if any(
-                item.project_id != project_id or item.citation.project_id != project_id
+                item.project_id != requested_project_id
+                or item.citation.project_id != requested_project_id
                 for item in retrieval.evidence
             ):
                 mapping_error_code = "RAG_RESULT_PROJECT_MISMATCH"
                 raise ValueError("RAG evidence projectId does not match the trusted project")
+            query = state["intent"].arguments.get("query")
+            if not isinstance(query, str) or not query.strip():
+                mapping_error_code = "RAG_RESULT_QUERY_INVALID"
+                raise ValueError("RAG query is unavailable during result consumption")
+            retrieval = select_query_relevant_evidence(retrieval, query=query)
         except Exception:  # noqa: BLE001 - observation must not abort guarded continuation
             state["tool_result_mapping_status"] = "VALIDATION_FAILED"
             state["tool_result_mapping_error_code"] = mapping_error_code
             state["rag_evidence_count"] = 0
+            state["rag_context_items"] = ()
             observe(
                 trace_recorder,
                 lambda: AgentStep(
@@ -791,6 +928,28 @@ def build_diagnosis_workflow(
         state["tool_result_mapping_status"] = "SUCCESS"
         state["tool_result_mapping_error_code"] = None
         state["rag_evidence_count"] = len(retrieval.evidence)
+        selected_result = result.model_copy(
+            update={"data": retrieval.model_dump(mode="json", by_alias=True)}
+        )
+        state["rag_untrusted_evidence"] = UntrustedEvidenceProcessor().from_tool_result(
+            selected_result,
+            tool_call=state["tool_call"],
+        )
+        # Keep citation identities as first-class RAG context while never
+        # bypassing the existing untrusted-evidence sanitizer with raw Java
+        # content.  The guarded tool-result item below carries the redacted
+        # text; these items carry only stable evidence identity/provenance.
+        state["rag_context_items"] = tuple(
+            ContextItem.from_retrieved_evidence(item, priority=80).model_copy(
+                update={
+                    "content": (
+                        "Mapped Java RAG evidence; redacted content is retained in "
+                        f"tool-result:{result.tool_call_id}."
+                    )
+                }
+            )
+            for item in retrieval.evidence
+        )
 
     def consume_tool_result(state: DiagnosisWorkflowState) -> dict[str, object]:
         """Consume one guarded result into trace facts and bounded context."""
@@ -801,7 +960,13 @@ def build_diagnosis_workflow(
         context_pack = context_builder.build(base_items)
         if isinstance(result, ToolResult):
             record_rag_query(state, result)
-        evidence = _rehydrate_untrusted_evidence(state.get("untrusted_evidence", ()))
+        evidence_source = (
+            state.get("rag_untrusted_evidence", ())
+            if state["intent"].tool_name == "rag.search"
+            else state.get("untrusted_evidence", ())
+        )
+        evidence = _rehydrate_untrusted_evidence(evidence_source)
+        rag_items = _rehydrate_context_items(state.get("rag_context_items", ()))
         mapping_status = state.get("tool_result_mapping_status")
         evidence_valid = bool(evidence) and (
             state["intent"].tool_name != "rag.search"
@@ -822,13 +987,15 @@ def build_diagnosis_workflow(
                 project_id=project_id,
                 run_id=state["report"].run_id,
             )
-            effective_context_items = base_items + (tool_item,)
+            effective_context_items = base_items + (tool_item,) + rag_items
             context_pack = context_builder.build(effective_context_items)
         return {
             "base_context_items": effective_context_items,
             "context_pack": context_pack,
             "tool_result_mapping_status": state.get("tool_result_mapping_status"),
             "tool_result_mapping_error_code": state.get("tool_result_mapping_error_code"),
+            "rag_evidence_count": state.get("rag_evidence_count", 0),
+            "rag_context_items": state.get("rag_context_items", ()),
         }
 
     async def continue_diagnosis(state: DiagnosisWorkflowState) -> dict[str, object]:
@@ -867,6 +1034,8 @@ def build_diagnosis_workflow(
             "diagnosis_report": decision,
             "tool_result_mapping_status": state.get("tool_result_mapping_status"),
             "tool_result_mapping_error_code": state.get("tool_result_mapping_error_code"),
+            "rag_evidence_count": consumed["rag_evidence_count"],
+            "rag_context_items": consumed["rag_context_items"],
         }
 
     def complete_tool_use(state: DiagnosisWorkflowState) -> dict[str, object]:

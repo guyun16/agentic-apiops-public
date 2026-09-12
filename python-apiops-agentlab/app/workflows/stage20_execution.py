@@ -253,6 +253,12 @@ class Stage20ExecutionWorkflow:
             report=report,
         )
 
+    @classmethod
+    def accepted_testcase(cls, state: dict[str, object]) -> TestCaseDSL:
+        """Expose the Stage 16 acceptance gate to generated-candidate runner bridges."""
+
+        return cls._accepted_testcase(state)
+
     @staticmethod
     def _accepted_testcase(state: dict[str, object]) -> TestCaseDSL:
         validation = state.get("validation_result")

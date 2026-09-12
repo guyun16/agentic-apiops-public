@@ -1,0 +1,24 @@
+{
+  "ground_truth_id": "gt_stage21_formal_testcase_boundary_inventory_zero",
+  "version": "v2",
+  "expected_tools": [],
+  "expected_tool_arguments": [],
+  "expected_facts": [
+    {
+      "name": "task_strategy",
+      "value": "BOUNDARY"
+    },
+    {
+      "name": "constraint",
+      "value": "inventory.available_quantity"
+    },
+    {
+      "name": "expected_http_status",
+      "value": 409
+    },
+    {
+      "name": "business_error",
+      "value": "ORDER_BUSINESS_CONFLICT"
+    }
+  ]
+}

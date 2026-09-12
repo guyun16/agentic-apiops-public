@@ -184,7 +184,7 @@ class Stage20DiagnosisToolAuditCrossProcessE2ETest {
                 python.path("ragQueryId").asText("NOT_PRESENT"),
                 requestIdSummary,
                 diagnosis.path("sufficientEvidence").asBoolean());
-        System.out.println("STAGE20_DIAGNOSIS_CORRELATION " + python);
+        System.out.println("STAGE21_DIAGNOSIS_CORRELATION " + python);
     }
 
     private static CompletableFuture<String> readAsync(java.io.InputStream stream) {

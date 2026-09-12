@@ -49,16 +49,18 @@ def stored_run(
     *,
     agent_run_id: str = "agent_run:1",
     workflow_id: str = "workflow:1",
+    project_id: int = 41,
     status: str = "APPROVAL_REQUIRED",
 ) -> StoredDiagnosisRun:
+    test_report = _test_report().model_copy(update={"project_id": project_id})
     return StoredDiagnosisRun(
         agent_run_id=agent_run_id,
         workflow_id=workflow_id,
         trace_id="trace:1",
-        project_id=41,
+        project_id=project_id,
         run_id=701,
         api_id="orders.get",
-        test_report=_test_report(),
+        test_report=test_report,
         model="deepseek-v4-flash",
         status=status,
         approval_request=ApprovalRequest(
@@ -136,6 +138,90 @@ def test_missing_returns_none(tmp_path: Path) -> None:
     repository = SQLiteDiagnosisRunRepository(tmp_path / "agentlab-runtime.sqlite3")
 
     assert repository.get("missing") is None
+    repository.close()
+
+
+def test_list_by_project_id_is_isolated_and_newest_first(tmp_path: Path) -> None:
+    database_path = tmp_path / "agentlab-runtime.sqlite3"
+    repository = SQLiteDiagnosisRunRepository(database_path)
+    repository.save(stored_run(agent_run_id="agent_run:old", workflow_id="workflow:old"))
+    repository.save(
+        stored_run(
+            agent_run_id="agent_run:other-project",
+            workflow_id="workflow:other-project",
+            project_id=42,
+        )
+    )
+    repository.save(stored_run(agent_run_id="agent_run:new", workflow_id="workflow:new"))
+    with sqlite3.connect(database_path) as connection:
+        connection.execute(
+            "UPDATE diagnosis_run SET updated_at = ? WHERE agent_run_id = ?",
+            ("2026-08-23T12:00:00+00:00", "agent_run:old"),
+        )
+        connection.execute(
+            "UPDATE diagnosis_run SET updated_at = ? WHERE agent_run_id = ?",
+            ("2026-08-23T12:01:00+00:00", "agent_run:new"),
+        )
+
+    entries = repository.list_by_project_id(41)
+
+    assert [entry.run.agent_run_id for entry in entries] == [
+        "agent_run:new",
+        "agent_run:old",
+    ]
+    assert all(entry.run.project_id == 41 for entry in entries)
+    repository.close()
+
+
+def test_existing_schema_is_upgraded_for_project_history(tmp_path: Path) -> None:
+    database_path = tmp_path / "agentlab-runtime.sqlite3"
+    record = stored_run()
+    with sqlite3.connect(database_path) as connection:
+        connection.executescript(
+            """
+            CREATE TABLE diagnosis_run (
+                agent_run_id TEXT PRIMARY KEY,
+                workflow_id TEXT NOT NULL UNIQUE,
+                payload_json TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
+            );
+            """
+        )
+        connection.execute(
+            """
+            INSERT INTO diagnosis_run (
+                agent_run_id, workflow_id, payload_json, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                record.agent_run_id,
+                record.workflow_id,
+                record.model_dump_json(by_alias=True),
+                "2026-08-23T12:00:00+00:00",
+                "2026-08-23T12:00:01+00:00",
+            ),
+        )
+
+    repository = SQLiteDiagnosisRunRepository(database_path)
+
+    assert repository.list_by_project_id(41)[0].run == record
+    with sqlite3.connect(database_path) as connection:
+        project_id = connection.execute(
+            "SELECT project_id FROM diagnosis_run WHERE agent_run_id = ?",
+            (record.agent_run_id,),
+        ).fetchone()[0]
+    assert project_id == 41
+    repository.close()
+
+
+@pytest.mark.parametrize("project_id", (0, -1, True, "41"))
+def test_list_rejects_invalid_project_id(tmp_path: Path, project_id: object) -> None:
+    repository = SQLiteDiagnosisRunRepository(tmp_path / "agentlab-runtime.sqlite3")
+
+    with pytest.raises(ValueError, match="positive integer"):
+        repository.list_by_project_id(project_id)  # type: ignore[arg-type]
+
     repository.close()
 
 

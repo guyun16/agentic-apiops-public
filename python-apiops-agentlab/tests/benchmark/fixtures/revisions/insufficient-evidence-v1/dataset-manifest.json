@@ -1,0 +1,120 @@
+{
+  "manifestVersion": "0.2.0",
+  "datasetId": "stage21-apioops-bench-mini",
+  "datasetVersion": "v3-insufficient-evidence-v1",
+  "taskSchemaVersion": "0.2.0",
+  "tasks": [
+    {
+      "benchmarkTaskId": "bench_task_failure_insufficient_missing",
+      "taskFile": "tasks/bench_task_failure_insufficient_missing.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_insufficient_missing.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_insufficient_missing",
+        "version": "v3-insufficient-evidence-v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "Correct outcome is insufficient evidence with an explicitly missing response-body fact.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_failure_insufficient_conflicting",
+      "taskFile": "tasks/bench_task_failure_insufficient_conflicting.json",
+      "groundTruthFile": "ground_truth/gt_stage21_failure_insufficient_conflicting.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_failure_insufficient_conflicting",
+        "version": "v3-insufficient-evidence-v1"
+      },
+      "split": "held_out",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "Held-out case contains unresolved competing explanations and must not force a diagnosis.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_conflicting",
+      "taskFile": "tasks/bench_task_formal_failure_insufficient_conflicting.json",
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_conflicting.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_conflicting",
+        "version": "v3-insufficient-evidence-v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=conflicting plausible roots.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_heldout_conflict",
+      "taskFile": "tasks/bench_task_formal_failure_insufficient_heldout_conflict.json",
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_heldout_conflict.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_heldout_conflict",
+        "version": "v3-insufficient-evidence-v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=held-out conflicting evidence case.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_heldout_missing",
+      "taskFile": "tasks/bench_task_formal_failure_insufficient_heldout_missing.json",
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_heldout_missing.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_heldout_missing",
+        "version": "v3-insufficient-evidence-v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=held-out missing evidence case.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_missing_auth",
+      "taskFile": "tasks/bench_task_formal_failure_insufficient_missing_auth.json",
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_missing_auth.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_missing_auth",
+        "version": "v3-insufficient-evidence-v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=missing authentication evidence.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_missing_headers",
+      "taskFile": "tasks/bench_task_formal_failure_insufficient_missing_headers.json",
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_missing_headers.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_missing_headers",
+        "version": "v3-insufficient-evidence-v1"
+      },
+      "split": "dev",
+      "difficulty": "medium",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "MEDIUM: combines more than one fact or requires one routing decision; focus=missing response evidence.",
+      "reviewStatus": "APPROVED"
+    },
+    {
+      "benchmarkTaskId": "bench_task_formal_failure_insufficient_partial_facts",
+      "taskFile": "tasks/bench_task_formal_failure_insufficient_partial_facts.json",
+      "groundTruthFile": "ground_truth/gt_stage21_formal_failure_insufficient_partial_facts.json",
+      "groundTruthRef": {
+        "groundTruthId": "gt_stage21_formal_failure_insufficient_partial_facts",
+        "version": "v3-insufficient-evidence-v1"
+      },
+      "split": "dev",
+      "difficulty": "hard",
+      "scenario": "INSUFFICIENT_EVIDENCE",
+      "difficultyRationale": "HARD: requires multiple constraints, conflict handling, or safety/evidence linkage; focus=partial facts without root.",
+      "reviewStatus": "APPROVED"
+    }
+  ]
+}

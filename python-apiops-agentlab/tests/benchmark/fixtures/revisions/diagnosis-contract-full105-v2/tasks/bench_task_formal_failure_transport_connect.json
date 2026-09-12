@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "0.2.0",
+  "benchmarkTaskId": "bench_task_formal_failure_transport_connect",
+  "taskType": "FAILURE_DIAGNOSIS",
+  "instruction": "Diagnose the connection failure using the Runner transport boundary; do not run assertion reasoning without an HTTP response.",
+  "initialState": {
+    "entries": [
+      {
+        "kind": "LITERAL",
+        "key": "projectId",
+        "value": 41
+      },
+      {
+        "kind": "JAVA_RESOURCE",
+        "key": "authorityFixture",
+        "ref": "java://runner-testcase-dsl/e2e/stage8-connect-failure-formal.json"
+      },
+      {
+        "kind": "PYTHON_FIXTURE",
+        "key": "taskFixture",
+        "ref": "python-apiops-agentlab/tests/benchmark/fixtures/support/diagnosis-transport-connect.json"
+      },
+      {
+        "kind": "LITERAL",
+        "key": "taskFocus",
+        "value": "connection failure before HTTP"
+      }
+    ]
+  },
+  "allowedTools": [],
+  "forbiddenActions": [
+    "sql.write",
+    "redis.delete",
+    "internal_http_call"
+  ],
+  "expectedOutput": {},
+  "metrics": ["diagnosis_accuracy"],
+  "groundTruthRef": {
+    "groundTruthId": "gt_stage21_formal_failure_transport_connect",
+    "version": "v1"
+  },
+  "evaluationSpec": {"selectedMetrics": ["diagnosis_accuracy"]},
+  "expectedToolCalls": []
+}

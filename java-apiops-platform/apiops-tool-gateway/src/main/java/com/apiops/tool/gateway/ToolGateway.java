@@ -11,6 +11,8 @@ import java.util.UUID;
 /** Public safety pipeline; the handler is an extension point, not a concrete Tool implementation. */
 public final class ToolGateway implements AutoCloseable {
 
+    private static final System.Logger LOGGER = System.getLogger(ToolGateway.class.getName());
+
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(1);
     private static final int DEFAULT_RUN_BUDGET = 16;
     private static final int DEFAULT_CONCURRENCY = 4;
@@ -49,12 +51,28 @@ public final class ToolGateway implements AutoCloseable {
             ResourceGuard resourceGuard,
             Audit audit,
             MeterRegistry meterRegistry) {
+        this(toolAuth, resourceGuard, audit, meterRegistry, DEFAULT_TIMEOUT);
+    }
+
+    /**
+     * Creates the default pipeline with an application-owned execution deadline.
+     *
+     * <p>The deadline remains enforced by the Java Tool Gateway. Applications that
+     * execute remote-backed read tools can align it below their outer transport
+     * timeout without weakening authorization, validation, or resource guards.
+     */
+    public ToolGateway(
+            ToolAuth toolAuth,
+            ResourceGuard resourceGuard,
+            Audit audit,
+            MeterRegistry meterRegistry,
+            Duration executionTimeout) {
         this(
                 toolAuth,
                 new ParamValidator(),
                 Objects.requireNonNull(resourceGuard, "resourceGuard must not be null"),
                 new ToolExecutionLimiter(
-                        DEFAULT_TIMEOUT, DEFAULT_RUN_BUDGET, DEFAULT_CONCURRENCY),
+                        executionTimeout, DEFAULT_RUN_BUDGET, DEFAULT_CONCURRENCY),
                 ToolRateLimiter.defaultLimiter(),
                 new ResultSanitizer(),
                 new ResultLimiter(DEFAULT_RESULT_LIMIT),
@@ -190,6 +208,11 @@ public final class ToolGateway implements AutoCloseable {
                 started,
                 requestedTargetProjectId,
                 invalid(toolName, toolCallId, "PUBLIC_CONTRACT_INVALID", reason));
+    }
+
+    /** Returns the Java-owned end-to-end execution deadline for audit and readiness checks. */
+    public Duration executionTimeout() {
+        return limiter.timeout();
     }
 
     private ToolResult<Object> finish(
@@ -339,8 +362,11 @@ public final class ToolGateway implements AutoCloseable {
     private void safeAudit(Audit.AuditEvent event) {
         try {
             audit.record(event);
-        } catch (RuntimeException ignored) {
-            // Audit failure is isolated and must never cause a tool retry.
+        } catch (RuntimeException exception) {
+            // The completed Tool result is preserved and never retried, but audit loss is visible.
+            LOGGER.log(System.Logger.Level.ERROR,
+                    "Tool audit persistence failed for toolCallId=" + event.toolCallId(),
+                    exception);
         }
     }
 

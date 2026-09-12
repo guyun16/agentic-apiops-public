@@ -8,7 +8,17 @@
     "build": "tsc -b && vite build",
     "lint": "tsc --noEmit",
     "test:context": "node --experimental-strip-types scripts/verify-context-trail.ts",
-    "preview": "vite preview"
+    "test:console-execution": "node --experimental-strip-types scripts/verify-console-execution.ts",
+    "test:diagnosis": "node --experimental-strip-types scripts/verify-diagnosis-history.ts && node --experimental-strip-types scripts/verify-diagnosis-recovery.ts",
+    "test:evaluation": "node --experimental-strip-types scripts/verify-evaluation.ts",
+    "verify:benchmark": "node --experimental-strip-types scripts/verify-benchmark.ts",
+    "preview": "vite preview",
+    "test:routes": "node --experimental-strip-types scripts/verify-console-route.ts",
+    "test:editor": "node --experimental-strip-types scripts/verify-testcase-editor.ts && node --experimental-strip-types scripts/verify-console-workflows.ts",
+    "test:i18n": "node --experimental-strip-types scripts/verify-i18n.ts",
+    "test:reports": "node --experimental-strip-types scripts/verify-report-export.ts",
+    "typecheck:benchmark": "tsc -p tsconfig.benchmark.json",
+    "build:benchmark": "npm run typecheck:benchmark && node scripts/build-benchmark.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

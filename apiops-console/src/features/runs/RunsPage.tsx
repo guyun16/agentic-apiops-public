@@ -8,13 +8,17 @@ import { ContextTrail } from '../../components/layout/ContextTrail'
 import { PageState } from '../../components/common/PageState'
 import { resolveEndpointIdentityForRun } from '../../app/contextTrailModel'
 import { RunDetail } from './components/RunDetail'
+import { RunControls } from './components/RunControls'
 import { RunsExplorer } from './components/RunsExplorer'
+import { fetchExactRun, includeExactRun } from './run-api'
+import { mergeRunPages, nextRunCursor, RUN_PAGE_SIZE } from './runPaging'
 import type { RunFilter, RunLiveState, RunProgress, RunSummary, RunTab, TestReport } from './types'
 
 type RunsPageProps = {
   initialRunId?: number | null
   onContextNavigate?: (target: ContextTrailTarget) => void
   onDiagnose?: (runId: string) => void
+  onRunSelected?: (runId: number, replace?: boolean) => void
 }
 
 type RunsLoadState = 'loading' | 'ready' | 'error'
@@ -101,7 +105,7 @@ function selectRunForContext(
   return nextRuns[0] ?? null
 }
 
-export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }: RunsPageProps) {
+export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose, onRunSelected }: RunsPageProps) {
   const { expireSession } = useAuth()
   const { t } = useConsoleLanguage()
   const {
@@ -116,8 +120,13 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
   const { currentProject, refreshProjects } = useProject()
   const [runs, setRuns] = useState<RunSummary[]>([])
   const [runsState, setRunsState] = useState<RunsLoadState>('loading')
+  const [runsAttempt, setRunsAttempt] = useState(0)
   const [runsError, setRunsError] = useState<ApiError | null>(null)
-  const [endpointMetadata, setEndpointMetadata] = useState<ContextTrailEndpoint[]>([])
+  const [beforeRunId, setBeforeRunId] = useState<number | null>(null)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [pageError, setPageError] = useState<string | null>(null)
+  const pageController = useRef<AbortController | null>(null)
+  const [endpointMetadata, setEndpointMetadata] = useState<ContextTrailEndpoint[] | null>(null)
   const [selectedRunId, setSelectedRunId] = useState<number | null>(null)
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<RunFilter>('ALL')
@@ -139,10 +148,23 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
     [runs, selectedRunId],
   )
 
-  const fetchRuns = useCallback(async (nextProjectId: string, signal?: AbortSignal) => {
-    const response = await apiFetch<RunSummaryResponse[]>(`/api/v1/projects/${encodeURIComponent(nextProjectId)}/test-runs`, { signal })
+  const fetchRuns = useCallback(async (nextProjectId: string, signal?: AbortSignal, before?: number) => {
+    const query = `limit=${RUN_PAGE_SIZE}${before === undefined ? '' : `&beforeRunId=${before}`}`
+    const response = await apiFetch<RunSummaryResponse[]>(`/api/v1/projects/${encodeURIComponent(nextProjectId)}/test-runs?${query}`, { signal })
     return response.map(normalizeRunSummary)
   }, [])
+
+  const fetchRunsWithTarget = useCallback(async (
+    nextProjectId: string,
+    targetRunId: number | null,
+    signal?: AbortSignal,
+  ) => {
+    const [recentRuns, exactRun] = await Promise.all([
+      fetchRuns(nextProjectId, signal),
+      targetRunId === null ? Promise.resolve(null) : fetchExactRun(nextProjectId, targetRunId, signal),
+    ])
+    return { runs: includeExactRun(recentRuns, exactRun), cursor: nextRunCursor(recentRuns) }
+  }, [fetchRuns])
 
   const fetchEndpointMetadata = useCallback(async (nextProjectId: string, signal: AbortSignal) => {
     const response = await apiFetch<ApiMetadataSummaryResponse[]>(
@@ -170,6 +192,7 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
   }, [recordEndpoint])
 
   const hydrateRunContext = useCallback((run: RunSummary) => {
+    if (endpointMetadata === null) return
     const endpointResolution = resolveEndpointIdentityForRun(run.apiId, [...endpointMetadata, ...endpoints])
     const endpoint = endpointResolution.endpoint
     if (endpoint) {
@@ -206,6 +229,11 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
   useEffect(() => {
     let cancelled = false
     setRuns([])
+    pageController.current?.abort()
+    pageController.current = null
+    setBeforeRunId(null)
+    setLoadingMore(false)
+    setPageError(null)
     setSelectedRunId(null)
     setReport(null)
     setReportState('idle')
@@ -220,9 +248,10 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
     setRunsState('loading')
     setRunsError(null)
     const controller = new AbortController()
-    void fetchRuns(projectId, controller.signal)
-      .then((nextRuns) => {
+    void fetchRunsWithTarget(projectId, initialRunId, controller.signal)
+      .then(({ runs: nextRuns, cursor }) => {
         if (cancelled) return
+        setBeforeRunId(cursor)
         rememberRuns(nextRuns)
         setRuns(nextRuns)
         const nextSelectedRun = selectRunForContext(nextRuns, initialRunId, activeContextRef.current)
@@ -263,12 +292,13 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
     return () => {
       cancelled = true
       controller.abort()
+      pageController.current?.abort()
     }
-  }, [expireSession, fetchRuns, initialRunId, projectId, recordContextReadModelGap, refreshProjects, rememberRuns])
+  }, [expireSession, fetchRunsWithTarget, initialRunId, projectId, recordContextReadModelGap, refreshProjects, rememberRuns, runsAttempt])
 
   useEffect(() => {
     let cancelled = false
-    setEndpointMetadata([])
+    setEndpointMetadata(null)
 
     if (!projectId) return () => { cancelled = true }
 
@@ -293,8 +323,11 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
   }, [expireSession, fetchEndpointMetadata, projectId, refreshProjects, rememberEndpoints])
 
   useEffect(() => {
-    if (selectedRun) hydrateRunContext(selectedRun)
-  }, [hydrateRunContext, selectedRun])
+    if (selectedRun) {
+      hydrateRunContext(selectedRun)
+      onRunSelected?.(selectedRun.runId)
+    }
+  }, [hydrateRunContext, onRunSelected, selectedRun])
 
   useEffect(() => {
     let cancelled = false
@@ -345,11 +378,11 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
         setLiveState('live')
         if (event.event === 'terminal') {
           setLiveState('idle')
-          void fetchRuns(projectId)
-            .then((nextRuns) => {
+          void fetchRunsWithTarget(projectId, selectedRun.runId)
+            .then(({ runs: nextRuns }) => {
               if (cancelled) return
               rememberRuns(nextRuns)
-              setRuns(nextRuns)
+              setRuns((current) => mergeRunPages(current, nextRuns))
               setSelectedRunId((currentId) => nextRuns.some((run) => run.runId === currentId)
                 ? currentId
                 : selectRunForContext(nextRuns, initialRunId, activeContextRef.current)?.runId ?? null)
@@ -377,7 +410,7 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
       cancelled = true
       controller.abort()
     }
-  }, [expireSession, fetchRuns, initialRunId, projectId, refreshProjects, rememberRuns, selectedRun?.runId, selectedRun?.status])
+  }, [expireSession, fetchRunsWithTarget, initialRunId, projectId, refreshProjects, rememberRuns, selectedRun?.runId, selectedRun?.status])
 
   const normalizedQuery = query.trim().toLowerCase()
   const visibleRuns = useMemo(() => runs.filter((run) => {
@@ -392,27 +425,7 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
     return matchesQuery && matchesFilter
   }), [filter, normalizedQuery, runs])
 
-  const retryRuns = () => {
-    setRunsState('loading')
-    setRunsError(null)
-    if (projectId) {
-      void fetchRuns(projectId)
-        .then((nextRuns) => {
-          rememberRuns(nextRuns)
-          setRuns(nextRuns)
-          const nextSelectedRun = selectRunForContext(nextRuns, initialRunId, activeContextRef.current)
-          setSelectedRunId(nextSelectedRun?.runId ?? null)
-          setRunsState('ready')
-        })
-        .catch((error: unknown) => {
-          const apiError = apiErrorFor(error, 'Unable to load runs')
-          setRunsError(apiError)
-          setRunsState('error')
-          if (apiError.status === 401) expireSession()
-          if (apiError.status === 403) void refreshProjects()
-        })
-    }
-  }
+  const retryRuns = () => setRunsAttempt((attempt) => attempt + 1)
 
   const handleContextNavigate = (target: ContextTrailTarget) => {
     if (target.type === 'run') {
@@ -424,6 +437,30 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
     }
 
     onContextNavigate?.(target)
+  }
+
+  const loadMore = async () => {
+    if (!projectId || beforeRunId === null || pageController.current) return
+    const controller = new AbortController()
+    pageController.current = controller
+    setLoadingMore(true)
+    setPageError(null)
+    try {
+      const page = await fetchRuns(projectId, controller.signal, beforeRunId)
+      if (controller.signal.aborted) return
+      setRuns((current) => mergeRunPages(current, page))
+      setBeforeRunId(nextRunCursor(page))
+      rememberRuns(page)
+    } catch (error) {
+      if (controller.signal.aborted) return
+      const failure = apiErrorFor(error, 'Unable to load older runs')
+      setPageError(failure.message)
+      if (failure.status === 401) expireSession()
+      if (failure.status === 403) void refreshProjects()
+    } finally {
+      if (pageController.current === controller) pageController.current = null
+      if (!controller.signal.aborted) setLoadingMore(false)
+    }
   }
 
   return (
@@ -438,12 +475,17 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
       ) : (
         <div className="runs-layout">
           <RunsExplorer
+            hasMore={beforeRunId !== null}
+            loadingMore={loadingMore}
+            pageError={pageError}
+            onLoadMore={() => { void loadMore() }}
             allRuns={runs}
             filter={filter}
             onDiagnose={onDiagnose}
             onFilterChange={setFilter}
             onQueryChange={setQuery}
             onSelect={(runId) => {
+              onRunSelected?.(runId, false)
               setSelectedRunId(runId)
               setActiveTab('Summary')
             }}
@@ -453,6 +495,18 @@ export function RunsPage({ initialRunId = null, onContextNavigate, onDiagnose }:
             totalRuns={runs.length}
           />
           <RunDetail
+            controls={selectedRun && projectId ? <RunControls key={`${projectId}:${selectedRun.runId}`}
+              run={selectedRun} onRefresh={async (runId, signal) => {
+                const { runs: nextRuns } = await fetchRunsWithTarget(projectId, runId, signal)
+                if (signal.aborted) return
+                rememberRuns(nextRuns)
+                setRuns((current) => mergeRunPages(current, nextRuns))
+                setSelectedRunId(runId)
+                if (runId !== selectedRun.runId) {
+                  setFilter('ALL')
+                  setQuery('')
+                }
+              }} /> : null}
             activeTab={activeTab}
             onDiagnose={onDiagnose}
             onRetryReport={() => setReportAttempt((attempt) => attempt + 1)}

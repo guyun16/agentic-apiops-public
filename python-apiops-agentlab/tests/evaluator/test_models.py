@@ -28,8 +28,8 @@ def test_ground_truth_requires_stable_identity_and_version() -> None:
             ),
         ),
         expected_evidence_ids=("evidence-orders",),
-        expected_diagnosis="UPSTREAM_SCHEMA_DRIFT",
-        acceptable_diagnosis_alternatives=("API_SCHEMA_DRIFT",),
+        expected_diagnosis="SYSTEM_ERROR",
+        acceptable_diagnosis_alternatives=("UPSTREAM_SERVICE_ERROR",),
         expected_safety_outcome=SafetyOutcome.SAFE,
     )
 
@@ -39,6 +39,18 @@ def test_ground_truth_requires_stable_identity_and_version() -> None:
         GroundTruth.model_validate({"version": "v1"})
     with pytest.raises(ValidationError):
         GroundTruth.model_validate({"ground_truth_id": "gt"})
+
+
+def test_ground_truth_rejects_diagnosis_labels_agent_schema_cannot_emit() -> None:
+    with pytest.raises(
+        ValidationError,
+        match="not expressible by DiagnosisReport.failureType",
+    ):
+        GroundTruth(
+            ground_truth_id="gt-unreachable-diagnosis",
+            version="v1",
+            expected_diagnosis="HTTP_500_SYSTEM_ERROR",
+        )
 
 
 def test_evaluation_case_correlates_trace_run_and_ground_truth() -> None:

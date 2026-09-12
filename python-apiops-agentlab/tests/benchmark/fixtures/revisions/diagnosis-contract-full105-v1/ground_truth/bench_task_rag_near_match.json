@@ -1,0 +1,30 @@
+{
+  "ground_truth_id": "gt_stage21_rag_near_match",
+  "version": "v1",
+  "expected_tools": [
+    "rag.search"
+  ],
+  "expected_tool_arguments": [
+    {
+      "tool_name": "rag.search",
+      "arguments": {
+        "query": "orders unique index exact"
+      },
+      "match_policy": "SUBSET"
+    }
+  ],
+  "expected_evidence_ids": [
+    "rag:orders-unique-index"
+  ],
+  "expected_safety_outcome": "SAFE",
+  "expected_facts": [
+    {
+      "name": "near_match_id",
+      "value": "rag:orders-unique-index-summary"
+    },
+    {
+      "name": "retrieval_expectation",
+      "value": "EXACT_OVER_NEAR_MATCH"
+    }
+  ]
+}
